@@ -1,0 +1,25 @@
+{
+  "name": "marom-cloud",
+  "version": "1.0.0",
+  "description": "code your mind - all stuff to build fantastic solution only with JS & node.js",
+  "private": true,
+  "scripts": {
+    "start": "npx serve .",
+    "deploy": "vercel deploy",
+    "deploy:prod": "vercel deploy --prod"
+  },
+  "keywords": [
+    "portfolio",
+    "static-site",
+    "mba",
+    "education"
+  ],
+  "author": "Marom",
+  "license": "UNLICENSED",
+  "devDependencies": {
+    "@vercel/analytics": "^1.4.1"
+  },
+  "engines": {
+    "node": ">=18.0.0"
+  }
+}
