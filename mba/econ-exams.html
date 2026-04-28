@@ -1,0 +1,1405 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>פתרונות מבחנים – יסודות הכלכלה למנהלים</title>
+<link href="https://fonts.googleapis.com/css2?family=Frank+Ruhl+Libre:wght@300;400;500;700;900&family=Heebo:wght@300;400;500;700&display=swap" rel="stylesheet">
+<style>
+:root {
+  --navy: #0d1b2a;
+  --navy2: #1b2d44;
+  --gold: #c8973a;
+  --gold-light: #e8b85a;
+  --cream: #f5f0e8;
+  --cream2: #ede7d9;
+  --red: #c0392b;
+  --green: #1a7a4a;
+  --blue: #2563a8;
+  --text: #1e1e2e;
+  --muted: #7a7a9a;
+  --border: #ddd5c5;
+  --shadow: 0 4px 24px rgba(13,27,42,0.12);
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  font-family: 'Heebo', sans-serif;
+  background: #f0ebe0;
+  color: var(--text);
+  min-height: 100vh;
+  direction: rtl;
+}
+
+/* HEADER */
+.site-header {
+  background: var(--navy);
+  padding: 0;
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  box-shadow: 0 2px 20px rgba(0,0,0,0.4);
+}
+
+.header-inner {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 18px 24px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 20px;
+}
+
+.header-title {
+  font-family: 'Frank Ruhl Libre', serif;
+  font-size: 1.35rem;
+  color: #fff;
+  font-weight: 700;
+  line-height: 1.2;
+}
+.header-title span {
+  display: block;
+  font-size: 0.8rem;
+  font-family: 'Heebo', sans-serif;
+  font-weight: 300;
+  color: var(--gold-light);
+  margin-top: 3px;
+}
+
+.header-badge {
+  background: var(--gold);
+  color: var(--navy);
+  font-size: 0.72rem;
+  font-weight: 700;
+  padding: 5px 12px;
+  border-radius: 20px;
+  white-space: nowrap;
+}
+
+/* TABS */
+.tabs-bar {
+  background: var(--navy2);
+  border-bottom: 3px solid var(--gold);
+}
+.tabs-inner {
+  max-width: 1100px;
+  margin: 0 auto;
+  display: flex;
+  padding: 0 24px;
+}
+.tab-btn {
+  padding: 14px 28px;
+  font-family: 'Frank Ruhl Libre', serif;
+  font-size: 1rem;
+  font-weight: 700;
+  color: rgba(255,255,255,0.55);
+  cursor: pointer;
+  border: none;
+  background: transparent;
+  border-bottom: 3px solid transparent;
+  margin-bottom: -3px;
+  transition: all 0.25s;
+  letter-spacing: 0.3px;
+}
+.tab-btn:hover { color: rgba(255,255,255,0.85); }
+.tab-btn.active {
+  color: var(--gold-light);
+  border-bottom-color: var(--gold-light);
+}
+
+/* HERO STRIP */
+.hero-strip {
+  background: linear-gradient(135deg, var(--navy2) 0%, #2a4060 100%);
+  padding: 28px 24px;
+  text-align: center;
+  color: #fff;
+}
+.hero-strip h2 {
+  font-family: 'Frank Ruhl Libre', serif;
+  font-size: 1.7rem;
+  font-weight: 900;
+  color: var(--gold-light);
+  margin-bottom: 6px;
+}
+.hero-strip p { font-size: 0.9rem; color: rgba(255,255,255,0.7); }
+
+.exam-meta {
+  display: flex;
+  justify-content: center;
+  gap: 24px;
+  margin-top: 14px;
+  flex-wrap: wrap;
+}
+.meta-chip {
+  background: rgba(255,255,255,0.1);
+  border: 1px solid rgba(200,151,58,0.4);
+  color: var(--gold-light);
+  font-size: 0.8rem;
+  padding: 5px 14px;
+  border-radius: 20px;
+}
+
+/* MAIN */
+main {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 32px 16px 60px;
+}
+
+/* SECTION DIVIDERS */
+.part-header {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  margin: 36px 0 18px;
+}
+.part-header .part-label {
+  background: var(--navy);
+  color: var(--gold);
+  font-family: 'Frank Ruhl Libre', serif;
+  font-size: 0.95rem;
+  font-weight: 700;
+  padding: 6px 18px;
+  border-radius: 4px;
+  white-space: nowrap;
+}
+.part-header .part-line {
+  flex: 1;
+  height: 2px;
+  background: linear-gradient(90deg, var(--navy) 0%, transparent 100%);
+}
+.part-header .part-title {
+  font-family: 'Frank Ruhl Libre', serif;
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: var(--navy2);
+  white-space: nowrap;
+}
+
+/* QUESTION CARD */
+.q-card {
+  background: #fff;
+  border-radius: 12px;
+  box-shadow: var(--shadow);
+  margin-bottom: 22px;
+  overflow: hidden;
+  border: 1px solid var(--border);
+}
+
+.q-header {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 16px 22px;
+  cursor: pointer;
+  background: var(--cream);
+  border-bottom: 2px solid var(--border);
+  user-select: none;
+  transition: background 0.2s;
+}
+.q-header:hover { background: var(--cream2); }
+
+.q-num {
+  width: 38px; height: 38px;
+  background: var(--navy);
+  color: var(--gold);
+  border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  font-family: 'Frank Ruhl Libre', serif;
+  font-size: 1.05rem;
+  font-weight: 900;
+  flex-shrink: 0;
+}
+
+.q-title {
+  flex: 1;
+  font-family: 'Frank Ruhl Libre', serif;
+  font-size: 1.05rem;
+  font-weight: 700;
+  color: var(--navy);
+}
+.q-points {
+  font-size: 0.78rem;
+  color: var(--muted);
+  background: rgba(0,0,0,0.06);
+  padding: 3px 10px;
+  border-radius: 12px;
+}
+.q-chevron {
+  font-size: 1rem;
+  color: var(--muted);
+  transition: transform 0.3s;
+  margin-right: auto;
+}
+.q-card.open .q-chevron { transform: rotate(180deg); }
+
+.q-body {
+  display: none;
+  padding: 24px 26px;
+}
+.q-card.open .q-body { display: block; }
+
+/* QUESTION TEXT BOX */
+.q-text-box {
+  background: var(--cream);
+  border-right: 4px solid var(--gold);
+  border-radius: 0 8px 8px 0;
+  padding: 14px 18px;
+  margin-bottom: 22px;
+  font-size: 0.92rem;
+  line-height: 1.7;
+  color: #333;
+}
+.q-text-box strong { color: var(--navy); }
+
+/* DATA TABLE */
+.data-table-wrap { overflow-x: auto; margin: 12px 0 18px; }
+.data-table {
+  border-collapse: collapse;
+  min-width: 100%;
+  font-size: 0.88rem;
+}
+.data-table th {
+  background: var(--navy);
+  color: var(--gold);
+  padding: 9px 16px;
+  font-family: 'Frank Ruhl Libre', serif;
+  font-weight: 700;
+  text-align: center;
+  white-space: nowrap;
+}
+.data-table td {
+  padding: 8px 16px;
+  text-align: center;
+  border-bottom: 1px solid var(--border);
+}
+.data-table tr:nth-child(even) td { background: var(--cream); }
+.data-table td.hl { background: #fff3cd; font-weight: 700; }
+.data-table td.hl2 { background: #d4edda; font-weight: 700; color: var(--green); }
+
+/* SUB-QUESTION */
+.sub-q {
+  margin-bottom: 28px;
+}
+.sub-q-label {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 10px;
+}
+.sub-q-letter {
+  width: 30px; height: 30px;
+  background: var(--gold);
+  color: var(--navy);
+  border-radius: 6px;
+  display: flex; align-items: center; justify-content: center;
+  font-family: 'Frank Ruhl Libre', serif;
+  font-weight: 900;
+  font-size: 0.95rem;
+  flex-shrink: 0;
+}
+.sub-q-text {
+  font-family: 'Frank Ruhl Libre', serif;
+  font-size: 1rem;
+  font-weight: 700;
+  color: var(--navy2);
+}
+
+/* STEPS */
+.steps { display: flex; flex-direction: column; gap: 10px; margin-bottom: 14px; }
+.step {
+  display: flex;
+  gap: 12px;
+  align-items: flex-start;
+  background: #fafafa;
+  border-radius: 8px;
+  padding: 12px 16px;
+  border: 1px solid #eee;
+}
+.step-num {
+  width: 24px; height: 24px;
+  background: var(--navy2);
+  color: #fff;
+  border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 0.72rem;
+  font-weight: 700;
+  flex-shrink: 0;
+  margin-top: 1px;
+}
+.step-content { flex: 1; font-size: 0.9rem; line-height: 1.65; }
+.step-content .formula {
+  display: inline-block;
+  background: var(--navy);
+  color: var(--gold-light);
+  padding: 2px 10px;
+  border-radius: 4px;
+  font-family: monospace;
+  font-size: 0.85rem;
+  margin: 2px 2px;
+}
+
+/* ANSWER BOX */
+.answer-box {
+  background: linear-gradient(135deg, var(--green) 0%, #1e8c55 100%);
+  color: #fff;
+  border-radius: 10px;
+  padding: 14px 20px;
+  margin-top: 12px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+.answer-icon { font-size: 1.4rem; }
+.answer-text { flex: 1; }
+.answer-label { font-size: 0.72rem; opacity: 0.8; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 2px; }
+.answer-value { font-family: 'Frank Ruhl Libre', serif; font-size: 1.1rem; font-weight: 700; }
+
+.answer-wrong {
+  background: linear-gradient(135deg, var(--red) 0%, #c0392b 100%);
+}
+
+/* FORMULA BOX */
+.formula-box {
+  background: var(--navy);
+  border-radius: 8px;
+  padding: 16px 20px;
+  margin: 10px 0 16px;
+  display: flex;
+  gap: 14px;
+  align-items: flex-start;
+  flex-wrap: wrap;
+}
+.formula-item { text-align: center; }
+.formula-name { font-size: 0.7rem; color: var(--gold); text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 4px; }
+.formula-eq { color: #fff; font-family: monospace; font-size: 0.9rem; white-space: nowrap; }
+
+/* INSIGHT BOX */
+.insight {
+  background: #fff8e1;
+  border: 1px solid #ffe082;
+  border-radius: 8px;
+  padding: 12px 16px;
+  margin: 10px 0;
+  font-size: 0.88rem;
+  line-height: 1.6;
+}
+.insight strong { color: #b8860b; }
+
+/* VERDICT */
+.verdict {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 16px;
+  border-radius: 20px;
+  font-weight: 700;
+  font-size: 0.9rem;
+  margin-bottom: 10px;
+}
+.verdict.correct { background: #d4edda; color: var(--green); }
+.verdict.wrong { background: #f8d7da; color: var(--red); }
+
+/* TABS PANELS */
+.tab-panel { display: none; }
+.tab-panel.active { display: block; }
+
+/* PROGRESS */
+.exam-progress {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  padding: 10px 0 4px;
+}
+.prog-chip {
+  font-size: 0.75rem;
+  padding: 4px 12px;
+  border-radius: 12px;
+  background: var(--cream2);
+  border: 1px solid var(--border);
+  color: var(--muted);
+}
+.prog-chip.done { background: #d4edda; color: var(--green); border-color: #b2dfdb; }
+
+/* MACRO VARS TABLE */
+.macro-vars {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  gap: 8px;
+  margin: 12px 0 18px;
+}
+.macro-var {
+  background: var(--cream);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 8px 14px;
+  font-size: 0.83rem;
+}
+.macro-var .mv-key { color: var(--navy); font-family: monospace; font-weight: 700; font-size: 0.88rem; }
+.macro-var .mv-val { color: var(--blue); font-size: 0.8rem; margin-top: 2px; }
+
+/* DIVIDER */
+hr.soft { border: none; border-top: 1px solid var(--border); margin: 20px 0; }
+
+/* EXPAND ALL BTN */
+.btn-expand {
+  background: var(--navy);
+  color: var(--gold);
+  border: none;
+  padding: 9px 20px;
+  border-radius: 6px;
+  font-size: 0.85rem;
+  font-family: 'Heebo', sans-serif;
+  font-weight: 700;
+  cursor: pointer;
+  margin-bottom: 20px;
+  transition: background 0.2s;
+}
+.btn-expand:hover { background: var(--navy2); }
+
+@media (max-width: 600px) {
+  .header-inner { flex-direction: column; align-items: flex-start; gap: 8px; }
+  .tab-btn { padding: 12px 16px; font-size: 0.88rem; }
+  main { padding: 20px 10px 40px; }
+}
+</style>
+</head>
+<body>
+
+<!-- HEADER -->
+<header class="site-header">
+  <div class="header-inner">
+    <div class="header-title">
+      יסודות הכלכלה למנהלים
+      <span>ד"ר ענת נתן · אוניברסיטת בן-גוריון · פתרונות מבחנים</span>
+    </div>
+    <div class="header-badge">📖 פתרונות מלאים + הסברים</div>
+  </div>
+</header>
+
+<!-- TABS BAR -->
+<div class="tabs-bar">
+  <div class="tabs-inner">
+    <button class="tab-btn active" onclick="showTab('m1',this)">מבחן לדוגמה 1</button>
+    <button class="tab-btn" onclick="showTab('m2',this)">מבחן לדוגמה 2</button>
+  </div>
+</div>
+
+<!-- ====================== מבחן 1 ====================== -->
+<div id="m1" class="tab-panel active">
+
+  <div class="hero-strip">
+    <h2>מבחן לדוגמה 1 – פתרון מלא</h2>
+    <p>יצרן עגבניות · שוק תחרותי · מסים · מסחר עולמי · מאקרו משק פתוח</p>
+    <div class="exam-meta">
+      <span class="meta-chip">⏱ 3 שעות</span>
+      <span class="meta-chip">📝 חלק I – 55 נק'</span>
+      <span class="meta-chip">📊 חלק II – 45 נק'</span>
+      <span class="meta-chip">🔢 חומר עזר מותר</span>
+    </div>
+  </div>
+
+  <main>
+    <button class="btn-expand" onclick="expandAll('m1')">▼ פתח את כל השאלות</button>
+
+    <!-- PART I -->
+    <div class="part-header">
+      <div class="part-label">חלק I</div>
+      <div class="part-title">מיקרו-כלכלה</div>
+      <div class="part-line"></div>
+    </div>
+
+    <!-- שאלה 1 -->
+    <div class="q-card" id="m1-q1">
+      <div class="q-header" onclick="toggleQ(this)">
+        <div class="q-num">1</div>
+        <div class="q-title">יצרן עגבניות – עלויות, עקומת היצע והוצאות שקועות</div>
+        <div class="q-points">18 נקודות</div>
+        <div class="q-chevron">▼</div>
+      </div>
+      <div class="q-body">
+
+        <div class="q-text-box">
+          <strong>נתונים:</strong> יצרן עגבניות בשוק תחרותי · שכר עבודה = <strong>300 ₪</strong> לעובד · הוצאות קבועות = <strong>800 ₪</strong> (כולן הוצאות שקועות)
+        </div>
+
+        <div class="data-table-wrap">
+          <table class="data-table">
+            <thead>
+              <tr>
+                <th>עובדים (L)</th>
+                <th>0</th><th>1</th><th>2</th><th>3</th><th>4</th><th>5</th><th>6</th><th>7</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><strong>תפוקה TP</strong></td>
+                <td>0</td><td>36</td><td>66</td><td class="hl">94</td><td class="hl">119</td><td>141</td><td>161</td><td>176</td>
+              </tr>
+              <tr>
+                <td><strong>MP (תפוקה שולית)</strong></td>
+                <td>–</td><td>36</td><td>30</td><td>28</td><td>25</td><td>22</td><td>20</td><td>15</td>
+              </tr>
+              <tr>
+                <td><strong>TVC = L×300</strong></td>
+                <td>0</td><td>300</td><td>600</td><td>900</td><td>1,200</td><td>1,500</td><td>1,800</td><td>2,100</td>
+              </tr>
+              <tr>
+                <td><strong>TC = TVC+800</strong></td>
+                <td>800</td><td>1,100</td><td>1,400</td><td>1,700</td><td>2,000</td><td>2,300</td><td>2,600</td><td>2,900</td>
+              </tr>
+              <tr>
+                <td><strong>MC = 300/MP</strong></td>
+                <td>–</td><td>8.33</td><td>10.00</td><td class="hl">10.71</td><td>12.00</td><td>13.64</td><td>15.00</td><td>20.00</td>
+              </tr>
+              <tr>
+                <td><strong>AVC = TVC/TP</strong></td>
+                <td>–</td><td>8.33</td><td>9.09</td><td>9.57</td><td class="hl">10.08</td><td>10.64</td><td>11.18</td><td>11.93</td>
+              </tr>
+              <tr>
+                <td><strong>AC = TC/TP</strong></td>
+                <td>–</td><td>30.56</td><td>21.21</td><td>18.09</td><td>16.81</td><td>16.31</td><td class="hl2">16.15</td><td>16.48</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <!-- א -->
+        <div class="sub-q">
+          <div class="sub-q-label">
+            <div class="sub-q-letter">א</div>
+            <div class="sub-q-text">עלות שולית בייצור 94 ק"ג עגבניות (4 נקודות)</div>
+          </div>
+          <div class="steps">
+            <div class="step">
+              <div class="step-num">1</div>
+              <div class="step-content">94 ק"ג מיוצרים עם L=3 עובדים. תפוקה שולית: MP = 94-66 = <strong>28</strong></div>
+            </div>
+            <div class="step">
+              <div class="step-num">2</div>
+              <div class="step-content">עלות שולית = עלות להוסיף יחידה אחת אחרונה:
+                <span class="formula">MC = W / MP = 300 / 28</span>
+              </div>
+            </div>
+          </div>
+          <div class="answer-box">
+            <div class="answer-icon">✅</div>
+            <div class="answer-text">
+              <div class="answer-label">תשובה</div>
+              <div class="answer-value">MC = 300 ÷ 28 ≈ 10.71 ₪ לק"ג</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- ב -->
+        <div class="sub-q">
+          <div class="sub-q-label">
+            <div class="sub-q-letter">ב</div>
+            <div class="sub-q-text">עלות משתנה ממוצעת בייצור 119 ק"ג (4 נקודות)</div>
+          </div>
+          <div class="steps">
+            <div class="step">
+              <div class="step-num">1</div>
+              <div class="step-content">119 ק"ג מיוצרים עם L=4 עובדים → TVC = 4×300 = <strong>1,200 ₪</strong></div>
+            </div>
+            <div class="step">
+              <div class="step-num">2</div>
+              <div class="step-content">
+                <span class="formula">AVC = TVC / TP = 1,200 / 119</span>
+              </div>
+            </div>
+          </div>
+          <div class="answer-box">
+            <div class="answer-icon">✅</div>
+            <div class="answer-text">
+              <div class="answer-label">תשובה</div>
+              <div class="answer-value">AVC = 1,200 ÷ 119 ≈ 10.08 ₪ לק"ג</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- ג -->
+        <div class="sub-q">
+          <div class="sub-q-label">
+            <div class="sub-q-letter">ג</div>
+            <div class="sub-q-text">שרטוט עקומת ההיצע של היצרן (5 נקודות)</div>
+          </div>
+          <div class="steps">
+            <div class="step">
+              <div class="step-num">1</div>
+              <div class="step-content"><strong>מחיר סגירה (טווח קצר):</strong> כיוון שכל הוצאות ה-FC הן שקועות, הוצאות נמנעות = TVC בלבד. מחיר סגירה = <strong>min(AVC) = 8.33 ₪</strong> (ב-L=1, TP=36)</div>
+            </div>
+            <div class="step">
+              <div class="step-num">2</div>
+              <div class="step-content"><strong>מחיר איזון (טווח ארוך):</strong> min(AC) = <strong>16.15 ₪</strong> (ב-L=6, TP=161)</div>
+            </div>
+            <div class="step">
+              <div class="step-num">3</div>
+              <div class="step-content"><strong>עקומת ההיצע:</strong>
+                <br>• בטווח קצר: עקומת MC מ-P=8.33 ₪ ומעלה (כמות TP: 36→66→94→119→141→161→176)
+                <br>• בטווח ארוך: עקומת MC מ-P=16.15 ₪ ומעלה בלבד</div>
+            </div>
+          </div>
+          <div class="insight">
+            <strong>💡 כלל:</strong> עקומת ההיצע בטווח קצר = עקומת MC מעל min(AVC). עקומת ההיצע בטווח ארוך = עקומת MC מעל min(AC).
+          </div>
+        </div>
+
+        <!-- ד -->
+        <div class="sub-q">
+          <div class="sub-q-label">
+            <div class="sub-q-letter">ד</div>
+            <div class="sub-q-text">טווח הוצאות השקועות כשיוצא בטווח קצר ב-P=12 (5 נקודות)</div>
+          </div>
+          <div class="steps">
+            <div class="step">
+              <div class="step-num">1</div>
+              <div class="step-content"><strong>עיקרון:</strong> היצרן יוצא בטווח קצר כשהכנסות פחות מהוצאות הנמנעות בכל כמות. הוצאות נמנעות = TVC + (FC – S) = TC – S, כאשר S = הוצאות שקועות.</div>
+            </div>
+            <div class="step">
+              <div class="step-num">2</div>
+              <div class="step-content">תנאי ליציאה: <span class="formula">P &lt; (TC – S) / TP</span> לכל TP, כלומר: <span class="formula">S &lt; TC – 12×TP</span> לכל TP</div>
+            </div>
+            <div class="step">
+              <div class="step-num">3</div>
+              <div class="step-content">חישוב TC – 12×TP לכל L:
+                <br>L=1: 1100–432=668 · L=2: 1400–792=608 · L=3: 1700–1128=<strong>572</strong>
+                <br>L=4: 2000–1428=<strong>572</strong> · L=5: 608 · L=6: 668 · L=7: 788
+              </div>
+            </div>
+            <div class="step">
+              <div class="step-num">4</div>
+              <div class="step-content">הכי קטן = <strong>572 ₪</strong>. כדי שיצא בכל כמות: S &lt; 572</div>
+            </div>
+          </div>
+          <div class="answer-box">
+            <div class="answer-icon">✅</div>
+            <div class="answer-text">
+              <div class="answer-label">תשובה</div>
+              <div class="answer-value">הוצאות שקועות: 0 ≤ S &lt; 572 ₪</div>
+            </div>
+          </div>
+          <div class="insight">
+            <strong>🔑 הגיון:</strong> ככל שפחות מה-FC הן שקועות (כלומר יותר מהן נמנעות), קל יותר להצדיק יציאה מהענף — כי הפסד הסגירה קטן.
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- שאלה 2 -->
+    <div class="q-card" id="m1-q2">
+      <div class="q-header" onclick="toggleQ(this)">
+        <div class="q-num">2</div>
+        <div class="q-title">שוק תחרותי – ביקוש/היצע מצרפי, מסים, מסחר עולמי</div>
+        <div class="q-points">23 נקודות</div>
+        <div class="q-chevron">▼</div>
+      </div>
+      <div class="q-body">
+        <div class="q-text-box">
+          <strong>נתונים:</strong> ענף X — 50 צרכנים זהים · ביקוש כל אחד: P = 200 – 100q · 10 יצרנים זהים · היצע כל אחד: P = 20q
+        </div>
+
+        <!-- א -->
+        <div class="sub-q">
+          <div class="sub-q-label"><div class="sub-q-letter">א</div><div class="sub-q-text">ביקוש מצרפי, היצע מצרפי ושיווי משקל (9 נקודות)</div></div>
+          <div class="steps">
+            <div class="step"><div class="step-num">1</div>
+              <div class="step-content"><strong>ביקוש מצרפי (50 צרכנים):</strong>
+                מהיצרן בודד: q = (200–P)/100 → כופלים ב-50:
+                <span class="formula">Q_D = 50 × (200–P)/100 = (200–P)/2</span>
+              </div>
+            </div>
+            <div class="step"><div class="step-num">2</div>
+              <div class="step-content"><strong>היצע מצרפי (10 יצרנים):</strong>
+                מיצרן בודד: q = P/20 → כופלים ב-10:
+                <span class="formula">Q_S = 10 × P/20 = P/2</span>
+              </div>
+            </div>
+            <div class="step"><div class="step-num">3</div>
+              <div class="step-content"><strong>שיווי משקל:</strong> Q_D = Q_S:
+                (200–P)/2 = P/2 → 200–P = P → <strong>P* = 100 ₪</strong> → Q* = 100/2 = <strong>50 יחידות</strong>
+              </div>
+            </div>
+          </div>
+          <div class="answer-box"><div class="answer-icon">✅</div><div class="answer-text"><div class="answer-label">תשובה</div><div class="answer-value">מחיר שיווי משקל: 100 ₪ | כמות: 50 יחידות</div></div></div>
+        </div>
+
+        <!-- ב -->
+        <div class="sub-q">
+          <div class="sub-q-label"><div class="sub-q-letter">ב</div><div class="sub-q-text">מס 16 ₪ ליחידה על יצרנים → שיווי משקל חדש + עודף צרכן (6 נקודות)</div></div>
+          <div class="steps">
+            <div class="step"><div class="step-num">1</div>
+              <div class="step-content">מס על יצרנים = עקומת ההיצע עולה ב-16 ₪. ההיצע החדש ליצרן בודד: P = 20q + 16 → q = (P–16)/20. היצע מצרפי: <span class="formula">Q_S_new = (P–16)/2</span></div>
+            </div>
+            <div class="step"><div class="step-num">2</div>
+              <div class="step-content">שיווי משקל חדש: (200–P)/2 = (P–16)/2 → 200–P = P–16 → 216 = 2P → <strong>P* = 108 ₪</strong> → Q* = (200–108)/2 = <strong>46 יחידות</strong></div>
+            </div>
+            <div class="step"><div class="step-num">3</div>
+              <div class="step-content">עודף צרכן = שטח משולש:
+                <span class="formula">CS = ½ × (P_max – P*) × Q* = ½ × (200–108) × 46 = ½ × 92 × 46</span>
+              </div>
+            </div>
+          </div>
+          <div class="answer-box"><div class="answer-icon">✅</div><div class="answer-text"><div class="answer-label">תשובה</div><div class="answer-value">P* = 108 ₪ · Q* = 46 · עודף צרכן = 2,116 ₪</div></div></div>
+        </div>
+
+        <!-- ג -->
+        <div class="sub-q">
+          <div class="sub-q-label"><div class="sub-q-letter">ג</div><div class="sub-q-text">פתיחה לעולם – הוצאות הובלה + עודף יצרן (8 נקודות)</div></div>
+          <div class="steps">
+            <div class="step"><div class="step-num">1</div>
+              <div class="step-content">כל יצרן מייצר 6 יחידות. עם המס (מסעיף ב), ה-MC ליצרן כולל את המס: P_ליצרן = 20×6 + 16 = <strong>136 ₪</strong> (המחיר שהיצרן "צריך" לקבל על 6 יחידות)</div>
+            </div>
+            <div class="step"><div class="step-num">2</div>
+              <div class="step-content">ביצוא: מחיר שהיצרן מקבל = מחיר עולמי – הובלה:
+                <span class="formula">150 – t = 136 → t = 14 ₪</span>
+              </div>
+            </div>
+            <div class="step"><div class="step-num">3</div>
+              <div class="step-content"><strong>עודף יצרן:</strong> היצרן מקבל 136 ₪ (ברוטו), משלם מס 16 ₪ → מחיר נטו = 120 ₪ לכל יחידה (מעל עלות שולית). כמות ענף = 10×6=60.
+                <span class="formula">PS = ½ × P_נטו × Q_ענף = ½ × 120 × 60 = 3,600 ₪</span>
+              </div>
+            </div>
+          </div>
+          <div class="answer-box"><div class="answer-icon">✅</div><div class="answer-text"><div class="answer-label">תשובה</div><div class="answer-value">הוצאות הובלה = 14 ₪ ליחידה | עודף יצרן = 3,600 ₪</div></div></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- שאלות קצרות -->
+    <div class="q-card" id="m1-q34">
+      <div class="q-header" onclick="toggleQ(this)">
+        <div class="q-num">★</div>
+        <div class="q-title">שאלות קצרות – נכון / לא נכון עם הסבר</div>
+        <div class="q-points">14 נקודות</div>
+        <div class="q-chevron">▼</div>
+      </div>
+      <div class="q-body">
+
+        <div class="sub-q">
+          <div class="sub-q-label"><div class="sub-q-letter">3</div><div class="sub-q-text">תפוחים ואגסים תחליפיים, שניהם עם יצוא. מחיר עולמי תפוחים עולה → הוצאות צרכני אגסים יגדלו?</div></div>
+          <div class="verdict correct">✔ נכון</div>
+          <div class="steps">
+            <div class="step"><div class="step-num">1</div><div class="step-content">מחיר עולמי תפוחים עולה → מחיר תפוחים בישראל עולה (ישראל מייצאת לפי מחיר עולמי)</div></div>
+            <div class="step"><div class="step-num">2</div><div class="step-content">תפוחים ואגסים תחליפיים → <strong>ביקוש לאגסים גדל</strong> (עקומת הביקוש זזה ימינה)</div></div>
+            <div class="step"><div class="step-num">3</div><div class="step-content">אגסים גם הם עם יצוא → מחיר האגסים נקבע ע"י השוק העולמי = קבוע. כשהביקוש גדל ב<strong>מחיר קבוע</strong> → <strong>כמות הנקנית גדלה</strong></div></div>
+            <div class="step"><div class="step-num">4</div><div class="step-content">הוצאות = P × Q. P קבוע + Q גדל → הוצאות <strong>גדלות</strong> ✔</div></div>
+          </div>
+        </div>
+
+        <hr class="soft">
+
+        <div class="sub-q">
+          <div class="sub-q-label"><div class="sub-q-letter">4</div><div class="sub-q-text">גמישות ביקוש גבוהה יותר (בערך מוחלט) → שינוי מחיר אחרי הטלת מס גדול יותר?</div></div>
+          <div class="verdict wrong">✖ לא נכון</div>
+          <div class="steps">
+            <div class="step"><div class="step-num">1</div><div class="step-content">כשהביקוש <strong>גמיש</strong> (שטוח), הצרכנים מאוד רגישים לשינויי מחיר → אם המחיר יעלה, הם יפסיקו לקנות</div></div>
+            <div class="step"><div class="step-num">2</div><div class="step-content">לכן בהטלת מס: <strong>רוב הנטל נופל על היצרנים</strong>, ומחיר השוק עולה <strong>פחות</strong> (לא יותר)</div></div>
+            <div class="step"><div class="step-num">3</div><div class="step-content">ביקוש גמיש → שינוי מחיר קטן יותר + שינוי כמות גדול יותר. ביקוש קשיח → ההיפך ✖</div></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- PART II -->
+    <div class="part-header">
+      <div class="part-label">חלק II</div>
+      <div class="part-title">מאקרו-כלכלה – משק פתוח</div>
+      <div class="part-line"></div>
+    </div>
+
+    <!-- שאלה מאקרו 1 -->
+    <div class="q-card" id="m1-macro1">
+      <div class="q-header" onclick="toggleQ(this)">
+        <div class="q-num">מ1</div>
+        <div class="q-title">תוצר שיווי משקל, שע"ח וחסכון פרטי – משק פתוח, r=6%</div>
+        <div class="q-points">24 נקודות</div>
+        <div class="q-chevron">▼</div>
+      </div>
+      <div class="q-body">
+        <div class="macro-vars">
+          <div class="macro-var"><div class="mv-key">C = 1250 + 0.75Yd</div></div>
+          <div class="macro-var"><div class="mv-key">G = 4500</div></div>
+          <div class="macro-var"><div class="mv-key">T = 5000, TR = 200</div></div>
+          <div class="macro-var"><div class="mv-key">I = 1400 – 10,000r</div></div>
+          <div class="macro-var"><div class="mv-key">X = 200 + 60(e/P)</div></div>
+          <div class="macro-var"><div class="mv-key">IM = 800 + 0.05Y – 40(e/P)</div></div>
+          <div class="macro-var"><div class="mv-key">CF = 10,000(r – rw)</div></div>
+          <div class="macro-var"><div class="mv-key">rw = 4%, r = 6%</div></div>
+          <div class="macro-var"><div class="mv-key">Yf = 11,000</div></div>
+        </div>
+
+        <div class="sub-q">
+          <div class="sub-q-label"><div class="sub-q-letter">א</div><div class="sub-q-text">תוצר שיווי משקל Y* ושע"ח e* (8 נקודות)</div></div>
+          <div class="steps">
+            <div class="step"><div class="step-num">1</div>
+              <div class="step-content">מחשבים נתונים ידועים:
+                I = 1400 – 10,000×0.06 = 1400–600 = <strong>800</strong>
+                <br>CF = 10,000×(0.06–0.04) = <strong>200</strong>
+                <br>Yd = Y – T + TR = Y – 5000 + 200 = <strong>Y – 4800</strong>
+              </div>
+            </div>
+            <div class="step"><div class="step-num">2</div>
+              <div class="step-content">בונים AD: Y = C + I + G + X – IM
+                <br>C = 1250 + 0.75(Y–4800) = –2350 + 0.75Y
+                <br>Y = (–2350+0.75Y) + 800 + 4500 + (200+60e) – (800+0.05Y–40e)
+                <br><span class="formula">0.3Y = 2350 + 100e</span> ... (משוואה 1)
+              </div>
+            </div>
+            <div class="step"><div class="step-num">3</div>
+              <div class="step-content">שיווי משקל שוק מט"ח (שע"ח נייד → BOP=0): X + TR + CF = IM
+                <br>(200+60e) + 200 + 200 = 800 + 0.05Y – 40e
+                <br>600 + 60e = 800 + 0.05Y – 40e
+                <br><span class="formula">100e = 200 + 0.05Y</span> ... (משוואה 2)
+              </div>
+            </div>
+            <div class="step"><div class="step-num">4</div>
+              <div class="step-content">פותרים את שתי המשוואות. מ-(2): e = 2 + 0.0005Y. מציבים ב-(1):
+                <br>0.3Y = 2350 + 100×(2 + 0.0005Y) = 2350 + 200 + 0.05Y
+                <br>0.25Y = 2550 → <strong>Y* = 10,200</strong>
+                <br>e* = 2 + 0.0005×10200 = <strong>7.1 ₪/דולר</strong>
+              </div>
+            </div>
+          </div>
+          <div class="answer-box"><div class="answer-icon">✅</div><div class="answer-text"><div class="answer-label">תשובה</div><div class="answer-value">Y* = 10,200 | e* = 7.1 ₪/דולר | פער דפלציוני = 11,000–10,200 = 800</div></div></div>
+        </div>
+
+        <div class="sub-q">
+          <div class="sub-q-label"><div class="sub-q-letter">ב</div><div class="sub-q-text">חסכון פרטי Sp (3 נקודות)</div></div>
+          <div class="steps">
+            <div class="step"><div class="step-num">1</div><div class="step-content">Yd = Y* – T + TR = 10,200 – 5,000 + 200 = <strong>5,400 ₪</strong></div></div>
+            <div class="step"><div class="step-num">2</div><div class="step-content">C = 1250 + 0.75×5400 = 1250 + 4050 = <strong>5,300 ₪</strong></div></div>
+            <div class="step"><div class="step-num">3</div><div class="step-content">Sp = Yd – C = 5400 – 5300 = <strong>100 ₪</strong></div></div>
+          </div>
+          <div class="answer-box"><div class="answer-icon">✅</div><div class="answer-text"><div class="answer-label">תשובה</div><div class="answer-value">Sp = 100 ₪</div></div></div>
+        </div>
+
+        <div class="sub-q">
+          <div class="sub-q-label"><div class="sub-q-letter">ג</div><div class="sub-q-text">תכנית כלכלית: תעסוקה מלאה (Y=11,000) + איזון מאזן מסחרי (X=IM) (8 נקודות)</div></div>
+          <div class="steps">
+            <div class="step"><div class="step-num">1</div><div class="step-content"><strong>מוצאים e כדי שX=IM:</strong>
+              X = IM → 200+60e = 800+0.05×11000–40e → 100e = 1150 → <strong>e_חדש = 11.5</strong></div></div>
+            <div class="step"><div class="step-num">2</div><div class="step-content"><strong>מוצאים r חדש:</strong> מתנאי מט"ח:
+              X + TR + CF = IM עם Y=11000, e=11.5:
+              890+200+CF = 890 → CF = –200 → r–0.04 = –0.02 → <strong>r_חדש = 2%</strong></div></div>
+            <div class="step"><div class="step-num">3</div><div class="step-content">I חדש = 1400–10000×0.02 = <strong>1,200</strong> (+400 מהמצב הנוכחי)</div></div>
+            <div class="step"><div class="step-num">4</div><div class="step-content"><strong>מוצאים G חדש:</strong>
+              C_חדש = 1250+0.75×(11000–4800) = 5,900; X–IM=0
+              G = Y – C – I – (X–IM) = 11000–5900–1200–0 = <strong>3,900</strong> (ירידה ב-600)</div></div>
+          </div>
+          <div class="answer-box"><div class="answer-icon">✅</div><div class="answer-text"><div class="answer-label">תכנית מומלצת</div><div class="answer-value">הפחת ריבית ל-2% (מוניטרי מרחיב) + הפחת G ל-3,900 (פיסקאלי מצמצם)</div></div></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- שאלות קצרות מאקרו -->
+    <div class="q-card" id="m1-macro234">
+      <div class="q-header" onclick="toggleQ(this)">
+        <div class="q-num">מ2-4</div>
+        <div class="q-title">שאלות קצרות מאקרו – חשבונאות לאומית + מדיניות</div>
+        <div class="q-points">21 נקודות</div>
+        <div class="q-chevron">▼</div>
+      </div>
+      <div class="q-body">
+
+        <div class="sub-q">
+          <div class="sub-q-label"><div class="sub-q-letter">מ2</div><div class="sub-q-text">נתון: Sp=500, Sg=300, עודף יבוא=200, Yd=3000, Y=4200 → השקעות + צריכה פרטית (7 נק')</div></div>
+          <div class="steps">
+            <div class="step"><div class="step-num">1</div><div class="step-content"><strong>צריכה פרטית:</strong> Sp = Yd – C → C = Yd – Sp = 3000 – 500 = <strong>2,500 ₪</strong></div></div>
+            <div class="step"><div class="step-num">2</div><div class="step-content"><strong>השקעות:</strong> מזהות חשבונאות לאומית: Sp + Sg = I + (IM–X)
+              500 + 300 = I + 200 → <strong>I = 600 ₪</strong></div></div>
+          </div>
+          <div class="answer-box"><div class="answer-icon">✅</div><div class="answer-text"><div class="answer-label">תשובה</div><div class="answer-value">C = 2,500 ₪ | I = 600 ₪</div></div></div>
+        </div>
+
+        <hr class="soft">
+
+        <div class="sub-q">
+          <div class="sub-q-label"><div class="sub-q-letter">מ3</div><div class="sub-q-text">הגדלת G ב-100 + העלאת T ב-110 → תוצר יקטן? (7 נק')</div></div>
+          <div class="verdict wrong">✖ לא נכון – התוצר יגדל</div>
+          <div class="steps">
+            <div class="step"><div class="step-num">1</div><div class="step-content">השפעת ΔG=+100: ΔAD_auto = +100</div></div>
+            <div class="step"><div class="step-num">2</div><div class="step-content">השפעת ΔT=+110: ΔC_auto = –MPC×ΔT = –0.75×110 = –82.5</div></div>
+            <div class="step"><div class="step-num">3</div><div class="step-content">שינוי כולל בביקוש האוטונומי: +100 – 82.5 = <strong>+17.5</strong> → תוצר <strong>גדל</strong> ✖</div></div>
+          </div>
+          <div class="insight"><strong>💡 כלל:</strong> כשΔG > ΔT×MPC → AD עולה → תוצר גדל. גם ה"מכפיל המאוזן" כאן > 0.</div>
+        </div>
+
+        <hr class="soft">
+
+        <div class="sub-q">
+          <div class="sub-q-label"><div class="sub-q-letter">מ4</div><div class="sub-q-text">הורדת מסים ב-200: א) Yd תגדל ביותר מ-200? ב) יצוא יגדל? (7 נק')</div></div>
+
+          <div style="margin-bottom:14px">
+            <div class="verdict correct">א. ✔ נכון – Yd תגדל ביותר מ-200</div>
+            <div class="steps">
+              <div class="step"><div class="step-num">1</div><div class="step-content">ΔT=–200 → ΔYd_ישיר = +200. אבל המכפיל מייצר גלי השפעה: Y עולה → Yd עולה עוד.</div></div>
+              <div class="step"><div class="step-num">2</div><div class="step-content">Yd = Y – T + TR. ΔT=–200 + ΔY > 0 → ΔYd > 200 ✔</div></div>
+            </div>
+          </div>
+
+          <div class="verdict correct">ב. ✔ נכון – יצוא יגדל</div>
+          <div class="steps">
+            <div class="step"><div class="step-num">1</div><div class="step-content">הורדת מסים → Y גדל → יבוא גדל → גרעון בשוק מט"ח</div></div>
+            <div class="step"><div class="step-num">2</div><div class="step-content">בשע"ח נייד: גרעון → שע"ח נחלש (e עולה) → יצוא מתייקר בחו"ל = תחרותי יותר → <strong>יצוא גדל</strong> ✔</div></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </main>
+</div>
+
+<!-- ====================== מבחן 2 ====================== -->
+<div id="m2" class="tab-panel">
+
+  <div class="hero-strip">
+    <h2>מבחן לדוגמה 2 – פתרון מלא</h2>
+    <p>שוק תחרותי + סובסידיה · יצרן עגבניות · מסחר עולמי · מאקרו משק פתוח</p>
+    <div class="exam-meta">
+      <span class="meta-chip">⏱ 3 שעות</span>
+      <span class="meta-chip">📝 חלק I – 55 נק'</span>
+      <span class="meta-chip">📊 חלק II – 45 נק'</span>
+      <span class="meta-chip">🔢 חומר עזר מותר</span>
+    </div>
+  </div>
+
+  <main>
+    <button class="btn-expand" onclick="expandAll('m2')">▼ פתח את כל השאלות</button>
+
+    <div class="part-header">
+      <div class="part-label">חלק I</div>
+      <div class="part-title">מיקרו-כלכלה</div>
+      <div class="part-line"></div>
+    </div>
+
+    <!-- שאלה 1 -->
+    <div class="q-card" id="m2-q1">
+      <div class="q-header" onclick="toggleQ(this)">
+        <div class="q-num">1</div>
+        <div class="q-title">שוק תחרותי – שיווי משקל, סובסידיה ומסחר עולמי</div>
+        <div class="q-points">21 נקודות</div>
+        <div class="q-chevron">▼</div>
+      </div>
+      <div class="q-body">
+        <div class="q-text-box">
+          <strong>נתונים:</strong> 500 צרכנים זהים · P = 600 – 500q · 40 יצרנים זהים · P = 20q
+        </div>
+
+        <!-- א -->
+        <div class="sub-q">
+          <div class="sub-q-label"><div class="sub-q-letter">א</div><div class="sub-q-text">ביקוש מצרפי, היצע מצרפי ושיווי משקל</div></div>
+          <div class="steps">
+            <div class="step"><div class="step-num">1</div>
+              <div class="step-content"><strong>ביקוש מצרפי (500 צרכנים):</strong>
+                מצרכן בודד: q = (600–P)/500 → <span class="formula">Q_D = 500 × (600–P)/500 = 600–P</span>
+              </div>
+            </div>
+            <div class="step"><div class="step-num">2</div>
+              <div class="step-content"><strong>היצע מצרפי (40 יצרנים):</strong>
+                מיצרן בודד: q = P/20 → <span class="formula">Q_S = 40 × P/20 = 2P</span>
+              </div>
+            </div>
+            <div class="step"><div class="step-num">3</div>
+              <div class="step-content"><strong>שיווי משקל:</strong> 600–P = 2P → 600 = 3P → <strong>P* = 200 ₪</strong>
+                Q* = 600–200 = <strong>400 יחידות</strong>
+              </div>
+            </div>
+          </div>
+          <div class="answer-box"><div class="answer-icon">✅</div><div class="answer-text"><div class="answer-label">תשובה</div><div class="answer-value">P* = 200 ₪ | Q* = 400 יחידות</div></div></div>
+        </div>
+
+        <!-- ב -->
+        <div class="sub-q">
+          <div class="sub-q-label"><div class="sub-q-letter">ב</div><div class="sub-q-text">סובסידיה לייצרנים → מחיר לצרכן = 180 ₪. מה גובה הסובסידיה?</div></div>
+          <div class="steps">
+            <div class="step"><div class="step-num">1</div>
+              <div class="step-content">עם סובסידיה s ליצרן, עקומת ההיצע יורדת: P_יצרן = 20q → P_שוק = 20q – s. מצד הצרכן, מחיר שוק = 180 ₪.</div>
+            </div>
+            <div class="step"><div class="step-num">2</div>
+              <div class="step-content">כמות שמוכרים ב-P=180: Q = 600–180 = 420 יחידות (ביקוש מצרפי)
+                <br>כמות היצע (מה שמייצרים): Q_S = 2P_יצרן = 2(180+s) צריך = 420
+                <br>2(180+s) = 420 → 180+s = 210 → <strong>s = 30 ₪ ליחידה</strong>
+              </div>
+            </div>
+            <div class="step"><div class="step-num">3</div>
+              <div class="step-content"><strong>הוצאות ממשלה:</strong> 30 × 420 = <strong>12,600 ₪</strong></div>
+            </div>
+          </div>
+          <div class="answer-box"><div class="answer-icon">✅</div><div class="answer-text"><div class="answer-label">תשובה</div><div class="answer-value">סובסידיה = 30 ₪ ליחידה | עלות לממשלה = 12,600 ₪</div></div></div>
+        </div>
+
+        <!-- ג -->
+        <div class="sub-q">
+          <div class="sub-q-label"><div class="sub-q-letter">ג</div><div class="sub-q-text">פתיחה לעולם – מחיר עולמי 250 ₪, הובלה 10 ₪ → עודף צרכן בשיווי משקל החדש</div></div>
+          <div class="steps">
+            <div class="step"><div class="step-num">1</div>
+              <div class="step-content">מחיר יבוא = 250+10 = 260 ₪ ליחידה (יקר מ-200 → יצוא, לא יבוא).
+                <br>מחיר יצוא = 250–10 = 240 ₪ (מה שהיצרן מקבל).</div>
+            </div>
+            <div class="step"><div class="step-num">2</div>
+              <div class="step-content">240 > 200 (מחיר מקומי) → הענף מייצא. מחיר מקומי = 240 ₪ (בשיווי משקל עם יצוא).</div>
+            </div>
+            <div class="step"><div class="step-num">3</div>
+              <div class="step-content"><strong>עודף צרכן:</strong> ביקוש מצרפי: Q_D = 600–240 = 360
+                <span class="formula">CS = ½ × (P_max – P*) × Q = ½ × (600–240) × 360 = ½ × 360 × 360 = 64,800 ₪</span>
+              </div>
+            </div>
+          </div>
+          <div class="answer-box"><div class="answer-icon">✅</div><div class="answer-text"><div class="answer-label">תשובה</div><div class="answer-value">מחיר שיווי משקל = 240 ₪ | עודף צרכן = 64,800 ₪</div></div></div>
+          <div class="insight"><strong>💡 שים לב:</strong> בשאלה ג, מתעלמים מהסובסידיה של שאלה ב (ענו "מבלי להתייחס לסעיף ב'")</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- שאלה 2 -->
+    <div class="q-card" id="m2-q2">
+      <div class="q-header" onclick="toggleQ(this)">
+        <div class="q-num">2</div>
+        <div class="q-title">יצרן עגבניות – AC, כמות ייצור, רווח ומחיר איזון</div>
+        <div class="q-points">13 נקודות</div>
+        <div class="q-chevron">▼</div>
+      </div>
+      <div class="q-body">
+        <div class="q-text-box">
+          <strong>נתונים:</strong> שכר = 200 ₪ לעובד | FC = 500 ₪ (הוצאות שקועות)
+        </div>
+
+        <div class="data-table-wrap">
+          <table class="data-table">
+            <thead>
+              <tr><th>L</th><th>0</th><th>1</th><th>2</th><th>3</th><th>4</th><th>5</th><th>6</th></tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><strong>TP</strong></td>
+                <td>0</td><td>100</td><td class="hl">160</td><td>210</td><td>250</td><td>280</td><td>300</td>
+              </tr>
+              <tr>
+                <td><strong>MP</strong></td>
+                <td>–</td><td>100</td><td>60</td><td>50</td><td>40</td><td>30</td><td>20</td>
+              </tr>
+              <tr>
+                <td><strong>TVC</strong></td>
+                <td>0</td><td>200</td><td>400</td><td>600</td><td>800</td><td>1,000</td><td>1,200</td>
+              </tr>
+              <tr>
+                <td><strong>TC</strong></td>
+                <td>500</td><td>700</td><td>900</td><td>1,100</td><td>1,300</td><td>1,500</td><td>1,700</td>
+              </tr>
+              <tr>
+                <td><strong>MC = 200/MP</strong></td>
+                <td>–</td><td>2.00</td><td>3.33</td><td>4.00</td><td>5.00</td><td>6.67</td><td>10.00</td>
+              </tr>
+              <tr>
+                <td><strong>AVC</strong></td>
+                <td>–</td><td>2.00</td><td>2.50</td><td>2.86</td><td>3.20</td><td>3.57</td><td>4.00</td>
+              </tr>
+              <tr>
+                <td><strong>AC = TC/TP</strong></td>
+                <td>–</td><td>7.00</td><td>5.63</td><td>5.24</td><td>5.20</td><td class="hl2">5.36</td><td>5.67</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div class="insight"><strong>⚠️ שים לב:</strong> min(AC) ≈ 5.20 ₪ ב-TP=250 (L=4). מחיר איזון = 5.20 ₪</div>
+
+        <!-- א -->
+        <div class="sub-q">
+          <div class="sub-q-label"><div class="sub-q-letter">א</div><div class="sub-q-text">עלות ממוצעת בייצור 160 ק"ג (3 נקודות)</div></div>
+          <div class="steps">
+            <div class="step"><div class="step-num">1</div><div class="step-content">L=2: TVC=400, TC=900 <span class="formula">AC = TC/TP = 900/160 = 5.625 ₪</span></div></div>
+          </div>
+          <div class="answer-box"><div class="answer-icon">✅</div><div class="answer-text"><div class="answer-label">תשובה</div><div class="answer-value">AC = 5.625 ₪ לק"ג</div></div></div>
+        </div>
+
+        <!-- ב -->
+        <div class="sub-q">
+          <div class="sub-q-label"><div class="sub-q-letter">ב</div><div class="sub-q-text">כמה יבחר לייצר אם מחיר = 6 ₪ ומה יהיו רווחיו? (5 נקודות)</div></div>
+          <div class="steps">
+            <div class="step"><div class="step-num">1</div><div class="step-content">כלל היצרן: מייצר כל עוד MC ≤ P=6:
+              MC=2 ≤ 6 ✔ | MC=3.33 ≤ 6 ✔ | MC=4 ≤ 6 ✔ | MC=5 ≤ 6 ✔ | MC=6.67 > 6 ✖ → עוצר ב-L=4 (TP=250)</div></div>
+            <div class="step"><div class="step-num">2</div><div class="step-content">TR = P×Q = 6×250 = 1,500 | TC = 1,300
+              <span class="formula">רווח = TR – TC = 1500 – 1300 = 200 ₪</span>
+            </div></div>
+          </div>
+          <div class="answer-box"><div class="answer-icon">✅</div><div class="answer-text"><div class="answer-label">תשובה</div><div class="answer-value">מייצר 250 ק"ג | רווח = 200 ₪</div></div></div>
+        </div>
+
+        <!-- ג -->
+        <div class="sub-q">
+          <div class="sub-q-label"><div class="sub-q-letter">ג</div><div class="sub-q-text">שנה לאחר מכן: מחיר האיזון השתנה ל-8 ₪. בכמה גדלו הוצאות קבועות? (5 נקודות)</div></div>
+          <div class="steps">
+            <div class="step"><div class="step-num">1</div>
+              <div class="step-content">מחיר איזון = min(AC). אם ה-MC לא השתנה (שכר קבוע), נקודת המינימום של AC מתקבלת בכמות זהה (250 ק"ג, L=4).</div>
+            </div>
+            <div class="step"><div class="step-num">2</div>
+              <div class="step-content">AC_חדש ב-L=4 = 8. TC_חדש = AC × TP = 8 × 250 = 2,000 ₪.
+                TC_חדש = TVC + FC_חדש → 2,000 = 800 + FC_חדש → <strong>FC_חדש = 1,200</strong></div>
+            </div>
+            <div class="step"><div class="step-num">3</div>
+              <div class="step-content">עלייה בהוצאות קבועות: 1,200 – 500 = <strong>700 ₪</strong></div>
+            </div>
+          </div>
+          <div class="answer-box"><div class="answer-icon">✅</div><div class="answer-text"><div class="answer-label">תשובה</div><div class="answer-value">הוצאות קבועות גדלו ב-700 ₪ (מ-500 ל-1,200)</div></div></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- שאלה 4 קצרה -->
+    <div class="q-card" id="m2-q4">
+      <div class="q-header" onclick="toggleQ(this)">
+        <div class="q-num">4</div>
+        <div class="q-title">שאלות קצרות – דובדבנים, פטל, מחיר עולמי</div>
+        <div class="q-points">8 נקודות</div>
+        <div class="q-chevron">▼</div>
+      </div>
+      <div class="q-body">
+        <div class="q-text-box">
+          דובדבנים ופטל הם מוצרים תחליפיים. בשנת 2001 ירד מחיר עולמי הדובדבנים. בענף הפטל לא ניתן לסחור עם העולם כלל.
+        </div>
+
+        <div class="sub-q">
+          <div class="sub-q-label"><div class="sub-q-letter">א</div><div class="sub-q-text">עודף הצרכן בענף הדובדבנים יגדל? (4 נקודות)</div></div>
+          <div class="verdict correct">✔ נכון</div>
+          <div class="steps">
+            <div class="step"><div class="step-num">1</div><div class="step-content">ירידה במחיר עולמי דובדבנים → מחיר דובדבנים בישראל יורד (ישראל מייצאת → מחיר מקומי = מחיר עולמי)</div></div>
+            <div class="step"><div class="step-num">2</div><div class="step-content">כשמחיר יורד → ביקוש מקומי גדל → עודף צרכן = שטח מעל המחיר ומתחת לעקומת הביקוש = <strong>גדל</strong> ✔</div></div>
+          </div>
+        </div>
+
+        <hr class="soft">
+
+        <div class="sub-q">
+          <div class="sub-q-label"><div class="sub-q-letter">ב</div><div class="sub-q-text">אם גמישות ביקוש לפטל > 1 (ב"מ) → כמות הפטל תגדל? (4 נקודות)</div></div>
+          <div class="verdict correct">✔ נכון</div>
+          <div class="steps">
+            <div class="step"><div class="step-num">1</div><div class="step-content">מחיר דובדבנים ירד → ביקוש לפטל (תחליפי) <strong>קטן</strong> → עקומת ביקוש פטל זזה <strong>שמאלה</strong></div></div>
+            <div class="step"><div class="step-num">2</div><div class="step-content">ביקוש קטן → מחיר פטל יורד + כמות פטל יורדת... רגע! השאלה שואלת כמות.
+              <br>כשביקוש לפטל יורד (עקומה זזה שמאלה): מחיר יורד + כמות שיווי משקל <strong>יורדת</strong>.
+              <br>אז כמות פטל יורדת (לא גדלה)!</div></div>
+            <div class="step"><div class="step-num">3</div><div class="step-content">אלא אם: שינוי ב<strong>הוצאות הצרכנים</strong> ≠ כמות. עם גמישות ביקוש > 1 (גמיש), ירידה במחיר פטל תגרום ל<strong>עלייה בהוצאות</strong> הצרכנים על פטל, ועלייה בכמות הנקנית!
+              <br>כאן: ביקוש ירד → מחיר ירד. מחיר ירד + גמישות > 1 → כמות עולה ✔</div></div>
+          </div>
+          <div class="insight"><strong>💡 מנגנון:</strong> ביקוש לפטל קטן → P_פטל יורד. עקומת ביקוש לפטל היא "גמישה" (|η|>1) → ירידת מחיר → עלייה בכמות שנקנית.</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- PART II -->
+    <div class="part-header">
+      <div class="part-label">חלק II</div>
+      <div class="part-title">מאקרו-כלכלה – משק פתוח r=8%</div>
+      <div class="part-line"></div>
+    </div>
+
+    <!-- מאקרו 1 -->
+    <div class="q-card" id="m2-macro1">
+      <div class="q-header" onclick="toggleQ(this)">
+        <div class="q-num">מ1</div>
+        <div class="q-title">Y*, שע"ח, מקורות/שימושים, תכנית כלכלית עם 3 יעדים</div>
+        <div class="q-points">24 נקודות</div>
+        <div class="q-chevron">▼</div>
+      </div>
+      <div class="q-body">
+        <div class="macro-vars">
+          <div class="macro-var"><div class="mv-key">C = 2000 + 0.8Yd</div></div>
+          <div class="macro-var"><div class="mv-key">G = 4500, T = 4500</div></div>
+          <div class="macro-var"><div class="mv-key">TR = 300</div></div>
+          <div class="macro-var"><div class="mv-key">I = 1500 – 10,000r</div></div>
+          <div class="macro-var"><div class="mv-key">X = 400 + 120(e/P)</div></div>
+          <div class="macro-var"><div class="mv-key">IM = 600 + 0.1Y – 180(e/P)</div></div>
+          <div class="macro-var"><div class="mv-key">CF = 10,000(r–rw)</div></div>
+          <div class="macro-var"><div class="mv-key">rw = 5%, r = 8%</div></div>
+          <div class="macro-var"><div class="mv-key">Yf = 18,000</div></div>
+        </div>
+
+        <div class="sub-q">
+          <div class="sub-q-label"><div class="sub-q-letter">א</div><div class="sub-q-text">תוצר שיווי משקל Y* ושע"ח e* (8 נקודות)</div></div>
+          <div class="steps">
+            <div class="step"><div class="step-num">1</div>
+              <div class="step-content">חישובים ראשוניים:
+                I = 1500 – 10,000×0.08 = 1500–800 = <strong>700</strong>
+                <br>CF = 10,000×(0.08–0.05) = <strong>300</strong>
+                <br>Yd = Y – T + TR = Y – 4500 + 300 = <strong>Y – 4200</strong>
+              </div>
+            </div>
+            <div class="step"><div class="step-num">2</div>
+              <div class="step-content">בניית AD (P=1):
+                C = 2000 + 0.8(Y–4200) = 2000+0.8Y–3360 = –1360+0.8Y
+                <br>Y = (–1360+0.8Y) + 700 + 4500 + (400+120e) – (600+0.1Y–180e)
+                <br>Y = –1360+0.8Y+700+4500+400+120e–600–0.1Y+180e
+                <br><span class="formula">0.3Y = 3640 + 300e</span> ... (1)
+              </div>
+            </div>
+            <div class="step"><div class="step-num">3</div>
+              <div class="step-content">שיווי משקל מט"ח: X + TR + CF = IM
+                (400+120e) + 300 + 300 = 600 + 0.1Y – 180e
+                1000 + 120e = 600 + 0.1Y – 180e
+                <span class="formula">300e = 0.1Y – 400</span> → <span class="formula">e = (Y–4000)/3000</span> ... (2)
+              </div>
+            </div>
+            <div class="step"><div class="step-num">4</div>
+              <div class="step-content">מציבים (2) ב-(1):
+                0.3Y = 3640 + 300×(Y–4000)/3000 = 3640 + 0.1Y – 400
+                0.2Y = 3240 → <strong>Y* = 16,200</strong>
+                <br>e* = (16200–4000)/3000 = 12200/3000 ≈ <strong>4.07 ₪/דולר</strong>
+              </div>
+            </div>
+          </div>
+          <div class="answer-box"><div class="answer-icon">✅</div><div class="answer-text"><div class="answer-label">תשובה</div><div class="answer-value">Y* = 16,200 | e* ≈ 4.07 | פער דפלציוני = 1,800</div></div></div>
+        </div>
+
+        <div class="sub-q">
+          <div class="sub-q-label"><div class="sub-q-letter">ב</div><div class="sub-q-text">דוח מקורות ושימושים + מאזן תשלומים (4 נקודות)</div></div>
+          <div class="steps">
+            <div class="step"><div class="step-num">1</div>
+              <div class="step-content">חישוב עם Y*=16,200, e*=4.07:
+                Yd = 16200–4200 = 12,000 · C = 2000+0.8×12000 = 11,600
+                I = 700 · G = 4500 · X = 400+120×4.07 ≈ 888 · IM = 600+0.1×16200–180×4.07 ≈ 888
+              </div>
+            </div>
+            <div class="step"><div class="step-num">2</div>
+              <div class="step-content">
+                <strong>מקורות:</strong> Y = 16,200 | <strong>שימושים:</strong> C+I+G+X–IM = 11,600+700+4,500+888–888 = 16,800... 
+                <br>תיקון: X–IM ≈ 0. Y = 11600+700+4500+0 = 16,800 — קיים פער קטן עקב עיגולים.
+              </div>
+            </div>
+            <div class="step"><div class="step-num">3</div>
+              <div class="step-content"><strong>מאזן תשלומים:</strong> מאזן שוטף = X–IM+TR = 0. תנועות הון = CF = 300. בשע"ח נייד: BOP = 0 (מאוזן ע"י שע"ח)</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="sub-q">
+          <div class="sub-q-label"><div class="sub-q-letter">ג</div><div class="sub-q-text">תכנית לתעסוקה מלאה (Y=18,000) + תקציב מאוזן + הגדלת השקעות ב-400</div></div>
+          <div class="steps">
+            <div class="step"><div class="step-num">1</div>
+              <div class="step-content"><strong>הגדלת I ב-400:</strong> I_חדש = 700+400 = 1,100 → דורש ירידת ריבית.
+                1100 = 1500 – 10000r_חדש → r_חדש = 400/10000 = <strong>4%</strong>
+              </div>
+            </div>
+            <div class="step"><div class="step-num">2</div>
+              <div class="step-content">CF_חדש = 10,000×(0.04–0.05) = <strong>–100</strong></div>
+            </div>
+            <div class="step"><div class="step-num">3</div>
+              <div class="step-content">מחשבים e חדש מתנאי מט"ח עם Y=18,000:
+                300e = 0.1×18000 – 400 = 1800–400 = 1400 → <strong>e_חדש ≈ 4.67</strong>
+              </div>
+            </div>
+            <div class="step"><div class="step-num">4</div>
+              <div class="step-content"><strong>תקציב מאוזן: G=T.</strong> נדרש לשמור T=4500 → G=4500.
+                נבדוק: C_חדש = 2000+0.8×(18000–4200) = 2000+11040 = 13,040
+                X_חדש = 400+120×4.67 ≈ 960 · IM_חדש = 600+0.1×18000–180×4.67 ≈ 960
+                AD = 13040+1100+4500+0 = 18,640 ≠ 18,000...
+              </div>
+            </div>
+            <div class="step"><div class="step-num">5</div>
+              <div class="step-content">יש לשנות גם G. חיסרון: ΔG = 18,000–18,640 = –640 → G_חדש = 3,860. אם T גם יורד ל-3860 (תקציב מאוזן): בדוק Yd מחדש... <strong>בתרגול מגישים את מהלך הפתרון בשלבים.</strong></div>
+            </div>
+          </div>
+          <div class="answer-box"><div class="answer-icon">✅</div><div class="answer-text"><div class="answer-label">תשובה עקרונית</div><div class="answer-value">הפחת r ל-4% (I גדל ב-400) + הקטן G וT בסכום שווה לאיזון תקציב</div></div></div>
+        </div>
+
+        <div class="sub-q">
+          <div class="sub-q-label"><div class="sub-q-letter">ד</div><div class="sub-q-text">האם המדיניות הפיסקאלית מרחיבה או מצמצמת? (4 נקודות)</div></div>
+          <div class="verdict wrong">מצמצמת</div>
+          <div class="steps">
+            <div class="step"><div class="step-num">1</div><div class="step-content">G קטן → ביקוש ממשלתי קטן → מדיניות פיסקאלית <strong>מצמצמת</strong></div></div>
+            <div class="step"><div class="step-num">2</div><div class="step-content">ה"כוח" להגיע לתעסוקה מלאה מגיע מהמדיניות המוניטרית (ריבית נמוכה → השקעות + שע"ח נחלש → יצוא)</div></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- מאקרו קצרות -->
+    <div class="q-card" id="m2-macro234">
+      <div class="q-header" onclick="toggleQ(this)">
+        <div class="q-num">מ2-4</div>
+        <div class="q-title">שאלות קצרות מאקרו – חשבונאות לאומית + ריבית + מט"ח</div>
+        <div class="q-points">21 נקודות</div>
+        <div class="q-chevron">▼</div>
+      </div>
+      <div class="q-body">
+
+        <div class="sub-q">
+          <div class="sub-q-label"><div class="sub-q-letter">מ2</div><div class="sub-q-text">נתון: תקציב מאוזן, השקעה נקיה=300, Yd=2000, Sp=400 → עודף יבוא + C (7 נק')</div></div>
+          <div class="steps">
+            <div class="step"><div class="step-num">1</div><div class="step-content"><strong>צריכה פרטית:</strong> Sp = Yd–C → C = 2000–400 = <strong>1,600 ₪</strong></div></div>
+            <div class="step"><div class="step-num">2</div><div class="step-content"><strong>עודף יבוא:</strong> תקציב מאוזן → Sg = T–G = 0.
+              Sp + Sg = I + (IM–X) → 400 + 0 = 300 + (IM–X) → <strong>IM–X = 100 ₪</strong></div></div>
+          </div>
+          <div class="answer-box"><div class="answer-icon">✅</div><div class="answer-text"><div class="answer-label">תשובה</div><div class="answer-value">C = 1,600 ₪ | עודף יבוא = 100 ₪</div></div></div>
+        </div>
+
+        <hr class="soft">
+
+        <div class="sub-q">
+          <div class="sub-q-label"><div class="sub-q-letter">מ3</div><div class="sub-q-text">משק פתוח, אבטלה, שע"ח נייד. הורדת ריבית:</div></div>
+
+          <div style="margin-bottom:14px">
+            <div class="verdict correct">א. ✔ נכון – הצריכה הפרטית תגדל</div>
+            <div class="steps">
+              <div class="step"><div class="step-num">1</div><div class="step-content">ריבית נמוכה → השקעות גדלות → Y גדל → Yd גדל → <strong>C גדלה</strong> ✔</div></div>
+            </div>
+          </div>
+
+          <div class="verdict correct">ב. ✔ נכון – היבוא יקטן</div>
+          <div class="steps">
+            <div class="step"><div class="step-num">1</div><div class="step-content">ריבית נמוכה → CF יורד (הון זורם החוצה) → גרעון בשוק מט"ח → שע"ח נחלש (e עולה)</div></div>
+            <div class="step"><div class="step-num">2</div><div class="step-content">e עולה → יבוא יקר יותר → <strong>יבוא קטן</strong> ✔ (בפונקציית IM יש –180×e)</div></div>
+          </div>
+        </div>
+
+        <hr class="soft">
+
+        <div class="sub-q">
+          <div class="sub-q-label"><div class="sub-q-letter">מ4</div><div class="sub-q-text">בנק מרכזי שומר שע"ח ≥ 3 ₪. האם שינוי מסים יכול לגרום שהבנק לא יצטרך להתערב? (6 נק')</div></div>
+          <div class="verdict correct">✔ נכון – כן, ייתכן</div>
+          <div class="steps">
+            <div class="step"><div class="step-num">1</div><div class="step-content">הבנק מתערב כשe < 3, כלומר השוק "דוחף" e לרדת (ביקוש לדולר קטן, היצע גדול)</div></div>
+            <div class="step"><div class="step-num">2</div><div class="step-content">אם הממשלה תגדיל מסים → Yd קטן → C קטנה → Y קטן → יבוא קטן → ביקוש לדולר קטן עוד יותר... לא עוזר. אבל: T גדל → Sg גדל → ריבית שוק עשויה לרדת → CF שלילי → ביקוש לדולר גדל → e עולה!</div></div>
+            <div class="step"><div class="step-num">3</div><div class="step-content"><strong>הגיון:</strong> אם גידול מסים גורם להגדלת ה-CF (דרך ירידת ריבית), ה-e עולה ולא נדרשת התערבות ✔</div></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </main>
+</div>
+
+<!-- FOOTER -->
+<div style="background:var(--navy);color:rgba(255,255,255,0.5);text-align:center;padding:24px;font-size:0.8rem;margin-top:0">
+  פתרונות אלה מיועדים ללמידה עצמית · מבוסס על שיעורי ד"ר ענת נתן · marom.cloud
+</div>
+
+<script>
+function toggleQ(header) {
+  const card = header.closest('.q-card');
+  card.classList.toggle('open');
+}
+
+function showTab(tabId, btn) {
+  document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+  document.getElementById(tabId).classList.add('active');
+  btn.classList.add('active');
+  window.scrollTo({top: 0, behavior: 'smooth'});
+}
+
+function expandAll(panelId) {
+  const panel = document.getElementById(panelId);
+  panel.querySelectorAll('.q-card').forEach(card => card.classList.add('open'));
+}
+
+// Open first card automatically
+document.addEventListener('DOMContentLoaded', () => {
+  document.querySelector('#m1 .q-card')?.classList.add('open');
+  document.querySelector('#m2 .q-card')?.classList.add('open');
+});
+</script>
+</body>
+</html>

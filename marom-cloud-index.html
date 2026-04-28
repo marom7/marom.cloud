@@ -1,0 +1,711 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>marom.cloud — code your mind</title>
+<meta name="description" content="Marom — IT Professional & Developer. Building internal tools, systems and digital products.">
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Mono:wght@300;400;500&family=Heebo:wght@300;400;500;700&display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  --bg:       #f7f4ef;
+  --bg2:      #edeae3;
+  --ink:      #1a1714;
+  --ink2:     #4a4540;
+  --muted:    #9a948c;
+  --accent:   #c8562a;
+  --accent2:  #1a4f3a;
+  --border:   rgba(26,23,20,0.1);
+  --serif:    'DM Serif Display', Georgia, serif;
+  --mono:     'DM Mono', monospace;
+  --sans:     'Heebo', sans-serif;
+}
+
+html { scroll-behavior: smooth; }
+
+body {
+  font-family: var(--sans);
+  background: var(--bg);
+  color: var(--ink);
+  min-height: 100vh;
+  overflow-x: hidden;
+}
+
+/* ── NOISE TEXTURE ── */
+body::after {
+  content: '';
+  position: fixed;
+  inset: 0;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='1'/%3E%3C/svg%3E");
+  opacity: 0.028;
+  pointer-events: none;
+  z-index: 1000;
+}
+
+/* ── NAV ── */
+nav {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 22px 40px;
+  border-bottom: 1px solid var(--border);
+  position: sticky;
+  top: 0;
+  background: rgba(247,244,239,0.92);
+  backdrop-filter: blur(12px);
+  z-index: 100;
+}
+
+.nav-logo {
+  font-family: var(--mono);
+  font-size: 0.95rem;
+  font-weight: 500;
+  color: var(--ink);
+  text-decoration: none;
+  letter-spacing: -0.3px;
+}
+.nav-logo span { color: var(--accent); }
+
+.nav-links {
+  display: flex;
+  align-items: center;
+  gap: 32px;
+  list-style: none;
+}
+.nav-links a {
+  font-size: 0.8rem;
+  font-weight: 500;
+  color: var(--ink2);
+  text-decoration: none;
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+  transition: color 0.2s;
+}
+.nav-links a:hover { color: var(--accent); }
+
+/* ── HERO ── */
+.hero {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 100px 40px 80px;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 60px;
+  align-items: center;
+}
+
+.hero-left { position: relative; }
+
+.hero-eyebrow {
+  font-family: var(--mono);
+  font-size: 0.75rem;
+  color: var(--muted);
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  margin-bottom: 22px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.hero-eyebrow::before {
+  content: '';
+  display: block;
+  width: 28px;
+  height: 1px;
+  background: var(--muted);
+}
+
+h1 {
+  font-family: var(--serif);
+  font-size: clamp(3rem, 5.5vw, 5rem);
+  line-height: 1.05;
+  letter-spacing: -1.5px;
+  color: var(--ink);
+  margin-bottom: 28px;
+}
+h1 .accent { color: var(--accent); font-style: italic; }
+h1 .line2 { display: block; }
+
+.hero-desc {
+  font-size: 1rem;
+  line-height: 1.75;
+  color: var(--ink2);
+  max-width: 420px;
+  margin-bottom: 40px;
+  font-weight: 300;
+}
+
+.hero-ctas {
+  display: flex;
+  gap: 14px;
+  flex-wrap: wrap;
+}
+
+.btn-primary {
+  background: var(--ink);
+  color: var(--bg);
+  font-family: var(--mono);
+  font-size: 0.8rem;
+  font-weight: 500;
+  padding: 13px 26px;
+  border-radius: 4px;
+  text-decoration: none;
+  letter-spacing: 0.3px;
+  transition: background 0.2s, transform 0.15s;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+}
+.btn-primary:hover { background: var(--accent); transform: translateY(-1px); }
+
+.btn-ghost {
+  border: 1px solid var(--border);
+  color: var(--ink2);
+  font-family: var(--mono);
+  font-size: 0.8rem;
+  font-weight: 400;
+  padding: 13px 26px;
+  border-radius: 4px;
+  text-decoration: none;
+  letter-spacing: 0.3px;
+  transition: border-color 0.2s, color 0.2s;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+}
+.btn-ghost:hover { border-color: var(--ink); color: var(--ink); }
+
+/* ── HERO RIGHT — stats card ── */
+.hero-right {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.stat-card {
+  background: #fff;
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 22px 26px;
+  display: flex;
+  align-items: center;
+  gap: 18px;
+  animation: slideIn 0.5s ease both;
+}
+.stat-card:nth-child(1) { animation-delay: 0.3s; }
+.stat-card:nth-child(2) { animation-delay: 0.45s; margin-right: -24px; }
+.stat-card:nth-child(3) { animation-delay: 0.6s; margin-right: 24px; }
+
+.stat-icon {
+  width: 44px; height: 44px;
+  border-radius: 10px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 1.3rem;
+  flex-shrink: 0;
+}
+.si-orange { background: #fef0eb; }
+.si-green  { background: #eaf4ef; }
+.si-blue   { background: #eaf0fa; }
+
+.stat-label { font-size: 0.75rem; color: var(--muted); font-weight: 400; margin-bottom: 3px; }
+.stat-value { font-family: var(--serif); font-size: 1.1rem; color: var(--ink); }
+
+/* ── SECTION ── */
+section {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 80px 40px;
+}
+
+.section-label {
+  font-family: var(--mono);
+  font-size: 0.72rem;
+  color: var(--muted);
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  margin-bottom: 48px;
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+.section-label::after {
+  content: '';
+  flex: 1;
+  height: 1px;
+  background: var(--border);
+}
+
+/* ── STACK ── */
+.stack-grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+.stack-tag {
+  font-family: var(--mono);
+  font-size: 0.8rem;
+  padding: 8px 16px;
+  border-radius: 100px;
+  border: 1px solid var(--border);
+  color: var(--ink2);
+  background: #fff;
+  transition: all 0.2s;
+  cursor: default;
+}
+.stack-tag:hover { background: var(--ink); color: var(--bg); border-color: var(--ink); }
+.stack-tag.accent { background: var(--accent); color: #fff; border-color: var(--accent); }
+.stack-tag.accent2 { background: var(--accent2); color: #fff; border-color: var(--accent2); }
+
+/* ── PROJECTS ── */
+.projects-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 18px;
+}
+
+.proj-card {
+  background: #fff;
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 28px 24px;
+  text-decoration: none;
+  color: inherit;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  transition: transform 0.25s, box-shadow 0.25s, border-color 0.25s;
+  position: relative;
+  overflow: hidden;
+}
+.proj-card::before {
+  content: '';
+  position: absolute;
+  top: 0; right: 0;
+  width: 60px; height: 60px;
+  background: var(--card-color, var(--accent));
+  opacity: 0.07;
+  border-radius: 0 12px 0 60px;
+  transition: opacity 0.25s;
+}
+.proj-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 12px 36px rgba(0,0,0,0.08);
+  border-color: var(--card-color, var(--accent));
+}
+.proj-card:hover::before { opacity: 0.14; }
+
+.proj-icon { font-size: 1.5rem; margin-bottom: 4px; }
+.proj-title {
+  font-family: var(--serif);
+  font-size: 1.1rem;
+  color: var(--ink);
+}
+.proj-desc {
+  font-size: 0.82rem;
+  color: var(--ink2);
+  line-height: 1.65;
+  font-weight: 300;
+  flex: 1;
+}
+.proj-tag {
+  font-family: var(--mono);
+  font-size: 0.68rem;
+  color: var(--muted);
+  letter-spacing: 0.5px;
+}
+
+/* ── ABOUT ── */
+.about-wrap {
+  display: grid;
+  grid-template-columns: 1fr 1.4fr;
+  gap: 80px;
+  align-items: start;
+}
+
+.about-title {
+  font-family: var(--serif);
+  font-size: clamp(2rem, 3.5vw, 2.8rem);
+  line-height: 1.15;
+  letter-spacing: -0.5px;
+  margin-bottom: 24px;
+}
+.about-title em { font-style: italic; color: var(--accent); }
+
+.about-text {
+  font-size: 0.95rem;
+  line-height: 1.85;
+  color: var(--ink2);
+  font-weight: 300;
+  margin-bottom: 16px;
+}
+
+.about-facts {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  overflow: hidden;
+  background: #fff;
+}
+.fact-row {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding: 16px 22px;
+  border-bottom: 1px solid var(--border);
+  font-size: 0.85rem;
+}
+.fact-row:last-child { border-bottom: none; }
+.fact-key {
+  font-family: var(--mono);
+  font-size: 0.72rem;
+  color: var(--muted);
+  width: 110px;
+  flex-shrink: 0;
+  letter-spacing: 0.3px;
+}
+.fact-val { color: var(--ink); font-weight: 400; }
+.fact-dot {
+  width: 7px; height: 7px;
+  border-radius: 50%;
+  flex-shrink: 0;
+  margin-right: 4px;
+}
+.dot-green { background: #22c55e; }
+.dot-amber { background: var(--accent); }
+
+/* ── MBA BANNER ── */
+.mba-banner {
+  background: var(--ink);
+  border-radius: 16px;
+  padding: 40px 48px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 32px;
+  margin: 0 40px 80px;
+  max-width: 1020px;
+  margin-inline: auto;
+  flex-wrap: wrap;
+}
+.mba-banner-text h3 {
+  font-family: var(--serif);
+  font-size: 1.6rem;
+  color: #fff;
+  margin-bottom: 6px;
+}
+.mba-banner-text p {
+  font-size: 0.85rem;
+  color: rgba(255,255,255,0.55);
+  font-weight: 300;
+}
+.btn-banner {
+  background: var(--accent);
+  color: #fff;
+  font-family: var(--mono);
+  font-size: 0.8rem;
+  font-weight: 500;
+  padding: 13px 26px;
+  border-radius: 6px;
+  text-decoration: none;
+  white-space: nowrap;
+  transition: opacity 0.2s, transform 0.15s;
+}
+.btn-banner:hover { opacity: 0.88; transform: translateY(-1px); }
+
+/* ── FOOTER ── */
+footer {
+  border-top: 1px solid var(--border);
+  padding: 32px 40px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  max-width: 1100px;
+  margin: 0 auto;
+  flex-wrap: wrap;
+  gap: 14px;
+}
+.footer-logo {
+  font-family: var(--mono);
+  font-size: 0.85rem;
+  color: var(--muted);
+}
+.footer-logo span { color: var(--accent); }
+.footer-links {
+  display: flex;
+  gap: 24px;
+  list-style: none;
+}
+.footer-links a {
+  font-size: 0.78rem;
+  color: var(--muted);
+  text-decoration: none;
+  transition: color 0.2s;
+}
+.footer-links a:hover { color: var(--ink); }
+.footer-copy {
+  font-size: 0.75rem;
+  color: var(--muted);
+  font-family: var(--mono);
+}
+
+/* ── DIVIDER ── */
+.divider {
+  border: none;
+  border-top: 1px solid var(--border);
+  margin: 0 40px;
+}
+
+/* ── ANIMATIONS ── */
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(20px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+@keyframes slideIn {
+  from { opacity: 0; transform: translateX(20px); }
+  to   { opacity: 1; transform: translateX(0); }
+}
+
+.hero-left { animation: fadeUp 0.65s ease both; }
+.hero-eyebrow { animation: fadeUp 0.5s ease both; }
+
+.proj-card { animation: fadeUp 0.5s ease both; }
+.proj-card:nth-child(1) { animation-delay: 0.05s; }
+.proj-card:nth-child(2) { animation-delay: 0.12s; }
+.proj-card:nth-child(3) { animation-delay: 0.19s; }
+.proj-card:nth-child(4) { animation-delay: 0.26s; }
+.proj-card:nth-child(5) { animation-delay: 0.33s; }
+
+/* ── RESPONSIVE ── */
+@media (max-width: 860px) {
+  nav { padding: 18px 24px; }
+  .hero { grid-template-columns: 1fr; padding: 60px 24px 40px; }
+  .hero-right { display: none; }
+  section { padding: 60px 24px; }
+  .projects-grid { grid-template-columns: 1fr 1fr; }
+  .about-wrap { grid-template-columns: 1fr; gap: 40px; }
+  .mba-banner { margin-inline: 24px; padding: 28px 28px; }
+  footer { padding: 28px 24px; }
+  .divider { margin: 0 24px; }
+}
+@media (max-width: 520px) {
+  .projects-grid { grid-template-columns: 1fr; }
+  .nav-links { display: none; }
+  h1 { font-size: 2.6rem; }
+}
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <a class="nav-logo" href="/">marom<span>.cloud</span></a>
+  <ul class="nav-links">
+    <li><a href="#work">Work</a></li>
+    <li><a href="#about">About</a></li>
+    <li><a href="/mba/">MBA</a></li>
+    <li><a href="mailto:hi@marom.cloud">Contact</a></li>
+  </ul>
+</nav>
+
+<!-- HERO -->
+<div class="hero">
+  <div class="hero-left">
+    <div class="hero-eyebrow">IT Professional & Developer · Ashdod, IL</div>
+    <h1>
+      code<br>
+      <span class="accent">your</span>
+      <span class="line2">mind.</span>
+    </h1>
+    <p class="hero-desc">
+      20+ שנות IT · 5 שנות פיתוח · MBA בתהליך.<br>
+      בונה כלים פנימיים, מערכות ניהול ומוצרים דיגיטליים לארגונים.
+    </p>
+    <div class="hero-ctas">
+      <a href="#work" class="btn-primary">→ הפרויקטים שלי</a>
+      <a href="mailto:hi@marom.cloud" class="btn-ghost">✉ צור קשר</a>
+    </div>
+  </div>
+
+  <div class="hero-right">
+    <div class="stat-card">
+      <div class="stat-icon si-orange">🏭</div>
+      <div>
+        <div class="stat-label">Current Role</div>
+        <div class="stat-value">IT & Dev · Port of Ashdod</div>
+      </div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-icon si-green">🎓</div>
+      <div>
+        <div class="stat-label">Education</div>
+        <div class="stat-value">MBA · Ben-Gurion University</div>
+      </div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-icon si-blue">⚡</div>
+      <div>
+        <div class="stat-label">Stack</div>
+        <div class="stat-value">JS · Node · C# · SQLite</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<hr class="divider">
+
+<!-- STACK -->
+<section>
+  <div class="section-label">Stack & Tools</div>
+  <div class="stack-grid">
+    <span class="stack-tag accent">JavaScript</span>
+    <span class="stack-tag accent2">Node.js</span>
+    <span class="stack-tag">HTML / CSS</span>
+    <span class="stack-tag">SQLite</span>
+    <span class="stack-tag">C# / .NET</span>
+    <span class="stack-tag">PHP</span>
+    <span class="stack-tag">Flutter</span>
+    <span class="stack-tag">SQL Server</span>
+    <span class="stack-tag">Vercel</span>
+    <span class="stack-tag">Cloudflare</span>
+    <span class="stack-tag">IIS</span>
+    <span class="stack-tag">VS Code</span>
+    <span class="stack-tag">Git</span>
+  </div>
+</section>
+
+<hr class="divider">
+
+<!-- PROJECTS -->
+<section id="work">
+  <div class="section-label">Selected Work</div>
+  <div class="projects-grid">
+
+    <a class="proj-card" href="#" style="--card-color:#c8562a">
+      <div class="proj-icon">🖥️</div>
+      <div class="proj-title">Shift Manager</div>
+      <div class="proj-desc">מערכת ניהול משמרות לצוות ה-IT של נמל אשדוד. לוח זמנים, ייצוא Excel ותצוגת LCD.</div>
+      <div class="proj-tag">HTML · JS · Node.js · SQLite</div>
+    </a>
+
+    <a class="proj-card" href="#" style="--card-color:#1a4f3a">
+      <div class="proj-icon">🗂️</div>
+      <div class="proj-title">Org Chart HR</div>
+      <div class="proj-desc">אורגנימפה אינטרקטיבית לחטיבת משאבי אנוש — standalone דפדפן, ללא שרת.</div>
+      <div class="proj-tag">SheetJS · Vanilla JS · Canvas</div>
+    </a>
+
+    <a class="proj-card" href="#" style="--card-color:#7c3aed">
+      <div class="proj-icon">📁</div>
+      <div class="proj-title">File Server</div>
+      <div class="proj-desc">OneDrive-סגנון עם אימות, drag & drop ותצוגת מדיה. פועל על turtle67 דרך Cloudflare Tunnel.</div>
+      <div class="proj-tag">Node.js · Express · CF Tunnel</div>
+    </a>
+
+    <a class="proj-card" href="#" style="--card-color:#0284c7">
+      <div class="proj-icon">📊</div>
+      <div class="proj-title">Network Dashboard</div>
+      <div class="proj-desc">לוח בקרה לניטור רשת פנימית — ציוד, סטטוסים ודוחות בזמן אמת.</div>
+      <div class="proj-tag">C# · WinForms · SNMP</div>
+    </a>
+
+    <a class="proj-card" href="/mba/" style="--card-color:#e8b84b">
+      <div class="proj-icon">🎓</div>
+      <div class="proj-title">MBA Study Hub</div>
+      <div class="proj-desc">חומרי לימוד, פתרונות מבחנים והכנה לבחינות לתואר MBA. 6 קורסים.</div>
+      <div class="proj-tag">HTML · CSS · JS</div>
+    </a>
+
+    <a class="proj-card" href="https://67.codes" target="_blank" style="--card-color:#f97316">
+      <div class="proj-icon">⚡</div>
+      <div class="proj-title">67.codes Lab</div>
+      <div class="proj-desc">הסדנה הדיגיטלית — ניסויים, כלים ופרויקטים רטרו. just code it.</div>
+      <div class="proj-tag">↗ 67.codes</div>
+    </a>
+
+  </div>
+</section>
+
+<hr class="divider">
+
+<!-- ABOUT -->
+<section id="about">
+  <div class="section-label">About</div>
+  <div class="about-wrap">
+    <div>
+      <h2 class="about-title">IT man.<br><em>Developer.</em><br>Student.</h2>
+      <p class="about-text">
+        עובד בנמל אשדוד כמקצוען IT ומפתח כלים פנימיים — מערכות ניהול משמרות, תצוגות LCD, אורגנימפות וכלי רשת.
+      </p>
+      <p class="about-text">
+        מאמין ב-KISS — Keep It Short & Simple. קוד שעושה מה שצריך, בלי בלגן. שניים ידיים, מקלדת אחת, והרבה קפה.
+      </p>
+      <p class="about-text" style="font-size:0.82rem; color:var(--muted); font-style:italic;">
+        "והכל מאת השם"
+      </p>
+    </div>
+
+    <div class="about-facts">
+      <div class="fact-row">
+        <span class="fact-key">location</span>
+        <span class="fact-dot dot-green"></span>
+        <span class="fact-val">Ashdod, Israel 🇮🇱</span>
+      </div>
+      <div class="fact-row">
+        <span class="fact-key">role</span>
+        <span class="fact-dot dot-amber"></span>
+        <span class="fact-val">IT Professional & Developer</span>
+      </div>
+      <div class="fact-row">
+        <span class="fact-key">employer</span>
+        <span class="fact-val">Port of Ashdod</span>
+      </div>
+      <div class="fact-row">
+        <span class="fact-key">it exp.</span>
+        <span class="fact-val">20+ years</span>
+      </div>
+      <div class="fact-row">
+        <span class="fact-key">dev exp.</span>
+        <span class="fact-val">4–5 years</span>
+      </div>
+      <div class="fact-row">
+        <span class="fact-key">studying</span>
+        <span class="fact-val">MBA · Ben-Gurion University</span>
+      </div>
+      <div class="fact-row">
+        <span class="fact-key">servers</span>
+        <span class="fact-val">turtle67 🐢 · neo67 💻 · DEV67</span>
+      </div>
+      <div class="fact-row">
+        <span class="fact-key">philosophy</span>
+        <span class="fact-val">KISS — Keep It Short & Simple</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- MBA BANNER -->
+<div class="mba-banner">
+  <div class="mba-banner-text">
+    <h3>MBA Study Hub 🎓</h3>
+    <p>פתרונות מבחנים · הסברים · הכנה לבחינות · 6 קורסים · אוניברסיטת בן-גוריון</p>
+  </div>
+  <a href="/mba/" class="btn-banner">כניסה לחומרים →</a>
+</div>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-logo">marom<span>.cloud</span></div>
+  <ul class="footer-links">
+    <li><a href="https://67.codes" target="_blank">67.codes ↗</a></li>
+    <li><a href="/mba/">MBA Hub</a></li>
+    <li><a href="mailto:hi@marom.cloud">hi@marom.cloud</a></li>
+  </ul>
+  <div class="footer-copy">© 2026 · code your mind</div>
+</footer>
+
+</body>
+</html>

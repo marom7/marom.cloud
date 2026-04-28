@@ -1,0 +1,1241 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>הכנה למבחן – מדעי ההתנהגות למנהלים</title>
+<link href="https://fonts.googleapis.com/css2?family=Frank+Ruhl+Libre:wght@300;400;500;700;900&family=Heebo:wght@300;400;500;700&display=swap" rel="stylesheet">
+<style>
+:root {
+  --plum: #3d1a4e;
+  --plum2: #5a2a72;
+  --violet: #7c3aed;
+  --amber: #d97706;
+  --amber-light: #fbbf24;
+  --cream: #fdf8f2;
+  --cream2: #f5ede0;
+  --red: #b91c1c;
+  --green: #15803d;
+  --blue: #1d4ed8;
+  --teal: #0f766e;
+  --text: #1e1a2e;
+  --muted: #7c6e8a;
+  --border: #e0d5ee;
+  --shadow: 0 4px 24px rgba(61,26,78,0.13);
+  --card-bg: #fff;
+}
+
+/* PRINT BUTTON */
+.btn-print {
+  background: var(--amber);
+  color: var(--plum);
+  border: none;
+  padding: 10px 20px;
+  border-radius: 6px;
+  font-size: 0.88rem;
+  font-family: 'Heebo', sans-serif;
+  font-weight: 900;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  margin: auto 0 auto auto;
+  transition: background 0.2s;
+  white-space: nowrap;
+}
+.btn-print:hover { background: var(--amber-light); }
+
+@media print {
+  .site-header, .tabs-bar, .btn-expand, .btn-print, .topic-legend { display: none !important; }
+  body { background: #fff !important; font-size: 11pt; }
+  .tab-panel { display: block !important; }
+  .hero-strip { background: var(--plum) !important; -webkit-print-color-adjust: exact; print-color-adjust: exact; padding: 16px; margin-bottom: 12px; }
+  .hero-strip h2 { font-size: 1.2rem; }
+  .q-card { break-inside: avoid; box-shadow: none; border: 1px solid #ccc; margin-bottom: 12px; }
+  .q-header { background: #f5f0fa !important; -webkit-print-color-adjust: exact; print-color-adjust: exact; cursor: default; }
+  .q-chevron { display: none; }
+  .q-body { display: block !important; padding: 14px 18px; }
+  .q-num { background: var(--plum) !important; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+  .choice.correct { background: #f0fdf4 !important; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+  .choice.correct .choice-letter { background: #15803d !important; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+  .choice.wrong { opacity: 0.6; }
+  .explanation { background: var(--plum) !important; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+  .answer-badge { background: #15803d !important; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+  .answer-badge.all { background: #0f766e !important; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+  main { padding: 0; }
+  .part-header { margin: 16px 0 8px; }
+  .theory-box, .insight { break-inside: avoid; }
+  .score-table th { background: var(--plum) !important; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body { font-family: 'Heebo', sans-serif; background: #f2edf8; color: var(--text); direction: rtl; min-height: 100vh; }
+
+/* HEADER */
+.site-header { background: var(--plum); position: sticky; top: 0; z-index: 100; box-shadow: 0 2px 20px rgba(0,0,0,0.4); }
+.header-inner { max-width: 1120px; margin: 0 auto; padding: 16px 22px; display: flex; align-items: center; justify-content: space-between; gap: 16px; }
+.header-title { font-family: 'Frank Ruhl Libre', serif; font-size: 1.3rem; color: #fff; font-weight: 700; line-height: 1.2; }
+.header-title span { display: block; font-size: 0.78rem; font-family: 'Heebo'; font-weight: 300; color: var(--amber-light); margin-top: 3px; }
+.header-badge { background: var(--amber); color: var(--plum); font-size: 0.72rem; font-weight: 700; padding: 5px 12px; border-radius: 20px; white-space: nowrap; }
+
+/* TABS */
+.tabs-bar { background: var(--plum2); border-bottom: 3px solid var(--amber); }
+.tabs-inner { max-width: 1120px; margin: 0 auto; display: flex; padding: 0 22px; flex-wrap: wrap; }
+.tab-btn { padding: 13px 24px; font-family: 'Frank Ruhl Libre', serif; font-size: 0.95rem; font-weight: 700; color: rgba(255,255,255,0.55); cursor: pointer; border: none; background: transparent; border-bottom: 3px solid transparent; margin-bottom: -3px; transition: all 0.25s; }
+.tab-btn:hover { color: rgba(255,255,255,0.85); }
+.tab-btn.active { color: var(--amber-light); border-bottom-color: var(--amber-light); }
+
+/* HERO */
+.hero-strip { background: linear-gradient(135deg, var(--plum2) 0%, #7c3aed55 100%), var(--plum); padding: 28px 22px; text-align: center; color: #fff; }
+.hero-strip h2 { font-family: 'Frank Ruhl Libre', serif; font-size: 1.65rem; font-weight: 900; color: var(--amber-light); margin-bottom: 6px; }
+.hero-strip p { font-size: 0.88rem; color: rgba(255,255,255,0.72); }
+.exam-meta { display: flex; justify-content: center; gap: 14px; margin-top: 14px; flex-wrap: wrap; }
+.meta-chip { background: rgba(255,255,255,0.1); border: 1px solid rgba(217,119,6,0.5); color: var(--amber-light); font-size: 0.78rem; padding: 4px 13px; border-radius: 20px; }
+
+/* TOPIC LEGEND */
+.topic-legend { max-width: 1120px; margin: 20px auto 0; padding: 0 16px; display: flex; flex-wrap: wrap; gap: 8px; }
+.topic-tag { display: inline-flex; align-items: center; gap: 6px; font-size: 0.76rem; font-weight: 700; padding: 5px 12px; border-radius: 20px; white-space: nowrap; }
+.tag-stress    { background: #fde8e8; color: #b91c1c; border: 1px solid #fca5a5; }
+.tag-learn     { background: #e0f2fe; color: #0369a1; border: 1px solid #7dd3fc; }
+.tag-person    { background: #f0fdf4; color: #15803d; border: 1px solid #86efac; }
+.tag-gen       { background: #fef9c3; color: #92400e; border: 1px solid #fcd34d; }
+.tag-emotion   { background: #fdf4ff; color: #7e22ce; border: 1px solid #d8b4fe; }
+.tag-motiv     { background: #fff7ed; color: #c2410c; border: 1px solid #fdba74; }
+.tag-justice   { background: #f0f9ff; color: #0c4a6e; border: 1px solid #7dd3fc; }
+.tag-resilience{ background: #f0fdf4; color: #065f46; border: 1px solid #6ee7b7; }
+
+/* MAIN */
+main { max-width: 1120px; margin: 0 auto; padding: 28px 14px 60px; }
+.tab-panel { display: none; }
+.tab-panel.active { display: block; }
+
+/* PART HEADER */
+.part-header { display: flex; align-items: center; gap: 14px; margin: 30px 0 16px; }
+.part-label { background: var(--plum); color: var(--amber); font-family: 'Frank Ruhl Libre', serif; font-size: 0.92rem; font-weight: 700; padding: 5px 16px; border-radius: 4px; white-space: nowrap; }
+.part-line { flex: 1; height: 2px; background: linear-gradient(90deg, var(--plum) 0%, transparent 100%); }
+.part-title { font-family: 'Frank Ruhl Libre', serif; font-size: 1.05rem; font-weight: 700; color: var(--plum); white-space: nowrap; }
+
+/* Q CARD */
+.q-card { background: var(--card-bg); border-radius: 12px; box-shadow: var(--shadow); margin-bottom: 18px; overflow: hidden; border: 1px solid var(--border); }
+.q-header { display: flex; align-items: center; gap: 12px; padding: 15px 20px; cursor: pointer; background: var(--cream); border-bottom: 2px solid var(--border); user-select: none; transition: background 0.2s; }
+.q-header:hover { background: var(--cream2); }
+.q-num { width: 38px; height: 38px; background: var(--plum); color: var(--amber); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-family: 'Frank Ruhl Libre', serif; font-size: 1rem; font-weight: 900; flex-shrink: 0; }
+.q-title { flex: 1; font-family: 'Frank Ruhl Libre', serif; font-size: 1rem; font-weight: 700; color: var(--plum); }
+.q-topic { font-size: 0.73rem; font-weight: 700; padding: 3px 10px; border-radius: 10px; white-space: nowrap; }
+.q-chevron { font-size: 0.9rem; color: var(--muted); transition: transform 0.3s; flex-shrink: 0; }
+.q-card.open .q-chevron { transform: rotate(180deg); }
+.q-body { display: none; padding: 22px 24px; }
+.q-card.open .q-body { display: block; }
+
+/* QUESTION BOX */
+.q-text-box { background: #f8f5fd; border-right: 4px solid var(--violet); border-radius: 0 8px 8px 0; padding: 14px 18px; margin-bottom: 18px; font-size: 0.92rem; line-height: 1.75; color: #333; }
+.q-text-box strong { color: var(--plum); }
+
+/* CHOICES */
+.choices { display: flex; flex-direction: column; gap: 8px; margin-bottom: 18px; }
+.choice { display: flex; align-items: flex-start; gap: 10px; padding: 10px 14px; border-radius: 8px; border: 1px solid var(--border); background: #fafafa; font-size: 0.88rem; line-height: 1.5; transition: all 0.2s; }
+.choice-letter { width: 26px; height: 26px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 0.82rem; flex-shrink: 0; background: var(--cream2); color: var(--plum2); }
+.choice.correct { background: #f0fdf4; border-color: #86efac; }
+.choice.correct .choice-letter { background: var(--green); color: #fff; }
+.choice.correct .choice-text { color: var(--green); font-weight: 700; }
+.choice.wrong { background: #fff1f1; border-color: #fca5a5; }
+.choice.wrong .choice-letter { background: #ef4444; color: #fff; }
+.choice.wrong .choice-text { color: #ef4444; text-decoration: line-through; opacity: 0.7; }
+.choice-text { flex: 1; }
+
+/* EXPLANATION */
+.explanation { background: linear-gradient(135deg, var(--plum) 0%, var(--plum2) 100%); color: #fff; border-radius: 10px; padding: 16px 20px; margin-top: 2px; }
+.explanation-label { font-size: 0.7rem; color: var(--amber-light); letter-spacing: 1px; text-transform: uppercase; margin-bottom: 8px; font-weight: 700; }
+.explanation p { font-size: 0.88rem; line-height: 1.75; }
+.explanation .key-concept { display: inline-block; background: rgba(251,191,36,0.25); color: var(--amber-light); padding: 1px 8px; border-radius: 4px; font-weight: 700; font-size: 0.84rem; margin: 0 2px; }
+.explanation ul { margin: 8px 0 0 0; padding-right: 18px; }
+.explanation ul li { font-size: 0.86rem; line-height: 1.7; margin-bottom: 3px; }
+
+/* THEORY BOX */
+.theory-box { background: #fdf8ff; border: 1px solid #ddd5ee; border-radius: 8px; padding: 14px 18px; margin: 0 0 14px; font-size: 0.85rem; line-height: 1.7; }
+.theory-box .theory-title { font-family: 'Frank Ruhl Libre', serif; font-weight: 700; color: var(--plum); font-size: 0.95rem; margin-bottom: 6px; display: flex; align-items: center; gap: 8px; }
+
+/* ANSWER BADGE */
+.answer-badge { display: inline-flex; align-items: center; gap: 8px; background: var(--green); color: #fff; padding: 6px 16px; border-radius: 20px; font-weight: 700; font-size: 0.9rem; margin-bottom: 14px; }
+.answer-badge.all { background: var(--teal); }
+.answer-badge.none { background: var(--red); }
+
+/* INSIGHT */
+.insight { background: #fffbeb; border: 1px solid #fde68a; border-radius: 8px; padding: 10px 16px; margin: 10px 0; font-size: 0.86rem; line-height: 1.65; }
+.insight strong { color: #92400e; }
+
+/* BTN */
+.btn-expand { background: var(--plum); color: var(--amber); border: none; padding: 9px 20px; border-radius: 6px; font-size: 0.85rem; font-family: 'Heebo', sans-serif; font-weight: 700; cursor: pointer; margin-bottom: 18px; transition: background 0.2s; }
+.btn-expand:hover { background: var(--plum2); }
+
+/* SCORE TABLE */
+.score-table { width: 100%; border-collapse: collapse; font-size: 0.85rem; margin: 12px 0; }
+.score-table th { background: var(--plum); color: var(--amber); padding: 8px 14px; text-align: right; font-family: 'Frank Ruhl Libre', serif; }
+.score-table td { padding: 8px 14px; border-bottom: 1px solid var(--border); }
+.score-table tr:nth-child(even) td { background: var(--cream); }
+
+hr.soft { border: none; border-top: 1px solid var(--border); margin: 20px 0; }
+
+@media (max-width: 600px) {
+  .header-inner { flex-direction: column; align-items: flex-start; }
+  .tab-btn { padding: 11px 14px; font-size: 0.82rem; }
+  main { padding: 18px 8px 40px; }
+  .q-body { padding: 16px 14px; }
+}
+</style>
+</head>
+<body>
+
+<header class="site-header">
+  <div class="header-inner">
+    <div class="header-title">
+      מדעי ההתנהגות למנהלים
+      <span>ד"ר דורית אפרת-טרייסטר · אוניברסיטת בן-גוריון · הכנה למבחן</span>
+    </div>
+    <div class="header-badge">🧠 פתרונות + הסברים</div>
+  </div>
+</header>
+
+<div class="tabs-bar">
+  <div class="tabs-inner">
+    <button class="tab-btn active" onclick="showTab('moedA',this)">מועד א׳ — פתרון מלא</button>
+    <button class="tab-btn" onclick="showTab('review',this)">שאלות חזרה</button>
+    <button class="tab-btn" onclick="showTab('prep2025',this)">הכנה למבחן 2025</button>
+    <button class="btn-print" onclick="printPage()">🖨️ הדפסה</button>
+  </div>
+</div>
+
+<!-- ====== מועד א׳ ====== -->
+<div id="moedA" class="tab-panel active">
+  <div class="hero-strip">
+    <h2>מועד א׳ — בחינה מלאה עם פתרונות</h2>
+    <p>ד"ר דורית אפרת-טרייסטר · 6.2.2026 · קורס מדעי ההתנהגות למנהלים</p>
+    <div class="exam-meta">
+      <span class="meta-chip">⏱ 90 דקות</span>
+      <span class="meta-chip">📝 20 שאלות × 5 נק'</span>
+      <span class="meta-chip">🔢 6 אפשרויות לכל שאלה</span>
+      <span class="meta-chip">🚫 ללא חומר עזר</span>
+    </div>
+  </div>
+
+  <div class="topic-legend">
+    <span class="topic-tag tag-stress">🔴 לחץ</span>
+    <span class="topic-tag tag-learn">🔵 למידה</span>
+    <span class="topic-tag tag-person">🟢 אישיות</span>
+    <span class="topic-tag tag-gen">🟡 בין-דורי</span>
+    <span class="topic-tag tag-emotion">🟣 רגשות & EI</span>
+    <span class="topic-tag tag-motiv">🟠 מוטיבציה</span>
+    <span class="topic-tag tag-justice">🔷 צדק</span>
+    <span class="topic-tag tag-resilience">🌿 חוסן</span>
+  </div>
+
+  <main>
+    <button class="btn-expand" onclick="expandAll('moedA')">▼ פתח את כל השאלות</button>
+
+    <!-- Q1 -->
+    <div class="q-card" id="q1">
+      <div class="q-header" onclick="toggleQ(this)">
+        <div class="q-num">1</div>
+        <div class="q-title">אסף שאינו רצוי בצוות — Fight or Flight?</div>
+        <span class="q-topic tag-stress">לחץ</span>
+        <div class="q-chevron">▼</div>
+      </div>
+      <div class="q-body">
+        <div class="q-text-box">
+          אסף התקבל לצוות עבודה באוניברסיטת בן-גוריון. כשהתחיל לעבוד, חש כי <strong>אינו רצוי</strong> בסביבת הצוות. למרות קבלת הפנים הקשה, אסף <strong>המשיך לעבוד ולהתמודד</strong> עם החוויות שחווה יום-יום. על-פי תיאוריית Fight or Flight (GAS):
+        </div>
+        <div class="choices">
+          <div class="choice wrong"><div class="choice-letter">א</div><div class="choice-text">תגובתו של אסף היא Flight: ברח</div></div>
+          <div class="choice wrong"><div class="choice-letter">ב</div><div class="choice-text">תגובתו של אסף היא Freeze: קפא</div></div>
+          <div class="choice wrong"><div class="choice-letter">ג</div><div class="choice-text">תגובתו של אסף היא Exhaustion: התשה</div></div>
+          <div class="choice correct"><div class="choice-letter">ד</div><div class="choice-text">תגובתו של אסף היא Fight: הלחם</div></div>
+          <div class="choice wrong"><div class="choice-letter">ה</div><div class="choice-text">כל התשובות נכונות</div></div>
+          <div class="choice wrong"><div class="choice-letter">ו</div><div class="choice-text">אף תשובה אינה נכונה</div></div>
+        </div>
+        <div class="answer-badge">✅ תשובה נכונה: ד — Fight</div>
+        <div class="explanation">
+          <div class="explanation-label">הסבר</div>
+          <p>תיאוריית <span class="key-concept">GAS של Selye</span> מתארת שלושה שלבים: Alarm → Resistance → Exhaustion, וכוללת שתי אפשרויות תגובה ללחץ: <span class="key-concept">Fight</span> (הלחם — נשאר ומתמודד) או <span class="key-concept">Flight</span> (ברח — מתרחק). אסף ממשיך לעבוד ולהתמודד עם הסביבה — זוהי בדיוק תגובת <strong>Fight</strong>. אלמלא היה מפסיק לעבוד או עוזב — זו הייתה תגובת Flight.</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Q2 -->
+    <div class="q-card" id="q2">
+      <div class="q-header" onclick="toggleQ(this)">
+        <div class="q-num">2</div>
+        <div class="q-title">מודל Lazarus — Transactional Model of Stress</div>
+        <span class="q-topic tag-stress">לחץ</span>
+        <div class="q-chevron">▼</div>
+      </div>
+      <div class="q-body">
+        <div class="q-text-box">על-פי <strong>Transactional Model of Stress and Coping</strong> (Lazarus), מה נכון לגבי תפיסת גורמי לחץ?</div>
+        <div class="choices">
+          <div class="choice wrong"><div class="choice-letter">א</div><div class="choice-text">כל גורמי הלחץ נתפסים בצורה שונה אצל כולם</div></div>
+          <div class="choice wrong"><div class="choice-letter">ב</div><div class="choice-text">כל גורמי הלחץ נתפסים בצורה דומה אצל כולם</div></div>
+          <div class="choice correct"><div class="choice-letter">ג</div><div class="choice-text">יש שונות בין אנשים לגבי תפיסת גורם לחץ כמאיים/לא מאיים</div></div>
+          <div class="choice wrong"><div class="choice-letter">ד</div><div class="choice-text">כל גורמי הלחץ נתפסים בצורה דומה בין אנשים, אך לא קבוצות או ארגונים</div></div>
+          <div class="choice wrong"><div class="choice-letter">ה</div><div class="choice-text">כל התשובות נכונות</div></div>
+          <div class="choice wrong"><div class="choice-letter">ו</div><div class="choice-text">אף תשובה אינה נכונה</div></div>
+        </div>
+        <div class="answer-badge">✅ תשובה נכונה: ג</div>
+        <div class="explanation">
+          <div class="explanation-label">הסבר</div>
+          <p>לפי מודל <span class="key-concept">Lazarus</span>, הלחץ נובע <strong>מהפרשנות הסובייקטיבית</strong> של האדם, לא מהאירוע עצמו. שני אנשים שחווים את אותו אירוע (למשל קבלת ביקורת) עשויים לפרש אותו אחרת: האחד כאיום, השני כאתגר. לכן יש <strong>שונות בין-אישית</strong> בתפיסת גורמי לחץ — לא כולם תופסים דבר כמאיים באותה מידה. האפשרות א' שגויה כי לא לכל דבר יש שונות מוחלטת; האפשרות ב' שגויה כי בדיוק זה מה שהמודל כן טוען שאינו כך.</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Q3 -->
+    <div class="q-card" id="q3">
+      <div class="q-header" onclick="toggleQ(this)">
+        <div class="q-num">3</div>
+        <div class="q-title">מתי יכול לחץ להתקיים? — הגדרת לחץ</div>
+        <span class="q-topic tag-stress">לחץ</span>
+        <div class="q-chevron">▼</div>
+      </div>
+      <div class="q-body">
+        <div class="q-text-box">לחץ יכול להתקיים כאשר:</div>
+        <div class="choices">
+          <div class="choice wrong"><div class="choice-letter">א</div><div class="choice-text">מונעים מאדם להשיג מטרה נכספת</div></div>
+          <div class="choice wrong"><div class="choice-letter">ב</div><div class="choice-text">מציבים בפני אדם מטרה נכספת</div></div>
+          <div class="choice wrong"><div class="choice-letter">ג</div><div class="choice-text">מציבים בפני אדם מטרה שאינו יכול להתמודד עמה מבחינה פסיכולוגית</div></div>
+          <div class="choice wrong"><div class="choice-letter">ד</div><div class="choice-text">מציבים בפני אדם מטרה שאינו יכול להתמודד עמה מבחינה פיזיולוגית</div></div>
+          <div class="choice correct"><div class="choice-letter">ה</div><div class="choice-text">כל התשובות נכונות</div></div>
+          <div class="choice wrong"><div class="choice-letter">ו</div><div class="choice-text">אף תשובה אינה נכונה</div></div>
+        </div>
+        <div class="answer-badge all">✅ תשובה נכונה: ה — כל התשובות נכונות</div>
+        <div class="explanation">
+          <div class="explanation-label">הסבר</div>
+          <p>לחץ הוא תגובה פסיכולוגית ופיזיולוגית לדרישות הסביבה שעולות על יכולת ההתמודדות. לחץ יכול להיגרם בדרכים רבות: ממניעת מטרה (<span class="key-concept">Conflict</span> פנימי), מהצבת מטרה קשה מדי (<span class="key-concept">Overload</span>), ומאי-יכולת פסיכולוגית או פיזיולוגית להתמודד. לכן כל ארבעת האפשרויות מהוות מצבים שבהם עשוי לחץ לצוץ.</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Q4 -->
+    <div class="q-card" id="q4">
+      <div class="q-header" onclick="toggleQ(this)">
+        <div class="q-num">4</div>
+        <div class="q-title">לינור, פופקורן ואצטדיון — איזה סוג למידה?</div>
+        <span class="q-topic tag-learn">למידה</span>
+        <div class="q-chevron">▼</div>
+      </div>
+      <div class="q-body">
+        <div class="q-text-box">
+          כל פעם שלינור הולכת למשחק כדורגל, היא אוכלת נקניקיות. היום עברה ליד האצטדיון — שהיה <strong>סגור</strong> — ועם זאת הרגישה את ריח וטעם הנקניקיות. תופעה זו התרחשה בשל:
+        </div>
+        <div class="choices">
+          <div class="choice wrong"><div class="choice-letter">א</div><div class="choice-text">התניה אופרנטית</div></div>
+          <div class="choice correct"><div class="choice-letter">ב</div><div class="choice-text">התניה קלאסית</div></div>
+          <div class="choice wrong"><div class="choice-letter">ג</div><div class="choice-text">למידה חברתית</div></div>
+          <div class="choice wrong"><div class="choice-letter">ד</div><div class="choice-text">הכללה</div></div>
+          <div class="choice wrong"><div class="choice-letter">ה</div><div class="choice-text">כל התשובות נכונות</div></div>
+          <div class="choice wrong"><div class="choice-letter">ו</div><div class="choice-text">אף תשובה אינה נכונה</div></div>
+        </div>
+        <div class="answer-badge">✅ תשובה נכונה: ב — התניה קלאסית</div>
+        <div class="theory-box">
+          <div class="theory-title">📚 התניה קלאסית — מבנה</div>
+          <table class="score-table">
+            <tr><th>מרכיב</th><th>בדוגמה</th></tr>
+            <tr><td>גירוי לא מותנה (UCS)</td><td>נקניקיות → ריח/טעם</td></tr>
+            <tr><td>תגובה לא מותנית (UCR)</td><td>תחושת ריח/טעם הנקניקיות</td></tr>
+            <tr><td>גירוי מותנה (CS)</td><td>האצטדיון</td></tr>
+            <tr><td>תגובה מותנית (CR)</td><td>ריח/טעם הנקניקיות רק מהאצטדיון</td></tr>
+          </table>
+        </div>
+        <div class="explanation">
+          <div class="explanation-label">הסבר</div>
+          <p>פבלוב הוכיח שניתן ליצור קשר בין גירוי ניטרלי (האצטדיון) לבין תגובה פיזיולוגית (ריח/טעם), לאחר שחוזרים ומשייכים אותם. האצטדיון הפך ל-<span class="key-concept">Conditioned Stimulus</span> — ותגובת הריח/הטעם היא ה-<span class="key-concept">Conditioned Response</span>.</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Q5 -->
+    <div class="q-card" id="q5">
+      <div class="q-header" onclick="toggleQ(this)">
+        <div class="q-num">5</div>
+        <div class="q-title">יתרון Big Five על פני MBTI</div>
+        <span class="q-topic tag-person">אישיות</span>
+        <div class="q-chevron">▼</div>
+      </div>
+      <div class="q-body">
+        <div class="q-text-box">מהו היתרון של מדד <strong>חמשת הגדולים (Big Five / OCEAN)</strong> על פני מדד סוגי אישיות <strong>MBTI</strong>?</div>
+        <div class="choices">
+          <div class="choice correct"><div class="choice-letter">א</div><div class="choice-text">מדד "חמשת הגדולים" רציף ולא דיכוטומי (בעל שני פנים)</div></div>
+          <div class="choice wrong"><div class="choice-letter">ב</div><div class="choice-text">מדד "חמשת הגדולים" כולל בתוכו גם אינטליגנציה רגשית</div></div>
+          <div class="choice wrong"><div class="choice-letter">ג</div><div class="choice-text">מדד "חמשת הגדולים" קיים היסטורית יותר שנים, ולכן מתוקף יותר</div></div>
+          <div class="choice wrong"><div class="choice-letter">ד</div><div class="choice-text">לכל מדד יתרונות וחסרונות, לכן עדיף להשתמש בשניהם</div></div>
+          <div class="choice wrong"><div class="choice-letter">ה</div><div class="choice-text">כל התשובות נכונות</div></div>
+          <div class="choice wrong"><div class="choice-letter">ו</div><div class="choice-text">אף תשובה אינה נכונה</div></div>
+        </div>
+        <div class="answer-badge">✅ תשובה נכונה: א</div>
+        <div class="explanation">
+          <div class="explanation-label">הסבר</div>
+          <p>ה-MBTI מסווג אנשים ל-16 <strong>טיפוסים</strong> — כל מאפיין הוא דיכוטומי (או/או): מוחצן/מופנם, חושי/אינטואיטיבי וכו'. ה-<span class="key-concept">Big Five</span> לעומת זאת מדד <strong>רציף</strong> — כל אחת מחמש התכונות (O, C, E, A, N) נמדדת על ציר, ולכן משקפת טוב יותר את מורכבות האישיות האנושית. זהו יתרון מדעי מוכח.</p>
+          <ul>
+            <li><strong>O</strong> — Openness (פתיחות לחוויות)</li>
+            <li><strong>C</strong> — Conscientiousness (מצפוניות) — <em>המנבא הטוב ביותר לביצועים!</em></li>
+            <li><strong>E</strong> — Extraversion (מוחצנות)</li>
+            <li><strong>A</strong> — Agreeableness (נעימות)</li>
+            <li><strong>N</strong> — Neuroticism (נוירוטיות)</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <!-- Q6 -->
+    <div class="q-card" id="q6">
+      <div class="q-header" onclick="toggleQ(this)">
+        <div class="q-num">6</div>
+        <div class="q-title">יוסי הפוליטיקאי שקורא את הקהל</div>
+        <span class="q-topic tag-emotion">רגשות & EI</span>
+        <div class="q-chevron">▼</div>
+      </div>
+      <div class="q-body">
+        <div class="q-text-box">יוסי פוליטיקאי מצוין. הוא <strong>יודע להתאים את עצמו לכל סיטואציה</strong>, ולומר בדיוק מה שהקהל רוצה לשמוע. ניתן לאבחן את יוסי כבעל...</div>
+        <div class="choices">
+          <div class="choice wrong"><div class="choice-letter">א</div><div class="choice-text">נועם גבוה (Agreeableness)</div></div>
+          <div class="choice wrong"><div class="choice-letter">ב</div><div class="choice-text">מוחצנות גבוהה</div></div>
+          <div class="choice wrong"><div class="choice-letter">ג</div><div class="choice-text">אסרטיביות גבוהה</div></div>
+          <div class="choice correct"><div class="choice-letter">ד</div><div class="choice-text">אינטליגנציה רגשית גבוהה (EI)</div></div>
+          <div class="choice wrong"><div class="choice-letter">ה</div><div class="choice-text">כל התשובות נכונות</div></div>
+          <div class="choice wrong"><div class="choice-letter">ו</div><div class="choice-text">אף תשובה אינה נכונה</div></div>
+        </div>
+        <div class="answer-badge">✅ תשובה נכונה: ד — EI גבוהה</div>
+        <div class="explanation">
+          <div class="explanation-label">הסבר</div>
+          <p><span class="key-concept">אינטליגנציה רגשית (EI)</span> לפי Goleman כוללת: קליטת רגשות (מזהה מה הקהל מרגיש), הבנת רגשות (מפרש את הסיטואציה), וניהול עצמי ויחסים (מתאים את עצמו בהתאם). יוסי מדגים את שלושת המרכיבים — ולכן ה-EI שלו גבוהה.</p>
+          <ul>
+            <li>נועם גבוה = חביב וסבלני, לא בהכרח קורא קהל</li>
+            <li>מוחצנות = אנרגיה חברתית, לא יכולת קריאה</li>
+            <li>אסרטיביות = ביטחון עצמי בביטוי, לא גמישות</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <!-- Q7 -->
+    <div class="q-card" id="q7">
+      <div class="q-header" onclick="toggleQ(this)">
+        <div class="q-num">7</div>
+        <div class="q-title">יתרון דור Baby Boomers</div>
+        <span class="q-topic tag-gen">בין-דורי</span>
+        <div class="q-chevron">▼</div>
+      </div>
+      <div class="q-body">
+        <div class="q-text-box">על-פי הנלמד בנושא ניהול בין-דורי, היתרון המרכזי של דור ה-<strong>Baby Boomers</strong> הוא:</div>
+        <div class="choices">
+          <div class="choice wrong"><div class="choice-letter">א</div><div class="choice-text">מחפשים משמעות בעבודה</div></div>
+          <div class="choice wrong"><div class="choice-letter">ב</div><div class="choice-text">פורצים גבולות ומוסכמות</div></div>
+          <div class="choice correct"><div class="choice-letter">ג</div><div class="choice-text">ממושמעים ועובדים קשה</div></div>
+          <div class="choice wrong"><div class="choice-letter">ד</div><div class="choice-text">מאזנים בית ועבודה היטב</div></div>
+          <div class="choice wrong"><div class="choice-letter">ה</div><div class="choice-text">כל התשובות נכונות</div></div>
+          <div class="choice wrong"><div class="choice-letter">ו</div><div class="choice-text">אף תשובה אינה נכונה</div></div>
+        </div>
+        <div class="answer-badge">✅ תשובה נכונה: ג</div>
+        <div class="theory-box">
+          <div class="theory-title">📅 ארבעת הדורות — מאפיינים</div>
+          <table class="score-table">
+            <tr><th>דור</th><th>שנות לידה</th><th>מאפיין מרכזי</th></tr>
+            <tr><td>Baby Boomers</td><td>1946–1964</td><td>ממושמעים, נאמנים, עובדי קשה</td></tr>
+            <tr><td>דור X</td><td>1965–1980</td><td>איזון בית-עבודה, עצמאיים, ציניים</td></tr>
+            <tr><td>דור Y (מילניאלס)</td><td>1981–1996</td><td>מחפשים משמעות, רוצים משוב</td></tr>
+            <tr><td>דור Z</td><td>1997+</td><td>דיגיטליים מלידה, פידבק מיידי</td></tr>
+          </table>
+        </div>
+        <div class="explanation">
+          <div class="explanation-label">הסבר</div>
+          <p>"חיפוש משמעות" = דור Y. "פריצת גבולות" = דור Z. "איזון בית/עבודה" = דור X. Baby Boomers ידועים בעבודה קשה, משמעת גבוהה ונאמנות לארגון — לכן ג' נכונה.</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Q8 -->
+    <div class="q-card" id="q8">
+      <div class="q-header" onclick="toggleQ(this)">
+        <div class="q-num">8</div>
+        <div class="q-title">חברה פיננסית: ותיקים שרופים + צעירים עוזבים — פתרון</div>
+        <span class="q-topic tag-gen">בין-דורי</span>
+        <div class="q-chevron">▼</div>
+      </div>
+      <div class="q-body">
+        <div class="q-text-box">
+          חברה פיננסית: עובדים ותיקים חשים שחיקה וחוסר הערכה. עובדים צעירים מתלוננים על חוסר באתגרים ועל כך שאין להם ממי ללמוד, ולכן נוטים לעזוב. <strong>מהו הפתרון המתאים ביותר לפי ניהול בין-דורי?</strong>
+        </div>
+        <div class="choices">
+          <div class="choice correct"><div class="choice-letter">א</div><div class="choice-text">יצירת "בנק כישורים" ושימוש במנטורינג הדדי: ותיקים מנחים צעירים, צעירים תורמים ידע עדכני</div></div>
+          <div class="choice wrong"><div class="choice-letter">ב</div><div class="choice-text">הפרדה מובנית: ותיקים בצוותי "שימור ידע" נפרדים, צעירים בצוותי "חדשנות"</div></div>
+          <div class="choice wrong"><div class="choice-letter">ג</div><div class="choice-text">התאמת תגמולים: ותיקים מקבלים תוספת שכר, צעירים מקבלים ימי כיף</div></div>
+          <div class="choice wrong"><div class="choice-letter">ד</div><div class="choice-text">ניהול בסגנון דור X ולהנמיך ציפיות רגשיות</div></div>
+          <div class="choice wrong"><div class="choice-letter">ה</div><div class="choice-text">כל התשובות נכונות</div></div>
+          <div class="choice wrong"><div class="choice-letter">ו</div><div class="choice-text">אף תשובה אינה נכונה</div></div>
+        </div>
+        <div class="answer-badge">✅ תשובה נכונה: א</div>
+        <div class="explanation">
+          <div class="explanation-label">הסבר</div>
+          <p>העיקרון המרכזי בניהול בין-דורי הוא <span class="key-concept">יצירת ערך הדדי</span> — לא למחוק את ההבדלים, אלא לנצל אותם. <span class="key-concept">מנטורינג הדדי</span> מאפשר: ותיקים מרגישים מועילים ומוערכים (פותר שחיקה), צעירים מקבלים למידה ומשוב (פותר עזיבה). הפרדה מבנית (ב) מחמירה את הניתוק, לא פותרת אותו.</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Q9 -->
+    <div class="q-card" id="q9">
+      <div class="q-header" onclick="toggleQ(this)">
+        <div class="q-num">9</div>
+        <div class="q-title">דניאל: מסכה בעבודה + הידבקות רגשית מעמית</div>
+        <span class="q-topic tag-emotion">רגשות & EI</span>
+        <div class="q-chevron">▼</div>
+      </div>
+      <div class="q-body">
+        <div class="q-text-box">
+          דניאל קיבל בשורה אישית קשה לפני משמרת. בכל זאת <strong>שם על עצמו מסכה, והראה שמח ואנרגטי</strong> בשיחות עם לקוחות. בהפסקה, ישב ליד עמית לחוץ (רועד, מכסוס ציפורניים) — <strong>מבלי שהחליפו מילה</strong> — ודניאל החל לחוש עצבנות ולחץ בעצמו. מה חווה דניאל <u>לפי הסדר</u>?
+        </div>
+        <div class="choices">
+          <div class="choice wrong"><div class="choice-letter">א</div><div class="choice-text">משחק שטחי; דיסוננס רגשי</div></div>
+          <div class="choice wrong"><div class="choice-letter">ב</div><div class="choice-text">משחק עמוק; הדבקה רגשית</div></div>
+          <div class="choice wrong"><div class="choice-letter">ג</div><div class="choice-text">משחק עמוק; דיסוננס רגשי</div></div>
+          <div class="choice correct"><div class="choice-letter">ד</div><div class="choice-text">משחק שטחי (Surface Acting); הדבקה רגשית (Emotional Contagion)</div></div>
+          <div class="choice wrong"><div class="choice-letter">ה</div><div class="choice-text">כל התשובות נכונות</div></div>
+          <div class="choice wrong"><div class="choice-letter">ו</div><div class="choice-text">אף תשובה אינה נכונה</div></div>
+        </div>
+        <div class="answer-badge">✅ תשובה נכונה: ד</div>
+        <div class="explanation">
+          <div class="explanation-label">הסבר</div>
+          <p><span class="key-concept">Surface Acting (משחק שטחי)</span> — מציג רגש שלא מרגיש (שם "מסכה"). הוא <strong>לא שינה את רגשו הפנימי</strong> — עדיין עצוב/דואג מבפנים, רק מציג שמחה. לעומת זאת, <span class="key-concept">Deep Acting</span> = שינוי הרגש הפנימי עצמו. לאחר מכן: <span class="key-concept">הדבקה רגשית (Emotional Contagion)</span> — קלט את חרדת העמית דרך שפת הגוף שלו (ללא מילים), ו"נדבק" בתחושת לחץ.</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Q10 -->
+    <div class="q-card" id="q10">
+      <div class="q-header" onclick="toggleQ(this)">
+        <div class="q-num">10</div>
+        <div class="q-title">מבחן המרשמלו — Mischel</div>
+        <span class="q-topic tag-person">אישיות</span>
+        <div class="q-chevron">▼</div>
+      </div>
+      <div class="q-body">
+        <div class="q-text-box">ב<strong>מבחן המרשמלו</strong> של Walter Mischel (1960), הילדים שהצליחו לדחות סיפוקים (לעומת אלו שלא) הראו בממוצע:</div>
+        <div class="choices">
+          <div class="choice wrong"><div class="choice-letter">א</div><div class="choice-text">ציונים גבוהים יותר בלימודים</div></div>
+          <div class="choice wrong"><div class="choice-letter">ב</div><div class="choice-text">בריאות טובה יותר לאורך כל חייהם</div></div>
+          <div class="choice wrong"><div class="choice-letter">ג</div><div class="choice-text">הצלחה מקצועית רבה יותר</div></div>
+          <div class="choice wrong"><div class="choice-letter">ד</div><div class="choice-text">התמדה טובה יותר במערכות יחסים</div></div>
+          <div class="choice correct"><div class="choice-letter">ה</div><div class="choice-text">כל התשובות נכונות</div></div>
+          <div class="choice wrong"><div class="choice-letter">ו</div><div class="choice-text">אף תשובה אינה נכונה</div></div>
+        </div>
+        <div class="answer-badge all">✅ תשובה נכונה: ה — כל התשובות נכונות</div>
+        <div class="explanation">
+          <div class="explanation-label">הסבר</div>
+          <p>מחקר Mischel עקב אחרי ילדים שחיכו עם המרשמלו (=יכולת <span class="key-concept">דחיית סיפוקים</span>, שקשורה ל-Conscientiousness) לאורך עשרות שנים. תוצאות: <strong>כל ארבעת</strong> המאפיינים (לימודים, בריאות, קריירה, מערכות יחסים) היו טובים יותר. על כן: <strong>כל התשובות נכונות</strong>.</p>
+          <div class="insight"><strong>⚠️ טיפ מבחן:</strong> שאלה זו חזרה בבחינה. כשהשאלה שואלת "מה הראו ילדים שדחו סיפוקים" — התשובה תמיד "כל התשובות נכונות."</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Q11 -->
+    <div class="q-card" id="q11">
+      <div class="q-header" onclick="toggleQ(this)">
+        <div class="q-num">11</div>
+        <div class="q-title">תיאוריית הציפייה — הגברת Valence (תועלת)</div>
+        <span class="q-topic tag-motiv">מוטיבציה</span>
+        <div class="q-chevron">▼</div>
+      </div>
+      <div class="q-body">
+        <div class="q-text-box">מנהל מעוניין להגביר את רכיב ה<strong>תועלת (Valence)</strong> בקרב עובדיו, לפי <strong>תיאוריית הציפייה (Vroom)</strong>. מה עליו לעשות?</div>
+        <div class="choices">
+          <div class="choice wrong"><div class="choice-letter">א</div><div class="choice-text">לתת לעובדים המצטיינים בונוס</div></div>
+          <div class="choice correct"><div class="choice-letter">ב</div><div class="choice-text">לתת לעובדים מגוון מתנות לבחירה</div></div>
+          <div class="choice wrong"><div class="choice-letter">ג</div><div class="choice-text">לתת לעובדים תחושת הוגנות מצד הממונים</div></div>
+          <div class="choice wrong"><div class="choice-letter">ד</div><div class="choice-text">לתת לעובדים הכשרה מתאימה</div></div>
+          <div class="choice wrong"><div class="choice-letter">ה</div><div class="choice-text">כל התשובות נכונות</div></div>
+          <div class="choice wrong"><div class="choice-letter">ו</div><div class="choice-text">אף תשובה אינה נכונה</div></div>
+        </div>
+        <div class="answer-badge">✅ תשובה נכונה: ב</div>
+        <div class="theory-box">
+          <div class="theory-title">📐 תיאוריית הציפייה — שלושת המרכיבים</div>
+          <table class="score-table">
+            <tr><th>מרכיב</th><th>הגדרה</th><th>כיצד להגביר</th></tr>
+            <tr><td><strong>Expectancy (ציפייה)</strong></td><td>ניסיון → ביצועים</td><td>הכשרה, כלים, תמיכה</td></tr>
+            <tr><td><strong>Instrumentality (מכשירות)</strong></td><td>ביצועים → תגמול</td><td>שקיפות, בונוס, הוגנות</td></tr>
+            <tr><td><strong>Valence (תועלת)</strong></td><td>ערך התגמול לעובד</td><td>אפשרות בחירה — כי ערך שונה לכל אחד!</td></tr>
+          </table>
+        </div>
+        <div class="explanation">
+          <div class="explanation-label">הסבר</div>
+          <p><span class="key-concept">Valence</span> = הערך הסובייקטיבי שהעובד מעניק לתגמול. כדי להגביר אותה, צריך לתת לעובד <strong>בחירה</strong> במה שמשמעותי לו. בונוס (א) עשוי להגביר Instrumentality (קשר ביצועים-תגמול), לא Valence עצמה. הכשרה (ד) מגבירה Expectancy. הוגנות (ג) אינה רכיב ישיר בתיאוריה זו.</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Q12 -->
+    <div class="q-card" id="q12">
+      <div class="q-header" onclick="toggleQ(this)">
+        <div class="q-num">12</div>
+        <div class="q-title">יונתן ומדריכים — Goal-Setting Theory</div>
+        <span class="q-topic tag-motiv">מוטיבציה</span>
+        <div class="q-chevron">▼</div>
+      </div>
+      <div class="q-body">
+        <div class="q-text-box">
+          יונתן רכז קהילה במכינה מרגיש שהחניכים קצת ילדותיים, ורוצה לחזק בגרות. הוא מכנס מדריכים ומסביר את הבעיה. <strong>לפי תיאוריית הצבת מטרות (Goal-Setting Theory)</strong>, כיצד יפעל יונתן נכון?
+        </div>
+        <div class="choices">
+          <div class="choice wrong"><div class="choice-letter">א</div><div class="choice-text">ייתן לחניכים מטרה כללית: "תנהגו בצורה בוגרת יותר"</div></div>
+          <div class="choice correct"><div class="choice-letter">ב</div><div class="choice-text">ייתן מטרה ספציפית, מאתגרת, עם משוב — לדוגמה: "כל חניך ינחה פגישה אחת בחודש"</div></div>
+          <div class="choice wrong"><div class="choice-letter">ג</div><div class="choice-text">יוסיף פרסים חיצוניים (שוקולד/בונוס) לכל מי שמתנהג בצורה בוגרת</div></div>
+          <div class="choice wrong"><div class="choice-letter">ד</div><div class="choice-text">ישתמש בענישה שלילית כלפי מי שמתנהג בילדותיות</div></div>
+          <div class="choice wrong"><div class="choice-letter">ה</div><div class="choice-text">כל התשובות נכונות</div></div>
+          <div class="choice wrong"><div class="choice-letter">ו</div><div class="choice-text">אף תשובה אינה נכונה</div></div>
+        </div>
+        <div class="answer-badge">✅ תשובה נכונה: ב</div>
+        <div class="explanation">
+          <div class="explanation-label">הסבר</div>
+          <p>לפי <span class="key-concept">Goal-Setting Theory (Locke & Latham)</span>, מטרות יעילות הן: <strong>ספציפיות, מאתגרות (אך מציאותיות), עם משוב</strong> — ובהסכמת העובד (Commitment). מטרה "תנהג בצורה בוגרת" היא עמומה מדי. מטרה ספציפית כמו "ניחוה פגישה אחת בחודש" ניתנת למדידה ולמשוב.</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Q13 -->
+    <div class="q-card" id="q13">
+      <div class="q-header" onclick="toggleQ(this)">
+        <div class="q-num">13</div>
+        <div class="q-title">גנבות בארגון מתוך חיקוי מנהלים — תיאוריה</div>
+        <span class="q-topic tag-learn">למידה</span>
+        <div class="q-chevron">▼</div>
+      </div>
+      <div class="q-body">
+        <div class="q-text-box">לטענת יועצים ארגוניים, הסיבה לגנבות רבות בארגונים היא התנהגות מושחתת של מנהלים — שהעובדים <strong>מחקים</strong>. עם איזה מושג תיאורטי זה מתיישב?</div>
+        <div class="choices">
+          <div class="choice wrong"><div class="choice-letter">א</div><div class="choice-text">התניה אופרנטית</div></div>
+          <div class="choice wrong"><div class="choice-letter">ב</div><div class="choice-text">התניה קלאסית</div></div>
+          <div class="choice wrong"><div class="choice-letter">ג</div><div class="choice-text">תיאוריית הנוגנות (Equity Theory)</div></div>
+          <div class="choice correct"><div class="choice-letter">ד</div><div class="choice-text">למידה חברתית (Social Learning — Bandura)</div></div>
+          <div class="choice wrong"><div class="choice-letter">ה</div><div class="choice-text">כל התשובות נכונות</div></div>
+          <div class="choice wrong"><div class="choice-letter">ו</div><div class="choice-text">אף תשובה אינה נכונה</div></div>
+        </div>
+        <div class="answer-badge">✅ תשובה נכונה: ד — למידה חברתית</div>
+        <div class="explanation">
+          <div class="explanation-label">הסבר</div>
+          <p><span class="key-concept">Bandura (Social Learning Theory)</span>: רוב הלמידה מתבצעת ע"י <strong>צפייה ב-מודל</strong> (Model) — לא בהכרח דרך ניסוי-טעייה. כשעובדים רואים מנהלים גונבים, הם לומדים שהתנהגות זו מקובלת/משתלמת ומחקים אותה. זהו בדיוק מנגנון ה-"Observational Learning" של בנדורה.</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Q14 -->
+    <div class="q-card" id="q14">
+      <div class="q-header" onclick="toggleQ(this)">
+        <div class="q-num">14</div>
+        <div class="q-title">שרה וצדק ארגוני — Equity Theory</div>
+        <span class="q-topic tag-justice">צדק</span>
+        <div class="q-chevron">▼</div>
+      </div>
+      <div class="q-body">
+        <div class="q-text-box">
+          שרה עובדת בחברת T. לאחרונה גילתה שהיא עובדת <strong>פחות קשה</strong> ממהיתיימות בקלחמה, אך מקבלת <strong>אותה תרוכשמ</strong>. לפי <strong>תיאוריית הנוגנות (Equity Theory)</strong>, מה תעשה שרה?
+        </div>
+        <div class="choices">
+          <div class="choice wrong"><div class="choice-letter">א</div><div class="choice-text">תתפטר ותחפש עבודה מתאימה</div></div>
+          <div class="choice wrong"><div class="choice-letter">ב</div><div class="choice-text">תנגיש שביעות רצון גבוהה, כי המצב נוח לה</div></div>
+          <div class="choice wrong"><div class="choice-letter">ג</div><div class="choice-text">תתחיל לעבוד יותר שעות</div></div>
+          <div class="choice correct"><div class="choice-letter">ד</div><div class="choice-text">תתחיל להשקיע פחות בעבודה</div></div>
+          <div class="choice wrong"><div class="choice-letter">ה</div><div class="choice-text">כל התשובות נכונות</div></div>
+          <div class="choice wrong"><div class="choice-letter">ו</div><div class="choice-text">אף תשובה אינה נכונה</div></div>
+        </div>
+        <div class="answer-badge">✅ תשובה נכונה: ד</div>
+        <div class="explanation">
+          <div class="explanation-label">הסבר</div>
+          <p>לפי <span class="key-concept">Equity Theory (Adams)</span>: כל עובד משווה את יחס ה-Input/Output שלו לזה של אחרים. כשיש חוסר איזון — גם <strong>לטובת עצמו</strong> — נוצר מתח (<em>Inequity Tension</em>) שמניע פעולה לשחזר שוויון. שרה מקבלת יותר מהמגיע לה → היא תפחית השקעה כדי להחזיר את האיזון (Output/Input שלה = של אחרים).</p>
+          <div class="insight"><strong>💡 חשוב:</strong> Equity Theory חל גם על מצב שבו מקבלים <em>יותר</em> ממה שמגיע — לא רק פחות!</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Q15 -->
+    <div class="q-card" id="q15">
+      <div class="q-header" onclick="toggleQ(this)">
+        <div class="q-num">15</div>
+        <div class="q-title">מחקר גרינברג — גנבה כתגובה לחוסר צדק</div>
+        <span class="q-topic tag-justice">צדק</span>
+        <div class="q-chevron">▼</div>
+      </div>
+      <div class="q-body">
+        <div class="q-text-box">מהי המסקנה מהמאמר של Greenberg (1990): <em>"Employee theft as a reaction to underpayment inequity: The hidden cost of pay cuts"</em>?</div>
+        <div class="choices">
+          <div class="choice wrong"><div class="choice-letter">א</div><div class="choice-text">צדק חלוקתי הוא החשוב ביותר לניבוי התנהגות עובדים</div></div>
+          <div class="choice correct"><div class="choice-letter">ב</div><div class="choice-text">צדק הליכי יכול לפצות על חוסר בצדק חלוקתי</div></div>
+          <div class="choice wrong"><div class="choice-letter">ג</div><div class="choice-text">צדק הליכי חייב לבוא יחד עם צדק חלוקתי</div></div>
+          <div class="choice wrong"><div class="choice-letter">ד</div><div class="choice-text">צדק חלוקתי יכול לפצות על חוסר בצדק הליכי</div></div>
+          <div class="choice wrong"><div class="choice-letter">ה</div><div class="choice-text">כל התשובות נכונות</div></div>
+          <div class="choice wrong"><div class="choice-letter">ו</div><div class="choice-text">אף תשובה אינה נכונה</div></div>
+        </div>
+        <div class="answer-badge">✅ תשובה נכונה: ב</div>
+        <div class="explanation">
+          <div class="explanation-label">הסבר</div>
+          <p>גרינברג מצא שעובדים שקיבלו הפחתת שכר (חוסר <span class="key-concept">צדק חלוקתי</span>) גנבו יותר — אבל רק כשלא ניתנה להם הסבר הולם. כשהמנהל הסביר את הסיבה בצורה מכובדת (= <span class="key-concept">צדק הליכי</span> — ההליך ו<strong>האופן</strong> בו ניתנת ההחלטה), הגנבות פחתו משמעותית. מסקנה: <strong>צדק הליכי יכול לפצות על חוסר בצדק חלוקתי</strong>.</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Q16 -->
+    <div class="q-card" id="q16">
+      <div class="q-header" onclick="toggleQ(this)">
+        <div class="q-num">16</div>
+        <div class="q-title">מחקר מילקשייק — Crum et al. (2011)</div>
+        <span class="q-topic tag-stress">לחץ</span>
+        <div class="q-chevron">▼</div>
+      </div>
+      <div class="q-body">
+        <div class="q-text-box">
+          במחקר <strong>מילקשייק (Crum et al.)</strong>, משתתפים שתו את <em>אותו</em> מילקשייק עם תוויות שונות — אחד "עתיר קלוריות", השני "דל קלוריות". נמצא שרמת הגרלין (הורמון רעב) השתנתה בהתאם לתווית, <em>לא</em> לתכולה האמיתית. מה מלמד ממצא זה?
+        </div>
+        <div class="choices">
+          <div class="choice wrong"><div class="choice-letter">א</div><div class="choice-text">מזון עתיר קלוריות תמיד מוריד גרלין יותר ממזון דל קלוריות</div></div>
+          <div class="choice correct"><div class="choice-letter">ב</div><div class="choice-text">התפיסה הקוגניטיבית משפיעה על התגובה הפיזיולוגית</div></div>
+          <div class="choice wrong"><div class="choice-letter">ג</div><div class="choice-text">הגרלין תלוי אך ורק בתכולת הקלוריות</div></div>
+          <div class="choice wrong"><div class="choice-letter">ד</div><div class="choice-text">מחשבות חיוביות תמיד משפרות את הבריאות</div></div>
+          <div class="choice wrong"><div class="choice-letter">ה</div><div class="choice-text">כל התשובות נכונות</div></div>
+          <div class="choice wrong"><div class="choice-letter">ו</div><div class="choice-text">אף תשובה אינה נכונה</div></div>
+        </div>
+        <div class="answer-badge">✅ תשובה נכונה: ב</div>
+        <div class="explanation">
+          <div class="explanation-label">הסבר</div>
+          <p>ממצא המחקר מדגים את הרעיון של <span class="key-concept">מודל Lazarus</span>: לא המציאות עצמה אלא <strong>הפרשנות שלנו</strong> (Cognitive Appraisal) קובעת את התגובה — כולל תגובות ביולוגיות/פיזיולוגיות. אנשים שהאמינו שהם שתו מילקשייק "שמן" הגוף שלהם הגיב כאילו אכלו יותר. זהו ביסוס לרעיון שה-<strong>Mindset</strong> משפיע על הגוף.</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Q17 -->
+    <div class="q-card" id="q17">
+      <div class="q-header" onclick="toggleQ(this)">
+        <div class="q-num">17</div>
+        <div class="q-title">BASIC PH — מודל חוסן (Lahad)</div>
+        <span class="q-topic tag-resilience">חוסן</span>
+        <div class="q-chevron">▼</div>
+      </div>
+      <div class="q-body">
+        <div class="q-text-box">אמיתי איבד לאחרונה את עבודתו. כשהוא בלחץ, הוא <strong>יוצא לריצה</strong>, ואחר כך <strong>פותח ספר</strong> ומסיח את הדעת עם סיפור בדיוני. על-פי מודל <strong>BASIC PH</strong>, אילו ערוצי התמודדות מפעיל אמיתי?</div>
+        <div class="choices">
+          <div class="choice wrong"><div class="choice-letter">א</div><div class="choice-text">S (חברתי) ו-C (קוגניטיבי)</div></div>
+          <div class="choice correct"><div class="choice-letter">ב</div><div class="choice-text">PH (פיזי) ו-I (דמיון)</div></div>
+          <div class="choice wrong"><div class="choice-letter">ג</div><div class="choice-text">B (אמונה) ו-A (רגש)</div></div>
+          <div class="choice wrong"><div class="choice-letter">ד</div><div class="choice-text">C (קוגניטיבי) ו-PH (פיזי)</div></div>
+          <div class="choice wrong"><div class="choice-letter">ה</div><div class="choice-text">כל התשובות נכונות</div></div>
+          <div class="choice wrong"><div class="choice-letter">ו</div><div class="choice-text">אף תשובה אינה נכונה</div></div>
+        </div>
+        <div class="answer-badge">✅ תשובה נכונה: ב</div>
+        <div class="explanation">
+          <div class="explanation-label">הסבר</div>
+          <p><span class="key-concept">BASIC PH (Lahad)</span> — 6 ערוצי התמודדות:</p>
+          <ul>
+            <li><strong>B</strong> — Belief: אמונה, רוחניות</li>
+            <li><strong>A</strong> — Affect: ביטוי רגשות, בכי, שיחה</li>
+            <li><strong>S</strong> — Social: תמיכה חברתית</li>
+            <li><strong>I</strong> — Imagination: <em>ספר בדיוני, יצירתיות, הומור</em></li>
+            <li><strong>C</strong> — Cognition: חשיבה, מידע, פתרון בעיות</li>
+            <li><strong>PH</strong> — Physical: <em>ריצה, פעילות גופנית, נשימה</em></li>
+          </ul>
+          <p>אמיתי מפעיל <strong>PH</strong> (ריצה) ו-<strong>I</strong> (ספר בדיוני = דמיון והסחת דעת).</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Q18 -->
+    <div class="q-card" id="q18">
+      <div class="q-header" onclick="toggleQ(this)">
+        <div class="q-num">18</div>
+        <div class="q-title">מודל Demand-Control — דוקטור בחדר מיון</div>
+        <span class="q-topic tag-stress">לחץ</span>
+        <div class="q-chevron">▼</div>
+      </div>
+      <div class="q-body">
+        <div class="q-text-box">
+          ד"ר מיכל עובדת בחדר מיון. המשמרות <strong>אינטנסיביות</strong>, עם עשרות חולים בזמן קצר. עם זאת, יש לה <strong>אוטונומיה מלאה</strong> בהחלטות רפואיות. לפי מודל <strong>Demand-Control (Karasek)</strong>, מה מצבה?
+        </div>
+        <div class="choices">
+          <div class="choice wrong"><div class="choice-letter">א</div><div class="choice-text">High Strain — דרישות גבוהות + שליטה נמוכה → שחיקה ודאית</div></div>
+          <div class="choice wrong"><div class="choice-letter">ב</div><div class="choice-text">Passive — ביצוע נהלים קבועים → שעמום</div></div>
+          <div class="choice correct"><div class="choice-letter">ג</div><div class="choice-text">Active / Eustress — דרישות גבוהות + שליטה גבוהה → צמיחה ולחץ חיובי</div></div>
+          <div class="choice wrong"><div class="choice-letter">ד</div><div class="choice-text">Low Strain — שליטה מלאה "מבטלת" את הדרישות</div></div>
+          <div class="choice wrong"><div class="choice-letter">ה</div><div class="choice-text">כל התשובות נכונות</div></div>
+          <div class="choice wrong"><div class="choice-letter">ו</div><div class="choice-text">אף תשובה אינה נכונה</div></div>
+        </div>
+        <div class="answer-badge">✅ תשובה נכונה: ג — Active / Eustress</div>
+        <div class="theory-box">
+          <div class="theory-title">📊 מטריצת Demand-Control</div>
+          <table class="score-table">
+            <tr><th></th><th>שליטה גבוהה</th><th>שליטה נמוכה</th></tr>
+            <tr><td><strong>דרישות גבוהות</strong></td><td>✅ Active / Eustress</td><td>⚠️ High Strain</td></tr>
+            <tr><td><strong>דרישות נמוכות</strong></td><td>😌 Low Strain</td><td>😴 Passive</td></tr>
+          </table>
+        </div>
+        <div class="explanation">
+          <div class="explanation-label">הסבר</div>
+          <p>מיכל: דרישות <strong>גבוהות</strong> (עשרות חולים, לחץ זמן) + שליטה <strong>גבוהה</strong> (אוטונומיה מלאה) = תא <strong>Active</strong> → <span class="key-concept">Eustress</span> = לחץ חיובי המוביל ללמידה וצמיחה. ה<strong>לחץ הגבוה ביותר</strong> (High Strain) = דרישות גבוהות + שליטה <em>נמוכה</em>.</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Q19 -->
+    <div class="q-card" id="q19">
+      <div class="q-header" onclick="toggleQ(this)">
+        <div class="q-num">19</div>
+        <div class="q-title">מחקר Rafaeli & Sutton — חיוך ומכירות</div>
+        <span class="q-topic tag-emotion">רגשות & EI</span>
+        <div class="q-chevron">▼</div>
+      </div>
+      <div class="q-body">
+        <div class="q-text-box">
+          Rafaeli & Sutton (1987) חקרו את <strong>השפעת ביטוי שגר על מכירות</strong> בחנויות נוחות. מה ימליצו מנהלים לאנשי שירות לאחר מחקר זה?
+        </div>
+        <div class="choices">
+          <div class="choice wrong"><div class="choice-letter">א</div><div class="choice-text">תמיד לחייך ולבטא שגר חיובי כי זה מעלה מכירות</div></div>
+          <div class="choice wrong"><div class="choice-letter">ב</div><div class="choice-text">לא לחייך, כי לא נמצא קשר בין שגר לתוצאות</div></div>
+          <div class="choice wrong"><div class="choice-letter">ג</div><div class="choice-text">לחייך רק כשאין לחץ על אנשי השירות</div></div>
+          <div class="choice correct"><div class="choice-letter">ד</div><div class="choice-text">לחייך ולבטא שגר חיובי דווקא כשהחנות עמוסה — כדי לרכך התנגדויות לקוחות</div></div>
+          <div class="choice wrong"><div class="choice-letter">ה</div><div class="choice-text">כל התשובות נכונות</div></div>
+          <div class="choice wrong"><div class="choice-letter">ו</div><div class="choice-text">אף תשובה אינה נכונה</div></div>
+        </div>
+        <div class="answer-badge">✅ תשובה נכונה: ד</div>
+        <div class="explanation">
+          <div class="explanation-label">הסבר</div>
+          <p>המחקר מצא שחיוך של מוכרים העלה מכירות — <strong>דווקא כשהחנות הייתה עמוסה</strong>. ההסבר: כשיש סביבה לחוצה ולקוחות ממהרים, החיוך רוכך התנגדות ויצר אווירה ידידותית. בזמן שקט, ההשפעה הייתה פחות מובהקת. לכן: לחייך <em>בשיא העומס</em>.</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Q20 -->
+    <div class="q-card" id="q20">
+      <div class="q-header" onclick="toggleQ(this)">
+        <div class="q-num">20</div>
+        <div class="q-title">רוני — Mood vs. Emotion (חוש/שגר)</div>
+        <span class="q-topic tag-emotion">רגשות & EI</span>
+        <div class="q-chevron">▼</div>
+      </div>
+      <div class="q-body">
+        <div class="q-text-box">
+          רוני התעורר בוקר אחד עם תחושת <strong>הוליות ואחוות</strong>. הוא הרגיש כך לאורך <strong>ימים אחדים</strong>, גם כשהיו אתגרים. מדוע מה שחווה רוני הוא <strong>Mood (חוש)</strong> ולא Emotion (שגר)?
+        </div>
+        <div class="choices">
+          <div class="choice correct"><div class="choice-letter">א</div><div class="choice-text">מטבעו הוא מתמשך / ממושך</div></div>
+          <div class="choice wrong"><div class="choice-letter">ב</div><div class="choice-text">הוא תוצאה של אירוע בודד</div></div>
+          <div class="choice wrong"><div class="choice-letter">ג</div><div class="choice-text">עוצמתו גבוהה יותר מרגש</div></div>
+          <div class="choice wrong"><div class="choice-letter">ד</div><div class="choice-text">הוא תחושה חיובית</div></div>
+          <div class="choice wrong"><div class="choice-letter">ה</div><div class="choice-text">כל התשובות נכונות</div></div>
+          <div class="choice wrong"><div class="choice-letter">ו</div><div class="choice-text">אף תשובה אינה נכונה</div></div>
+        </div>
+        <div class="answer-badge">✅ תשובה נכונה: א</div>
+        <div class="explanation">
+          <div class="explanation-label">הסבר</div>
+          <p>ההבדל המרכזי בין <span class="key-concept">Emotion (רגש)</span> לבין <span class="key-concept">Mood (חוש)</span>:</p>
+          <ul>
+            <li>Emotion: <strong>קצר</strong>, עז, עם סיבה ספציפית (כעס על פקק תנועה)</li>
+            <li>Mood: <strong>ממושך</strong>, עמום יותר, לרוב ללא סיבה ברורה</li>
+          </ul>
+          <p>רוני חש הוליות <em>ימים אחדים</em> ללא אירוע מזרז ברור — זהו בדיוק Mood.</p>
+        </div>
+      </div>
+    </div>
+
+  </main>
+</div>
+
+<!-- ====== שאלות חזרה ====== -->
+<div id="review" class="tab-panel">
+  <div class="hero-strip">
+    <h2>שאלות חזרה — פתרונות מלאים</h2>
+    <p>שאלות מהחומר עם תשובות ועם הסבר תיאורטי מלא</p>
+    <div class="exam-meta">
+      <span class="meta-chip">📋 15 שאלות</span>
+      <span class="meta-chip">✅ כל שאלה עם פתרון</span>
+    </div>
+  </div>
+  <main>
+    <button class="btn-expand" onclick="expandAll('review')">▼ פתח את כל השאלות</button>
+
+    <div class="q-card"><div class="q-header" onclick="toggleQ(this)"><div class="q-num">1</div><div class="q-title">אורית ופרויקט חדש — מודל Lazarus + Demand-Control</div><span class="q-topic tag-stress">לחץ</span><div class="q-chevron">▼</div></div>
+    <div class="q-body">
+      <div class="q-text-box">אורית מתחילה פרויקט חדש ואומרת: <em>"אני ממש מתרגשת מהאתגר. אני יודעת איך לגייס אנשים שיעזרו לי."</em> מה סביר לטעון לפי הנלמד על לחץ?</div>
+      <div class="choices">
+        <div class="choice wrong"><div class="choice-letter">א</div><div class="choice-text">לפי Demand-Control, אורית במצב Distress</div></div>
+        <div class="choice wrong"><div class="choice-letter">ב</div><div class="choice-text">אורית בסיכון גבוה לפתח בעיה רפואית</div></div>
+        <div class="choice correct"><div class="choice-letter">ג</div><div class="choice-text">אורית מבצעת הערכה ראשונית גבוהה (אתגר!) והערכה שניונית גבוהה (יש לה משאבים)</div></div>
+        <div class="choice wrong"><div class="choice-letter">ד</div><div class="choice-text">אורית פועלת במצב Flight</div></div>
+        <div class="choice wrong"><div class="choice-letter">ה</div><div class="choice-text">כל התשובות נכונות</div></div>
+        <div class="choice wrong"><div class="choice-letter">ו</div><div class="choice-text">אף תשובה אינה נכונה</div></div>
+      </div>
+      <div class="answer-badge">✅ ג — הערכה ראשונית ושניונית גבוהות → Eustress</div>
+      <div class="explanation"><div class="explanation-label">הסבר</div>
+        <p>לפי <span class="key-concept">Lazarus</span>: הערכה <strong>ראשונית</strong> = "זה אתגר מרגש" (לא איום). הערכה <strong>שניונית</strong> = "יש לי את המשאבים להתמודד" (יודעת לגייס עזרה). השילוב: → <span class="key-concept">Eustress</span> (לחץ חיובי + מוטיבציה), לא Distress.</p>
+      </div>
+    </div></div>
+
+    <div class="q-card"><div class="q-header" onclick="toggleQ(this)"><div class="q-num">2</div><div class="q-title">דני רופא מיון — Demand-Control</div><span class="q-topic tag-stress">לחץ</span><div class="q-chevron">▼</div></div>
+    <div class="q-body">
+      <div class="q-text-box">דני רופא בחדר מיון: משמרות אינטנסיביות + עשרות חולים + לחץ זמן. אך יש לו <strong>אוטונומיה מלאה</strong>. לפי Demand-Control, מה מצבו?</div>
+      <div class="choices">
+        <div class="choice wrong"><div class="choice-letter">א</div><div class="choice-text">High Strain — שחיקה ופגיעה ודאית</div></div>
+        <div class="choice wrong"><div class="choice-letter">ב</div><div class="choice-text">Passive — שעמום וחוסר מוטיבציה</div></div>
+        <div class="choice correct"><div class="choice-letter">ג</div><div class="choice-text">Active/Eustress — דרישות גבוהות + שליטה גבוהה → צמיחה</div></div>
+        <div class="choice wrong"><div class="choice-letter">ד</div><div class="choice-text">Low Strain — שליטה מלאה "מבטלת" דרישות</div></div>
+        <div class="choice wrong"><div class="choice-letter">ה</div><div class="choice-text">כל התשובות נכונות</div></div>
+        <div class="choice wrong"><div class="choice-letter">ו</div><div class="choice-text">אף תשובה אינה נכונה</div></div>
+      </div>
+      <div class="answer-badge">✅ ג — Active/Eustress</div>
+      <div class="explanation"><div class="explanation-label">הסבר</div><p>ראה Q18 מעל. הנוסחה: דרישות גבוהות + שליטה גבוהה = <span class="key-concept">Active</span> → Eustress → למידה וצמיחה.</p></div>
+    </div></div>
+
+    <div class="q-card"><div class="q-header" onclick="toggleQ(this)"><div class="q-num">3</div><div class="q-title">לירון ופופקורן — קלאסי vs. אופרנטי</div><span class="q-topic tag-learn">למידה</span><div class="q-chevron">▼</div></div>
+    <div class="q-body">
+      <div class="q-text-box">לירון הולכת תמיד לסרט עם פופקורן. היום עברה ליד קולנוע סגור — <strong>והרגישה ריח וטעם פופקורן</strong>. מה קרה?</div>
+      <div class="choices">
+        <div class="choice wrong"><div class="choice-letter">א</div><div class="choice-text">תגובה בלתי מותנית (UCR)</div></div>
+        <div class="choice wrong"><div class="choice-letter">ב</div><div class="choice-text">גירוי מותנה (CS)</div></div>
+        <div class="choice wrong"><div class="choice-letter">ג</div><div class="choice-text">גירוי בלתי מותנה (UCS)</div></div>
+        <div class="choice correct"><div class="choice-letter">ד</div><div class="choice-text">תגובה מותנית (CR)</div></div>
+        <div class="choice wrong"><div class="choice-letter">ה</div><div class="choice-text">כל התשובות נכונות</div></div>
+        <div class="choice wrong"><div class="choice-letter">ו</div><div class="choice-text">אף תשובה אינה נכונה</div></div>
+      </div>
+      <div class="answer-badge">✅ ד — תגובה מותנית (CR)</div>
+      <div class="explanation"><div class="explanation-label">הסבר</div>
+        <p>הקולנוע (CS) יצר תגובת ריח/טעם (CR) אפילו שהפופקורן לא היה שם. זוהי <span class="key-concept">Conditioned Response</span> — תגובה שנרכשה דרך חיבור חוזר בין גירוי ניטרלי (קולנוע) לגירוי טבעי (פופקורן). השאלה שואלת על <em>התחושה שעלתה מהקולנוע הסגור</em> — זוהי CR, לא UCR.</p>
+      </div>
+    </div></div>
+
+    <div class="q-card"><div class="q-header" onclick="toggleQ(this)"><div class="q-num">4</div><div class="q-title">שירה ויישום ידע בעבודה — הכללה</div><span class="q-topic tag-learn">למידה</span><div class="q-chevron">▼</div></div>
+    <div class="q-body">
+      <div class="q-text-box">שירה למדה ניהול אך לא התנסתה בניהול אמיתי. כשהתחילה לעבוד, גילתה שהיא <strong>מיישמת ידע ממצבים שלא למדה עליהם ספציפית</strong>. איזו יכולת השתמשה?</div>
+      <div class="choices">
+        <div class="choice correct"><div class="choice-letter">א</div><div class="choice-text">הכללה (Generalization)</div></div>
+        <div class="choice wrong"><div class="choice-letter">ב</div><div class="choice-text">הבחנה (Discrimination)</div></div>
+        <div class="choice wrong"><div class="choice-letter">ג</div><div class="choice-text">למידה חברתית</div></div>
+        <div class="choice wrong"><div class="choice-letter">ד</div><div class="choice-text">התניה אופרנטית</div></div>
+        <div class="choice wrong"><div class="choice-letter">ה</div><div class="choice-text">כל התשובות נכונות</div></div>
+        <div class="choice wrong"><div class="choice-letter">ו</div><div class="choice-text">אף תשובה אינה נכונה</div></div>
+      </div>
+      <div class="answer-badge">✅ א — הכללה (Generalization)</div>
+      <div class="explanation"><div class="explanation-label">הסבר</div>
+        <p><span class="key-concept">הכללה</span> = העברת למידה ממצב מוכר לסיטואציה חדשה דומה. שירה יישמה ידע ממצבים שלמדה עליהם (מודלים תיאורטיים) על מצבים חדשים בעבודה — בדיוק הכללה. הבחנה היא ההיפך — זיהוי שמצב חדש <em>שונה</em>.</p>
+      </div>
+    </div></div>
+
+    <div class="q-card"><div class="q-header" onclick="toggleQ(this)"><div class="q-num">5</div><div class="q-title">שקד שמגורש מחדר המיון — סוג ענישה</div><span class="q-topic tag-learn">למידה</span><div class="q-chevron">▼</div></div>
+    <div class="q-body">
+      <div class="q-text-box">שקד נפצע, הגיע כועס לחדר מיון ופרץ על המאבטח. המאבטח <strong>מנע ממנו להיכנס</strong> ואמר שיטופל רק בבית חולים אחר. תגובת המאבטח היא דוגמה ל:</div>
+      <div class="choices">
+        <div class="choice wrong"><div class="choice-letter">א</div><div class="choice-text">ענישה חיובית (הוספת גירוי לא נעים)</div></div>
+        <div class="choice wrong"><div class="choice-letter">ב</div><div class="choice-text">חיזוק שלילי (הסרת גירוי לא נעים)</div></div>
+        <div class="choice correct"><div class="choice-letter">ג</div><div class="choice-text">ענישה שלילית (הסרת גירוי נעים — טיפול)</div></div>
+        <div class="choice wrong"><div class="choice-letter">ד</div><div class="choice-text">תגובה בלתי מותנית</div></div>
+        <div class="choice wrong"><div class="choice-letter">ה</div><div class="choice-text">כל התשובות נכונות</div></div>
+        <div class="choice wrong"><div class="choice-letter">ו</div><div class="choice-text">אף תשובה אינה נכונה</div></div>
+      </div>
+      <div class="answer-badge">✅ ג — ענישה שלילית</div>
+      <div class="theory-box">
+        <div class="theory-title">📐 טבלת חיזוק/ענישה</div>
+        <table class="score-table">
+          <tr><th></th><th>הוספת גירוי (+)</th><th>הסרת גירוי (−)</th></tr>
+          <tr><td><strong>מגביר התנהגות</strong></td><td>חיזוק חיובי ✅</td><td>חיזוק שלילי ✅</td></tr>
+          <tr><td><strong>מפחית התנהגות</strong></td><td>ענישה חיובית ❌</td><td>ענישה שלילית ❌</td></tr>
+        </table>
+      </div>
+      <div class="explanation"><div class="explanation-label">הסבר</div>
+        <p>המאבטח <strong>הסיר</strong> מגירוי נעים (טיפול רפואי). הסרה = שלילי. מטרה = להפחית התנהגות (צעקות) = ענישה. לכן: <span class="key-concept">ענישה שלילית</span>.</p>
+      </div>
+    </div></div>
+
+    <div class="q-card"><div class="q-header" onclick="toggleQ(this)"><div class="q-num">6</div><div class="q-title">רון ופיצה לאחרון — חיזוק או ענישה?</div><span class="q-topic tag-learn">למידה</span><div class="q-chevron">▼</div></div>
+    <div class="q-body">
+      <div class="q-text-box">רון מנהל מכריז: "מי שמגיע אחרון לישיבה, קונה פיצה לכולם בישיבה הבאה." רון עושה שימוש ב:</div>
+      <div class="choices">
+        <div class="choice wrong"><div class="choice-letter">א</div><div class="choice-text">חיזוק חיובי למי שמגיע בזמן</div></div>
+        <div class="choice correct"><div class="choice-letter">ב</div><div class="choice-text">ענישה שלילית למי שמאחר (לוקח כסף)</div></div>
+        <div class="choice wrong"><div class="choice-letter">ג</div><div class="choice-text">חיזוק שלילי למי שמגיע בזמן</div></div>
+        <div class="choice wrong"><div class="choice-letter">ד</div><div class="choice-text">חיזוק וענישה לכולם</div></div>
+        <div class="choice wrong"><div class="choice-letter">ה</div><div class="choice-text">כל התשובות נכונות</div></div>
+        <div class="choice wrong"><div class="choice-letter">ו</div><div class="choice-text">אף תשובה אינה נכונה</div></div>
+      </div>
+      <div class="answer-badge">✅ ב — ענישה שלילית</div>
+      <div class="explanation"><div class="explanation-label">הסבר</div>
+        <p>מי שמאחר — <strong>מאבד</strong> כסף (הסרת גירוי נעים = כסף). מטרה = הפחתת איחורים. = <span class="key-concept">ענישה שלילית</span>. אין כאן חיזוק חיובי למי שמגיע בזמן — הם פשוט לא מאבדים כסף.</p>
+      </div>
+    </div></div>
+
+    <div class="q-card"><div class="q-header" onclick="toggleQ(this)"><div class="q-num">7</div><div class="q-title">Schurr, Rodensky & Erev — אכיפה ידידותית בכביש</div><span class="q-topic tag-learn">למידה</span><div class="q-chevron">▼</div></div>
+    <div class="q-body">
+      <div class="q-text-box">לפי מחקר שור, רודנסקי וערב (2014) על אכיפה ידידותית — מה הכי יעיל להגדלת ציות לחוקי תנועה?</div>
+      <div class="choices">
+        <div class="choice wrong"><div class="choice-letter">א</div><div class="choice-text">ענישה חמורה בתדירות גבוהה</div></div>
+        <div class="choice wrong"><div class="choice-letter">ב</div><div class="choice-text">ענישה חמורה בתדירות נמוכה</div></div>
+        <div class="choice wrong"><div class="choice-letter">ג</div><div class="choice-text">עונש חיובי ביחד עם חיזוק שלילי</div></div>
+        <div class="choice correct"><div class="choice-letter">ד</div><div class="choice-text">ענישה קלה (ידידותית) בתדירות גבוהה</div></div>
+        <div class="choice wrong"><div class="choice-letter">ה</div><div class="choice-text">כל התשובות נכונות</div></div>
+        <div class="choice wrong"><div class="choice-letter">ו</div><div class="choice-text">אף תשובה אינה נכונה</div></div>
+      </div>
+      <div class="answer-badge">✅ ד — ענישה קלה + תדירות גבוהה</div>
+      <div class="explanation"><div class="explanation-label">הסבר</div>
+        <p>ענישה חמורה אינה אפקטיבית כי: לא ניתן לאוכפה בתדירות גבוהה, ויוצרת תגובות שליליות (אנטגוניזם, דיכוי זמני). לעומת זאת <span class="key-concept">ענישה קלה + תדירה</span> מאפשרת: למידה הדרגתית, פחות אנטגוניזם, הפנמת הנורמה. ממצא המחקר: 90-100% ציות לאחר מעבר לאכיפה ידידותית.</p>
+      </div>
+    </div></div>
+
+    <div class="q-card"><div class="q-header" onclick="toggleQ(this)"><div class="q-num">8</div><div class="q-title">מובילאיי — מדוע הצלחת המערכת?</div><span class="q-topic tag-learn">למידה</span><div class="q-chevron">▼</div></div>
+    <div class="q-body">
+      <div class="q-text-box">מובילאיי פיתחה מערכת שמצפצפת כשהרכב סוטה מנתיב. לפי שור, רודנסקי וערב — מה הסיבה להצלחה?</div>
+      <div class="choices">
+        <div class="choice wrong"><div class="choice-letter">א</div><div class="choice-text">המערכת מהווה התניה מותנית להתנהגות נכונה</div></div>
+        <div class="choice correct"><div class="choice-letter">ב</div><div class="choice-text">המערכת מצפצפת ברוב המוחלט של המקרים (תדירות גבוהה)</div></div>
+        <div class="choice wrong"><div class="choice-letter">ג</div><div class="choice-text">המערכת נותנת חיזוק חיובי על נהיגה נכונה</div></div>
+        <div class="choice wrong"><div class="choice-letter">ד</div><div class="choice-text">המערכת מלמדת את הנהג לנהוג נכון</div></div>
+        <div class="choice wrong"><div class="choice-letter">ה</div><div class="choice-text">כל התשובות נכונות</div></div>
+        <div class="choice wrong"><div class="choice-letter">ו</div><div class="choice-text">אף תשובה אינה נכונה</div></div>
+      </div>
+      <div class="answer-badge">✅ ב — תדירות גבוהה של הצפצוף</div>
+      <div class="explanation"><div class="explanation-label">הסבר</div>
+        <p>עיקרון האכיפה הידידותית: <strong>אכיפה עקבית ותכופה</strong> → הפנמת הנורמה. מובילאיי מצפצפת <em>כמעט בכל פעם</em> שיש סטייה → נהג לומד שהנורמה ברורה ועקבית. זהו המנגנון שהצליח — לא החומרה אלא <span class="key-concept">התדירות</span>.</p>
+      </div>
+    </div></div>
+
+    <div class="q-card"><div class="q-header" onclick="toggleQ(this)"><div class="q-num">9</div><div class="q-title">משקפי מגן — אכיפה ידידותית, ההסבר התיאורטי</div><span class="q-topic tag-learn">למידה</span><div class="q-chevron">▼</div></div>
+    <div class="q-body">
+      <div class="q-text-box">עובדים לא חבשו משקפי מגן. עברו מענישה קשה לאכיפה ידידותית. כעבור שנה — שיפור עקבי. ההסבר התיאורטי הנכון ביותר:</div>
+      <div class="choices">
+        <div class="choice wrong"><div class="choice-letter">א</div><div class="choice-text">פיקוח צמוד יותר (Micro-management)</div></div>
+        <div class="choice correct"><div class="choice-letter">ב</div><div class="choice-text">לענישה יש תופעות לוואי שליליות; אכיפה ידידותית מאפשרת למידה הדרגתית ועקבית</div></div>
+        <div class="choice wrong"><div class="choice-letter">ג</div><div class="choice-text">אכיפה ידידותית מביאה ל-100% ציות כבר ברבעון הראשון</div></div>
+        <div class="choice wrong"><div class="choice-letter">ד</div><div class="choice-text">עיקרון "התנור החם" — ענישה מיידית וחזקה</div></div>
+        <div class="choice wrong"><div class="choice-letter">ה</div><div class="choice-text">כל התשובות נכונות</div></div>
+        <div class="choice wrong"><div class="choice-letter">ו</div><div class="choice-text">אף תשובה אינה נכונה</div></div>
+      </div>
+      <div class="answer-badge">✅ ב</div>
+      <div class="explanation"><div class="explanation-label">הסבר</div>
+        <p>לענישה חמורה יש <span class="key-concept">תופעות לוואי שליליות</span>: דיכוי זמני, אנטגוניזם, ערך אינפורמטיבי נמוך ("לא לעשות X" — לא אומר מה כן לעשות). אכיפה ידידותית (קלה + עקבית) מאפשרת <strong>למידה מתמשכת</strong> ויצירת נורמות אמיתיות.</p>
+      </div>
+    </div></div>
+
+    <div class="q-card"><div class="q-header" onclick="toggleQ(this)"><div class="q-num">10</div><div class="q-title">יתרון דור Z — ניהול בין-דורי</div><span class="q-topic tag-gen">בין-דורי</span><div class="q-chevron">▼</div></div>
+    <div class="q-body">
+      <div class="q-text-box">לפי הנלמד בנושא ניהול בין-דורי, היתרון המרכזי של <strong>דור Z</strong> הוא:</div>
+      <div class="choices">
+        <div class="choice correct"><div class="choice-letter">א</div><div class="choice-text">מחפש משמעות בעבודתו</div></div>
+        <div class="choice wrong"><div class="choice-letter">ב</div><div class="choice-text">פורץ גבולות ומוסכמות</div></div>
+        <div class="choice wrong"><div class="choice-letter">ג</div><div class="choice-text">ממושמע</div></div>
+        <div class="choice wrong"><div class="choice-letter">ד</div><div class="choice-text">מאזן בית ועבודה היטב</div></div>
+        <div class="choice wrong"><div class="choice-letter">ה</div><div class="choice-text">כל התשובות נכונות</div></div>
+        <div class="choice wrong"><div class="choice-letter">ו</div><div class="choice-text">אף תשובה אינה נכונה</div></div>
+      </div>
+      <div class="answer-badge">✅ א — מחפש משמעות</div>
+      <div class="explanation"><div class="explanation-label">הסבר</div>
+        <p>דור Z (1997+) דיגיטלי מלידה. היתרון המרכזי: רצון למצוא <span class="key-concept">משמעות ותכלית</span> בעבודה — לא רק שכר. הם רוצים לתרום לדבר גדול יותר. "ממושמע" = BB, "איזון" = X, "פריצת גבולות" = כמה דורות.</p>
+      </div>
+    </div></div>
+
+  </main>
+</div>
+
+<!-- ====== הכנה 2025 ====== -->
+<div id="prep2025" class="tab-panel">
+  <div class="hero-strip">
+    <h2>הכנה למבחן 2025 — שאלות לדוגמה</h2>
+    <p>20 שאלות רב-ברירה בסגנון הבחינה האמיתית עם פתרונות</p>
+    <div class="exam-meta">
+      <span class="meta-chip">📝 20 שאלות מדוגמות</span>
+      <span class="meta-chip">6 אפשרויות לכל שאלה</span>
+    </div>
+  </div>
+  <main>
+    <button class="btn-expand" onclick="expandAll('prep2025')">▼ פתח את כל השאלות</button>
+
+    <div class="q-card"><div class="q-header" onclick="toggleQ(this)"><div class="q-num">1</div><div class="q-title">Holmes-Rahe — יתרון וחיסרון של המדד</div><span class="q-topic tag-stress">לחץ</span><div class="q-chevron">▼</div></div>
+    <div class="q-body">
+      <div class="q-text-box">לפי תיאוריית Holmes-Rahe Stress Inventory (1967): מהו <strong>היתרון</strong> ומהו <strong>החיסרון</strong> העיקריים?</div>
+      <div class="choices">
+        <div class="choice wrong"><div class="choice-letter">1</div><div class="choice-text">יתרון: מאפשר לנבא איזה גורם יגרום ללחץ; חיסרון: לא מתייחס להבדלים בין אנשים</div></div>
+        <div class="choice correct"><div class="choice-letter">2</div><div class="choice-text">יתרון: מאפשר לנבא איזה גורם יגרום ללחץ בהסתברות גבוהה; חיסרון: לא מתייחס להבדלים בין אנשים/קבוצות/ארגונים</div></div>
+        <div class="choice wrong"><div class="choice-letter">3</div><div class="choice-text">יתרון: מתייחס להבדלים בין אנשים; חיסרון: לא מאפשר לנבא גורמי לחץ</div></div>
+        <div class="choice wrong"><div class="choice-letter">4</div><div class="choice-text">יתרון: מאפשר לנבא; חיסרון: מתייחס רק לאנשים, לא לקבוצות</div></div>
+        <div class="choice wrong"><div class="choice-letter">5</div><div class="choice-text">כל התשובות נכונות</div></div>
+        <div class="choice wrong"><div class="choice-letter">6</div><div class="choice-text">אף תשובה אינה נכונה</div></div>
+      </div>
+      <div class="answer-badge">✅ 2</div>
+      <div class="explanation"><div class="explanation-label">הסבר</div>
+        <p><span class="key-concept">Holmes-Rahe</span>: מדד המנקד אירועי חיים (מוות, גירושין, נישואין). <strong>יתרון:</strong> מאפשר לנבא <em>עם כמה לחץ</em> מתמודד אדם ו<em>מה הסיכון</em> למחלה. <strong>חיסרון:</strong> לא לוקח בחשבון הבדלים סובייקטיביים (מה שללחיץ אחד = אתגר לאחר). זהו בדיוק ההבדל ממודל Lazarus שכן לוקח הבדלים אלו בחשבון.</p>
+      </div>
+    </div></div>
+
+    <div class="q-card"><div class="q-header" onclick="toggleQ(this)"><div class="q-num">2</div><div class="q-title">תיוור — עבודה רגשית + הדבקה רגשית</div><span class="q-topic tag-emotion">רגשות & EI</span><div class="q-chevron">▼</div></div>
+    <div class="q-body">
+      <div class="q-text-box">תיוור תמיד מחייכת ללקוחות (הוראת מנהלת). לאחר שיחה עם אחיה הכועס — היא מרגישה עצבנית. לפי הסדר המתואר, מה חווה תיוור?</div>
+      <div class="choices">
+        <div class="choice wrong"><div class="choice-letter">1</div><div class="choice-text">Emotional Labor + Emotional Regulation</div></div>
+        <div class="choice wrong"><div class="choice-letter">2</div><div class="choice-text">Emotional Regulation + Collective Affect</div></div>
+        <div class="choice correct"><div class="choice-letter">3</div><div class="choice-text">Emotional Labor + Emotional Contagion</div></div>
+        <div class="choice wrong"><div class="choice-letter">4</div><div class="choice-text">Collective Affect + Emotional Labor</div></div>
+        <div class="choice wrong"><div class="choice-letter">5</div><div class="choice-text">כל התשובות נכונות</div></div>
+        <div class="choice wrong"><div class="choice-letter">6</div><div class="choice-text">אף תשובה אינה נכונה</div></div>
+      </div>
+      <div class="answer-badge">✅ 3 — Emotional Labor + Emotional Contagion</div>
+      <div class="explanation"><div class="explanation-label">הסבר</div>
+        <p>שלב א: תיוור מחייכת ע"פ הנחייה, אף שאינה מרגישה כך = <span class="key-concept">Emotional Labor (עבודה רגשית)</span> — Surface Acting. שלב ב: "נדבקת" מהעצבנות של אחיה טלפונית = <span class="key-concept">Emotional Contagion (הדבקה רגשית)</span> — קלטה רגש של אחר ללא בחירה מודעת.</p>
+      </div>
+    </div></div>
+
+    <div class="q-card"><div class="q-header" onclick="toggleQ(this)"><div class="q-num">3</div><div class="q-title">Greenberg (1990) — גנבה כתגובה לחוסר צדק</div><span class="q-topic tag-justice">צדק</span><div class="q-chevron">▼</div></div>
+    <div class="q-body">
+      <div class="q-text-box">מהי המסקנה ממאמר Greenberg (1990) על גנבת עובדים כתגובה ל-Underpayment?</div>
+      <div class="choices">
+        <div class="choice wrong"><div class="choice-letter">1</div><div class="choice-text">צדק חלוקתי הוא החשוב ביותר לניבוי התנהגות</div></div>
+        <div class="choice correct"><div class="choice-letter">2</div><div class="choice-text">צדק הליכי יכול לפצות על חוסר בצדק חלוקתי</div></div>
+        <div class="choice wrong"><div class="choice-letter">3</div><div class="choice-text">צדק הליכי חייב לבוא יחד עם צדק חלוקתי</div></div>
+        <div class="choice wrong"><div class="choice-letter">4</div><div class="choice-text">צדק חלוקתי יכול לפצות על חוסר בצדק הליכי</div></div>
+        <div class="choice wrong"><div class="choice-letter">5</div><div class="choice-text">כל התשובות נכונות</div></div>
+        <div class="choice wrong"><div class="choice-letter">6</div><div class="choice-text">אף תשובה אינה נכונה</div></div>
+      </div>
+      <div class="answer-badge">✅ 2</div>
+      <div class="explanation"><div class="explanation-label">הסבר</div><p>ראה Q15 ממועד א׳. <span class="key-concept">Procedural Justice</span> (האופן והתהליך) יכולה לפצות על חוסר ב-<span class="key-concept">Distributive Justice</span> (מה שניתן בפועל).</p></div>
+    </div></div>
+
+    <div class="q-card"><div class="q-header" onclick="toggleQ(this)"><div class="q-num">4</div><div class="q-title">ציחי — לאיזה דור הוא שייך?</div><span class="q-topic tag-gen">בין-דורי</span><div class="q-chevron">▼</div></div>
+    <div class="q-body">
+      <div class="q-text-box">ציחי עובד 8 בוקר עד 8 ערב, שנים רבות. <strong>משמעת, מוסר עבודה גבוה, מחויבות</strong>. לפי ניהול בין-דורי — לאיזה דור הוא שייך?</div>
+      <div class="choices">
+        <div class="choice wrong"><div class="choice-letter">א</div><div class="choice-text">דור Z</div></div>
+        <div class="choice wrong"><div class="choice-letter">ב</div><div class="choice-text">דור Y</div></div>
+        <div class="choice correct"><div class="choice-letter">ג</div><div class="choice-text">Baby Boomers</div></div>
+        <div class="choice wrong"><div class="choice-letter">ד</div><div class="choice-text">אלפא</div></div>
+        <div class="choice wrong"><div class="choice-letter">ה</div><div class="choice-text">כל התשובות נכונות</div></div>
+        <div class="choice wrong"><div class="choice-letter">ו</div><div class="choice-text">אף תשובה אינה נכונה</div></div>
+      </div>
+      <div class="answer-badge">✅ ג — Baby Boomers</div>
+      <div class="explanation"><div class="explanation-label">הסבר</div><p>שעות עבודה ארוכות + מחויבות + משמעת = מאפייני BB בעיקרם. Baby Boomers ידועים בנאמנות לארגון ובמוסר עבודה גבוה.</p></div>
+    </div></div>
+
+    <div class="q-card"><div class="q-header" onclick="toggleQ(this)"><div class="q-num">5</div><div class="q-title">מחקר Rafaeli & Sutton — חיוך מתי?</div><span class="q-topic tag-emotion">רגשות & EI</span><div class="q-chevron">▼</div></div>
+    <div class="q-body">
+      <div class="q-text-box">לפי Rafaeli & Sutton (1987) על חיוך ומכירות — מה להמליץ למנהלים?</div>
+      <div class="choices">
+        <div class="choice wrong"><div class="choice-letter">1</div><div class="choice-text">תמיד לחייך — מעלה מכירות</div></div>
+        <div class="choice wrong"><div class="choice-letter">2</div><div class="choice-text">לא לחייך — אין קשר בין שגר לתוצאות</div></div>
+        <div class="choice wrong"><div class="choice-letter">3</div><div class="choice-text">לחייך רק כשאין לחץ</div></div>
+        <div class="choice correct"><div class="choice-letter">4</div><div class="choice-text">לחייך דווקא כשהחנות עמוסה — כי זה מרכך התנגדות לקוחות</div></div>
+        <div class="choice wrong"><div class="choice-letter">5</div><div class="choice-text">כל התשובות נכונות</div></div>
+        <div class="choice wrong"><div class="choice-letter">6</div><div class="choice-text">אף תשובה אינה נכונה</div></div>
+      </div>
+      <div class="answer-badge">✅ 4</div>
+      <div class="explanation"><div class="explanation-label">הסבר</div><p>ראה Q19 ממועד א׳. חיוך בעומס = ריכוך התנגדות = יותר מכירות.</p></div>
+    </div></div>
+
+    <div class="q-card"><div class="q-header" onclick="toggleQ(this)"><div class="q-num">6</div><div class="q-title">מרוי מתעורר עם הוליות — Mood vs. Emotion</div><span class="q-topic tag-emotion">רגשות & EI</span><div class="q-chevron">▼</div></div>
+    <div class="q-body">
+      <div class="q-text-box">מרוי התעורר עם הוליות וצמחוות. התחושה נמשכה <strong>ימים</strong>. מדוע זה <strong>Mood</strong> ולא Emotion?</div>
+      <div class="choices">
+        <div class="choice correct"><div class="choice-letter">1</div><div class="choice-text">מטבעו הוא מתמשך / ממושך</div></div>
+        <div class="choice wrong"><div class="choice-letter">2</div><div class="choice-text">הוא תוצאה של אירוע בודד</div></div>
+        <div class="choice wrong"><div class="choice-letter">3</div><div class="choice-text">עוצמתו גבוהה יותר</div></div>
+        <div class="choice wrong"><div class="choice-letter">4</div><div class="choice-text">הוא תחושה חיובית</div></div>
+        <div class="choice wrong"><div class="choice-letter">5</div><div class="choice-text">כל התשובות נכונות</div></div>
+        <div class="choice wrong"><div class="choice-letter">6</div><div class="choice-text">אף תשובה אינה נכונה</div></div>
+      </div>
+      <div class="answer-badge">✅ 1 — ממושך</div>
+      <div class="explanation"><div class="explanation-label">הסבר</div><p>ראה Q20 ממועד א׳. Mood = ממושך, פחות עז, לרוב ללא גורם מדויק. Emotion = קצר, עז, עם טריגר ספציפי.</p></div>
+    </div></div>
+
+    <div class="q-card"><div class="q-header" onclick="toggleQ(this)"><div class="q-num">7</div><div class="q-title">יצחק הצלרמ — Emotional Labor</div><span class="q-topic tag-emotion">רגשות & EI</span><div class="q-chevron">▼</div></div>
+    <div class="q-body">
+      <div class="q-text-box">יצחק הצלרמ ב"חיוג אזור 08" — נדרש לחייך גם כשאינו במצב רוח טוב. עבודתו מאופיינת ברמה גבוהה של:</div>
+      <div class="choices">
+        <div class="choice correct"><div class="choice-letter">1</div><div class="choice-text">עבודה רגשית (Emotional Labor)</div></div>
+        <div class="choice wrong"><div class="choice-letter">2</div><div class="choice-text">משחק עמוק (Deep Acting)</div></div>
+        <div class="choice wrong"><div class="choice-letter">3</div><div class="choice-text">הדבקה רגשית (Emotional Contagion)</div></div>
+        <div class="choice wrong"><div class="choice-letter">4</div><div class="choice-text">דיסוננס קוגניטיבי</div></div>
+        <div class="choice wrong"><div class="choice-letter">5</div><div class="choice-text">כל התשובות נכונות</div></div>
+        <div class="choice wrong"><div class="choice-letter">6</div><div class="choice-text">אף תשובה אינה נכונה</div></div>
+      </div>
+      <div class="answer-badge">✅ 1 — Emotional Labor</div>
+      <div class="explanation"><div class="explanation-label">הסבר</div>
+        <p><span class="key-concept">Emotional Labor</span> = ניהול ביטוי הרגשות כחלק מדרישות התפקיד (Hochschild). צלמר שחייב לחייך = Emotional Labor גבוה. Surface Acting אם הוא רק מציג, Deep Acting אם שינה את הרגש — אבל הסוג הוא בכל מקרה Emotional Labor.</p>
+      </div>
+    </div></div>
+
+    <div class="q-card"><div class="q-header" onclick="toggleQ(this)"><div class="q-num">8</div><div class="q-title">Distress — מי מהמקרים הוא Distress?</div><span class="q-topic tag-stress">לחץ</span><div class="q-chevron">▼</div></div>
+    <div class="q-body">
+      <div class="q-text-box">מהי דוגמה ל<strong>Distress</strong> (לחץ שלילי)?</div>
+      <div class="choices">
+        <div class="choice wrong"><div class="choice-letter">א</div><div class="choice-text">לחץ מסיום קורס בהצלחה לקבלת תואר</div></div>
+        <div class="choice wrong"><div class="choice-letter">ב</div><div class="choice-text">לחץ מזכייה בלוטו</div></div>
+        <div class="choice correct"><div class="choice-letter">ג</div><div class="choice-text">לחץ מתובב מבוסה עם דרישות רבות שאין יכולת לנהלן</div></div>
+        <div class="choice wrong"><div class="choice-letter">ד</div><div class="choice-text">לחץ ממציאת כסף רב ברחוב</div></div>
+        <div class="choice wrong"><div class="choice-letter">ה</div><div class="choice-text">כל התשובות נכונות</div></div>
+        <div class="choice wrong"><div class="choice-letter">ו</div><div class="choice-text">אף תשובה אינה נכונה</div></div>
+      </div>
+      <div class="answer-badge">✅ ג</div>
+      <div class="explanation"><div class="explanation-label">הסבר</div>
+        <p><span class="key-concept">Distress</span> = לחץ <em>שלילי</em>: הדרישות עולות על יכולת ההתמודדות → תחושת מוצפות. א, ב, ד הם מצבים חיוביים שאמנם לוחצים אך הם <span class="key-concept">Eustress</span>. ג הוא בדיוק תיאור High Strain (ביקוש גבוה + שליטה נמוכה = Distress).</p>
+      </div>
+    </div></div>
+
+    <div class="q-card"><div class="q-header" onclick="toggleQ(this)"><div class="q-num">9</div><div class="q-title">Deep Acting — אילו דוגמאות מתאימות?</div><span class="q-topic tag-emotion">רגשות & EI</span><div class="q-chevron">▼</div></div>
+    <div class="q-body">
+      <div class="q-text-box">איזה מהמקרים הוא דוגמה ל<strong>Deep Acting</strong> (משחק עמוק)?</div>
+      <div class="choices">
+        <div class="choice correct"><div class="choice-letter">א</div><div class="choice-text">גננת שמשנה את רגשותיה ומדמיינת את הילדים כילדיה שלה כל בוקר</div></div>
+        <div class="choice wrong"><div class="choice-letter">ב</div><div class="choice-text">צלרמית שמציגה חיוך למרות עייפות</div></div>
+        <div class="choice wrong"><div class="choice-letter">ג</div><div class="choice-text">פקיד קבלה שמחייך ללקוחות כועסים בלי לשנות תחושתו</div></div>
+        <div class="choice wrong"><div class="choice-letter">ד</div><div class="choice-text">חלבאמ שמחייך כדי לא להיפטר</div></div>
+        <div class="choice wrong"><div class="choice-letter">ה</div><div class="choice-text">כל התשובות נכונות</div></div>
+        <div class="choice wrong"><div class="choice-letter">ו</div><div class="choice-text">אף תשובה אינה נכונה</div></div>
+      </div>
+      <div class="answer-badge">✅ א — Deep Acting</div>
+      <div class="explanation"><div class="explanation-label">הסבר</div>
+        <p><span class="key-concept">Deep Acting</span> = שינוי הרגש <strong>הפנימי</strong> עצמו (לא רק הביטוי החיצוני). הגננת <em>מדמיינת</em> ומשנה את תפיסתה ← כך רגשה הפנימי משתנה. ב, ג, ד = Surface Acting — הביטוי משתנה אך הרגש הפנימי לא.</p>
+      </div>
+    </div></div>
+
+    <div class="q-card"><div class="q-header" onclick="toggleQ(this)"><div class="q-num">10</div><div class="q-title">שרה משקיעה פחות — Equity Theory</div><span class="q-topic tag-justice">צדק</span><div class="q-chevron">▼</div></div>
+    <div class="q-body">
+      <div class="q-text-box">שרה גילתה שמשקיעה פחות מחברתה אך מקבלת אותה תרוכשמ. לפי Equity Theory — מה תעשה?</div>
+      <div class="choices">
+        <div class="choice wrong"><div class="choice-letter">א</div><div class="choice-text">תתפטר ותחפש עבודה מתאימה</div></div>
+        <div class="choice wrong"><div class="choice-letter">ב</div><div class="choice-text">תנגיש שביעות רצון גבוהה</div></div>
+        <div class="choice wrong"><div class="choice-letter">ג</div><div class="choice-text">תתחיל לעבוד יותר שעות</div></div>
+        <div class="choice correct"><div class="choice-letter">ד</div><div class="choice-text">תתחיל להשקיע פחות בעבודה</div></div>
+        <div class="choice wrong"><div class="choice-letter">ה</div><div class="choice-text">כל התשובות נכונות</div></div>
+        <div class="choice wrong"><div class="choice-letter">ו</div><div class="choice-text">אף תשובה אינה נכונה</div></div>
+      </div>
+      <div class="answer-badge">✅ ד — תפחית השקעה</div>
+      <div class="explanation"><div class="explanation-label">הסבר</div><p>ראה Q14 ממועד א׳. Equity Theory: גם חוסר שוויון לטובת האדם עצמו יוצר מתח — שמוביל להפחתת Input (השקעה) עד לאיזון מחדש.</p></div>
+    </div></div>
+
+  </main>
+</div>
+
+<div style="background:var(--plum);color:rgba(255,255,255,0.5);text-align:center;padding:22px;font-size:0.78rem;margin-top:0">
+  בחינה: 28.4.2026 · ד"ר דורית אפרת-טרייסטר · מדעי ההתנהגות למנהלים · marom.cloud
+</div>
+
+<script>
+function toggleQ(header) {
+  const card = header.closest('.q-card');
+  card.classList.toggle('open');
+}
+function showTab(tabId, btn) {
+  document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+  document.getElementById(tabId).classList.add('active');
+  btn.classList.add('active');
+  window.scrollTo({top:0, behavior:'smooth'});
+}
+function printPage() {
+  const activePanel = document.querySelector(".tab-panel.active");
+  if (activePanel) activePanel.querySelectorAll(".q-card").forEach(c => c.classList.add("open"));
+  window.print();
+}
+function expandAll(panelId) {
+  const panel = document.getElementById(panelId);
+  panel.querySelectorAll('.q-card').forEach(card => card.classList.add('open'));
+}
+document.addEventListener('DOMContentLoaded', () => {
+  document.querySelector('#moedA .q-card')?.classList.add('open');
+});
+</script>
+</body>
+</html>
