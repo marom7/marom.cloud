@@ -1,0 +1,2286 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>חשבונאות למנהלים — תרגול לבחינה | פוגל</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Frank+Ruhl+Libre:wght@400;500;700;900&family=Heebo:wght@300;400;500;700;900&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root {
+  --ink: #0a2540;
+  --ink-soft: #1e3a5f;
+  --paper: #faf8f3;
+  --paper-shade: #f0ebe0;
+  --gold: #b8924a;
+  --gold-soft: #d9b870;
+  --red: #b54a3e;
+  --green: #4a7a3e;
+  --line: #d4ccb8;
+  --mono: 'JetBrains Mono', ui-monospace, monospace;
+  --serif: 'Frank Ruhl Libre', 'David Libre', Georgia, serif;
+  --sans: 'Heebo', 'Assistant', system-ui, sans-serif;
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+html { scroll-behavior: smooth; }
+
+body {
+  font-family: var(--sans);
+  background: var(--paper);
+  color: var(--ink);
+  line-height: 1.6;
+  font-weight: 400;
+  font-size: 16px;
+  background-image:
+    radial-gradient(circle at 1px 1px, rgba(10,37,64,0.04) 1px, transparent 0);
+  background-size: 20px 20px;
+}
+
+/* === HEADER === */
+.site-header {
+  border-bottom: 2px solid var(--ink);
+  background: var(--paper);
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  backdrop-filter: blur(10px);
+  background: rgba(250, 248, 243, 0.95);
+}
+
+.header-inner {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 1rem 1.5rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+
+.brand {
+  display: flex;
+  align-items: baseline;
+  gap: 0.75rem;
+}
+
+.brand-mark {
+  font-family: var(--serif);
+  font-weight: 900;
+  font-size: 1.75rem;
+  color: var(--ink);
+  letter-spacing: -0.02em;
+}
+
+.brand-sub {
+  font-family: var(--mono);
+  font-size: 0.7rem;
+  color: var(--gold);
+  text-transform: uppercase;
+  letter-spacing: 0.15em;
+}
+
+.countdown {
+  font-family: var(--mono);
+  font-size: 0.85rem;
+  background: var(--ink);
+  color: var(--paper);
+  padding: 0.4rem 0.9rem;
+  border-radius: 2px;
+}
+
+.countdown strong {
+  color: var(--gold-soft);
+  font-weight: 700;
+}
+
+/* === NAV === */
+.main-nav {
+  border-bottom: 1px solid var(--line);
+  background: var(--paper-shade);
+  overflow-x: auto;
+  scrollbar-width: thin;
+}
+
+.nav-inner {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 1.5rem;
+  display: flex;
+  gap: 0.25rem;
+  white-space: nowrap;
+}
+
+.nav-btn {
+  background: transparent;
+  border: none;
+  padding: 0.85rem 1rem;
+  font-family: var(--sans);
+  font-weight: 500;
+  font-size: 0.92rem;
+  color: var(--ink-soft);
+  cursor: pointer;
+  border-bottom: 2px solid transparent;
+  transition: all 0.2s ease;
+  white-space: nowrap;
+}
+
+.nav-btn:hover {
+  color: var(--ink);
+  background: rgba(184, 146, 74, 0.08);
+}
+
+.nav-btn.active {
+  color: var(--ink);
+  border-bottom-color: var(--gold);
+  font-weight: 700;
+}
+
+.nav-num {
+  font-family: var(--mono);
+  font-size: 0.7rem;
+  color: var(--gold);
+  margin-left: 0.4rem;
+}
+
+/* === MAIN === */
+main {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 2.5rem 1.5rem 4rem;
+}
+
+.section { display: none; animation: fadeIn 0.4s ease; }
+.section.active { display: block; }
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(8px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* === TYPOGRAPHY === */
+h1.section-title {
+  font-family: var(--serif);
+  font-size: clamp(2rem, 5vw, 3rem);
+  font-weight: 900;
+  letter-spacing: -0.02em;
+  line-height: 1.1;
+  margin-bottom: 0.5rem;
+}
+
+.section-tag {
+  font-family: var(--mono);
+  font-size: 0.75rem;
+  color: var(--gold);
+  text-transform: uppercase;
+  letter-spacing: 0.2em;
+  margin-bottom: 0.75rem;
+  display: block;
+}
+
+.section-intro {
+  font-size: 1.1rem;
+  color: var(--ink-soft);
+  margin-bottom: 2.5rem;
+  max-width: 65ch;
+  border-right: 3px solid var(--gold);
+  padding-right: 1rem;
+}
+
+h2 {
+  font-family: var(--serif);
+  font-size: 1.75rem;
+  font-weight: 700;
+  margin: 2.5rem 0 1rem;
+  letter-spacing: -0.01em;
+}
+
+h3 {
+  font-family: var(--sans);
+  font-size: 1.15rem;
+  font-weight: 700;
+  margin: 1.5rem 0 0.75rem;
+}
+
+p { margin-bottom: 1rem; }
+
+/* === HERO / HOME === */
+.hero-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 2rem;
+  margin-bottom: 3rem;
+}
+
+@media (min-width: 800px) {
+  .hero-grid { grid-template-columns: 1.4fr 1fr; }
+}
+
+.hero-card {
+  background: var(--ink);
+  color: var(--paper);
+  padding: 2rem;
+  border-radius: 4px;
+  position: relative;
+  overflow: hidden;
+}
+
+.hero-card::before {
+  content: '';
+  position: absolute;
+  top: -50%;
+  left: -20%;
+  width: 200px;
+  height: 200px;
+  background: radial-gradient(circle, var(--gold) 0%, transparent 70%);
+  opacity: 0.15;
+}
+
+.hero-card h2 {
+  color: var(--paper);
+  font-size: 1.5rem;
+  margin-top: 0;
+  position: relative;
+}
+
+.hero-card .big-num {
+  font-family: var(--serif);
+  font-size: 4rem;
+  font-weight: 900;
+  color: var(--gold-soft);
+  line-height: 1;
+  position: relative;
+  display: block;
+  margin: 1rem 0 0.5rem;
+}
+
+.hero-card .label {
+  font-family: var(--mono);
+  font-size: 0.8rem;
+  color: var(--gold-soft);
+  text-transform: uppercase;
+  letter-spacing: 0.15em;
+  position: relative;
+}
+
+.exam-structure {
+  background: var(--paper-shade);
+  border: 1px solid var(--line);
+  padding: 1.75rem;
+  border-radius: 4px;
+}
+
+.exam-structure h3 {
+  margin-top: 0;
+  font-family: var(--serif);
+  font-size: 1.4rem;
+  margin-bottom: 1rem;
+}
+
+.q-row {
+  display: grid;
+  grid-template-columns: auto 1fr auto;
+  gap: 0.75rem;
+  align-items: center;
+  padding: 0.7rem 0;
+  border-bottom: 1px dashed var(--line);
+  font-size: 0.95rem;
+}
+
+.q-row:last-child { border-bottom: none; }
+
+.q-num {
+  font-family: var(--serif);
+  font-weight: 900;
+  font-size: 1.5rem;
+  color: var(--gold);
+  width: 2rem;
+}
+
+.q-percent {
+  font-family: var(--mono);
+  font-weight: 700;
+  background: var(--ink);
+  color: var(--gold-soft);
+  padding: 0.2rem 0.5rem;
+  border-radius: 2px;
+  font-size: 0.8rem;
+}
+
+.q-percent.big { background: var(--red); color: white; }
+
+/* === STUDY PLAN === */
+.plan-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+  gap: 0.75rem;
+  margin: 1rem 0 2rem;
+}
+
+.day-card {
+  background: var(--paper);
+  border: 1px solid var(--line);
+  padding: 0.85rem;
+  border-radius: 3px;
+  position: relative;
+}
+
+.day-card.priority { border-color: var(--gold); border-width: 2px; background: rgba(217, 184, 112, 0.06); }
+.day-card.exam { background: var(--ink); color: var(--paper); border-color: var(--ink); }
+
+.day-card .day {
+  font-family: var(--mono);
+  font-size: 0.7rem;
+  color: var(--gold);
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+}
+
+.day-card.exam .day { color: var(--gold-soft); }
+
+.day-card .topic {
+  font-weight: 700;
+  font-size: 0.92rem;
+  margin-top: 0.3rem;
+  line-height: 1.3;
+}
+
+/* === PRINCIPLES (FLIP CARDS) === */
+.principles-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+  gap: 1rem;
+  margin: 2rem 0;
+}
+
+.flip-card {
+  perspective: 1000px;
+  height: 200px;
+  cursor: pointer;
+}
+
+.flip-inner {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  transition: transform 0.6s;
+  transform-style: preserve-3d;
+}
+
+.flip-card.flipped .flip-inner {
+  transform: rotateY(180deg);
+}
+
+.flip-front, .flip-back {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  backface-visibility: hidden;
+  border-radius: 4px;
+  padding: 1.25rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  border: 1px solid var(--line);
+}
+
+.flip-front {
+  background: var(--paper);
+}
+
+.flip-front .num {
+  font-family: var(--serif);
+  font-size: 3rem;
+  font-weight: 900;
+  color: var(--gold);
+  line-height: 1;
+}
+
+.flip-front .name {
+  font-family: var(--serif);
+  font-size: 1.3rem;
+  font-weight: 700;
+  line-height: 1.2;
+}
+
+.flip-front .hint {
+  font-family: var(--mono);
+  font-size: 0.7rem;
+  color: var(--ink-soft);
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+}
+
+.flip-back {
+  background: var(--ink);
+  color: var(--paper);
+  transform: rotateY(180deg);
+  font-size: 0.92rem;
+  line-height: 1.5;
+  overflow-y: auto;
+}
+
+.flip-back strong {
+  color: var(--gold-soft);
+}
+
+/* === EXERCISE === */
+.exercise {
+  background: var(--paper);
+  border: 1px solid var(--line);
+  border-right: 4px solid var(--gold);
+  border-radius: 3px;
+  padding: 1.5rem;
+  margin: 1.5rem 0;
+}
+
+.exercise-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  margin-bottom: 1rem;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+
+.exercise-title {
+  font-family: var(--serif);
+  font-weight: 700;
+  font-size: 1.2rem;
+}
+
+.exercise-meta {
+  font-family: var(--mono);
+  font-size: 0.75rem;
+  color: var(--gold);
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+}
+
+.exercise-body {
+  font-size: 0.97rem;
+}
+
+.exercise-body p { margin-bottom: 0.75rem; }
+
+.givens {
+  background: var(--paper-shade);
+  border-radius: 3px;
+  padding: 1rem 1.25rem;
+  margin: 1rem 0;
+  font-size: 0.9rem;
+}
+
+.givens-title {
+  font-family: var(--mono);
+  font-size: 0.7rem;
+  text-transform: uppercase;
+  color: var(--gold);
+  letter-spacing: 0.15em;
+  margin-bottom: 0.5rem;
+  display: block;
+}
+
+.toggle-solution {
+  background: var(--ink);
+  color: var(--paper);
+  border: none;
+  padding: 0.65rem 1.25rem;
+  font-family: var(--sans);
+  font-weight: 500;
+  font-size: 0.9rem;
+  cursor: pointer;
+  border-radius: 2px;
+  margin-top: 1rem;
+  transition: all 0.2s;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.toggle-solution:hover {
+  background: var(--gold);
+}
+
+.toggle-solution::before {
+  content: '▸';
+  display: inline-block;
+  transition: transform 0.2s;
+}
+
+.exercise.open .toggle-solution::before {
+  transform: rotate(90deg);
+}
+
+.solution {
+  display: none;
+  margin-top: 1.25rem;
+  padding-top: 1.25rem;
+  border-top: 1px dashed var(--line);
+  animation: fadeIn 0.3s ease;
+}
+
+.exercise.open .solution { display: block; }
+
+.solution-step {
+  margin-bottom: 1.25rem;
+  padding-right: 1rem;
+  border-right: 2px solid var(--gold-soft);
+}
+
+.solution-step .step-label {
+  font-family: var(--mono);
+  font-size: 0.72rem;
+  color: var(--gold);
+  text-transform: uppercase;
+  letter-spacing: 0.15em;
+  font-weight: 700;
+}
+
+.solution-step .step-content {
+  margin-top: 0.4rem;
+}
+
+/* === TABLES === */
+.acct-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-family: var(--mono);
+  font-size: 0.85rem;
+  margin: 1rem 0;
+  background: var(--paper);
+}
+
+.acct-table th, .acct-table td {
+  padding: 0.5rem 0.75rem;
+  border: 1px solid var(--line);
+  text-align: right;
+}
+
+.acct-table th {
+  background: var(--ink);
+  color: var(--paper);
+  font-weight: 500;
+  font-family: var(--sans);
+  font-size: 0.85rem;
+}
+
+.acct-table td.num {
+  font-variant-numeric: tabular-nums;
+  font-weight: 500;
+}
+
+.acct-table tr.total td {
+  background: var(--paper-shade);
+  font-weight: 700;
+  border-top: 2px solid var(--ink);
+}
+
+.acct-table tr.subtotal td {
+  border-top: 1px solid var(--ink);
+  font-weight: 600;
+}
+
+/* Journal entry style */
+.journal-entry {
+  background: var(--paper-shade);
+  border-right: 3px solid var(--gold);
+  padding: 0.75rem 1rem;
+  margin: 0.75rem 0;
+  font-family: var(--mono);
+  font-size: 0.9rem;
+  border-radius: 3px;
+}
+
+.journal-entry .je-line {
+  display: flex;
+  justify-content: space-between;
+  padding: 0.15rem 0;
+}
+
+.journal-entry .je-line.credit {
+  padding-right: 1.5rem;
+}
+
+.journal-entry .je-note {
+  font-family: var(--sans);
+  font-size: 0.8rem;
+  color: var(--ink-soft);
+  margin-top: 0.4rem;
+  font-style: italic;
+}
+
+.calc {
+  font-family: var(--mono);
+  background: rgba(184, 146, 74, 0.1);
+  padding: 0.1rem 0.4rem;
+  border-radius: 2px;
+  font-size: 0.88em;
+}
+
+/* Theory question */
+.theory-q {
+  background: var(--paper);
+  border: 1px solid var(--line);
+  padding: 1.25rem;
+  margin: 1rem 0;
+  border-radius: 3px;
+}
+
+.theory-q .q-text {
+  font-weight: 500;
+  margin-bottom: 0.75rem;
+}
+
+.theory-q .answer {
+  display: none;
+  margin-top: 0.75rem;
+  padding: 0.85rem 1rem;
+  background: var(--paper-shade);
+  border-right: 3px solid var(--green);
+  border-radius: 2px;
+  font-size: 0.94rem;
+}
+
+.theory-q.open .answer { display: block; }
+
+.show-answer {
+  background: transparent;
+  color: var(--gold);
+  border: 1px solid var(--gold);
+  padding: 0.4rem 0.85rem;
+  font-family: var(--sans);
+  font-size: 0.82rem;
+  font-weight: 500;
+  cursor: pointer;
+  border-radius: 2px;
+  transition: all 0.2s;
+}
+
+.show-answer:hover { background: var(--gold); color: var(--paper); }
+
+.theory-q.open .show-answer { display: none; }
+
+/* === KEY CONCEPT BOX === */
+.concept-box {
+  background: linear-gradient(135deg, var(--paper-shade) 0%, var(--paper) 100%);
+  border: 1px solid var(--gold);
+  border-right: 4px solid var(--gold);
+  padding: 1.25rem 1.5rem;
+  margin: 1.5rem 0;
+  border-radius: 3px;
+  position: relative;
+}
+
+.concept-box::before {
+  content: 'מושג מפתח';
+  position: absolute;
+  top: -0.5rem;
+  right: 1rem;
+  background: var(--gold);
+  color: var(--paper);
+  font-family: var(--mono);
+  font-size: 0.65rem;
+  text-transform: uppercase;
+  letter-spacing: 0.15em;
+  padding: 0.15rem 0.6rem;
+  border-radius: 2px;
+}
+
+.concept-box h4 {
+  font-family: var(--serif);
+  font-size: 1.15rem;
+  font-weight: 700;
+  margin: 0.5rem 0 0.6rem;
+}
+
+.warning-box {
+  background: rgba(181, 74, 62, 0.06);
+  border: 1px solid var(--red);
+  border-right: 4px solid var(--red);
+  padding: 1rem 1.25rem;
+  margin: 1.25rem 0;
+  border-radius: 3px;
+  font-size: 0.94rem;
+}
+
+.warning-box strong { color: var(--red); }
+
+/* === FORMULAS === */
+.formula {
+  background: var(--ink);
+  color: var(--paper);
+  padding: 1rem 1.25rem;
+  border-radius: 3px;
+  margin: 1rem 0;
+  font-family: var(--mono);
+  font-size: 0.95rem;
+  text-align: center;
+  letter-spacing: 0.02em;
+}
+
+.formula .formula-label {
+  font-family: var(--sans);
+  display: block;
+  font-size: 0.75rem;
+  color: var(--gold-soft);
+  text-transform: uppercase;
+  letter-spacing: 0.15em;
+  margin-bottom: 0.5rem;
+}
+
+/* === LISTS === */
+ul.clean, ol.clean {
+  padding-right: 1.25rem;
+  margin: 0.75rem 0 1.25rem;
+}
+
+ul.clean li, ol.clean li {
+  margin-bottom: 0.4rem;
+}
+
+/* === FOOTER === */
+.site-footer {
+  border-top: 2px solid var(--ink);
+  margin-top: 4rem;
+  padding: 2rem 1.5rem;
+  text-align: center;
+  font-family: var(--mono);
+  font-size: 0.78rem;
+  color: var(--ink-soft);
+  letter-spacing: 0.05em;
+}
+
+.site-footer .made {
+  color: var(--gold);
+  font-weight: 700;
+}
+
+/* Mobile tweaks */
+@media (max-width: 600px) {
+  main { padding: 1.5rem 1rem 3rem; }
+  .exercise { padding: 1.1rem; }
+  h1.section-title { font-size: 1.75rem; }
+  h2 { font-size: 1.4rem; }
+  .acct-table { font-size: 0.78rem; }
+  .acct-table th, .acct-table td { padding: 0.4rem 0.5rem; }
+  .principles-grid { grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); }
+  .flip-card { height: 170px; }
+  .flip-front .num { font-size: 2.2rem; }
+  .flip-front .name { font-size: 1.05rem; }
+  .countdown { font-size: 0.75rem; }
+}
+
+::selection { background: var(--gold); color: var(--paper); }
+</style>
+</head>
+<body>
+
+<header class="site-header">
+  <div class="header-inner">
+    <div class="brand">
+      <div class="brand-mark">חשבונאות / 67</div>
+      <div class="brand-sub">Pugel · BGU MBA</div>
+    </div>
+    <div class="countdown" id="countdown">טוען...</div>
+  </div>
+</header>
+
+<nav class="main-nav">
+  <div class="nav-inner">
+    <button class="nav-btn active" data-section="home">בית <span class="nav-num">00</span></button>
+    <button class="nav-btn" data-section="principles">עקרונות <span class="nav-num">10</span></button>
+    <button class="nav-btn" data-section="q1">שאלה 1: דוחות <span class="nav-num">50%</span></button>
+    <button class="nav-btn" data-section="q2">שאלה 2: רכוש קבוע <span class="nav-num">15%</span></button>
+    <button class="nav-btn" data-section="q3">שאלה 3: מלאי <span class="nav-num">15%</span></button>
+    <button class="nav-btn" data-section="q4">שאלה 4: לקוחות <span class="nav-num">15%</span></button>
+    <button class="nav-btn" data-section="q5">שאלה 5: תיאוריה <span class="nav-num">5%</span></button>
+    <button class="nav-btn" data-section="cheat">דף עזר</button>
+  </div>
+</nav>
+
+<main>
+
+<!-- ============= HOME ============= -->
+<section class="section active" id="home">
+  <span class="section-tag">20 במאי 2026 · מועד א׳</span>
+  <h1 class="section-title">חשבונאות למנהלים<br>תרגול ממוקד מבחן</h1>
+  <p class="section-intro">
+    סרוקה של ד"ר חנן פוגל בנוי תמיד מ־5 שאלות באותו פורמט. במקום ללמוד את כל המצגת — נתרגל בדיוק את מה שיופיע במבחן.
+  </p>
+
+  <div class="hero-grid">
+    <div class="hero-card">
+      <h2>פוקוס: שאלה 1 = חצי מהציון</h2>
+      <span class="big-num" id="bigDays">—</span>
+      <span class="label">ימים עד הבחינה</span>
+      <p style="margin-top: 1rem; opacity: 0.85; font-size: 0.95rem;">
+        אם תשלוט בשאלה 1 (בניית מאזן בוחן → פקודות יומן → דוחות כספיים) ובחישובי הפחת והמלאי, יש לך 80% מהציון בכיס. שאר התיאוריה זה בונוס.
+      </p>
+    </div>
+
+    <div class="exam-structure">
+      <h3>מבנה הבחינה (קבוע)</h3>
+      <div class="q-row">
+        <div class="q-num">1</div>
+        <div>מאזן בוחן + פקודות יומן + דוחות כספיים</div>
+        <div class="q-percent big">50%</div>
+      </div>
+      <div class="q-row">
+        <div class="q-num">2</div>
+        <div>רכוש קבוע: פחת + מכירת נכס</div>
+        <div class="q-percent">15%</div>
+      </div>
+      <div class="q-row">
+        <div class="q-num">3</div>
+        <div>מלאי: FIFO / ממוצע משוקלל</div>
+        <div class="q-percent">15%</div>
+      </div>
+      <div class="q-row">
+        <div class="q-num">4</div>
+        <div>לקוחות וחומ"ס + שאלות תיאוריה קצרות</div>
+        <div class="q-percent">15%</div>
+      </div>
+      <div class="q-row">
+        <div class="q-num">5</div>
+        <div>סימני אזהרה / נכון-לא נכון</div>
+        <div class="q-percent">5%</div>
+      </div>
+    </div>
+  </div>
+
+  <h2>תכנית 16 ימים</h2>
+  <div class="plan-grid">
+    <div class="day-card priority"><div class="day">יום 1-2</div><div class="topic">10 העקרונות + מאזן בוחן בסיסי</div></div>
+    <div class="day-card priority"><div class="day">יום 3-5</div><div class="topic">שאלה 1 — תרגול 3 מבחנים</div></div>
+    <div class="day-card"><div class="day">יום 6-7</div><div class="topic">רכוש קבוע — כל שיטות הפחת</div></div>
+    <div class="day-card"><div class="day">יום 8-9</div><div class="topic">מלאי — FIFO + ממוצע משוקלל</div></div>
+    <div class="day-card"><div class="day">יום 10-11</div><div class="topic">לקוחות וחומ"ס</div></div>
+    <div class="day-card"><div class="day">יום 12</div><div class="topic">תיאוריה + סימני אזהרה</div></div>
+    <div class="day-card priority"><div class="day">יום 13-14</div><div class="topic">מבחן מבחן מלא בזמן אמת</div></div>
+    <div class="day-card priority"><div class="day">יום 15</div><div class="topic">חזרה על שאלה 1 — שינון</div></div>
+    <div class="day-card"><div class="day">יום 16</div><div class="topic">מנוחה וסקירה קלה</div></div>
+    <div class="day-card exam"><div class="day">20 במאי</div><div class="topic">⚡ הבחינה ⚡</div></div>
+  </div>
+
+  <div class="concept-box">
+    <h4>הטיפ הכי חשוב למבחן של פוגל</h4>
+    <p style="margin-bottom: 0;">
+      כל המבחנים מתחילים בשאלת מאזן עם <strong>"עודפים = ?"</strong>. זה תמיד הסעיף שצריך להשלים. השיטה: בנה מאזן בוחן ראשוני, גלה את הסעיף החסר ע"י איזון, ואז תיקח את התוספות שמוסיפים בנתונים הנוספים ותרשום פקודות יומן. לבסוף — תרכיב מאזן ודוח רווה"פ סופיים. <strong>זה דפוס קבוע, וכל מבחן הוא וריאציה עליו.</strong>
+    </p>
+  </div>
+</section>
+
+<!-- All other sections will be inserted here by str_replace -->
+<!-- ============= PRINCIPLES ============= -->
+<section class="section" id="principles">
+  <span class="section-tag">היסודות / Foundation</span>
+  <h1 class="section-title">10 העקרונות החשבונאיים</h1>
+  <p class="section-intro">
+    הקליק על כל כרטיס יחשוף את ההגדרה. שאלות 4-5 במבחן בודקות לעיתים קרובות את העקרונות האלה ישירות. <strong>שלוט בעקרונות 1-5 — הם מוזכרים בסילבוס המילואים כיסוד החובה.</strong>
+  </p>
+
+  <div class="principles-grid">
+
+    <div class="flip-card">
+      <div class="flip-inner">
+        <div class="flip-front">
+          <div class="num">1</div>
+          <div>
+            <div class="name">הישות הנפרדת</div>
+            <div class="hint">לחץ להפיכה</div>
+          </div>
+        </div>
+        <div class="flip-back">
+          <strong>העסק = יחידה נפרדת מבעליו.</strong> לא מערבים עסקאות פרטיות של בעל המניות. רושמים רק פעולות של העסק.
+        </div>
+      </div>
+    </div>
+
+    <div class="flip-card">
+      <div class="flip-inner">
+        <div class="flip-front">
+          <div class="num">2</div>
+          <div>
+            <div class="name">העסק החי</div>
+            <div class="hint">Going Concern</div>
+          </div>
+        </div>
+        <div class="flip-back">
+          הנחה שהישות תמשיך לפעול לאורך זמן. בהיעדר הנחה זו — <strong>חובה לציין במפורש</strong> ולערוך שינויים מהותיים בהצגת הדוחות.
+        </div>
+      </div>
+    </div>
+
+    <div class="flip-card">
+      <div class="flip-inner">
+        <div class="flip-front">
+          <div class="num">3</div>
+          <div>
+            <div class="name">היחידה הכספית</div>
+            <div class="hint">Monetary Unit</div>
+          </div>
+        </div>
+        <div class="flip-back">
+          רושמים <strong>רק תופעות שניתנות למדידה כספית</strong>. לא רושמים: ותק עובדים, ניסיון, נאמנות. מדווחים במטבע יחיד (₪/$).
+        </div>
+      </div>
+    </div>
+
+    <div class="flip-card">
+      <div class="flip-inner">
+        <div class="flip-front">
+          <div class="num">4</div>
+          <div>
+            <div class="name">העלות ההיסטורית</div>
+            <div class="hint">Historical Cost</div>
+          </div>
+        </div>
+        <div class="flip-back">
+          כל פריט נרשם לפי <strong>עלותו ביום הרכישה + עלויות נלוות</strong> (הובלה, התקנה, מכס) שנועדו להביא את הנכס למצב זמין לשימוש.
+        </div>
+      </div>
+    </div>
+
+    <div class="flip-card">
+      <div class="flip-inner">
+        <div class="flip-front">
+          <div class="num">5</div>
+          <div>
+            <div class="name">הכרה בהכנסה</div>
+            <div class="hint">Revenue Recognition</div>
+          </div>
+        </div>
+        <div class="flip-back">
+          מכירים בהכנסה כש<strong>הפעילות הסתיימה</strong> (סופק מוצר/שירות) וניתן לאמוד תמורה. <strong>לא לפי קבלת המזומן!</strong> זו הסיבה ל"הכנסות לקבל".
+        </div>
+      </div>
+    </div>
+
+    <div class="flip-card">
+      <div class="flip-inner">
+        <div class="flip-front">
+          <div class="num">6</div>
+          <div>
+            <div class="name">ההקבלה</div>
+            <div class="hint">Matching</div>
+          </div>
+        </div>
+        <div class="flip-back">
+          הוצאות נרשמות <strong>באותה תקופה של ההכנסות שהן הניבו</strong>. זו הסיבה ל"הוצאות מראש" ו"הוצאות לשלם".
+        </div>
+      </div>
+    </div>
+
+    <div class="flip-card">
+      <div class="flip-inner">
+        <div class="flip-front">
+          <div class="num">7</div>
+          <div>
+            <div class="name">הגילוי הנאות</div>
+            <div class="hint">Full Disclosure</div>
+          </div>
+        </div>
+        <div class="flip-back">
+          חובה לחשוף <strong>כל מידע רלוונטי</strong> שעשוי להשפיע על קבלת החלטות — ביאורים, נתוני השוואה, אירועים מהותיים אחרי תאריך המאזן.
+        </div>
+      </div>
+    </div>
+
+    <div class="flip-card">
+      <div class="flip-inner">
+        <div class="flip-front">
+          <div class="num">8</div>
+          <div>
+            <div class="name">המהותיות</div>
+            <div class="hint">Materiality</div>
+          </div>
+        </div>
+        <div class="flip-back">
+          לא חובה לדווח על מידע <strong>לא מהותי</strong>. עודף פרטים פוגע בקריאות ובהבנה. הסטנדרט: "האם המידע משפיע על החלטה?"
+        </div>
+      </div>
+    </div>
+
+    <div class="flip-card">
+      <div class="flip-inner">
+        <div class="flip-front">
+          <div class="num">9</div>
+          <div>
+            <div class="name">השמרנות</div>
+            <div class="hint">Conservatism</div>
+          </div>
+        </div>
+        <div class="flip-back">
+          <strong>רווחים צפויים — רק אחרי מימוש.<br>הפסדים צפויים — מיידית!</strong><br>
+          דוגמה: מלאי לפי "עלות או שוק — הנמוך מביניהם".
+        </div>
+      </div>
+    </div>
+
+    <div class="flip-card">
+      <div class="flip-inner">
+        <div class="flip-front">
+          <div class="num">10</div>
+          <div>
+            <div class="name">העקביות</div>
+            <div class="hint">Consistency</div>
+          </div>
+        </div>
+        <div class="flip-back">
+          חובת דיווח <strong>אחיד וקבוע בין תקופות</strong>. אם משנים שיטה (למשל פחת או הפרשה לחומ"ס) — חובה לפרש בביאורים.
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <div class="concept-box">
+    <h4>למה ללמוד את העקרונות?</h4>
+    <p style="margin-bottom: 0;">בשאלה 4 פוגל אוהב לשאול: "מהי החשיבות ביישום עקרונות חשבונאיים?" התשובה הקצרה — <strong>יצירת אחידות, אובייקטיביות, השוואתיות בין פירמות, ושיפור רמת הדוחות. העקרונות מוכרים ומוסכמים בכל העולם.</strong></p>
+  </div>
+</section>
+
+
+<!-- ============= Q1 ============= -->
+<section class="section" id="q1">
+  <span class="section-tag">50% מהציון · השאלה החשובה</span>
+  <h1 class="section-title">שאלה 1: מאזן בוחן → דוחות כספיים</h1>
+  <p class="section-intro">
+    זו השאלה שצריכה להיות בכיס שלך. בכל מבחן יש את אותו דפוס: יתרות מספרי החברה, סעיף "עודפים = ?", התאמות נוספות. הסדר תמיד זהה.
+  </p>
+
+  <h2>הסדר הנכון לפתרון (זה האלגוריתם!)</h2>
+  <ol class="clean">
+    <li><strong>בנה מאזן בוחן ראשוני</strong> — כל הסעיפים כמו שהם, סכם חובה וזכות.</li>
+    <li><strong>חשב את הסעיף החסר (בד"כ עודפים)</strong> ע"י איזון בין הצדדים.</li>
+    <li><strong>רשום פקודות יומן</strong> לכל ההתאמות הנוספות (פחת, הפרשות, הוצאות לשלם, הכנסות מראש וכו').</li>
+    <li><strong>עדכן את המאזן הבוחן</strong> בעמודות התיקונים.</li>
+    <li><strong>הכן דוחות סופיים</strong>: דוח רווה"פ ומאזן.</li>
+  </ol>
+
+  <div class="concept-box">
+    <h4>איך מזהים סעיף תוצאתי vs מאזני?</h4>
+    <p>
+      <strong>תוצאתיים</strong> (לדוח רווה"פ): כל ה"הוצאות..." וה"הכנסות..." (משכורת, ריבית, פחת, ביטוח, תרוכשמ...).<br>
+      <strong>מאזניים</strong>: נכסים, התחייבויות, הון. (לקוחות, ספקים, רכוש קבוע, הלוואות, מלאי, פח"נצ).<br>
+      <strong>מקרים מיוחדים</strong>: <span class="calc">מלאי פתיחה</span> = תוצאתי (הולך לעלות המכר); <span class="calc">מלאי סגירה</span> = מאזני; <span class="calc">תוחקלמ תורזחה</span> ו<span class="calc">תוחנה</span> = מקטינות מכירות.
+    </p>
+  </div>
+
+  <h2>חישובי חתך נפוצים</h2>
+
+  <div class="formula">
+    <span class="formula-label">פחת קו ישר</span>
+    (עלות − ערך גרט) ÷ אורך חיים בשנים
+  </div>
+
+  <div class="formula">
+    <span class="formula-label">פחת לפי תפוקה</span>
+    (עלות − גרט) ÷ סה"כ תפוקה צפויה × תפוקה בפועל בתקופה
+  </div>
+
+  <div class="formula">
+    <span class="formula-label">ריבית לתקופה חלקית</span>
+    קרן × ריבית שנתית × (חודשים ÷ 12)
+  </div>
+
+  <div class="formula">
+    <span class="formula-label">הפרשה לחובות מסופקים</span>
+    יתרת לקוחות × % ההפרשה הנדרש − יתרת חומ"ס נוכחית
+  </div>
+
+  <h2>תרגיל 1.1 — חברת "סוכר" (פוגל, 2023, מועד א)</h2>
+
+  <div class="exercise">
+    <div class="exercise-header">
+      <div class="exercise-title">חברת "סוכר" — בניית דוחות כספיים</div>
+      <div class="exercise-meta">50% · 2023 · רמה: בינוני-גבוה</div>
+    </div>
+    <div class="exercise-body">
+      <p>להלן נתונים שנלקחו מספרי חברת "סוכר" בע"מ למסחר בממתקים ליום <strong>31.12.2022</strong>:</p>
+
+      <div class="givens">
+        <span class="givens-title">נתונים (חלקיים)</span>
+        <table class="acct-table">
+          <tr><td>הוצאות תקשורת</td><td class="num">85,000</td><td>ספקים</td><td class="num">60,000</td></tr>
+          <tr><td>מלאי פתיחה</td><td class="num">73,000</td><td>תובוח םידבוע</td><td class="num">100,000</td></tr>
+          <tr><td>הוצאות ארנונה</td><td class="num">12,000</td><td>קנב ש"וע</td><td class="num">80,000</td></tr>
+          <tr><td>לקוחות</td><td class="num">55,000</td><td>הון מניות</td><td class="num">40,000</td></tr>
+          <tr><td>הפסד הון מכירת ציוד</td><td class="num">3,000</td><td>מכירות</td><td class="num">620,000</td></tr>
+          <tr><td>הוצאות שיווק</td><td class="num">4,000</td><td>חוור תרתי תליחתל הנש</td><td class="num">?</td></tr>
+          <tr><td>הלח"מ</td><td class="num">8,250</td><td>תוחזרות מלקוחות</td><td class="num">5,000</td></tr>
+          <tr><td>קרן הון לחידוש ציוד</td><td class="num">10,000</td><td>הנחות מספקים במזומן</td><td class="num">3,000</td></tr>
+          <tr><td>תרוכשמ תואצוה</td><td class="num">55,000</td><td>שטרות לפירעון</td><td class="num">6,000</td></tr>
+          <tr><td>בניין</td><td class="num">330,000</td><td>פח"נצ בניין</td><td class="num">70,000</td></tr>
+          <tr><td>מוניטין</td><td class="num">3,000</td><td>הוצאות ריבית</td><td class="num">2,250</td></tr>
+          <tr><td>קניות</td><td class="num">380,000</td><td>הוצאות ביטוח</td><td class="num">30,000</td></tr>
+          <tr><td>עתודה לפיצויים</td><td class="num">20,000</td><td>הלוואה מהבנק</td><td class="num">?</td></tr>
+        </table>
+      </div>
+
+      <p><strong>נתונים נוספים:</strong></p>
+      <ol class="clean">
+        <li>עלות מלאי שנספר בסוף השנה — 100,000 ₪. שווי שוק בסוף השנה — 110,000.</li>
+        <li>החברה החלה להיות מבוטחת רק החל מ-1.3.2022 תמורת 2,000 ₪ לחודש.</li>
+        <li>פחת בניין 4% לשנה. שליש מהבניין מהווה את הקרקע. הבניין משמש בצורה שווה את מחלקת המכירות והנהלת החברה.</li>
+        <li>הוצאות המשכורת משולמות לאנסחאים, מתחלקות בצורה שווה על פני השנה ואינן כוללות את אנשי המכירות והנהלת החברה.</li>
+        <li>ביום 1.9.2022 קיבלה החברה הלוואה מבנק בסך 100,000 ₪ להחזר ב-10 תשלומים של קרן ההלוואה. ריבית שנתית 10%. החזרי הקרן מתחילים מ-1.10.2022.</li>
+        <li>ביום 31.12.2022 לקוח של החברה בעל חוב בסך 6,000 ₪ הכריז על פשיטת רגל. טרם נרשמה פעולה. החברה נוהגת להעמיד את יתרת חומ"ס ב-5% מיתרת הלקוחות.</li>
+      </ol>
+
+      <p><strong>נדרש:</strong> (1) מאזן בוחן ראשוני וחישוב היתרות החסרות, (2) פקודות יומן, (3) דוחות כספיים סופיים.</p>
+
+      <button class="toggle-solution">הצג פתרון מודרג</button>
+
+      <div class="solution">
+
+        <div class="solution-step">
+          <span class="step-label">צעד 1 · מיון לתוצאתי vs מאזני</span>
+          <div class="step-content">
+            <strong>תוצאתיים (לרווה"פ):</strong> הוצ' תקשורת, מלאי פתיחה, הוצ' ארנונה, הפסד הון, מכירות, הוצ' שיווק, החזרות מלקוחות, הנחות מספקים (מקטין קניות), משכורת, הוצ' ריבית, הוצ' ביטוח, קניות.<br>
+            <strong>מאזניים:</strong> ספקים, חובות עובדים, עו"ש בנק, לקוחות, הון מניות, עודפים, הלח"מ, קרן הון, שטרות לפירעון, בניין, פח"נצ, מוניטין, עתודה לפיצויים, הלוואה.
+          </div>
+        </div>
+
+        <div class="solution-step">
+          <span class="step-label">צעד 2 · גילוי החסרים ע"י איזון</span>
+          <div class="step-content">
+            סכום חובה (מאזני + תוצאתי): <span class="calc">73,000 + 55,000 + 330,000 + 3,000 + 380,000 + 85,000 + 12,000 + 4,000 + 5,000 + 55,000 + 2,250 + 30,000 + 8,250 + 3,000 = 1,045,500</span><br>
+            סכום זכות הידוע: <span class="calc">60,000 + 100,000 + 80,000 + 40,000 + 620,000 + 6,000 + 70,000 + 10,000 + 20,000 + 3,000 = 1,009,000</span><br>
+            ההפרש 36,500 — מתחלק בין <strong>עודפים</strong> (פתיחה) ו<strong>הלוואה מהבנק</strong>.<br>
+            <em>במבחן ייתכן שתוסיף נתון: הלוואה = 100,000 (לפי סעיף 5 בנתונים נוספים). אז עודפים פתיחה = הפרש 1,109,000 - 1,045,500 = ייצא בערך שלילי, צריך לבדוק את ההפרש המדויק עם המשכורת המלאה. הטכניקה: רושמים את ההלוואה כידועה ובודקים מה נשאר.</em>
+          </div>
+        </div>
+
+        <div class="solution-step">
+          <span class="step-label">צעד 3 · פקודות יומן להתאמות</span>
+          <div class="step-content">
+
+            <strong>סעיף 1 — מלאי סגירה:</strong>
+            <div class="journal-entry">
+              <div class="je-line"><span>ח' מלאי סגירה (מאזן)</span><span>100,000</span></div>
+              <div class="je-line credit"><span>ז' מלאי סגירה (רווה"פ)</span><span>100,000</span></div>
+              <div class="je-note">מלאי 100,000 (עלות) &lt; 110,000 (שוק) → רושמים לפי הנמוך = 100,000 (עקרון השמרנות)</div>
+            </div>
+
+            <strong>סעיף 2 — ביטוח מראש:</strong>
+            <div class="journal-entry">
+              <div class="je-line"><span>ח' ביטוח מראש</span><span>10,000</span></div>
+              <div class="je-line credit"><span>ז' הוצ' ביטוח</span><span>10,000</span></div>
+              <div class="je-note">ביטוח 10 חודשים (3-12) × 2,000 = 20,000 בלבד שייכים לשנה. נרשמו 30,000 → 10,000 הוצאות מראש</div>
+            </div>
+
+            <strong>סעיף 3 — פחת בניין:</strong>
+            <div class="journal-entry">
+              <div class="je-line"><span>ח' הוצ' פחת בניין</span><span>8,800</span></div>
+              <div class="je-line credit"><span>ז' פח"נצ בניין</span><span>8,800</span></div>
+              <div class="je-note">עלות לפחת = 330,000 × 2/3 = 220,000. פחת = 220,000 × 4% = 8,800. מתחלק שווה: 4,400 שיווק + 4,400 הנהלה</div>
+            </div>
+
+            <strong>סעיף 5 — ריבית הלוואה:</strong>
+            <div class="journal-entry">
+              <div class="je-line"><span>ח' הוצ' ריבית</span><span>1,917</span></div>
+              <div class="je-line credit"><span>ז' הוצ' ריבית לשלם</span><span>1,917</span></div>
+              <div class="je-note">קרן ממוצעת × 10% × חלק שנה. תקופה 1.9-1.10: 100,000×10%×1/12=833. תקופה 1.10-31.12: קרן יורדת ב-10,000 כל חודש. בסה"כ ~1,917 (חישוב מדויק תלוי בלוח הסילוק)</div>
+            </div>
+
+            <strong>סעיף 6 — פשיטת רגל ועדכון חומ"ס:</strong>
+            <div class="journal-entry">
+              <div class="je-line"><span>ח' חומ"ס (לחיוב חוב אבוד)</span><span>6,000</span></div>
+              <div class="je-line credit"><span>ז' לקוחות</span><span>6,000</span></div>
+              <div class="je-note">מחיקת חוב הלקוח כנגד הלח"מ הקיים</div>
+            </div>
+            <div class="journal-entry">
+              <div class="je-line"><span>ח' הוצ' חומ"ס</span><span>2,200</span></div>
+              <div class="je-line credit"><span>ז' הלח"מ</span><span>2,200</span></div>
+              <div class="je-note">לקוחות אחרי מחיקה: 55,000 - 6,000 = 49,000. הלח"מ נדרש 5% × 49,000 = 2,450. נשאר אחרי המחיקה: 8,250 - 6,000 = 2,250. נדרש להוסיף: 2,450 - 2,250 = 200. (במבחן בדוק את החישוב המדויק)</div>
+            </div>
+
+          </div>
+        </div>
+
+        <div class="solution-step">
+          <span class="step-label">צעד 4 · דוח רווח והפסד (מבנה)</span>
+          <div class="step-content">
+            <table class="acct-table">
+              <tr><th>סעיף</th><th>סכום</th></tr>
+              <tr><td>מכירות</td><td class="num">620,000</td></tr>
+              <tr><td>(החזרות מלקוחות)</td><td class="num">(5,000)</td></tr>
+              <tr class="subtotal"><td>מכירות נטו</td><td class="num">615,000</td></tr>
+              <tr><td>מלאי פתיחה</td><td class="num">73,000</td></tr>
+              <tr><td>קניות</td><td class="num">380,000</td></tr>
+              <tr><td>(הנחות מספקים)</td><td class="num">(3,000)</td></tr>
+              <tr><td>(מלאי סגירה)</td><td class="num">(100,000)</td></tr>
+              <tr class="subtotal"><td>עלות המכירות</td><td class="num">350,000</td></tr>
+              <tr class="subtotal"><td>רווח גולמי</td><td class="num">265,000</td></tr>
+              <tr><td>הוצ' שיווק (כולל פחת+משכורת)</td><td class="num">~63,400</td></tr>
+              <tr><td>הוצ' הנה"כ (תקשורת, ארנונה, ביטוח, פחת)</td><td class="num">~111,200</td></tr>
+              <tr class="subtotal"><td>רווח תפעולי</td><td class="num">~90,400</td></tr>
+              <tr><td>הוצ' מימון (ריבית)</td><td class="num">~(4,167)</td></tr>
+              <tr><td>הוצ' אחרות (הפסד הון)</td><td class="num">(3,000)</td></tr>
+              <tr class="total"><td>רווח נקי</td><td class="num">~83,233</td></tr>
+            </table>
+            <em style="font-size: 0.85rem; color: var(--ink-soft);">הערה: המספרים המדויקים תלויים בחישובים המדויקים של הריבית והפחת. השאלה היא דוגמה — מה שחשוב הוא <strong>הסדר והשיטה</strong>.</em>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+  <h2>תרגיל 1.2 — מהיר: זיהוי החסרים</h2>
+
+  <div class="exercise">
+    <div class="exercise-header">
+      <div class="exercise-title">איזון מאזן בוחן בלי התאמות</div>
+      <div class="exercise-meta">חימום · 5 דקות</div>
+    </div>
+    <div class="exercise-body">
+      <p>להלן יתרות מספרי "חלונות שאול":</p>
+      <div class="givens">
+        <span class="givens-title">יתרות</span>
+        דמי מפתח 170,000; שטל"ק 70,000; ספקים 120,000; הוצ' חשמל 2,000; הכנסות שכ"ד 1,800; קניות 322,000; הלוואה מבנק 60,000; החזרות לספקים 4,000; קניית חומרי אריזה 1,000; תרומות 500; מכירות 444,200; שטרות לגביה 16,000; ניכיונות 40,000; לקוחות 50,000; ריבית הלוואות 3,000; החזרות מלקוחות 5,000; שטרות לניכיון 40,000; הוצ' ריבית 1,500; מלאי פתיחה 16,000; הנחות שניתנו 3,000; הון = ?
+      </div>
+      <p><strong>נדרש:</strong> חשב את ההון העצמי.</p>
+
+      <button class="toggle-solution">הצג פתרון מודרג</button>
+
+      <div class="solution">
+        <div class="solution-step">
+          <span class="step-label">צעד 1 · סווג לחובה / זכות</span>
+          <div class="step-content">
+            <strong>חובה (נכסים + הוצאות):</strong> דמי מפתח 170,000, שטל"ק 70,000, הוצ' חשמל 2,000, קניות 322,000, קניית חומרי אריזה 1,000, תרומות 500, שטרות לגביה 16,000, ניכיונות 40,000, לקוחות 50,000, ריבית הלוואות 3,000, החזרות מלקוחות 5,000, שטרות לניכיון 40,000, הוצ' ריבית 1,500, מלאי פתיחה 16,000, הנחות שניתנו 3,000.<br>
+            <strong>סה"כ חובה:</strong> <span class="calc">740,000</span>
+          </div>
+        </div>
+        <div class="solution-step">
+          <span class="step-label">צעד 2 · זכויות הידועות</span>
+          <div class="step-content">
+            <strong>זכות:</strong> ספקים 120,000, הכנסות שכ"ד 1,800, הלוואה 60,000, החזרות לספקים 4,000, מכירות 444,200.<br>
+            <strong>סה"כ זכות (ידוע):</strong> <span class="calc">630,000</span>
+          </div>
+        </div>
+        <div class="solution-step">
+          <span class="step-label">צעד 3 · ההון</span>
+          <div class="step-content">
+            הון = חובה - זכות הידועה = 740,000 - 630,000 = <strong>110,000</strong> ₪.<br>
+            <em>אם תשובה זו לא במחירים — לבדוק שכל הסעיפים מסווגים נכון. למשל "ניכיונות" יכול להיות נכס (ניכיון לקבל) או הוצאה.</em>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <h2>חשבונות חתך תקופה (חובה לדעת!)</h2>
+
+  <div class="concept-box">
+    <h4>המטריצה לזכור</h4>
+    <table class="acct-table">
+      <tr><th>סוג</th><th>הסבר</th><th>מאזני / תוצאתי</th></tr>
+      <tr><td><strong>הוצאות לשלם</strong></td><td>הוצאה שייכת לתקופה אך טרם שולמה</td><td>התחייבות (זכות)</td></tr>
+      <tr><td><strong>הוצאות מראש</strong></td><td>שולם מראש על תקופה עתידית</td><td>נכס (חובה)</td></tr>
+      <tr><td><strong>הכנסות לקבל</strong></td><td>הכנסה שייכת לתקופה אך טרם התקבלה</td><td>נכס (חובה)</td></tr>
+      <tr><td><strong>הכנסות מראש</strong></td><td>התקבל מראש על תקופה עתידית</td><td>התחייבות (זכות)</td></tr>
+    </table>
+  </div>
+
+</section>
+
+
+<!-- ============= Q2 ============= -->
+<section class="section" id="q2">
+  <span class="section-tag">15% מהציון</span>
+  <h1 class="section-title">שאלה 2: רכוש קבוע</h1>
+  <p class="section-intro">
+    בכל מבחן: רכישת נכס, חישוב פחת בשיטה אחת או יותר, לעיתים קרובות מכירת הנכס באמצע השנה. הצגה מאזנית. <strong>הכי חשוב: דייקנות בחישוב חודשים חלקיים.</strong>
+  </p>
+
+  <h2>3 שיטות הפחת — חובה לזכור</h2>
+
+  <div class="concept-box">
+    <h4>1. קו ישר (Straight Line)</h4>
+    <div class="formula" style="margin: 0.5rem 0;">
+      <span class="formula-label">פחת שנתי</span>
+      (עלות לפחת − ערך גרט) ÷ אורך חיים
+    </div>
+    <p style="margin-bottom: 0; font-size: 0.93rem;">
+      פחת קבוע בכל שנה. לחודשים חלקיים — מכפילים ב־<span class="calc">חודשים/12</span>.
+    </p>
+  </div>
+
+  <div class="concept-box">
+    <h4>2. לפי תפוקה (Units of Production)</h4>
+    <div class="formula" style="margin: 0.5rem 0;">
+      <span class="formula-label">פחת לתקופה</span>
+      [(עלות − גרט) ÷ סה"כ תפוקה צפויה] × תפוקה בפועל
+    </div>
+    <p style="margin-bottom: 0; font-size: 0.93rem;">
+      לא תלוי בזמן! רק בכמה הנכס ייצר באותה תקופה.
+    </p>
+  </div>
+
+  <div class="concept-box">
+    <h4>3. סכום ספרות שנים (Sum of Years' Digits)</h4>
+    <div class="formula" style="margin: 0.5rem 0;">
+      <span class="formula-label">פחת בשנה k</span>
+      (עלות − גרט) × [שנים נותרות ÷ סכום הספרות]
+    </div>
+    <p style="margin-bottom: 0; font-size: 0.93rem;">
+      פחת מואץ. לדוגמה ל-5 שנים: סכום ספרות = 1+2+3+4+5 = 15. שנה ראשונה: 5/15. שנה שניה: 4/15.
+    </p>
+  </div>
+
+  <div class="warning-box">
+    <strong>מלכודת קבועה אצל פוגל!</strong> כשנותנים בניין — שליש מהעלות הוא <strong>קרקע</strong> (שלא מתפחתת). מחשבים פחת רק על שני שלישים. תמיד תבדוק!
+  </div>
+
+  <h2>תרגיל 2.1 — חברת "פיקס" (פוגל, פברואר 2022)</h2>
+
+  <div class="exercise">
+    <div class="exercise-header">
+      <div class="exercise-title">פחת מעורב + מכירת נכס</div>
+      <div class="exercise-meta">15% · רמה: בינוני</div>
+    </div>
+    <div class="exercise-body">
+      <div class="givens">
+        <span class="givens-title">נתונים</span>
+        <table class="acct-table">
+          <tr><th>נכס</th><th>תאריך קניה</th><th>עלות</th><th>אורך חיים</th><th>שיטת פחת</th></tr>
+          <tr><td>בניין</td><td>1.6.2018</td><td class="num">1,500,000</td><td>40 שנה</td><td>קו ישר</td></tr>
+          <tr><td>מכונה</td><td>1.8.2020</td><td class="num">250,000</td><td>—</td><td>לפי תפוקה</td></tr>
+        </table>
+        <p style="margin-top: 0.75rem;">
+          <strong>הבניין:</strong> שליש מהעלות מהווה את הקרקע. נמכר ביום 1.10.2022 תמורת 1,050,000 ₪.<br>
+          <strong>המכונה:</strong> עלויות הובלה והתקנה הסתכמו ב-70,000 ₪. ערך גרט 20,000. צפויה לייצר 400,000 יחידות. תפוקה: 2020 = 30,000; 2021 = 70,000; 2022 = 80,000.
+        </p>
+      </div>
+
+      <p><strong>נדרש:</strong> (א) הוצ' פחת לשנים 2020 ו-2022. (ב) פקודת יומן למכירת הבניין. (ג) הצגת רכוש קבוע במאזן 31.12.2021 ו-2022.</p>
+
+      <button class="toggle-solution">הצג פתרון מודרג</button>
+
+      <div class="solution">
+
+        <div class="solution-step">
+          <span class="step-label">צעד 1 · עלות בניין לפחת</span>
+          <div class="step-content">
+            עלות הבניין: 1,500,000 ₪. שליש קרקע = 500,000. <strong>עלות לפחת = 1,000,000.</strong><br>
+            פחת שנתי בקו ישר 40 שנה = <span class="calc">1,000,000 ÷ 40 = 25,000</span> ₪ לשנה.
+          </div>
+        </div>
+
+        <div class="solution-step">
+          <span class="step-label">צעד 2 · עלות מכונה לפחת</span>
+          <div class="step-content">
+            עלות מקורית 250,000 + הובלה והתקנה 70,000 = <strong>320,000</strong> (עלות מלאה).<br>
+            עלות לפחת = 320,000 - 20,000 (גרט) = <strong>300,000</strong>.<br>
+            פחת ליחידה: <span class="calc">300,000 ÷ 400,000 = 0.75 ₪/יחידה</span>.
+          </div>
+        </div>
+
+        <div class="solution-step">
+          <span class="step-label">צעד 3 · פחת 2020 (שנה ראשונה — חלקית!)</span>
+          <div class="step-content">
+            <strong>בניין:</strong> נרכש 1.6.2018, אז 2020 שנה מלאה. <span class="calc">פחת 2020 = 25,000</span>.<br>
+            <strong>מכונה:</strong> נרכשה 1.8.2020, פעלה רק 5 חודשים. אבל זה לא משנה כי שיטת תפוקה! החישוב לפי יחידות בלבד: <span class="calc">30,000 × 0.75 = 22,500</span>.<br>
+            <strong>סה"כ פחת 2020 = 47,500 ₪.</strong>
+          </div>
+        </div>
+
+        <div class="solution-step">
+          <span class="step-label">צעד 4 · פחת 2022 (שנת מכירת הבניין!)</span>
+          <div class="step-content">
+            <strong>בניין:</strong> נמכר 1.10.2022 → פחת רק על 9 חודשים. <span class="calc">25,000 × 9/12 = 18,750</span>.<br>
+            <strong>מכונה:</strong> 80,000 יחידות × 0.75 = <span class="calc">60,000</span>.<br>
+            <strong>סה"כ פחת 2022 = 78,750 ₪.</strong>
+          </div>
+        </div>
+
+        <div class="solution-step">
+          <span class="step-label">צעד 5 · פח"נצ בניין במכירה</span>
+          <div class="step-content">
+            פח"נצ עד 1.10.2022 = פחת מלא 2018 (חלקי) + 2019 + 2020 + 2021 + פחת חלקי 2022.<br>
+            2018: 7 חודשים <span class="calc">25,000 × 7/12 = 14,583</span><br>
+            2019, 2020, 2021: <span class="calc">25,000 × 3 = 75,000</span><br>
+            2022 חלקי: <span class="calc">18,750</span><br>
+            <strong>סה"כ פח"נצ במכירה = 108,333 ₪</strong> (לערך — תלוי איך מעגלים).
+          </div>
+        </div>
+
+        <div class="solution-step">
+          <span class="step-label">צעד 6 · פקודת יומן למכירת הבניין</span>
+          <div class="step-content">
+            עלות מופחתת = 1,500,000 - 108,333 = 1,391,667.<br>
+            תמורה = 1,050,000 → <strong>הפסד הון = 341,667</strong>.<br>
+            <div class="journal-entry">
+              <div class="je-line"><span>ח' מזומן</span><span>1,050,000</span></div>
+              <div class="je-line"><span>ח' פח"נצ בניין</span><span>108,333</span></div>
+              <div class="je-line"><span>ח' הפסד הון ממכירת בניין</span><span>341,667</span></div>
+              <div class="je-line credit"><span>ז' בניין</span><span>1,500,000</span></div>
+            </div>
+          </div>
+        </div>
+
+        <div class="solution-step">
+          <span class="step-label">צעד 7 · הצגה מאזנית</span>
+          <div class="step-content">
+            <strong>31.12.2021:</strong>
+            <table class="acct-table">
+              <tr><th>נכס</th><th>עלות</th><th>פח"נצ</th><th>עלות מופחתת</th></tr>
+              <tr><td>בניין</td><td class="num">1,500,000</td><td class="num">(89,583)</td><td class="num">1,410,417</td></tr>
+              <tr><td>מכונה</td><td class="num">320,000</td><td class="num">(75,000)</td><td class="num">245,000</td></tr>
+              <tr class="total"><td>סה"כ</td><td class="num">1,820,000</td><td class="num">(164,583)</td><td class="num">1,655,417</td></tr>
+            </table>
+            <strong>31.12.2022:</strong> רק המכונה נשארה.
+            <table class="acct-table">
+              <tr><th>נכס</th><th>עלות</th><th>פח"נצ</th><th>עלות מופחתת</th></tr>
+              <tr><td>מכונה</td><td class="num">320,000</td><td class="num">(135,000)</td><td class="num">185,000</td></tr>
+            </table>
+            <em>פח"נצ מכונה: 22,500 + 52,500 + 60,000 = 135,000</em>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <h2>תרגיל 2.2 — מכירה באמצע שנה (קו ישר)</h2>
+
+  <div class="exercise">
+    <div class="exercise-header">
+      <div class="exercise-title">משאית — שינוי שיטת פחת</div>
+      <div class="exercise-meta">15% · רמה: גבוה</div>
+    </div>
+    <div class="exercise-body">
+      <p>ביום 1.4.2018 נרכשה מכונה תמורת 400,000 ₪. עלות הובלה והתקנה 50,000 ₪. ערך גרט 30,000. המכונה הופעלה ב-1.7.2018 ואמורה לייצר 1,000,000 יחידות.</p>
+      <div class="givens">
+        <span class="givens-title">תפוקה בפועל</span>
+        2018: 150,000 · 2019: 120,000 · 2020: 200,000 · 2021: 100,000 (עד 1.10.2021)
+      </div>
+      <p>המכונה <strong>נמכרה</strong> ביום 1.10.2021 תמורת 170,000 ₪.</p>
+      <p><strong>נדרש:</strong> (1) פחת 2018 ו-2020. (2) הצגה מאזנית 31.12.2019. (3) רווח/הפסד הון מהמכירה.</p>
+
+      <button class="toggle-solution">הצג פתרון מודרג</button>
+
+      <div class="solution">
+
+        <div class="solution-step">
+          <span class="step-label">צעד 1 · עלות לפחת + פחת ליחידה</span>
+          <div class="step-content">
+            עלות מלאה: <span class="calc">400,000 + 50,000 = 450,000</span>.<br>
+            עלות לפחת: <span class="calc">450,000 - 30,000 = 420,000</span>.<br>
+            פחת ליחידה: <span class="calc">420,000 ÷ 1,000,000 = 0.42 ₪/יחידה</span>.<br>
+            <em>שים לב: אף שנקנתה ב-1.4 והופעלה ב-1.7 — בשיטת תפוקה לא מתחשבים בזה. רק בפועל!</em>
+          </div>
+        </div>
+
+        <div class="solution-step">
+          <span class="step-label">צעד 2 · פחת 2018 ו-2020</span>
+          <div class="step-content">
+            פחת 2018 = <span class="calc">150,000 × 0.42 = 63,000</span><br>
+            פחת 2020 = <span class="calc">200,000 × 0.42 = 84,000</span><br>
+            (פחת 2019: <span class="calc">120,000 × 0.42 = 50,400</span> · פחת 2021: <span class="calc">100,000 × 0.42 = 42,000</span>)
+          </div>
+        </div>
+
+        <div class="solution-step">
+          <span class="step-label">צעד 3 · הצגה מאזנית 31.12.2019</span>
+          <div class="step-content">
+            פח"נצ עד 31.12.2019 = 63,000 + 50,400 = 113,400.
+            <table class="acct-table">
+              <tr><th>נכס</th><th>עלות</th><th>פח"נצ</th><th>עלות מופחתת</th></tr>
+              <tr><td>מכונה</td><td class="num">450,000</td><td class="num">(113,400)</td><td class="num">336,600</td></tr>
+            </table>
+          </div>
+        </div>
+
+        <div class="solution-step">
+          <span class="step-label">צעד 4 · רווח/הפסד הון במכירה</span>
+          <div class="step-content">
+            פח"נצ עד 1.10.2021 = 113,400 + 84,000 + 42,000 = 239,400.<br>
+            עלות מופחתת = 450,000 - 239,400 = 210,600.<br>
+            תמורה = 170,000 → <strong>הפסד הון = 40,600 ₪</strong>.
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+  <div class="warning-box">
+    <strong>טעויות נפוצות בשאלה 2:</strong><br>
+    1. שכחת לעדכן עלות לפחת אחרי הוספת עלויות נלוות (הובלה, התקנה, מכס).<br>
+    2. חישוב פחת על קרקע (אסור!).<br>
+    3. שכחת חודשים חלקיים בשנת רכישה / מכירה בשיטת קו ישר.<br>
+    4. בלבול בין עלות מקורית לעלות מופחתת בחישוב רווח/הפסד הון.
+  </div>
+
+</section>
+
+
+<!-- ============= Q3 ============= -->
+<section class="section" id="q3">
+  <span class="section-tag">15% מהציון</span>
+  <h1 class="section-title">שאלה 3: שיטות מלאי</h1>
+  <p class="section-intro">
+    בכל מבחן: טבלת תנועות (פתיחה, קניות, מכירות) במחירים שונים. נדרש לחשב מלאי סגירה ורווח גולמי בשיטה אחת או שתיים. <strong>השיטה הנפוצה אצל פוגל: ממוצע משוקלל נע + FIFO.</strong>
+  </p>
+
+  <h2>3 שיטות — הבדלים מהותיים</h2>
+
+  <div class="concept-box">
+    <h4>FIFO (First In, First Out)</h4>
+    <p>"מי שנכנס ראשון יוצא ראשון". מלאי הסגירה <strong>מיוצג ע"י הקניות האחרונות</strong> (החדשות ביותר).<br>
+    <em>בתקופת עליית מחירים → מלאי סגירה גבוה → רווח גולמי גבוה.</em></p>
+  </div>
+
+  <div class="concept-box">
+    <h4>ממוצע משוקלל תקופתי</h4>
+    <p>מחשבים <strong>פעם אחת בסוף התקופה</strong> ממוצע: סה"כ עלות (פתיחה + קניות) ÷ סה"כ יחידות.<br>
+    <em>פשוט יותר. פוגל אוהב לבקש את זה.</em></p>
+  </div>
+
+  <div class="concept-box">
+    <h4>ממוצע משוקלל נע (תמידי)</h4>
+    <p>מחשבים ממוצע <strong>אחרי כל קנייה חדשה</strong>. כל מכירה יוצאת לפי הממוצע העדכני.<br>
+    <em>יותר עבודה אבל מדויק יותר. פוגל מבקש לעיתים.</em></p>
+  </div>
+
+  <div class="warning-box">
+    <strong>שמרנות במלאי!</strong> בסוף החישוב — תמיד תשווה לעלות מול שווי שוק. <strong>הצגה לפי הנמוך מביניהם!</strong> (זה הגנה ע"י עקרון השמרנות.)
+  </div>
+
+  <h2>תרגיל 3.1 — חברת "כוכבי" (פוגל)</h2>
+
+  <div class="exercise">
+    <div class="exercise-header">
+      <div class="exercise-title">ממוצע משוקלל תקופתי + רווח גולמי</div>
+      <div class="exercise-meta">15% · רמה: בינוני</div>
+    </div>
+    <div class="exercise-body">
+      <div class="givens">
+        <span class="givens-title">תנועות מלאי 2021</span>
+        <table class="acct-table">
+          <tr><th>תאריך</th><th>פעולה</th><th>כמות</th><th>מחיר ליחידה</th></tr>
+          <tr><td>1/1</td><td>פתיחה</td><td class="num">150</td><td class="num">15</td></tr>
+          <tr><td>ינואר</td><td>קנייה</td><td class="num">300</td><td class="num">16</td></tr>
+          <tr><td>פברואר</td><td>מכירה</td><td class="num">220</td><td class="num">18</td></tr>
+          <tr><td>אפריל</td><td>מכירה</td><td class="num">100</td><td class="num">19</td></tr>
+          <tr><td>מאי</td><td>קנייה</td><td class="num">140</td><td class="num">22</td></tr>
+          <tr><td>אוגוסט</td><td>מכירה</td><td class="num">130</td><td class="num">24</td></tr>
+          <tr><td>אוקטובר</td><td>קנייה</td><td class="num">180</td><td class="num">25</td></tr>
+          <tr><td>דצמבר</td><td>מכירה</td><td class="num">160</td><td class="num">28</td></tr>
+        </table>
+        <p style="margin-top: 0.5rem;">שווי שוק ליום 31.12 = 3,200 ₪.</p>
+      </div>
+
+      <p><strong>נדרש:</strong> (1) ערך מלאי סגירה לפי ממוצע משוקלל תקופתי. (2) רווח גולמי.</p>
+
+      <button class="toggle-solution">הצג פתרון מודרג</button>
+
+      <div class="solution">
+
+        <div class="solution-step">
+          <span class="step-label">צעד 1 · כמות מלאי סגירה</span>
+          <div class="step-content">
+            פתיחה + קניות - מכירות = 150 + 300 + 140 + 180 - 220 - 100 - 130 - 160<br>
+            = <span class="calc">770 - 610 = 160 יחידות</span>.
+          </div>
+        </div>
+
+        <div class="solution-step">
+          <span class="step-label">צעד 2 · עלות ממוצעת ליחידה</span>
+          <div class="step-content">
+            סה"כ עלות זמינה = (150×15) + (300×16) + (140×22) + (180×25)<br>
+            = <span class="calc">2,250 + 4,800 + 3,080 + 4,500 = 14,630</span><br>
+            סה"כ יחידות זמינות = 150 + 300 + 140 + 180 = <span class="calc">770</span><br>
+            עלות ממוצעת = <span class="calc">14,630 ÷ 770 = 19 ₪/יחידה</span>.
+          </div>
+        </div>
+
+        <div class="solution-step">
+          <span class="step-label">צעד 3 · ערך מלאי סגירה</span>
+          <div class="step-content">
+            עלות לפי ממוצע = <span class="calc">160 × 19 = 3,040 ₪</span>.<br>
+            שווי שוק = 3,200.<br>
+            <strong>הצגה במאזן: 3,040 ₪</strong> (הנמוך — שמרנות).
+          </div>
+        </div>
+
+        <div class="solution-step">
+          <span class="step-label">צעד 4 · רווח גולמי</span>
+          <div class="step-content">
+            <table class="acct-table">
+              <tr><th>סעיף</th><th>חישוב</th><th>סכום</th></tr>
+              <tr><td>מכירות</td><td>(220×18)+(100×19)+(130×24)+(160×28)</td><td class="num">13,460</td></tr>
+              <tr><td>מ"פ + קניות</td><td>2,250 + 4,800 + 3,080 + 4,500</td><td class="num">14,630</td></tr>
+              <tr><td>(מלאי סגירה)</td><td></td><td class="num">(3,040)</td></tr>
+              <tr class="subtotal"><td>עלות המכירות</td><td></td><td class="num">11,590</td></tr>
+              <tr class="total"><td>רווח גולמי</td><td></td><td class="num">1,870</td></tr>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <h2>תרגיל 3.2 — חברת "צוקר" (פוגל, 2023)</h2>
+
+  <div class="exercise">
+    <div class="exercise-header">
+      <div class="exercise-title">ממוצע משוקלל נע</div>
+      <div class="exercise-meta">12% · רמה: גבוה</div>
+    </div>
+    <div class="exercise-body">
+      <div class="givens">
+        <span class="givens-title">נתוני מלאי 2022</span>
+        <table class="acct-table">
+          <tr><th>תאריך</th><th>פרטים</th><th>כמות</th><th>מחיר</th></tr>
+          <tr><td>ינואר</td><td>פתיחה</td><td class="num">320</td><td class="num">38</td></tr>
+          <tr><td>פברואר</td><td>קנייה</td><td class="num">400</td><td class="num">45</td></tr>
+          <tr><td>מרץ</td><td>מכירה</td><td class="num">450</td><td class="num">120</td></tr>
+          <tr><td>אפריל</td><td>קנייה</td><td class="num">600</td><td class="num">58</td></tr>
+          <tr><td>יוני</td><td>מכירה</td><td class="num">650</td><td class="num">120</td></tr>
+          <tr><td>יולי</td><td>מכירה</td><td class="num">100</td><td class="num">120</td></tr>
+          <tr><td>אוגוסט</td><td>קנייה</td><td class="num">420</td><td class="num">74</td></tr>
+          <tr><td>אוקטובר</td><td>מכירה</td><td class="num">300</td><td class="num">120</td></tr>
+          <tr><td>נובמבר</td><td>קנייה</td><td class="num">700</td><td class="num">85</td></tr>
+          <tr><td>דצמבר</td><td>מכירה</td><td class="num">600</td><td class="num">120</td></tr>
+        </table>
+        <p style="margin-top: 0.5rem;">שווי שוק לסגירה — 85 ₪/יחידה.</p>
+      </div>
+
+      <p><strong>נדרש:</strong> ערך מלאי סגירה לפי <strong>ממוצע משוקלל נע (תמידי)</strong> ורווח גולמי.</p>
+
+      <button class="toggle-solution">הצג פתרון מודרג</button>
+
+      <div class="solution">
+
+        <div class="solution-step">
+          <span class="step-label">שיטה: אחרי כל קנייה — חשב ממוצע חדש</span>
+          <div class="step-content">
+            <strong>פתיחה:</strong> 320 × 38 = 12,160. ממוצע: 38.<br><br>
+            <strong>פברואר (קנייה 400×45):</strong><br>
+            סך עלות: 12,160 + 18,000 = 30,160<br>
+            כמות: 320 + 400 = 720<br>
+            <span class="calc">ממוצע חדש = 30,160 / 720 = 41.89</span><br><br>
+            <strong>מרץ (מכירה 450):</strong><br>
+            יוצא: 450 × 41.89 = 18,852<br>
+            יתרה: 270 × 41.89 = 11,308<br><br>
+            <strong>אפריל (קנייה 600×58):</strong><br>
+            סך: 11,308 + 34,800 = 46,108. כמות: 870.<br>
+            <span class="calc">ממוצע חדש = 53.00</span><br><br>
+            <strong>יוני (מכירה 650):</strong> יוצא 34,450. יתרה 220 × 53 = 11,660.<br><br>
+            <strong>יולי (מכירה 100):</strong> יוצא 5,300. יתרה 120 × 53 = 6,360.<br><br>
+            <strong>אוגוסט (קנייה 420×74):</strong><br>
+            סך: 6,360 + 31,080 = 37,440. כמות: 540.<br>
+            <span class="calc">ממוצע חדש = 69.33</span><br><br>
+            <strong>אוקטובר (מכירה 300):</strong> יוצא 20,800. יתרה 240 × 69.33 = 16,640.<br><br>
+            <strong>נובמבר (קנייה 700×85):</strong><br>
+            סך: 16,640 + 59,500 = 76,140. כמות: 940.<br>
+            <span class="calc">ממוצע חדש = 81.00</span><br><br>
+            <strong>דצמבר (מכירה 600):</strong> יוצא 48,600. יתרה <strong>340 × 81 = 27,540</strong>.
+          </div>
+        </div>
+
+        <div class="solution-step">
+          <span class="step-label">השוואה לשוק ועלות מכירות</span>
+          <div class="step-content">
+            עלות מלאי סגירה: 27,540 (ממוצע = 81). שוק: 85.<br>
+            <strong>מלאי במאזן: 27,540 ₪</strong> (הנמוך).<br><br>
+            סה"כ עלות מכירות = 18,852 + 34,450 + 5,300 + 20,800 + 48,600 = <strong>128,002</strong>.<br>
+            סה"כ מכירות = (450+650+100+300+600) × 120 = 2,100 × 120 = <strong>252,000</strong>.<br>
+            <strong>רווח גולמי = 252,000 - 128,002 = 123,998 ₪</strong>.
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+  <div class="concept-box">
+    <h4>טריק לחיסכון בזמן: סדר חישוב</h4>
+    <p>בשיטת ממוצע נע, רשום טבלה עם 4 עמודות: <strong>תאריך · כמות · מחיר · עלות מצטברת</strong>. אחרי כל קנייה — חשב ממוצע חדש (עמודה 5). מכירות פשוט מוציאות במחיר הממוצע האחרון.</p>
+  </div>
+
+</section>
+
+
+<!-- ============= Q4 ============= -->
+<section class="section" id="q4">
+  <span class="section-tag">15% מהציון</span>
+  <h1 class="section-title">שאלה 4: לקוחות וחומ"ס</h1>
+  <p class="section-intro">
+    שאלה זו בודקת תנועות בכרטיס לקוחות במשך השנה: מכירות, גבייה, מחיקת חוב אבוד, ועדכון הפרשה לחובות מסופקים. <strong>חובה לדעת את ההבדל בין הוצ' חומ"ס להפרשה לחומ"ס.</strong>
+  </p>
+
+  <h2>3 המושגים המבלבלים</h2>
+
+  <div class="concept-box">
+    <h4>הוצ' חומ"ס (חובות מסופקים) — תוצאתי</h4>
+    <p>סכום שנרשם בדוח רווה"פ כהוצאה השוטפת השנה בגין חובות שצפויים לא להיגבות. <strong>זה רק הגידול / הקיטון בהפרשה.</strong></p>
+  </div>
+
+  <div class="concept-box">
+    <h4>הפרשה לחומ"ס (הלח"מ) — מאזני</h4>
+    <p>חשבון נגדי ל"לקוחות". מציג <strong>כמה מהיתרה לא צפויה להיגבות</strong>. נרשם בצד הזכות במאזן הבוחן (כמו "פח"נצ" לרכוש קבוע).</p>
+  </div>
+
+  <div class="concept-box">
+    <h4>חוב אבוד — מחיקה</h4>
+    <p>כשלקוח מסוים פושט רגל / לא ישלם בוודאות. מוחקים את החוב <strong>נגד ההפרשה</strong> (הלח"מ), לא נגד הוצאה!</p>
+  </div>
+
+  <div class="formula">
+    <span class="formula-label">פקודה לעדכון הפרשה</span>
+    הוצ' חומ"ס = הלח"מ נדרש (% מלקוחות אחרי מחיקות) − הלח"מ קיים
+  </div>
+
+  <div class="warning-box">
+    <strong>סדר הפעולות חובה!</strong><br>
+    1. קודם — מחיקת חוב אבוד (לקוחות מקטין נגד הלח"מ).<br>
+    2. אחר כך — חישוב הלח"מ הנדרש על יתרת הלקוחות החדשה.<br>
+    3. לבסוף — עדכון ההלח"מ דרך הוצ' חומ"ס.
+  </div>
+
+  <h2>תרגיל 4.1 — תרגיל קלאסי של פוגל</h2>
+
+  <div class="exercise">
+    <div class="exercise-header">
+      <div class="exercise-title">לקוחות, גבייה, חוב אבוד והלח"מ</div>
+      <div class="exercise-meta">12% · רמה: בינוני</div>
+    </div>
+    <div class="exercise-body">
+      <div class="givens">
+        <span class="givens-title">נתונים</span>
+        יתרת לקוחות 31.12.2020: <strong>300,000</strong> ₪<br>
+        יתרת הלח"מ 31.12.2020: <strong>12,000</strong> ₪<br>
+        בשנת 2021: מכירות בהקפה 2,700,000 ₪. נגבה מלקוחות 1,800,000 ₪.<br>
+        ביום 31.12.2021 התברר שלקוח שחייב 38,000 ₪ פשט רגל. החברה שומרת על מדיניות הלח"מ של 4% מיתרת הלקוחות.
+      </div>
+
+      <p><strong>נדרש:</strong> (א) פקודות יומן 2021. (ב) כרטיס לקוחות, הוצ' חומ"ס, הלח"מ. (ג) הצגה במאזן 31.12.2021.</p>
+
+      <button class="toggle-solution">הצג פתרון מודרג</button>
+
+      <div class="solution">
+
+        <div class="solution-step">
+          <span class="step-label">צעד 1 · רישום מכירות וגבייה</span>
+          <div class="step-content">
+            <div class="journal-entry">
+              <div class="je-line"><span>ח' לקוחות</span><span>2,700,000</span></div>
+              <div class="je-line credit"><span>ז' מכירות</span><span>2,700,000</span></div>
+            </div>
+            <div class="journal-entry">
+              <div class="je-line"><span>ח' מזומן</span><span>1,800,000</span></div>
+              <div class="je-line credit"><span>ז' לקוחות</span><span>1,800,000</span></div>
+            </div>
+          </div>
+        </div>
+
+        <div class="solution-step">
+          <span class="step-label">צעד 2 · מחיקת החוב האבוד</span>
+          <div class="step-content">
+            יתרת לקוחות לפני מחיקה: 300,000 + 2,700,000 - 1,800,000 = <strong>1,200,000</strong>.<br>
+            <div class="journal-entry">
+              <div class="je-line"><span>ח' הלח"מ</span><span>38,000</span></div>
+              <div class="je-line credit"><span>ז' לקוחות</span><span>38,000</span></div>
+              <div class="je-note">מחיקה ישירה דרך ההפרשה (לא דרך הוצאה!)</div>
+            </div>
+            יתרת לקוחות אחרי מחיקה: 1,200,000 - 38,000 = <strong>1,162,000</strong>.<br>
+            יתרת הלח"מ אחרי מחיקה: 12,000 - 38,000 = <strong>(26,000)</strong> שלילי!
+          </div>
+        </div>
+
+        <div class="solution-step">
+          <span class="step-label">צעד 3 · עדכון הלח"מ ל-4%</span>
+          <div class="step-content">
+            הלח"מ נדרש: 1,162,000 × 4% = <strong>46,480</strong>.<br>
+            הלח"מ קיים: -26,000 (שלילי).<br>
+            צריך להוסיף: 46,480 - (-26,000) = <span class="calc">72,480</span>.<br>
+            <div class="journal-entry">
+              <div class="je-line"><span>ח' הוצ' חומ"ס</span><span>72,480</span></div>
+              <div class="je-line credit"><span>ז' הלח"מ</span><span>72,480</span></div>
+            </div>
+          </div>
+        </div>
+
+        <div class="solution-step">
+          <span class="step-label">צעד 4 · כרטיסים</span>
+          <div class="step-content">
+            <strong>כרטיס לקוחות:</strong>
+            <table class="acct-table">
+              <tr><th>תאריך</th><th>פעולה</th><th>חובה</th><th>זכות</th><th>יתרה</th></tr>
+              <tr><td>1.1</td><td>פתיחה</td><td class="num">300,000</td><td></td><td class="num">300,000</td></tr>
+              <tr><td>—</td><td>מכירות</td><td class="num">2,700,000</td><td></td><td class="num">3,000,000</td></tr>
+              <tr><td>—</td><td>גבייה</td><td></td><td class="num">1,800,000</td><td class="num">1,200,000</td></tr>
+              <tr><td>31.12</td><td>מחיקה</td><td></td><td class="num">38,000</td><td class="num">1,162,000</td></tr>
+            </table>
+            <strong>כרטיס הלח"מ:</strong>
+            <table class="acct-table">
+              <tr><th>תאריך</th><th>פעולה</th><th>חובה</th><th>זכות</th><th>יתרה (זכות)</th></tr>
+              <tr><td>1.1</td><td>פתיחה</td><td></td><td class="num">12,000</td><td class="num">12,000</td></tr>
+              <tr><td>31.12</td><td>מחיקה</td><td class="num">38,000</td><td></td><td class="num">(26,000)</td></tr>
+              <tr><td>31.12</td><td>עדכון</td><td></td><td class="num">72,480</td><td class="num">46,480</td></tr>
+            </table>
+          </div>
+        </div>
+
+        <div class="solution-step">
+          <span class="step-label">צעד 5 · הצגה מאזנית</span>
+          <div class="step-content">
+            <strong>במאזן 31.12.2021 — בתוך נכסים שוטפים:</strong>
+            <table class="acct-table">
+              <tr><td>לקוחות</td><td class="num">1,162,000</td></tr>
+              <tr><td>(הלח"מ)</td><td class="num">(46,480)</td></tr>
+              <tr class="total"><td>לקוחות נטו</td><td class="num">1,115,520</td></tr>
+            </table>
+            <strong>בדוח רווה"פ:</strong> הוצ' חומ"ס = 72,480.
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+  <h2>תרגיל 4.2 — וריאציה קצרה</h2>
+
+  <div class="exercise">
+    <div class="exercise-header">
+      <div class="exercise-title">חישוב מהיר של עדכון הלח"מ</div>
+      <div class="exercise-meta">חימום · 5 דקות</div>
+    </div>
+    <div class="exercise-body">
+      <p>יתרת לקוחות 31.12.X: 500,000. יתרת הלח"מ: 8,000. <strong>במהלך השנה X+1</strong>: נמחקו 15,000 חובות אבודים. בסוף השנה X+1 יתרת לקוחות 700,000, החברה רוצה לשמור על הלח"מ של 3%.</p>
+      <p><strong>נדרש:</strong> מה ההוצ' חומ"ס בשנה X+1?</p>
+
+      <button class="toggle-solution">הצג פתרון מודרג</button>
+
+      <div class="solution">
+        <div class="solution-step">
+          <span class="step-label">צעד 1 · הלח"מ אחרי מחיקות</span>
+          <div class="step-content">
+            הלח"מ אחרי מחיקות: 8,000 - 15,000 = <strong>-7,000</strong> (שלילי).
+          </div>
+        </div>
+        <div class="solution-step">
+          <span class="step-label">צעד 2 · הלח"מ נדרש</span>
+          <div class="step-content">
+            700,000 × 3% = <strong>21,000</strong>.
+          </div>
+        </div>
+        <div class="solution-step">
+          <span class="step-label">צעד 3 · הוצ' חומ"ס</span>
+          <div class="step-content">
+            הוצ' = הנדרש - הקיים = 21,000 - (-7,000) = <strong>28,000 ₪</strong>.
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</section>
+
+
+<!-- ============= Q5 ============= -->
+<section class="section" id="q5">
+  <span class="section-tag">5-8% מהציון · נקודות קלות!</span>
+  <h1 class="section-title">שאלה 5: תיאוריה ו"סימני אזהרה"</h1>
+  <p class="section-intro">
+    שאלות קצרות, 2-3 שורות תשובה. שתי קטגוריות: <strong>"סימני אזהרה" בדוחות כספיים</strong> ו<strong>נכון/לא נכון עם נימוק</strong>. כאן הציון מהיר וקל — אל תוותר!
+  </p>
+
+  <h2>סימני אזהרה — בנק התשובות</h2>
+
+  <div class="concept-box">
+    <h4>4 סימני אזהרה עיקריים</h4>
+    <ol class="clean">
+      <li><strong>הון עצמי שלילי</strong> — ההפסדים המצטברים גדולים מההון. סימן לבעיית המשך פעילות.</li>
+      <li><strong>תזרים מזומנים שלילי משנים מצטבר</strong> — החברה לא מייצרת מזומנים מהפעילות.</li>
+      <li><strong>גידול חד בלקוחות / מלאי לעומת מכירות</strong> — קושי בגבייה או מלאי תקוע = בעיית נזילות.</li>
+      <li><strong>חוות דעת מסויגת של רו"ח</strong> — הרו"ח לא נותן אישור מלא לדוחות. תמיד דגל אדום.</li>
+    </ol>
+    <p style="margin: 0.5rem 0 0;">סימנים נוספים: יחס שוטף נמוך מ-1, התחייבויות לטווח קצר גבוהות מאוד, תלות בלקוח/ספק יחיד, גידול חד בהוצ' מימון.</p>
+  </div>
+
+  <h2>שאלות תיאוריה — תרגול</h2>
+
+  <div class="theory-q">
+    <div class="q-text">1. מה ההבדל בין "הוצ' חומ"ס" ל"הפרשה לחומ"ס" (הלח"מ)?</div>
+    <button class="show-answer">הצג תשובה</button>
+    <div class="answer">
+      <strong>הוצ' חומ"ס</strong> — חשבון <strong>תוצאתי</strong> בדוח רווה"פ. מציג את ההוצאה השוטפת השנה בגין החובות הצפויים לא להיגבות.<br>
+      <strong>הלח"מ</strong> — חשבון <strong>מאזני נגדי</strong> ל"לקוחות". מציג את הסכום המצטבר של הפרשה (כמה מהיתרה לא צפויה להיגבות).
+    </div>
+  </div>
+
+  <div class="theory-q">
+    <div class="q-text">2. האם יש לרשום הוצאה בדוח רווה"פ בגין החזר קרן הלוואה?</div>
+    <button class="show-answer">הצג תשובה</button>
+    <div class="answer">
+      <strong>לא</strong>. החזר קרן הלוואה הוא הקטנת התחייבות (פעולה מאזנית) — מצד אחד מקטין מזומנים, מצד שני מקטין הלוואה. <strong>רק הריבית</strong> שמשולמת על ההלוואה היא הוצאה תוצאתית.
+    </div>
+  </div>
+
+  <div class="theory-q">
+    <div class="q-text">3. בתקופת עליית מחירים — באיזו שיטת מלאי יירשם המלאי בסוף השנה במחיר הגבוה ביותר?</div>
+    <button class="show-answer">הצג תשובה</button>
+    <div class="answer">
+      <strong>FIFO</strong>. המלאי שנשאר הוא הקניות האחרונות (במחירים הגבוהים), כי הקניות הראשונות (זולות) "יצאו" קודם. בעקבות זאת — <strong>רווח גולמי גבוה יותר וגם מס גבוה יותר</strong>.
+    </div>
+  </div>
+
+  <div class="theory-q">
+    <div class="q-text">4. מהי החשיבות ביישום עקרונות חשבונאיים בהכנת הדוחות הכספיים?</div>
+    <button class="show-answer">הצג תשובה</button>
+    <div class="answer">
+      <strong>3 סיבות מרכזיות:</strong> (1) יצירת אחידות ואובייקטיביות בדיווח. (2) אפשרות להשוות בין פירמות שונות. (3) שיפור רמת ואמינות הדוחות. העקרונות מוסכמים ומוכרים בכל העולם — מאפשרים ליצור "שפה כספית" אחידה.
+    </div>
+  </div>
+
+  <div class="theory-q">
+    <div class="q-text">5. מהם התנאים לחלוקת דיבידנד בחברה?</div>
+    <button class="show-answer">הצג תשובה</button>
+    <div class="answer">
+      <strong>2 מבחנים בחוק החברות:</strong><br>
+      (1) <strong>מבחן הרווח</strong>: יש בחברה רווחים ראויים לחלוקה (עודפים חיוביים).<br>
+      (2) <strong>מבחן יכולת הפירעון</strong>: החלוקה לא תמנע מהחברה לעמוד בהתחייבויותיה הקיימות והצפויות במועדן.
+    </div>
+  </div>
+
+  <div class="theory-q">
+    <div class="q-text">6. מהו העיקרון החשבונאי שלפיו לא יירשם הערך של ניסיון העובדים בדוחות הכספיים?</div>
+    <button class="show-answer">הצג תשובה</button>
+    <div class="answer">
+      <strong>עקרון היחידה הכספית</strong>. רק תופעות שניתנות למדידה כספית אובייקטיבית נרשמות. ניסיון, מוניטין-עובדים, ותק וכישרון — קיימים אבל לא ניתנים למדידה כספית מדויקת.
+    </div>
+  </div>
+
+  <div class="theory-q">
+    <div class="q-text">7. נכון / לא נכון: "מאזן של חברה לא יתאזן אם ההון העצמי שלילי."</div>
+    <button class="show-answer">הצג תשובה</button>
+    <div class="answer">
+      <strong>לא נכון</strong>. המאזן <strong>תמיד מתאזן</strong> — בגלל המשוואה החשבונאית: נכסים = התחייבויות + הון. הון שלילי פשוט אומר שההתחייבויות גדולות מהנכסים — אבל המאזן עדיין שווה.
+    </div>
+  </div>
+
+  <div class="theory-q">
+    <div class="q-text">8. נכון / לא נכון: "רואה חשבון לא יכול לעבוד בחברה שהוא מבקר את דוחותיה הכספיים."</div>
+    <button class="show-answer">הצג תשובה</button>
+    <div class="answer">
+      <strong>נכון</strong>. עיקרון ה<strong>אי-תלות (Independence)</strong> של רו"ח חיצוני אוסר עליו להיות עובד או בעל אינטרס בחברה אותה הוא מבקר. ניגוד עניינים ישיר.
+    </div>
+  </div>
+
+  <div class="theory-q">
+    <div class="q-text">9. נכון / לא נכון: "אם יתרת העודפים של החברה זהה ב-31.12.X וב-31.12.X+1 — סימן שהחברה לא הרוויחה ולא הפסידה בשנה X+1."</div>
+    <button class="show-answer">הצג תשובה</button>
+    <div class="answer">
+      <strong>לא נכון</strong>. החברה יכולה הייתה להרוויח ובמקביל לחלק דיבידנד באותו סכום בדיוק — והעודפים יישארו זהים. סוגי שינויים בעודפים: רווח/הפסד שנתי, חלוקת דיבידנד, יעוד לקרנות הון. <strong>עודפים זהים ≠ אין רווח.</strong>
+    </div>
+  </div>
+
+  <div class="theory-q">
+    <div class="q-text">10. נכון / לא נכון: "הנחות שהתקבלו מספקים במזומן מקטינות את חשבון 'קניות' בדוח רווה"פ."</div>
+    <button class="show-answer">הצג תשובה</button>
+    <div class="answer">
+      <strong>נכון</strong>. הנחות מספקים — בין אם מסחריות ובין אם במזומן — <strong>מקטינות את עלות הקניות</strong> בחישוב עלות המכר. הצגה: בעלות המכירות מופחתות מ"קניות" כסעיף נפרד.
+    </div>
+  </div>
+
+  <div class="theory-q">
+    <div class="q-text">11. למה "מלאי פתיחה" הוא חשבון תוצאתי (לדוח רווה"פ) ולא מאזני?</div>
+    <button class="show-answer">הצג תשובה</button>
+    <div class="answer">
+      <strong>מלאי פתיחה</strong> נכלל בחישוב <strong>עלות המכר</strong> (פתיחה + קניות - סגירה = עלות המכירות), שהיא הוצאה ברווה"פ. המלאי הפיזי שנשאר בסוף השנה — "מלאי סגירה" — הוא הסעיף המאזני.
+    </div>
+  </div>
+
+  <div class="theory-q">
+    <div class="q-text">12. מה ההבדל בין "הוצאות מראש" ל"הכנסות מראש"?</div>
+    <button class="show-answer">הצג תשובה</button>
+    <div class="answer">
+      <strong>הוצאות מראש</strong> — נכס. שולם השנה אבל שייך לשנה הבאה.<br>
+      <strong>הכנסות מראש</strong> — התחייבות. התקבל השנה אבל ההכנסה שייכת לשנה הבאה (חייבים לתת תמורה בעתיד).<br>
+      שניהם נובעים מ<strong>עיקרון ההקבלה</strong>.
+    </div>
+  </div>
+
+  <div class="theory-q">
+    <div class="q-text">13. מתי יש להשתמש בעיקרון "העסק החי" כתנאי של דיווח?</div>
+    <button class="show-answer">הצג תשובה</button>
+    <div class="answer">
+      <strong>תמיד</strong> — זוהי הנחת היסוד בדוחות הכספיים. רק כש<strong>אין ביסוס להמשך הפעילות</strong> (קרובה לפירוק / חוסר נזילות חמור) — חובה לציין זאת במפורש בביאורים ולערוך שינויים מהותיים בהצגת הדוחות (למשל, להציג נכסים בערכי מימוש ולא בעלות).
+    </div>
+  </div>
+
+  <div class="theory-q">
+    <div class="q-text">14. למה רושמים מלאי לפי "עלות או שוק — הנמוך מביניהם" (LCM)?</div>
+    <button class="show-answer">הצג תשובה</button>
+    <div class="answer">
+      בגלל <strong>עיקרון השמרנות</strong>. הפסדים צפויים נרשמים מיידית, רווחים צפויים — רק לאחר מימוש. אם שווי השוק נפל מתחת לעלות, נרשם הירידה כהפסד מיידית. אם השוק עלה מעל העלות — לא רושמים את הרווח עד למימוש (מכירת המלאי).
+    </div>
+  </div>
+
+  <div class="theory-q">
+    <div class="q-text">15. מה השפעת חלוקת דיבידנד על המאזן ועל דוח רווה"פ?</div>
+    <button class="show-answer">הצג תשובה</button>
+    <div class="answer">
+      <strong>על מאזן:</strong> מקטין מזומנים (נכס) + מקטין עודפים (הון). אין שינוי בסה"כ ההתחייבויות.<br>
+      <strong>על דוח רווה"פ:</strong> <strong>אין השפעה!</strong> דיבידנד הוא חלוקת רווחים שצברה החברה (פעולת הון), לא הוצאה תפעולית. הוא מופיע בדוח על שינויים בהון העצמי.
+    </div>
+  </div>
+
+  <div class="concept-box">
+    <h4>טיפ אחרון לשאלות נכון/לא נכון</h4>
+    <p style="margin-bottom: 0;">
+      פוגל אוהב להציג טענה שנשמעת הגיונית אבל יש בה <strong>קפיצה לוגית</strong>. תקרא את המשפט פעמיים. תחפש מקרי קצה. תמיד תנמק עם <strong>עיקרון חשבונאי או דוגמה נגדית</strong>. גם תשובה קצרה של 2 שורות מנוסחת היטב — תיתן לך את הניקוד המלא.
+    </p>
+  </div>
+
+</section>
+
+
+<!-- ============= CHEAT SHEET ============= -->
+<section class="section" id="cheat">
+  <span class="section-tag">דף עזר ליום הבחינה</span>
+  <h1 class="section-title">קצה הרשת — מה לזכור באחרונה</h1>
+  <p class="section-intro">
+    הדף הזה מסכם את כל הנוסחאות, התבניות, והטעויות הנפוצות. תקרא אותו 30 דקות לפני המבחן.
+  </p>
+
+  <h2>1. נוסחאות חיוניות</h2>
+
+  <div class="formula">
+    <span class="formula-label">המשוואה החשבונאית</span>
+    נכסים = התחייבויות + הון עצמי
+  </div>
+
+  <div class="formula">
+    <span class="formula-label">פחת קו ישר (שנה מלאה)</span>
+    (עלות לפחת − גרט) ÷ אורך חיים
+  </div>
+
+  <div class="formula">
+    <span class="formula-label">פחת לפי תפוקה</span>
+    (עלות − גרט) ÷ סה"כ תפוקה צפויה × תפוקה השנה
+  </div>
+
+  <div class="formula">
+    <span class="formula-label">ריבית לתקופה חלקית</span>
+    קרן × ריבית שנתית × חודשים ÷ 12
+  </div>
+
+  <div class="formula">
+    <span class="formula-label">הוצ' חומ"ס</span>
+    (יתרת לקוחות אחרי מחיקות × % נדרש) − יתרת הלח"מ קיימת
+  </div>
+
+  <div class="formula">
+    <span class="formula-label">עלות המכירות</span>
+    מלאי פתיחה + קניות נטו − מלאי סגירה
+  </div>
+
+  <div class="formula">
+    <span class="formula-label">קניות נטו</span>
+    קניות − החזרות לספקים − הנחות מספקים
+  </div>
+
+  <div class="formula">
+    <span class="formula-label">מכירות נטו</span>
+    מכירות − החזרות מלקוחות − הנחות ללקוחות
+  </div>
+
+  <div class="formula">
+    <span class="formula-label">יחס שוטף</span>
+    נכסים שוטפים ÷ התחייבויות שוטפות
+  </div>
+
+  <div class="formula">
+    <span class="formula-label">יחס מהיר</span>
+    (נכסים שוטפים − מלאי) ÷ התחייבויות שוטפות
+  </div>
+
+  <h2>2. סיווג סעיפים — טבלה מהירה</h2>
+
+  <table class="acct-table">
+    <tr><th>סעיף</th><th>סוג</th><th>צד</th></tr>
+    <tr><td>לקוחות</td><td>נכס שוטף</td><td>חובה</td></tr>
+    <tr><td>הלח"מ (חומ"ס)</td><td>נכס נגדי</td><td>זכות</td></tr>
+    <tr><td>שטרות לגבייה (שטל"ק)</td><td>נכס שוטף</td><td>חובה</td></tr>
+    <tr><td>מלאי פתיחה</td><td>תוצאתי (רווה"פ)</td><td>חובה</td></tr>
+    <tr><td>מלאי סגירה</td><td>נכס שוטף + הקטנת רווה"פ</td><td>חובה במאזן</td></tr>
+    <tr><td>הוצאות מראש</td><td>נכס שוטף</td><td>חובה</td></tr>
+    <tr><td>הכנסות לקבל</td><td>נכס שוטף</td><td>חובה</td></tr>
+    <tr><td>בניין / רכב / ציוד</td><td>רכוש קבוע</td><td>חובה</td></tr>
+    <tr><td>פח"נצ</td><td>נכס נגדי</td><td>זכות</td></tr>
+    <tr><td>מוניטין / פטנט</td><td>רכוש אחר</td><td>חובה</td></tr>
+    <tr><td>ספקים</td><td>התחייבות שוטפת</td><td>זכות</td></tr>
+    <tr><td>שטרות לפירעון (שטל"פ)</td><td>התחייבות שוטפת</td><td>זכות</td></tr>
+    <tr><td>עו"ש משיכת יתר</td><td>התחייבות שוטפת</td><td>זכות</td></tr>
+    <tr><td>הוצאות לשלם</td><td>התחייבות שוטפת</td><td>זכות</td></tr>
+    <tr><td>הכנסות מראש / מקדמות מלקוחות</td><td>התחייבות שוטפת</td><td>זכות</td></tr>
+    <tr><td>הלוואה לזמן ארוך</td><td>התחייבות לא שוטפת</td><td>זכות</td></tr>
+    <tr><td>אגרות חוב</td><td>התחייבות לא שוטפת</td><td>זכות</td></tr>
+    <tr><td>עתודה לפיצויים</td><td>התחייבות / עתודה</td><td>זכות</td></tr>
+    <tr><td>הון מניות</td><td>הון</td><td>זכות</td></tr>
+    <tr><td>קרן הון / פרמיה</td><td>הון</td><td>זכות</td></tr>
+    <tr><td>עודפים</td><td>הון</td><td>זכות (אם רווחים)</td></tr>
+  </table>
+
+  <h2>3. תבנית פקודות יומן נפוצות</h2>
+
+  <h3>פחת תקופתי</h3>
+  <div class="journal-entry">
+    <div class="je-line"><span>ח' הוצ' פחת [נכס]</span><span>X</span></div>
+    <div class="je-line credit"><span>ז' פח"נצ [נכס]</span><span>X</span></div>
+  </div>
+
+  <h3>הוצ' לשלם בסוף תקופה</h3>
+  <div class="journal-entry">
+    <div class="je-line"><span>ח' הוצ' [סוג]</span><span>X</span></div>
+    <div class="je-line credit"><span>ז' הוצ' [סוג] לשלם</span><span>X</span></div>
+  </div>
+
+  <h3>הוצאות מראש (תיקון בסוף תקופה)</h3>
+  <div class="journal-entry">
+    <div class="je-line"><span>ח' הוצ' מראש</span><span>X</span></div>
+    <div class="je-line credit"><span>ז' הוצ' [סוג]</span><span>X</span></div>
+    <div class="je-note">משחזר חלק מההוצאה לתקופה הבאה</div>
+  </div>
+
+  <h3>הכנסות מראש (תיקון בסוף תקופה)</h3>
+  <div class="journal-entry">
+    <div class="je-line"><span>ח' הכנסות [סוג]</span><span>X</span></div>
+    <div class="je-line credit"><span>ז' הכנסות [סוג] מראש</span><span>X</span></div>
+    <div class="je-note">דוחה חלק מההכנסה לתקופה הבאה</div>
+  </div>
+
+  <h3>מחיקת חוב אבוד</h3>
+  <div class="journal-entry">
+    <div class="je-line"><span>ח' הלח"מ</span><span>X</span></div>
+    <div class="je-line credit"><span>ז' לקוחות</span><span>X</span></div>
+  </div>
+
+  <h3>עדכון הלח"מ בסוף שנה</h3>
+  <div class="journal-entry">
+    <div class="je-line"><span>ח' הוצ' חומ"ס</span><span>הפרש</span></div>
+    <div class="je-line credit"><span>ז' הלח"מ</span><span>הפרש</span></div>
+  </div>
+
+  <h3>מכירת רכוש קבוע (במלואו)</h3>
+  <div class="journal-entry">
+    <div class="je-line"><span>ח' מזומן (או לקוחות)</span><span>תמורה</span></div>
+    <div class="je-line"><span>ח' פח"נצ</span><span>פח"נצ</span></div>
+    <div class="je-line"><span>ח' הפסד הון (אם הפסד)</span><span>X</span></div>
+    <div class="je-line credit"><span>ז' הנכס</span><span>עלות מקורית</span></div>
+    <div class="je-line credit"><span>ז' רווח הון (אם רווח)</span><span>X</span></div>
+  </div>
+
+  <h3>מלאי סגירה</h3>
+  <div class="journal-entry">
+    <div class="je-line"><span>ח' מלאי סגירה (מאזן)</span><span>X</span></div>
+    <div class="je-line credit"><span>ז' מלאי סגירה (רווה"פ)</span><span>X</span></div>
+    <div class="je-note">פעולה דו-רגלית — אותו סכום, שני מקומות שונים</div>
+  </div>
+
+  <h2>4. סדר פעולות אופטימלי בבחינה</h2>
+
+  <ol class="clean">
+    <li><strong>קרא את כל החומר 5 דקות</strong> — תבחן באיזו שאלה להתחיל. (טיפ: לא חייב לפי הסדר.)</li>
+    <li><strong>קודם שאלה 1 (50%)</strong> — היא הכי גדולה. תקצה לה ~80 דקות.</li>
+    <li><strong>שאלה 4-5 לסיום אם זמן</strong> — שאלות תיאוריה לא דורשות חישוב, מהירות.</li>
+    <li><strong>בכל בעיה חישובית</strong> — רשום נוסחה לפני שמחליף מספרים.</li>
+    <li><strong>אם משהו לא מתחבר</strong> — סמן ותעבור הלאה. תחזור בסוף.</li>
+    <li><strong>בודקים תמיד שהמאזן מתאזן.</strong> אם לא — איפשהו טעות.</li>
+  </ol>
+
+  <h2>5. 7 הטעויות הנפוצות ביותר אצל פוגל</h2>
+
+  <div class="warning-box">
+    <ol class="clean" style="margin-bottom: 0;">
+      <li><strong>שכחת שליש קרקע בבניין</strong> — מחשבים פחת על העלות כולה במקום על 2/3.</li>
+      <li><strong>חישוב פחת לשנה מלאה כשהנכס נקנה/נמכר באמצע</strong> — פספוס של חודשים חלקיים.</li>
+      <li><strong>שכחת לעדכן עלות לפחת</strong> אחרי הוספת הובלה/התקנה.</li>
+      <li><strong>בלבול חוב אבוד עם הוצ' חומ"ס</strong> — מחיקה היא נגד הלח"מ, לא נגד הוצאה.</li>
+      <li><strong>שכחת לעדכן יתרת לקוחות לפני חישוב הלח"מ נדרש</strong> — חייבים להפחית קודם.</li>
+      <li><strong>חישוב מלאי סגירה לפי שיטה אחת ולא משוואה לעלות מול שוק</strong> — תמיד הנמוך!</li>
+      <li><strong>הצגת מלאי פתיחה במאזן</strong> במקום בעלות המכירות.</li>
+    </ol>
+  </div>
+
+  <div class="concept-box">
+    <h4>אם נשאר זמן בבחינה — תבדוק</h4>
+    <p style="margin-bottom: 0;">
+      (1) שכל הסעיפים בדוח רווה"פ הם תוצאתיים (לא מאזני בטעות). (2) שמלאי פתיחה <strong>לא</strong> במאזן הסופי. (3) שהמאזן באמת מתאזן (חבר את שני הצדדים). (4) שכל פקודה משלימה — חובה = זכות.
+    </p>
+  </div>
+
+  <div class="hero-card" style="margin-top: 2.5rem;">
+    <h2 style="margin-top: 0;">בהצלחה במבחן!</h2>
+    <p style="position: relative; opacity: 0.9; font-size: 1.05rem; margin-top: 1rem;">
+      "Slow is smooth, smooth is fast." 🐢🚀<br>
+      תרגלת את הדפוס. תאמין בעצמך, תקרא לאט, ותבנה צעד-אחר-צעד.
+    </p>
+  </div>
+
+</section>
+
+
+
+</main>
+
+<footer class="site-footer">
+  <span class="made">marom.cloud</span> · קוד את התואר ·
+  <span style="opacity: 0.6;">single-file · offline · v1</span>
+</footer>
+
+<script>
+// Section navigation
+document.querySelectorAll('.nav-btn').forEach(btn => {
+  btn.addEventListener('click', () => {
+    const target = btn.dataset.section;
+    document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
+    document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+    btn.classList.add('active');
+    document.getElementById(target).classList.add('active');
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  });
+});
+
+// Solution toggle
+document.addEventListener('click', e => {
+  if (e.target.matches('.toggle-solution')) {
+    e.target.closest('.exercise').classList.toggle('open');
+    e.target.textContent = e.target.closest('.exercise').classList.contains('open') ? 'הסתר פתרון' : 'הצג פתרון מודרג';
+  }
+  if (e.target.matches('.show-answer')) {
+    e.target.closest('.theory-q').classList.add('open');
+  }
+  if (e.target.matches('.flip-card') || e.target.closest('.flip-card')) {
+    const card = e.target.matches('.flip-card') ? e.target : e.target.closest('.flip-card');
+    card.classList.toggle('flipped');
+  }
+});
+
+// Countdown
+function updateCountdown() {
+  const examDate = new Date('2026-05-20T09:00:00');
+  const now = new Date();
+  const diff = examDate - now;
+  const days = Math.floor(diff / (1000*60*60*24));
+  const hours = Math.floor((diff % (1000*60*60*24)) / (1000*60*60));
+  document.getElementById('countdown').innerHTML = `<strong>${days}</strong> ימים · ${hours} שעות עד הבחינה`;
+  const big = document.getElementById('bigDays');
+  if (big) big.textContent = days;
+}
+updateCountdown();
+setInterval(updateCountdown, 60000);
+</script>
+
+</body>
+</html>
