@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>talk2ev.app – ABB Terra</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=Noto+Sans+Hebrew:wght@300;400;600;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <!-- ── HEADER ── -->
+  <header>
+    <div class="brand">
+      <div class="brand-name">talk2ev.app</div>
+      <div class="brand-sub">ABB Terra AC • 11kW</div>
+    </div>
+    <div class="status-pill">
+      <div id="dot" class="dot"></div>
+      <span id="statusLabel">STANDBY</span>
+    </div>
+  </header>
+
+  <!-- ── BATTERY ── -->
+  <div class="battery-section">
+    <div class="battery-outer">
+      <div class="battery-cap"></div>
+      <div class="battery-body">
+        <div id="fill" class="battery-fill high" style="height: 20%"></div>
+        <div class="battery-segments">
+          <div class="segment-line"></div>
+          <div class="segment-line"></div>
+          <div class="segment-line"></div>
+          <div class="segment-line"></div>
+        </div>
+        <div id="bolt" class="bolt">⚡</div>
+        <div class="battery-percent">
+          <span id="pctNum" class="pct-num">20</span><span class="pct-sym">%</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── STATS ROW ── -->
+  <div class="stats-row">
+    <div class="stat-cell">
+      <div class="stat-label">קוט״ש נטען</div>
+      <div id="kwhVal" class="stat-value green">0.00</div>
+    </div>
+    <div class="stat-cell">
+      <div class="stat-label">עלות</div>
+      <div id="costVal" class="stat-value">0.00 ₪</div>
+    </div>
+    <div class="stat-cell">
+      <div class="stat-label">זמן התחלה</div>
+      <div id="timeVal" class="stat-value blue">--:--</div>
+    </div>
+  </div>
+
+  <!-- ── BOTTOM PANEL ── -->
+  <div class="bottom-panel">
+    <div class="btn-row">
+      <button id="btnStart" class="btn-start" onclick="startCharging()">⚡ התחל טעינה</button>
+      <button id="btnStop"  class="btn-stop"  onclick="stopCharging()" disabled>⏹ עצור</button>
+      <button               class="btn-status" onclick="showStatus()">📡 פרטים</button>
+    </div>
+    <div class="power-bar-wrap">
+      <span class="power-label">עוצמה</span>
+      <div class="power-bar-track">
+        <div id="powerBar" class="power-bar-fill"></div>
+      </div>
+      <span id="powerVal" class="power-val">0.0 kW</span>
+    </div>
+  </div>
+
+  <!-- ── TOAST ── -->
+  <div id="toast" class="toast"></div>
+
+  <!-- scripts: api layer first, then app logic -->
+  <script src="api-ocpp.js"></script>
+  <script src="app.js"></script>
+
+</body>
+</html>
