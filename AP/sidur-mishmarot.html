@@ -1,0 +1,1201 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>סידור משמרות • מדור תמיכה</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.20.3/xlsx.full.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&amp;family=Noto+Sans+Hebrew:wght@300;400;500;600&amp;display=swap');
+        
+        :root {
+            --primary: #0f766e;
+        }
+        
+        body {
+            font-family: 'Noto Sans Hebrew', 'Inter', system-ui, -apple-system, sans-serif;
+        }
+        
+        .schedule-container {
+            scrollbar-width: thin;
+            scrollbar-color: #cbd5e1 #f8fafc;
+        }
+        
+        .day-card {
+            transition: transform 0.2s cubic-bezier(0.4, 0, 0.2, 1), 
+                       box-shadow 0.2s cubic-bezier(0.4, 0.0, 0.2, 1);
+            min-width: 10rem;
+        }
+        
+        .day-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 15px -3px rgb(0 0 0 / 0.05), 0 4px 6px -4px rgb(0 0 0 / 0.05);
+        }
+        
+        .shift-row {
+            transition: all 0.1s ease;
+        }
+        
+        .shift-row:hover {
+            filter: brightness(0.985);
+        }
+        
+        .assignee-chip {
+            transition: all 0.1s ease;
+            user-select: none;
+        }
+        
+        .assignee-chip:hover {
+            filter: brightness(0.95);
+        }
+        
+        .modal {
+            animation: modalPopIn 0.2s cubic-bezier(0.34, 1.56, 0.64, 1);
+        }
+        
+        @keyframes modalPopIn {
+            from {
+                opacity: 0;
+                transform: scale(0.95) translateY(10px);
+            }
+            to {
+                opacity: 1;
+                transform: scale(1) translateY(0);
+            }
+        }
+        
+        .section-header {
+            font-size: 0.75rem;
+            letter-spacing: 0.5px;
+        }
+        
+        .stats-bar {
+            height: 6px;
+            background: linear-gradient(to right, #0f766e, #14b8a6);
+            border-radius: 9999px;
+        }
+        
+        .horizontal-scroll {
+            scroll-behavior: smooth;
+            -webkit-overflow-scrolling: touch;
+        }
+        
+        .shift-label {
+            font-weight: 600;
+            font-size: 0.875rem;
+        }
+        
+        .empty-state {
+            font-size: 0.75rem;
+            font-style: italic;
+        }
+    </style>
+</head>
+<body class="bg-slate-50">
+    <!-- Navbar -->
+    <nav class="bg-white border-b border-slate-200 sticky top-0 z-50">
+        <div class="max-w-screen-2xl mx-auto">
+            <div class="px-6 py-4 flex items-center justify-between">
+                <div class="flex items-center gap-x-3">
+                    <div class="w-11 h-11 bg-teal-600 rounded-2xl flex items-center justify-center shadow-inner">
+                        <i class="fa-solid fa-calendar-check text-white text-3xl"></i>
+                    </div>
+                    <div>
+                        <h1 class="text-2xl font-bold text-slate-800 tracking-tight">סידור משמרות</h1>
+                        <p class="text-xs text-slate-500 -mt-0.5">מדור תמיכה • אפריל-מאי 2026</p>
+                    </div>
+                </div>
+                
+                <div class="flex items-center gap-x-2">
+                    <!-- Action Buttons -->
+                    <button onclick="resetToDefault()" 
+                            class="flex items-center gap-x-2 px-4 py-2 text-sm font-medium text-slate-600 hover:text-slate-800 hover:bg-slate-100 transition-colors rounded-2xl border border-slate-200">
+                        <i class="fa-solid fa-undo text-xs"></i>
+                        <span>אפס לברירת מחדל</span>
+                    </button>
+                    
+                    <button onclick="document.getElementById('import-input').click()" 
+                            class="flex items-center gap-x-2 px-4 py-2 text-sm font-medium text-slate-600 hover:text-slate-800 hover:bg-slate-100 transition-colors rounded-2xl border border-slate-200">
+                        <i class="fa-solid fa-file-import text-xs"></i>
+                        <span>ייבא JSON</span>
+                    </button>
+                    
+                    <input type="file" id="import-input" accept=".json" class="hidden" onchange="importFromJson(event)">
+                    
+                    <!-- Excel Upload -->
+                    <button onclick="document.getElementById('excel-input').click()" 
+                            class="flex items-center gap-x-2 px-4 py-2 text-sm font-medium bg-emerald-600 hover:bg-emerald-700 text-white transition-all rounded-2xl shadow-sm">
+                        <i class="fa-solid fa-file-excel text-xs"></i>
+                        <span>טען אקסל</span>
+                    </button>
+                    <input type="file" id="excel-input" accept=".xlsx,.xls" class="hidden" onchange="handleExcelUpload(event)">
+                    
+                    <button onclick="exportToJson()" 
+                            class="flex items-center gap-x-2 px-5 py-2 text-sm font-semibold bg-teal-600 hover:bg-teal-700 transition-all text-white rounded-2xl shadow-sm">
+                        <i class="fa-solid fa-download text-xs"></i>
+                        <span>ייצא ל-JSON</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <div class="max-w-screen-2xl mx-auto px-6 pt-6">
+        
+        <!-- Info Bar -->
+        <div class="mb-5 flex items-center justify-between bg-white border border-slate-200 rounded-3xl px-5 py-3 shadow-sm">
+            <div class="flex items-center gap-x-4">
+                <div class="flex items-center gap-x-2 text-sm">
+                    <div class="w-2.5 h-2.5 bg-emerald-500 rounded-full animate-pulse"></div>
+                    <span id="days-count" class="font-medium text-slate-700">35 ימים</span>
+                </div>
+                <div class="h-3 w-px bg-slate-200"></div>
+                <div class="text-sm text-slate-500">
+                    <span class="font-medium text-slate-700">7 עובדים</span> פעילים
+                </div>
+            </div>
+            
+            <div class="flex items-center gap-x-2 text-xs">
+                <div class="px-3 py-1 bg-amber-50 text-amber-600 rounded-2xl flex items-center gap-x-1.5 border border-amber-100">
+                    <i class="fa-solid fa-info-circle"></i>
+                    <span>לחץ על משמרת לעריכה • לחץ X להסרה מהירה</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Main Content -->
+        <div class="flex gap-6">
+            
+            <!-- Schedule Area -->
+            <div class="flex-1 min-w-0">
+                <div class="flex items-end justify-between mb-3 px-1">
+                    <div>
+                        <h2 class="text-lg font-semibold text-slate-800">לוח משמרות חודשי</h2>
+                        <p class="text-xs text-slate-500">גלול אופקית לראות את כל הימים • ניתן לערוך בלחיצה</p>
+                    </div>
+                    
+                    <div class="flex items-center gap-x-4 text-xs">
+                        <!-- Legend -->
+                        <div class="flex items-center gap-x-4 bg-white px-4 py-2 rounded-2xl border border-slate-200 shadow-sm">
+                            <div class="flex items-center gap-x-1.5">
+                                <div class="w-3 h-3 rounded bg-emerald-500"></div>
+                                <span class="text-emerald-700 font-medium text-xs">בוקר</span>
+                            </div>
+                            <div class="flex items-center gap-x-1.5">
+                                <div class="w-3 h-3 rounded bg-amber-500"></div>
+                                <span class="text-amber-700 font-medium text-xs">צהריים</span>
+                            </div>
+                            <div class="flex items-center gap-x-1.5">
+                                <div class="w-3 h-3 rounded bg-violet-500"></div>
+                                <span class="text-violet-700 font-medium text-xs">לילה</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Filter Bar -->
+                <div id="filter-bar" class="hidden mb-3 items-center gap-x-3 bg-white border border-teal-200 px-4 py-2.5 rounded-2xl shadow-sm" style="display: none;">
+                    <div class="flex items-center gap-x-3">
+                        <span class="text-sm text-slate-500">מסונן לפי:</span>
+                        <span id="filter-name" class="font-bold text-teal-700 text-base"></span>
+                        <span id="filter-count" class="text-xs px-2.5 py-0.5 bg-teal-100 text-teal-700 rounded-full font-medium"></span>
+                    </div>
+                    <button onclick="clearFilter()" 
+                            class="ml-auto text-xs px-4 py-1.5 bg-white hover:bg-red-50 text-red-600 border border-red-200 hover:border-red-300 rounded-2xl flex items-center gap-x-1.5 transition-colors font-medium">
+                        <i class="fa-solid fa-times text-xs"></i>
+                        <span>נקה סינון</span>
+                    </button>
+                </div>
+
+                <!-- Horizontal Scrollable Days -->
+                <div id="days-container" 
+                     class="horizontal-scroll flex gap-3 overflow-x-auto pb-6 pt-1 px-1 schedule-container"
+                     style="scrollbar-width: thin;">
+                    <!-- Populated by JS -->
+                </div>
+                
+                <div class="text-[10px] text-slate-400 px-2 flex items-center gap-x-2">
+                    <i class="fa-solid fa-hand-point-right"></i>
+                    <span>גלול ימינה ושמאלה לניווט בין הימים</span>
+                </div>
+            </div>
+            
+            <!-- Sidebar: Team Workload -->
+            <div class="w-72 flex-shrink-0">
+                <div class="bg-white border border-slate-200 rounded-3xl p-5 shadow-sm sticky top-24">
+                    <div class="flex items-center justify-between mb-4">
+                        <div>
+                            <h3 class="font-semibold text-slate-800">עומס משמרות</h3>
+                            <p class="text-xs text-slate-500">לפי עובד • כלל התקופה</p>
+                        </div>
+                        <i class="fa-solid fa-users text-slate-300 text-xl"></i>
+                    </div>
+                    
+                    <div id="stats-container" class="space-y-1 text-sm">
+                        <!-- Populated by JS -->
+                    </div>
+                    
+                    <div class="mt-4 pt-4 border-t border-slate-100">
+                        <div class="text-[10px] text-slate-400 flex items-center gap-x-1">
+                            <i class="fa-solid fa-balance-scale"></i>
+                            <span>שמור על איזון בין העובדים</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+        </div>
+        
+        <!-- Notes / Holidays -->
+        <div class="mt-6 grid grid-cols-1 md:grid-cols-3 gap-3 text-xs">
+            <div class="bg-white border border-amber-200 rounded-2xl p-3 flex gap-3 items-start">
+                <div class="text-amber-500 mt-0.5"><i class="fa-solid fa-calendar-day"></i></div>
+                <div class="text-amber-700">
+                    <span class="font-semibold">פסח שני</span> — 26.04.2026
+                </div>
+            </div>
+            <div class="bg-white border border-orange-200 rounded-2xl p-3 flex gap-3 items-start">
+                <div class="text-orange-500 mt-0.5"><i class="fa-solid fa-fire"></i></div>
+                <div class="text-orange-700">
+                    <span class="font-semibold">ל"ג בעומר</span> — 03-05.05.2026
+                </div>
+            </div>
+            <div class="bg-white border border-violet-200 rounded-2xl p-3 flex gap-3 items-start">
+                <div class="text-violet-500 mt-0.5"><i class="fa-solid fa-star"></i></div>
+                <div class="text-violet-700">
+                    <span class="font-semibold">שבועות</span> — 17.05.2026 ואילך
+                </div>
+            </div>
+        </div>
+        
+    </div>
+    
+    <!-- Edit Modal -->
+    <div id="edit-modal" onclick="if (event.target.id === 'edit-modal') closeModal()" 
+         class="hidden fixed inset-0 bg-black/60 backdrop-blur-sm z-[100] flex items-center justify-center p-4">
+        <div onclick="event.stopImmediatePropagation()" 
+             class="modal bg-white w-full max-w-md rounded-3xl shadow-2xl border border-slate-100 overflow-hidden">
+            
+            <!-- Modal Header -->
+            <div class="px-6 pt-5 pb-4 bg-slate-50 border-b flex items-center justify-between">
+                <div>
+                    <div id="modal-shift-badge" 
+                         class="inline-flex items-center px-3 py-1 rounded-2xl text-xs font-bold tracking-wider"></div>
+                    <h3 id="modal-title" class="font-bold text-xl text-slate-800 mt-1.5"></h3>
+                    <p id="modal-date" class="text-sm text-slate-500"></p>
+                </div>
+                <button onclick="closeModal()" 
+                        class="w-9 h-9 flex items-center justify-center text-slate-400 hover:text-slate-600 hover:bg-slate-100 rounded-2xl transition-colors">
+                    <i class="fa-solid fa-times text-xl"></i>
+                </button>
+            </div>
+            
+            <div class="p-6">
+                <!-- Current Assignees -->
+                <div class="mb-5">
+                    <div class="flex items-center justify-between mb-2 px-1">
+                        <span class="text-xs font-semibold text-slate-500 tracking-wider">עובדים משובצים</span>
+                        <button onclick="clearAllAssignees()" 
+                                class="text-xs px-2.5 py-1 text-red-500 hover:bg-red-50 rounded-xl flex items-center gap-x-1 transition-colors">
+                            <i class="fa-solid fa-trash text-xs"></i>
+                            <span>נקה הכל</span>
+                        </button>
+                    </div>
+                    <div id="modal-assignees" class="flex flex-wrap gap-2 min-h-[42px] p-3 bg-slate-50 border border-slate-100 rounded-2xl">
+                        <!-- Chips populated by JS -->
+                    </div>
+                </div>
+                
+                <!-- Add Employee -->
+                <div>
+                    <label class="text-xs font-semibold text-slate-500 tracking-wider px-1">הוסף עובד</label>
+                    
+                    <div class="flex gap-2 mt-1.5">
+                        <select id="employee-select" 
+                                class="flex-1 bg-white border border-slate-300 text-sm rounded-2xl px-4 py-2.5 focus:outline-none focus:border-teal-500">
+                            <!-- Options populated by JS -->
+                        </select>
+                        
+                        <button onclick="addSelectedEmployee()" 
+                                class="px-5 bg-teal-600 hover:bg-teal-700 transition-colors text-white text-sm font-semibold rounded-2xl flex items-center justify-center gap-x-2 shadow-sm">
+                            <i class="fa-solid fa-plus"></i>
+                            <span>הוסף</span>
+                        </button>
+                    </div>
+                    
+                    <!-- Custom name -->
+                    <div class="flex gap-2 mt-2">
+                        <input id="custom-name-input" type="text" placeholder="שם עובד חדש..." 
+                               class="flex-1 bg-white border border-slate-300 text-sm rounded-2xl px-4 py-2 focus:outline-none focus:border-teal-500"
+                               onkeypress="if (event.key === 'Enter') addCustomEmployee()">
+                        <button onclick="addCustomEmployee()" 
+                                class="px-4 text-sm font-medium border border-slate-300 hover:bg-slate-50 text-slate-600 rounded-2xl transition-colors">
+                            הוסף חדש
+                        </button>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="px-6 py-4 bg-slate-50 border-t flex justify-end gap-x-3">
+                <button onclick="closeModal()" 
+                        class="px-6 py-2.5 text-sm font-medium text-slate-600 hover:bg-slate-100 rounded-2xl transition-colors">
+                    ביטול
+                </button>
+                <button onclick="saveModalChanges()" 
+                        class="px-8 py-2.5 text-sm font-semibold bg-teal-600 hover:bg-teal-700 text-white rounded-2xl shadow-sm transition-all active:scale-[0.985]">
+                    שמור שינויים
+                </button>
+            </div>
+        </div>
+    </div>
+    
+    <footer class="mt-10 pb-6 text-center">
+        <p class="text-[10px] text-slate-400">
+            מערכת אינטראקטיבית לניהול משמרות • נשמר אוטומטית בדפדפן • ניתן לייצא/לייבא JSON
+        </p>
+    </footer>
+
+    <script>
+        // Tailwind script configuration
+        function initTailwind() {
+            document.documentElement.style.setProperty('--accent', '#0f766e');
+        }
+        
+        // Team members
+        let employees = ['מארק', 'רומן', 'ניר', 'גיא', 'דב', 'מרום', 'רועי'];
+        
+        // Default schedule data (parsed from the provided Excel)
+        const defaultSchedule = [
+            // Week 1 - פסח שני (26.04 - 02.05)
+            { date: "2026-04-26", hebrew: "ט אייר", day: "ראשון", holiday: "פסח שני", shifts: { בוקר: ["מארק"], צהריים: ["מרום"], לילה: [] } },
+            { date: "2026-04-27", hebrew: "י אייר", day: "שני", holiday: null, shifts: { בוקר: ["רומן"], צהריים: ["דב"], לילה: [] } },
+            { date: "2026-04-28", hebrew: "יא אייר", day: "שלישי", holiday: null, shifts: { בוקר: ["ניר"], צהריים: ["מרום"], לילה: [] } },
+            { date: "2026-04-29", hebrew: "יב אייר", day: "רביעי", holiday: null, shifts: { בוקר: ["גיא"], צהריים: ["מארק"], לילה: [] } },
+            { date: "2026-04-30", hebrew: "יג אייר", day: "חמישי", holiday: null, shifts: { בוקר: ["דב"], צהריים: ["מרום"], לילה: [] } },
+            { date: "2026-05-01", hebrew: "יד אייר", day: "שישי", holiday: null, shifts: { בוקר: ["מרום"], צהריים: [], לילה: [] } },
+            { date: "2026-05-02", hebrew: "טו אייר", day: "שבת", holiday: null, shifts: { בוקר: ["רומן"], צהריים: [], לילה: [] } },
+            
+            // Week 2 - ל"ג בעומר (03.05 - 09.05)
+            { date: "2026-05-03", hebrew: "טז אייר", day: "ראשון", holiday: "ל\"ג בעומר", shifts: { בוקר: ["מארק"], צהריים: ["מרום"], לילה: [] } },
+            { date: "2026-05-04", hebrew: "יז אייר", day: "שני", holiday: null, shifts: { בוקר: ["רומן"], צהריים: ["דב"], לילה: [] } },
+            { date: "2026-05-05", hebrew: "יח אייר", day: "שלישי", holiday: null, shifts: { בוקר: ["ניר"], צהריים: ["מרום"], לילה: [] } },
+            { date: "2026-05-06", hebrew: "יט אייר", day: "רביעי", holiday: null, shifts: { בוקר: ["מרום"], צהריים: ["מארק"], לילה: [] } },
+            { date: "2026-05-07", hebrew: "כ אייר", day: "חמישי", holiday: null, shifts: { בוקר: ["דב"], צהריים: ["מרום"], לילה: [] } },
+            { date: "2026-05-08", hebrew: "כא אייר", day: "שישי", holiday: null, shifts: { בוקר: ["דב"], צהריים: [], לילה: [] } },
+            { date: "2026-05-09", hebrew: "כב אייר", day: "שבת", holiday: null, shifts: { בוקר: ["דב"], צהריים: [], לילה: [] } },
+            
+            // Week 3 (10.05 - 16.05)
+            { date: "2026-05-10", hebrew: "כג אייר", day: "ראשון", holiday: null, shifts: { בוקר: ["מארק"], צהריים: ["מרום"], לילה: [] } },
+            { date: "2026-05-11", hebrew: "כד אייר", day: "שני", holiday: null, shifts: { בוקר: ["רומן"], צהריים: ["דב"], לילה: [] } },
+            { date: "2026-05-12", hebrew: "כה אייר", day: "שלישי", holiday: null, shifts: { בוקר: ["ניר"], צהריים: ["מרום"], לילה: [] } },
+            { date: "2026-05-13", hebrew: "כו אייר", day: "רביעי", holiday: null, shifts: { בוקר: ["גיא"], צהריים: ["מארק"], לילה: [] } },
+            { date: "2026-05-14", hebrew: "כז אייר", day: "חמישי", holiday: null, shifts: { בוקר: ["רועי"], צהריים: ["מרום"], לילה: [] } },
+            { date: "2026-05-15", hebrew: "כח אייר", day: "שישי", holiday: null, shifts: { בוקר: ["מארק"], צהריים: [], לילה: [] } },
+            { date: "2026-05-16", hebrew: "כט אייר", day: "שבת", holiday: null, shifts: { בוקר: ["מארק"], צהריים: [], לילה: [] } },
+            
+            // Week 4 - שבועות (17.05 - 23.05)
+            { date: "2026-05-17", hebrew: "א סיון", day: "ראשון", holiday: "שבועות", shifts: { בוקר: ["מארק"], צהריים: ["מרום"], לילה: [] } },
+            { date: "2026-05-18", hebrew: "ב סיון", day: "שני", holiday: null, shifts: { בוקר: ["רומן"], צהריים: ["דב"], לילה: [] } },
+            { date: "2026-05-19", hebrew: "ג סיון", day: "שלישי", holiday: null, shifts: { בוקר: ["ניר"], צהריים: ["מרום"], לילה: [] } },
+            { date: "2026-05-20", hebrew: "ד סיון", day: "רביעי", holiday: null, shifts: { בוקר: ["מרום"], צהריים: ["מארק"], לילה: [] } },
+            { date: "2026-05-21", hebrew: "ה סיון", day: "חמישי", holiday: null, shifts: { בוקר: ["דב"], צהריים: ["מרום"], לילה: [] } },
+            { date: "2026-05-22", hebrew: "ו סיון", day: "שישי", holiday: null, shifts: { בוקר: ["רומן"], צהריים: [], לילה: [] } },
+            { date: "2026-05-23", hebrew: "ז סיון", day: "שבת", holiday: null, shifts: { בוקר: ["רומן"], צהריים: [], לילה: [] } },
+            
+            // Week 5 (24.05 - 30.05)
+            { date: "2026-05-24", hebrew: "ח סיון", day: "ראשון", holiday: null, shifts: { בוקר: ["מארק"], צהריים: ["מרום"], לילה: [] } },
+            { date: "2026-05-25", hebrew: "ט סיון", day: "שני", holiday: null, shifts: { בוקר: ["רומן"], צהריים: ["דב"], לילה: [] } },
+            { date: "2026-05-26", hebrew: "י סיון", day: "שלישי", holiday: null, shifts: { בוקר: ["ניר"], צהריים: ["מרום"], לילה: [] } },
+            { date: "2026-05-27", hebrew: "יא סיון", day: "רביעי", holiday: null, shifts: { בוקר: ["גיא"], צהריים: ["מארק"], לילה: [] } },
+            { date: "2026-05-28", hebrew: "יב סיון", day: "חמישי", holiday: null, shifts: { בוקר: ["רועי"], צהריים: ["מרום"], לילה: [] } },
+            { date: "2026-05-29", hebrew: "יג סיון", day: "שישי", holiday: null, shifts: { בוקר: ["ניר"], צהריים: [], לילה: [] } },
+            { date: "2026-05-30", hebrew: "יד סיון", day: "שבת", holiday: null, shifts: { בוקר: ["ניר"], צהריים: [], לילה: [] } }
+        ];
+        
+        let scheduleData = [];
+        let currentEdit = { date: null, shiftKey: null, tempAssignees: [] };
+        let currentFilter = null; // employee name or null for filtering days
+        
+        // LocalStorage
+        const STORAGE_KEY = 'mishmarotSchedule2026_v1';
+        
+        function loadFromLocalStorage() {
+            try {
+                const saved = localStorage.getItem(STORAGE_KEY);
+                if (saved) {
+                    const parsed = JSON.parse(saved);
+                    if (Array.isArray(parsed) && parsed.length > 0) {
+                        scheduleData = parsed;
+                        return true;
+                    }
+                }
+            } catch (e) {
+                console.warn('Failed to load from localStorage', e);
+            }
+            return false;
+        }
+        
+        function saveToLocalStorage() {
+            try {
+                localStorage.setItem(STORAGE_KEY, JSON.stringify(scheduleData));
+            } catch (e) {
+                console.warn('Failed to save to localStorage', e);
+            }
+        }
+        
+        // Create a single day card
+        function createDayCard(dayData) {
+            const card = document.createElement('div');
+            card.className = `day-card flex-shrink-0 w-40 bg-white border border-slate-200 rounded-3xl shadow-sm overflow-hidden ${dayData.holiday ? 'ring-2 ring-amber-300 ring-offset-2' : ''}`;
+            
+            // Header
+            const headerHTML = `
+                <div class="px-3.5 py-3 text-center ${dayData.holiday ? 'bg-amber-50' : 'bg-slate-50'}">
+                    <div class="text-[10px] font-mono text-slate-400 tracking-[0.5px]">${dayData.date.split('-').reverse().join('.')}</div>
+                    <div class="text-[21px] leading-none font-extrabold text-slate-800 mt-0.5">${dayData.day}</div>
+                    <div class="text-xs text-slate-400 mt-0.5">${dayData.hebrew}</div>
+                </div>
+            `;
+            card.innerHTML = headerHTML;
+            
+            if (dayData.holiday) {
+                const badgeContainer = card.querySelector('.px-3\\.5');
+                const badge = document.createElement('div');
+                badge.className = `mx-auto -mt-1 mb-1 inline-flex items-center text-[9px] font-bold px-2.5 py-px rounded-full bg-amber-200 text-amber-700`;
+                badge.textContent = dayData.holiday;
+                badgeContainer.appendChild(badge);
+            }
+            
+            // Shifts section
+            const shiftsContainer = document.createElement('div');
+            shiftsContainer.className = 'p-2.5 space-y-2 bg-white';
+            
+            const shiftConfig = {
+                'בוקר': {
+                    label: 'בוקר',
+                    time: '06:30-15:30',
+                    bg: 'bg-emerald-50',
+                    border: 'border-emerald-200',
+                    text: 'text-emerald-700',
+                    chip: 'bg-emerald-100 text-emerald-800 border-emerald-200'
+                },
+                'צהריים': {
+                    label: 'צהריים',
+                    time: '13:30-22:30',
+                    bg: 'bg-amber-50',
+                    border: 'border-amber-200',
+                    text: 'text-amber-700',
+                    chip: 'bg-amber-100 text-amber-800 border-amber-200'
+                },
+                'לילה': {
+                    label: 'לילה',
+                    time: 'כונן לילה',
+                    bg: 'bg-violet-50',
+                    border: 'border-violet-200',
+                    text: 'text-violet-700',
+                    chip: 'bg-violet-100 text-violet-800 border-violet-200'
+                }
+            };
+            
+            ['בוקר', 'צהריים', 'לילה'].forEach(shiftKey => {
+                const config = shiftConfig[shiftKey];
+                const assignees = dayData.shifts[shiftKey] || [];
+                
+                const shiftRow = document.createElement('div');
+                shiftRow.className = `shift-row p-2.5 rounded-2xl border ${config.border} ${config.bg} cursor-pointer`;
+                shiftRow.dataset.date = dayData.date;
+                shiftRow.dataset.shift = shiftKey;
+                
+                // Shift header
+                const head = document.createElement('div');
+                head.className = 'flex items-center justify-between mb-1.5 px-0.5';
+                head.innerHTML = `
+                    <span class="shift-label ${config.text}">${config.label}</span>
+                    <span class="font-mono text-[10px] ${config.text} opacity-70">${config.time}</span>
+                `;
+                shiftRow.appendChild(head);
+                
+                // Assignees area
+                const assigneesWrap = document.createElement('div');
+                assigneesWrap.className = 'flex flex-wrap gap-1 min-h-[26px] px-0.5';
+                
+                if (assignees.length > 0) {
+                    assignees.forEach(name => {
+                        const chip = document.createElement('div');
+                        chip.className = `assignee-chip inline-flex items-center text-xs font-medium pl-3 pr-1.5 py-px rounded-2xl border ${config.chip} shadow-sm`;
+                        chip.innerHTML = `
+                            <span>${name}</span>
+                            <button class="ml-1.5 w-3.5 h-3.5 flex items-center justify-center text-current opacity-40 hover:opacity-100 hover:text-red-500 transition-all">×</button>
+                        `;
+                        
+                        // Remove button
+                        chip.querySelector('button').onclick = (e) => {
+                            e.stopPropagation();
+                            removeAssignee(dayData.date, shiftKey, name);
+                        };
+                        
+                        assigneesWrap.appendChild(chip);
+                    });
+                } else {
+                    const empty = document.createElement('div');
+                    empty.className = `empty-state px-1.5 py-0.5 text-slate-400`;
+                    empty.textContent = 'לא מאויש';
+                    assigneesWrap.appendChild(empty);
+                }
+                
+                shiftRow.appendChild(assigneesWrap);
+                
+                // Click to edit (but not when clicking X button)
+                shiftRow.onclick = (e) => {
+                    if (!e.target.closest('button')) {
+                        openEditModal(dayData.date, shiftKey);
+                    }
+                };
+                
+                shiftsContainer.appendChild(shiftRow);
+            });
+            
+            card.appendChild(shiftsContainer);
+            return card;
+        }
+        
+        // Render all days
+        function renderSchedule() {
+            const container = document.getElementById('days-container');
+            container.innerHTML = '';
+            
+            let visibleCount = 0;
+            
+            scheduleData.forEach(day => {
+                // Apply filter if active
+                if (currentFilter) {
+                    const isAssigned = Object.values(day.shifts).some(arr => 
+                        Array.isArray(arr) && arr.includes(currentFilter)
+                    );
+                    if (!isAssigned) return; // skip non-matching days
+                }
+                
+                const card = createDayCard(day);
+                container.appendChild(card);
+                visibleCount++;
+            });
+            
+            // Update filter bar count if active
+            const filterBar = document.getElementById('filter-bar');
+            const filterCountEl = document.getElementById('filter-count');
+            if (currentFilter && filterBar && filterCountEl) {
+                filterCountEl.textContent = `${visibleCount} ימים`;
+            }
+            
+            // Update top days count
+            const countEl = document.getElementById('days-count');
+            if (countEl) {
+                countEl.textContent = `${scheduleData.length} ימים`;
+            }
+        }
+        
+        // Update workload statistics
+        function updateStats() {
+            const container = document.getElementById('stats-container');
+            container.innerHTML = '';
+            
+            const counts = {};
+            employees.forEach(emp => counts[emp] = 0);
+            
+            // Count all assignments
+            scheduleData.forEach(day => {
+                Object.values(day.shifts).forEach(arr => {
+                    if (Array.isArray(arr)) {
+                        arr.forEach(name => {
+                            if (counts[name] !== undefined) {
+                                counts[name]++;
+                            } else {
+                                // Handle custom names not in main list
+                                counts[name] = (counts[name] || 0) + 1;
+                            }
+                        });
+                    }
+                });
+            });
+            
+            // Sort by count descending
+            const sorted = Object.entries(counts).sort((a, b) => b[1] - a[1]);
+            
+            sorted.forEach(([name, count]) => {
+                const row = document.createElement('div');
+                const isActive = currentFilter === name;
+                row.className = `flex items-center justify-between py-[5px] px-2 border-b border-slate-100 last:border-b-0 group cursor-pointer rounded-xl transition-all ${isActive ? 'bg-teal-50 ring-1 ring-teal-200' : 'hover:bg-slate-50'}`;
+                
+                const percentage = Math.min(Math.round((count / 15) * 100), 100);
+                
+                row.innerHTML = `
+                    <div class="flex items-center gap-x-2">
+                        <span class="font-medium ${isActive ? 'text-teal-700' : 'text-slate-700 group-hover:text-teal-700'} transition-colors">${name}</span>
+                    </div>
+                    <div class="flex items-center gap-x-2">
+                        <div class="w-12 h-1.5 bg-slate-100 rounded-full overflow-hidden">
+                            <div class="stats-bar h-full transition-all" style="width: ${percentage}%"></div>
+                        </div>
+                        <span class="font-mono text-xs font-bold w-5 text-right text-slate-600">${count}</span>
+                    </div>
+                `;
+                
+                // Click to filter
+                row.onclick = () => filterByEmployee(name);
+                
+                container.appendChild(row);
+            });
+        }
+        
+        // Filter schedule by employee
+        function filterByEmployee(name) {
+            currentFilter = name;
+            
+            // Show filter bar
+            const filterBar = document.getElementById('filter-bar');
+            const filterNameEl = document.getElementById('filter-name');
+            
+            if (filterBar && filterNameEl) {
+                filterBar.style.display = 'flex';
+                filterBar.classList.remove('hidden');
+                filterNameEl.textContent = name;
+            }
+            
+            renderSchedule();
+            
+            // Optional: scroll to first visible day
+            setTimeout(() => {
+                const firstCard = document.querySelector('#days-container .day-card');
+                if (firstCard) {
+                    firstCard.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'start' });
+                }
+            }, 80);
+        }
+        
+        function clearFilter() {
+            currentFilter = null;
+            
+            const filterBar = document.getElementById('filter-bar');
+            if (filterBar) {
+                filterBar.style.display = 'none';
+                filterBar.classList.add('hidden');
+            }
+            
+            renderSchedule();
+        }
+        
+        // Remove assignee from a shift
+        function removeAssignee(dateStr, shiftKey, name) {
+            const dayIndex = scheduleData.findIndex(d => d.date === dateStr);
+            if (dayIndex === -1) return;
+            
+            const day = scheduleData[dayIndex];
+            if (!day.shifts[shiftKey]) return;
+            
+            const idx = day.shifts[shiftKey].indexOf(name);
+            if (idx > -1) {
+                day.shifts[shiftKey].splice(idx, 1);
+            }
+            
+            saveToLocalStorage();
+            renderSchedule();
+            updateStats();
+        }
+        
+        // Open edit modal
+        function openEditModal(dateStr, shiftKey) {
+            const day = scheduleData.find(d => d.date === dateStr);
+            if (!day) return;
+            
+            currentEdit = {
+                date: dateStr,
+                shiftKey: shiftKey,
+                tempAssignees: [...(day.shifts[shiftKey] || [])]
+            };
+            
+            // Set modal content
+            const modal = document.getElementById('edit-modal');
+            const titleEl = document.getElementById('modal-title');
+            const dateEl = document.getElementById('modal-date');
+            const badgeEl = document.getElementById('modal-shift-badge');
+            
+            const shiftLabels = {
+                'בוקר': { label: 'בוקר', color: 'emerald' },
+                'צהריים': { label: 'צהריים', color: 'amber' },
+                'לילה': { label: 'לילה (כונן)', color: 'violet' }
+            };
+            
+            const info = shiftLabels[shiftKey];
+            
+            badgeEl.className = `inline-flex items-center px-3 py-1 rounded-2xl text-xs font-extrabold tracking-[1px] bg-${info.color}-100 text-${info.color}-700`;
+            badgeEl.textContent = info.label.toUpperCase();
+            
+            titleEl.textContent = `עריכת משמרת ${info.label}`;
+            dateEl.textContent = `${day.day} • ${day.date.split('-').reverse().join('.')} (${day.hebrew})`;
+            
+            // Render current assignees in modal
+            renderModalAssignees();
+            
+            // Populate employee select
+            populateEmployeeSelect();
+            
+            // Show modal
+            modal.classList.remove('hidden');
+            modal.classList.add('flex');
+            
+            // Focus custom input
+            setTimeout(() => {
+                document.getElementById('custom-name-input').focus();
+            }, 300);
+        }
+        
+        function renderModalAssignees() {
+            const container = document.getElementById('modal-assignees');
+            container.innerHTML = '';
+            
+            if (currentEdit.tempAssignees.length === 0) {
+                const empty = document.createElement('div');
+                empty.className = 'text-xs text-slate-400 italic px-2 py-1';
+                empty.textContent = 'אין עובדים משובצים';
+                container.appendChild(empty);
+                return;
+            }
+            
+            currentEdit.tempAssignees.forEach((name, index) => {
+                const chip = document.createElement('div');
+                chip.className = 'inline-flex items-center bg-white border border-slate-300 text-slate-700 text-sm font-medium pl-3.5 pr-2 py-1 rounded-2xl shadow-sm';
+                chip.innerHTML = `
+                    <span>${name}</span>
+                    <button class="ml-2 w-5 h-5 flex items-center justify-center text-slate-400 hover:text-red-500 transition-colors">×</button>
+                `;
+                
+                chip.querySelector('button').onclick = () => {
+                    currentEdit.tempAssignees.splice(index, 1);
+                    renderModalAssignees();
+                };
+                
+                container.appendChild(chip);
+            });
+        }
+        
+        function populateEmployeeSelect() {
+            const select = document.getElementById('employee-select');
+            select.innerHTML = '<option value="">— בחר עובד —</option>';
+            
+            employees.forEach(emp => {
+                // Don't show already selected in main list? Allow duplicates for flexibility, but prefer not
+                const option = document.createElement('option');
+                option.value = emp;
+                option.textContent = emp;
+                select.appendChild(option);
+            });
+            
+            // Add "אחר..." option
+            const otherOpt = document.createElement('option');
+            otherOpt.value = '__custom__';
+            otherOpt.textContent = 'אחר (הקלד שם חדש)...';
+            select.appendChild(otherOpt);
+        }
+        
+        function addSelectedEmployee() {
+            const select = document.getElementById('employee-select');
+            const value = select.value;
+            
+            if (!value) return;
+            
+            if (value === '__custom__') {
+                // Focus the custom input
+                document.getElementById('custom-name-input').focus();
+                return;
+            }
+            
+            if (!currentEdit.tempAssignees.includes(value)) {
+                currentEdit.tempAssignees.push(value);
+                renderModalAssignees();
+            }
+            
+            // Reset select
+            select.value = '';
+        }
+        
+        function addCustomEmployee() {
+            const input = document.getElementById('custom-name-input');
+            const name = input.value.trim();
+            
+            if (!name) return;
+            
+            if (!currentEdit.tempAssignees.includes(name)) {
+                currentEdit.tempAssignees.push(name);
+                
+                // Add to employees list if new
+                if (!employees.includes(name)) {
+                    employees.push(name);
+                }
+                
+                renderModalAssignees();
+            }
+            
+            input.value = '';
+        }
+        
+        function clearAllAssignees() {
+            currentEdit.tempAssignees = [];
+            renderModalAssignees();
+        }
+        
+        function saveModalChanges() {
+            const day = scheduleData.find(d => d.date === currentEdit.date);
+            if (!day) return;
+            
+            if (!day.shifts[currentEdit.shiftKey]) {
+                day.shifts[currentEdit.shiftKey] = [];
+            }
+            
+            day.shifts[currentEdit.shiftKey] = [...currentEdit.tempAssignees];
+            
+            saveToLocalStorage();
+            closeModal();
+            renderSchedule();
+            updateStats();
+        }
+        
+        function closeModal() {
+            const modal = document.getElementById('edit-modal');
+            modal.classList.remove('flex');
+            modal.classList.add('hidden');
+            currentEdit = { date: null, shiftKey: null, tempAssignees: [] };
+        }
+        
+        // Export to JSON file
+        function exportToJson() {
+            const exportData = {
+                meta: {
+                    title: "סידור משמרות - מדור תמיכה",
+                    period: "26.04.2026 - 30.05.2026",
+                    exportedAt: new Date().toISOString(),
+                    version: 1,
+                    source: "Interactive Shift Scheduler"
+                },
+                employees: employees,
+                schedule: scheduleData
+            };
+            
+            const dataStr = JSON.stringify(exportData, null, 2);
+            const blob = new Blob([dataStr], { type: 'application/json;charset=utf-8' });
+            const url = URL.createObjectURL(blob);
+            
+            const link = document.createElement('a');
+            link.href = url;
+            link.download = `sidur-mishmarot-2026-04-05-${new Date().toISOString().slice(0,10)}.json`;
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+            URL.revokeObjectURL(url);
+        }
+        
+        // Import from JSON
+        function importFromJson(event) {
+            const file = event.target.files[0];
+            if (!file) return;
+            
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                try {
+                    const imported = JSON.parse(e.target.result);
+                    
+                    if (imported.schedule && Array.isArray(imported.schedule)) {
+                        scheduleData = imported.schedule;
+                        
+                        // Merge employees if provided
+                        if (imported.employees && Array.isArray(imported.employees)) {
+                            imported.employees.forEach(emp => {
+                                if (!employees.includes(emp)) {
+                                    employees.push(emp);
+                                }
+                            });
+                        }
+                        
+                        saveToLocalStorage();
+                        renderSchedule();
+                        updateStats();
+                        
+                        // Success feedback
+                        const originalText = event.target.parentElement.innerHTML;
+                        showToast('הקובץ יובא בהצלחה! השינויים נשמרו.');
+                    } else {
+                        showToast('קובץ JSON לא תקין. ודא שהוא מכיל שדה "schedule".', true);
+                    }
+                } catch (err) {
+                    showToast('שגיאה בקריאת הקובץ: ' + err.message, true);
+                }
+                
+                // Reset file input
+                event.target.value = '';
+            };
+            
+            reader.readAsText(file);
+        }
+        
+        // ==================== EXCEL PARSER ====================
+        function handleExcelUpload(event) {
+            const file = event.target.files[0];
+            if (!file) return;
+            
+            if (typeof XLSX === 'undefined') {
+                showToast('שגיאה: ספריית XLSX לא נטענה. נסה לרענן את הדף או להשתמש בדפדפן אחר.', true);
+                event.target.value = '';
+                return;
+            }
+            
+            showToast('טוען קובץ אקסל...');
+            
+            parseExcelSchedule(file)
+                .then(newSchedule => {
+                    if (newSchedule.length === 0) {
+                        showToast('לא נמצאו נתונים תקינים בקובץ.', true);
+                        return;
+                    }
+                    
+                    scheduleData = newSchedule;
+                    
+                    // Auto-detect and add new employees from the parsed data
+                    const detectedEmployees = new Set(employees);
+                    newSchedule.forEach(day => {
+                        Object.values(day.shifts).forEach(arr => {
+                            if (Array.isArray(arr)) {
+                                arr.forEach(name => detectedEmployees.add(name));
+                            }
+                        });
+                    });
+                    employees = Array.from(detectedEmployees);
+                    
+                    saveToLocalStorage();
+                    renderSchedule();
+                    updateStats();
+                    
+                    showToast(`נטען בהצלחה! ${newSchedule.length} ימים מהאקסל.`);
+                })
+                .catch(err => {
+                    console.error(err);
+                    if (err.message.includes('XLSX') || typeof XLSX === 'undefined') {
+                        showToast('שגיאה: ספריית XLSX לא נטענה מה-CDN. נסה לרענן את הדף (F5) או לפתוח ב-Chrome/Edge.', true);
+                    } else {
+                        showToast('שגיאה בטעינת קובץ האקסל: ' + err.message, true);
+                    }
+                })
+                .finally(() => {
+                    event.target.value = ''; // reset input
+                });
+        }
+        
+        async function parseExcelSchedule(file) {
+            return new Promise((resolve, reject) => {
+                const reader = new FileReader();
+                reader.onload = (e) => {
+                    try {
+                        const data = new Uint8Array(e.target.result);
+                        const workbook = XLSX.read(data, { type: 'array' });
+                        
+                        // Find the main data sheet (usually Sheet1)
+                        let sheet = workbook.Sheets['Sheet1'] || workbook.Sheets[workbook.SheetNames[0]];
+                        if (!sheet) throw new Error('לא נמצא גיליון נתונים');
+                        
+                        const rows = XLSX.utils.sheet_to_json(sheet, { header: 1, defval: '', blankrows: false });
+                        
+                        const parsedDays = [];
+                        const dateRegex = /^\d{2}\.\d{2}\.\d{2}$/;
+                        
+                        for (let i = 0; i < rows.length; i++) {
+                            const row = rows[i];
+                            
+                            // Look for a row that contains Gregorian dates (start of week block)
+                            const dateCells = row.map((cell, idx) => ({cell, idx})).filter(x => 
+                                typeof x.cell === 'string' && dateRegex.test(x.cell)
+                            );
+                            
+                            if (dateCells.length >= 7) {
+                                // Found date row → this starts a new week
+                                const weekDates = dateCells.slice(0, 7).map(x => x.cell); // take first 7 dates
+                                
+                                // Find the morning shift row (משמרת א) - usually 1-2 rows below
+                                let morningRow = null;
+                                let afternoonRow = null;
+                                
+                                for (let j = i + 1; j < Math.min(i + 6, rows.length); j++) {
+                                    const r = rows[j];
+                                    const joined = r.join(' ').toLowerCase();
+                                    if (joined.includes('משמרת א') || joined.includes('06:30')) {
+                                        morningRow = r;
+                                    }
+                                    if (joined.includes('משמרת ב') || joined.includes('13:30')) {
+                                        afternoonRow = r;
+                                    }
+                                }
+                                
+                                if (!morningRow || !afternoonRow) continue;
+                                
+                                // Extract names (columns after the time column, usually index 4 onwards)
+                                // Typical structure: [note, , משמרת א, 06:30-15:30, name1, name2, ..., name7]
+                                const morningNames = extractNamesFromRow(morningRow);
+                                const afternoonNames = extractNamesFromRow(afternoonRow);
+                                
+                                // Create 7 day objects
+                                for (let d = 0; d < 7; d++) {
+                                    const gregorian = weekDates[d]; // "31.05.26"
+                                    if (!gregorian) continue;
+                                    
+                                    const [dd, mm, yy] = gregorian.split('.');
+                                    const isoDate = `20${yy}-${mm}-${dd}`;
+                                    
+                                    // Try to get Hebrew date from previous row if available
+                                    const hebrewRow = rows[i - 1] || [];
+                                    const hebrewDate = hebrewRow[dateCells[0].idx + d] || '';
+                                    
+                                    // Day name from row i+1 or i+2
+                                    const dayNameRow = rows[i + 2] || rows[i + 1] || [];
+                                    const dayName = dayNameRow[dateCells[0].idx + d] || '';
+                                    
+                                    parsedDays.push({
+                                        date: isoDate,
+                                        hebrew: hebrewDate || '',
+                                        day: dayName || '',
+                                        holiday: null,
+                                        shifts: {
+                                            בוקר: morningNames[d] ? [morningNames[d]] : [],
+                                            צהריים: afternoonNames[d] ? [afternoonNames[d]] : [],
+                                            לילה: []
+                                        }
+                                    });
+                                }
+                            }
+                        }
+                        
+                        resolve(parsedDays);
+                    } catch (err) {
+                        reject(err);
+                    }
+                };
+                reader.onerror = () => reject(new Error('שגיאה בקריאת הקובץ'));
+                reader.readAsArrayBuffer(file);
+            });
+        }
+        
+        function extractNamesFromRow(row) {
+            // Find the column where the first name starts (after time like 06:30-15:30)
+            let startIdx = -1;
+            for (let i = 0; i < row.length; i++) {
+                if (typeof row[i] === 'string' && /^\d{2}:\d{2}/.test(row[i])) {
+                    startIdx = i + 1;
+                    break;
+                }
+            }
+            if (startIdx === -1) startIdx = 4; // fallback
+            
+            const names = [];
+            for (let i = startIdx; i < startIdx + 7 && i < row.length; i++) {
+                const val = row[i];
+                if (val && typeof val === 'string' && val.trim() !== '') {
+                    names.push(val.trim());
+                } else {
+                    names.push(null);
+                }
+            }
+            return names;
+        }
+        
+        function showToast(message, isError = false) {
+            const toast = document.createElement('div');
+            toast.className = `fixed bottom-5 left-1/2 -translate-x-1/2 px-6 py-3 rounded-2xl shadow-xl text-sm font-medium z-[200] flex items-center gap-x-3 ${isError ? 'bg-red-600 text-white' : 'bg-teal-600 text-white'}`;
+            toast.innerHTML = `
+                <span>${message}</span>
+            `;
+            document.body.appendChild(toast);
+            
+            setTimeout(() => {
+                toast.style.transition = 'all 0.3s ease';
+                toast.style.opacity = '0';
+                setTimeout(() => toast.parentNode.removeChild(toast), 300);
+            }, 2800);
+        }
+        
+        // Reset to original Excel data
+        function resetToDefault() {
+            if (!confirm('האם לאפס את כל השינויים ולחזור לנתוני ברירת המחדל מהאקסל?')) {
+                return;
+            }
+            
+            scheduleData = JSON.parse(JSON.stringify(defaultSchedule));
+            localStorage.removeItem(STORAGE_KEY);
+            
+            renderSchedule();
+            updateStats();
+            
+            showToast('הנתונים אופסו לברירת המחדל.');
+        }
+        
+        // Keyboard support
+        function initKeyboard() {
+            document.addEventListener('keydown', function(e) {
+                if (e.key === 'Escape') {
+                    const modal = document.getElementById('edit-modal');
+                    if (!modal.classList.contains('hidden')) {
+                        closeModal();
+                    }
+                }
+                
+                if (e.key === '/' && document.activeElement.tagName === 'BODY') {
+                    e.preventDefault();
+                    const firstDay = document.querySelector('.day-card');
+                    if (firstDay) firstDay.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                }
+            });
+            
+            // Hint in console
+            console.log('%c[Shift Scheduler] Press "/" to quickly scroll to schedule', 'color:#64748b');
+        }
+        
+        // Initialize everything
+        function init() {
+            initTailwind();
+            
+            // Load saved data or use default
+            const hasSaved = loadFromLocalStorage();
+            if (!hasSaved || scheduleData.length === 0) {
+                scheduleData = JSON.parse(JSON.stringify(defaultSchedule));
+            }
+            
+            // Render UI
+            renderSchedule();
+            updateStats();
+            
+            // Keyboard shortcuts
+            initKeyboard();
+            
+            // Easter egg / tip
+            setTimeout(() => {
+                const container = document.getElementById('days-container');
+                if (container) {
+                    container.addEventListener('scroll', function onFirstScroll() {
+                        // Optional: could show a one-time tip
+                        container.removeEventListener('scroll', onFirstScroll);
+                    }, { once: true });
+                }
+            }, 1200);
+            
+            // Welcome toast on first visit (only if no saved data)
+            if (!hasSaved) {
+                setTimeout(() => {
+                    // showToast('ברוך הבא! לחץ על כל משמרת כדי לערוך את השיבוץ.');
+                }, 1800);
+            }
+            
+            console.log('%c[✓] Interactive Shift Scheduler initialized successfully', 'color:#14b8a6');
+        }
+        
+        // Boot the application
+        window.onload = init;
+    </script>
+</body>
+</html>
