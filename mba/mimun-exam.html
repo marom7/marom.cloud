@@ -1,0 +1,1744 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>מימון למנהלים — מחברת מבחנים</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Frank+Ruhl+Libre:wght@400;500;700;900&family=Heebo:wght@300;400;500;700&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #f5efe4;
+    --bg-alt: #ede4d1;
+    --paper: #faf6ee;
+    --ink: #1a2942;
+    --ink-soft: #3a4860;
+    --ink-muted: #6b7588;
+    --amber: #b8651a;
+    --amber-soft: #d89656;
+    --amber-bg: #f4e4cf;
+    --green: #4a6741;
+    --green-bg: #e1ebd8;
+    --rust: #a04230;
+    --rust-bg: #f0d8d0;
+    --rule: #c9bfa8;
+    --rule-soft: #ddd3bd;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    background: var(--bg);
+    color: var(--ink);
+    font-family: 'Heebo', sans-serif;
+    font-weight: 400;
+    line-height: 1.7;
+    font-size: 17px;
+    min-height: 100vh;
+    background-image:
+      radial-gradient(circle at 20% 10%, rgba(184,101,26,0.04) 0%, transparent 50%),
+      radial-gradient(circle at 80% 90%, rgba(74,103,65,0.04) 0%, transparent 50%);
+  }
+
+  /* Paper grain texture */
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    opacity: 0.4;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 0.1 0 0 0 0 0.16 0 0 0 0 0.25 0 0 0 0.06 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+    z-index: 1;
+  }
+
+  /* Hero / Header */
+  header.hero {
+    position: relative;
+    padding: 80px 40px 60px;
+    background: linear-gradient(180deg, var(--paper) 0%, var(--bg) 100%);
+    border-bottom: 1px solid var(--rule);
+    overflow: hidden;
+    z-index: 2;
+  }
+
+  header.hero::after {
+    content: '';
+    position: absolute;
+    top: 30px;
+    left: 30px;
+    width: 180px;
+    height: 180px;
+    border: 2px solid var(--amber);
+    border-radius: 50%;
+    opacity: 0.15;
+    z-index: 0;
+  }
+
+  .hero-inner {
+    max-width: 1200px;
+    margin: 0 auto;
+    position: relative;
+    z-index: 2;
+  }
+
+  .eyebrow {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 13px;
+    letter-spacing: 0.15em;
+    color: var(--amber);
+    text-transform: uppercase;
+    margin-bottom: 24px;
+    display: flex;
+    align-items: center;
+    gap: 16px;
+  }
+
+  .eyebrow::before {
+    content: '';
+    width: 40px;
+    height: 1px;
+    background: var(--amber);
+  }
+
+  h1.hero-title {
+    font-family: 'Frank Ruhl Libre', serif;
+    font-weight: 900;
+    font-size: clamp(48px, 7vw, 96px);
+    line-height: 0.95;
+    color: var(--ink);
+    margin-bottom: 28px;
+    letter-spacing: -0.02em;
+  }
+
+  h1.hero-title em {
+    font-style: italic;
+    font-weight: 400;
+    color: var(--amber);
+  }
+
+  .hero-meta {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 32px;
+    margin-top: 40px;
+    padding-top: 32px;
+    border-top: 1px solid var(--rule);
+    font-size: 14px;
+    color: var(--ink-muted);
+  }
+
+  .hero-meta strong {
+    color: var(--ink);
+    font-weight: 500;
+    display: block;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    margin-bottom: 4px;
+  }
+
+  .hero-subtitle {
+    font-size: 19px;
+    color: var(--ink-soft);
+    max-width: 680px;
+    font-weight: 300;
+    line-height: 1.6;
+  }
+
+  /* Exam selector */
+  nav.exam-nav {
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    background: var(--paper);
+    border-bottom: 1px solid var(--rule);
+    padding: 0;
+    backdrop-filter: blur(8px);
+  }
+
+  .nav-inner {
+    max-width: 1200px;
+    margin: 0 auto;
+    display: flex;
+    align-items: stretch;
+    padding: 0 40px;
+  }
+
+  .nav-tab {
+    padding: 22px 32px;
+    font-family: 'Frank Ruhl Libre', serif;
+    font-size: 19px;
+    font-weight: 500;
+    color: var(--ink-muted);
+    cursor: pointer;
+    border: none;
+    background: transparent;
+    border-bottom: 3px solid transparent;
+    transition: all 0.25s ease;
+    position: relative;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+
+  .nav-tab .tab-num {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 12px;
+    color: var(--amber);
+    background: var(--amber-bg);
+    padding: 2px 8px;
+    border-radius: 3px;
+  }
+
+  .nav-tab:hover {
+    color: var(--ink);
+  }
+
+  .nav-tab.active {
+    color: var(--ink);
+    border-bottom-color: var(--amber);
+  }
+
+  .nav-tab.active .tab-num {
+    background: var(--amber);
+    color: var(--paper);
+  }
+
+  /* Main content */
+  main {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 60px 40px 100px;
+    position: relative;
+    z-index: 2;
+  }
+
+  .exam-panel {
+    display: none;
+  }
+
+  .exam-panel.active {
+    display: block;
+    animation: fadeIn 0.4s ease;
+  }
+
+  @keyframes fadeIn {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  .exam-header {
+    margin-bottom: 48px;
+    padding-bottom: 32px;
+    border-bottom: 2px solid var(--ink);
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+    gap: 40px;
+    flex-wrap: wrap;
+  }
+
+  .exam-title-block h2 {
+    font-family: 'Frank Ruhl Libre', serif;
+    font-size: 56px;
+    font-weight: 700;
+    line-height: 1.05;
+    margin-bottom: 12px;
+    letter-spacing: -0.01em;
+  }
+
+  .exam-title-block .exam-sub {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 13px;
+    letter-spacing: 0.1em;
+    color: var(--ink-muted);
+    text-transform: uppercase;
+  }
+
+  .exam-stats {
+    display: flex;
+    gap: 32px;
+  }
+
+  .stat {
+    text-align: right;
+  }
+
+  .stat .num {
+    font-family: 'Frank Ruhl Libre', serif;
+    font-size: 42px;
+    font-weight: 700;
+    color: var(--amber);
+    line-height: 1;
+    display: block;
+  }
+
+  .stat .label {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: var(--ink-muted);
+    margin-top: 6px;
+  }
+
+  /* Question cards */
+  .question {
+    background: var(--paper);
+    border: 1px solid var(--rule);
+    margin-bottom: 24px;
+    padding: 0;
+    position: relative;
+    transition: box-shadow 0.3s ease;
+  }
+
+  .question:hover {
+    box-shadow: 0 4px 30px rgba(26,41,66,0.08);
+  }
+
+  .q-header {
+    padding: 28px 32px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 24px;
+    border-bottom: 1px solid var(--rule-soft);
+    background: linear-gradient(to left, transparent 0%, rgba(184,101,26,0.03) 100%);
+  }
+
+  .q-num-block {
+    display: flex;
+    align-items: baseline;
+    gap: 20px;
+  }
+
+  .q-num {
+    font-family: 'Frank Ruhl Libre', serif;
+    font-size: 64px;
+    font-weight: 900;
+    color: var(--amber);
+    line-height: 0.85;
+    letter-spacing: -0.04em;
+  }
+
+  .q-title {
+    font-family: 'Frank Ruhl Libre', serif;
+    font-size: 26px;
+    font-weight: 500;
+    color: var(--ink);
+    line-height: 1.3;
+    max-width: 600px;
+  }
+
+  .q-points {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 13px;
+    color: var(--amber);
+    background: var(--amber-bg);
+    padding: 6px 12px;
+    border-radius: 3px;
+    font-weight: 600;
+    white-space: nowrap;
+  }
+
+  .q-body {
+    padding: 32px;
+  }
+
+  .q-text {
+    color: var(--ink-soft);
+    font-size: 16px;
+    line-height: 1.85;
+    margin-bottom: 24px;
+  }
+
+  .q-text p {
+    margin-bottom: 14px;
+  }
+
+  .q-text ul, .q-text ol {
+    margin: 14px 24px;
+  }
+
+  .q-text li {
+    margin-bottom: 8px;
+  }
+
+  .data-list {
+    background: var(--bg-alt);
+    border-right: 3px solid var(--amber);
+    padding: 20px 24px;
+    margin: 20px 0;
+    list-style: none !important;
+  }
+
+  .data-list li {
+    padding: 4px 0;
+    font-size: 15.5px;
+    line-height: 1.7;
+  }
+
+  .data-list li::before {
+    content: '◆ ';
+    color: var(--amber);
+    font-size: 11px;
+    margin-left: 8px;
+  }
+
+  /* Solution toggle */
+  .solution-toggle {
+    background: var(--ink);
+    color: var(--paper);
+    border: none;
+    padding: 16px 28px;
+    font-family: 'Heebo', sans-serif;
+    font-size: 15px;
+    font-weight: 500;
+    cursor: pointer;
+    width: 100%;
+    text-align: right;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    transition: background 0.2s ease;
+    margin-top: 16px;
+  }
+
+  .solution-toggle:hover {
+    background: var(--ink-soft);
+  }
+
+  .solution-toggle .icon {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 18px;
+    transition: transform 0.3s ease;
+  }
+
+  .solution-toggle.open .icon {
+    transform: rotate(45deg);
+  }
+
+  .solution {
+    display: none;
+    padding: 32px;
+    background: var(--bg);
+    border-top: 1px solid var(--rule);
+  }
+
+  .solution.open {
+    display: block;
+    animation: slideDown 0.4s ease;
+  }
+
+  @keyframes slideDown {
+    from { opacity: 0; transform: translateY(-10px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  .sol-label {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--amber);
+    margin-bottom: 20px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+
+  .sol-label::before {
+    content: '';
+    width: 24px;
+    height: 1px;
+    background: var(--amber);
+  }
+
+  .step {
+    margin-bottom: 28px;
+    padding-right: 24px;
+    border-right: 2px solid var(--amber-soft);
+    position: relative;
+  }
+
+  .step-num {
+    font-family: 'Frank Ruhl Libre', serif;
+    font-size: 14px;
+    font-weight: 700;
+    color: var(--paper);
+    background: var(--amber);
+    padding: 3px 10px;
+    border-radius: 2px;
+    display: inline-block;
+    margin-bottom: 10px;
+    letter-spacing: 0.05em;
+  }
+
+  .step h4 {
+    font-family: 'Frank Ruhl Libre', serif;
+    font-size: 21px;
+    font-weight: 500;
+    color: var(--ink);
+    margin-bottom: 12px;
+  }
+
+  .step p {
+    color: var(--ink-soft);
+    margin-bottom: 12px;
+    font-size: 15.5px;
+  }
+
+  /* Formula box */
+  .formula {
+    background: var(--paper);
+    border: 1px solid var(--rule);
+    border-right: 4px solid var(--amber);
+    padding: 16px 22px;
+    margin: 14px 0;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 14.5px;
+    color: var(--ink);
+    line-height: 1.9;
+    direction: ltr;
+    text-align: left;
+    overflow-x: auto;
+    border-radius: 2px;
+  }
+
+  .formula .var { color: var(--amber); font-weight: 600; }
+  .formula .op { color: var(--rust); }
+  .formula .res { color: var(--green); font-weight: 600; }
+  .formula .num { color: var(--ink); }
+  .formula .comment { color: var(--ink-muted); font-style: italic; }
+
+  /* Insight / explanation box */
+  .insight {
+    background: var(--green-bg);
+    border-right: 3px solid var(--green);
+    padding: 16px 22px;
+    margin: 16px 0;
+    border-radius: 2px;
+  }
+
+  .insight strong {
+    font-family: 'Frank Ruhl Libre', serif;
+    font-weight: 700;
+    color: var(--green);
+    font-size: 14px;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    margin-left: 8px;
+  }
+
+  .insight p {
+    color: var(--ink);
+    font-size: 15px;
+    line-height: 1.65;
+    margin: 0;
+    display: inline;
+  }
+
+  .warning {
+    background: var(--rust-bg);
+    border-right: 3px solid var(--rust);
+    padding: 16px 22px;
+    margin: 16px 0;
+    border-radius: 2px;
+  }
+
+  .warning strong {
+    font-family: 'Frank Ruhl Libre', serif;
+    font-weight: 700;
+    color: var(--rust);
+    font-size: 14px;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    margin-left: 8px;
+  }
+
+  .warning p {
+    color: var(--ink);
+    font-size: 15px;
+    line-height: 1.65;
+    margin: 0;
+    display: inline;
+  }
+
+  /* Tables for cash flows */
+  .cf-table-wrap {
+    overflow-x: auto;
+    margin: 18px 0;
+    border: 1px solid var(--rule);
+    background: var(--paper);
+  }
+
+  .cf-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 12.5px;
+    direction: ltr;
+  }
+
+  .cf-table th {
+    background: var(--ink);
+    color: var(--paper);
+    padding: 10px 12px;
+    font-weight: 500;
+    text-align: center;
+    letter-spacing: 0.03em;
+    white-space: nowrap;
+  }
+
+  .cf-table th:first-child {
+    text-align: right;
+    direction: rtl;
+    font-family: 'Heebo', sans-serif;
+    font-size: 13px;
+  }
+
+  .cf-table td {
+    padding: 8px 12px;
+    border-top: 1px solid var(--rule-soft);
+    text-align: center;
+  }
+
+  .cf-table td:first-child {
+    text-align: right;
+    direction: rtl;
+    font-family: 'Heebo', sans-serif;
+    font-size: 13.5px;
+    font-weight: 500;
+    background: var(--bg-alt);
+    white-space: nowrap;
+  }
+
+  .cf-table tr:nth-child(even) td:not(:first-child) {
+    background: rgba(184,101,26,0.03);
+  }
+
+  .cf-table .neg { color: var(--rust); }
+  .cf-table .pos { color: var(--green); }
+  .cf-table .total td {
+    background: var(--amber-bg) !important;
+    font-weight: 700;
+    border-top: 2px solid var(--amber);
+  }
+
+  /* Answer / final result */
+  .answer {
+    background: var(--ink);
+    color: var(--paper);
+    padding: 22px 28px;
+    margin: 24px 0 8px;
+    font-family: 'Frank Ruhl Libre', serif;
+    font-size: 20px;
+    font-weight: 500;
+    line-height: 1.5;
+    border-right: 5px solid var(--amber);
+  }
+
+  .answer strong {
+    color: var(--amber-soft);
+    font-weight: 700;
+    margin-left: 10px;
+    font-size: 22px;
+  }
+
+  /* Footer */
+  footer {
+    background: var(--ink);
+    color: var(--paper);
+    padding: 60px 40px;
+    margin-top: 80px;
+    position: relative;
+    z-index: 2;
+  }
+
+  .footer-inner {
+    max-width: 1200px;
+    margin: 0 auto;
+  }
+
+  .footer-title {
+    font-family: 'Frank Ruhl Libre', serif;
+    font-size: 32px;
+    font-weight: 500;
+    margin-bottom: 8px;
+  }
+
+  .footer-sub {
+    color: rgba(245,239,228,0.6);
+    font-size: 14px;
+    margin-bottom: 32px;
+  }
+
+  .footer-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 32px;
+    padding-top: 32px;
+    border-top: 1px solid rgba(245,239,228,0.15);
+  }
+
+  .footer-item {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 12px;
+    line-height: 1.7;
+  }
+
+  .footer-item strong {
+    display: block;
+    color: var(--amber-soft);
+    text-transform: uppercase;
+    letter-spacing: 0.15em;
+    font-size: 10px;
+    margin-bottom: 10px;
+  }
+
+  .footer-item span {
+    color: rgba(245,239,228,0.8);
+  }
+
+  /* Small details */
+  .pill {
+    display: inline-block;
+    padding: 2px 10px;
+    background: var(--amber-bg);
+    color: var(--amber);
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    border-radius: 2px;
+    margin: 0 4px;
+    font-weight: 600;
+  }
+
+  .pill.green {
+    background: var(--green-bg);
+    color: var(--green);
+  }
+
+  .pill.rust {
+    background: var(--rust-bg);
+    color: var(--rust);
+  }
+
+  /* Responsive */
+  @media (max-width: 768px) {
+    header.hero { padding: 50px 24px 40px; }
+    main { padding: 40px 20px 60px; }
+    .nav-inner { padding: 0 20px; overflow-x: auto; }
+    .nav-tab { padding: 18px 18px; font-size: 16px; white-space: nowrap; }
+    .q-header { flex-direction: column; align-items: stretch; padding: 24px 22px; }
+    .q-body { padding: 22px; }
+    .solution { padding: 22px; }
+    .q-num { font-size: 48px; }
+    .q-title { font-size: 21px; }
+    .exam-title-block h2 { font-size: 36px; }
+    .exam-header { flex-direction: column; align-items: stretch; gap: 24px; }
+    .exam-stats { gap: 20px; }
+    .stat .num { font-size: 32px; }
+  }
+
+  /* Marginalia decoration */
+  .marginalia {
+    position: absolute;
+    left: -50px;
+    top: 32px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    color: var(--amber);
+    writing-mode: vertical-rl;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    opacity: 0.6;
+  }
+
+  @media (max-width: 1100px) {
+    .marginalia { display: none; }
+  }
+</style>
+</head>
+<body>
+
+<header class="hero">
+  <div class="hero-inner">
+    <div class="eyebrow">MBA · אוניברסיטת בן-גוריון בנגב · ד"ר דוד פלד</div>
+    <h1 class="hero-title">מימון<br><em>למנהלים</em></h1>
+    <p class="hero-subtitle">מחברת מבחנים אינטראקטיבית — שני מועדי בחינה מלאים עם פתרונות מפורטים, הסברים שלב-אחר-שלב, וטיפים לקראת הבחינה.</p>
+    <div class="hero-meta">
+      <div>
+        <strong>בחינה קרובה</strong>
+        29 במאי 2026 · 09:00
+      </div>
+      <div>
+        <strong>משך</strong>
+        3 שעות
+      </div>
+      <div>
+        <strong>חומר עזר</strong>
+        מחשבון בלבד
+      </div>
+      <div>
+        <strong>יעד</strong>
+        65 / 100
+      </div>
+    </div>
+  </div>
+</header>
+
+<nav class="exam-nav">
+  <div class="nav-inner">
+    <button class="nav-tab active" data-exam="2020">
+      <span class="tab-num">2020</span>
+      מועד מאי 2020
+    </button>
+    <button class="nav-tab" data-exam="2019">
+      <span class="tab-num">2019</span>
+      מועד מאי 2019
+    </button>
+  </div>
+</nav>
+
+<main>
+
+<!-- ====================== EXAM 2020 ====================== -->
+<section class="exam-panel active" id="exam-2020">
+
+  <div class="exam-header">
+    <div class="exam-title-block">
+      <h2>בחינה — 22 במאי 2020</h2>
+      <div class="exam-sub">קורס 687-2-0067 · מועד א' · סמסטר ב' תש"פ</div>
+    </div>
+    <div class="exam-stats">
+      <div class="stat"><span class="num">6</span><div class="label">שאלות</div></div>
+      <div class="stat"><span class="num">100</span><div class="label">נקודות</div></div>
+      <div class="stat"><span class="num">3h</span><div class="label">משך</div></div>
+    </div>
+  </div>
+
+  <!-- Q1 -->
+  <article class="question">
+    <div class="q-header">
+      <div class="q-num-block">
+        <div class="q-num">01</div>
+        <div class="q-title">חברת "סי.קום" — הפעלת שירותים סלולריים</div>
+      </div>
+      <div class="q-points">32 נקודות</div>
+    </div>
+    <div class="q-body">
+      <div class="q-text">
+        <p>חברת "סי.קום" הפועלת בענף התקשורת מעוניינת להפעיל שירותים סלולריים חדשים למשך 10 השנים הבאות. להלן צפי מספר המנויים של החברה:</p>
+        <ul class="data-list">
+          <li>שנה 1: 300,000 מנויים · שנה 2: 400,000 · שנים 3–10: 500,000</li>
+          <li>מחיר מנוי: 800 ש"ח בשנה</li>
+          <li>הוצאות משתנות: 500 ש"ח לשנה למנוי</li>
+          <li>שכר עובדים חדשים: 40 מיליון ש"ח לשנה</li>
+          <li>הון חוזר: בתחילת כל שנה, 100 ש"ח כפול מספר המנויים</li>
+          <li>השקעה בתשתיות: 500 מיליון ש"ח · שדרוג שנה 5: 150 מיליון</li>
+          <li>מבנה קיים: ערך שוק 200 מ' (עלות היסטורית 200 מ', מופחת בקו ישר על פני 5 שנים) · ערך שוק בעוד 10 שנים: 100 מ'</li>
+          <li>מחיר ההון (אחר מס): 7% · מס שוטף: 30% · מס רווחי הון: 25%</li>
+          <li>פחת קו ישר לצורכי מס על פני 10 שנים</li>
+        </ul>
+        <p>חשבו את ה-NPV של ההפעלה — האם פעילות זו כדאית לחברה?</p>
+      </div>
+      <button class="solution-toggle">
+        <span>הצג פתרון מלא + הסברים</span>
+        <span class="icon">+</span>
+      </button>
+      <div class="solution">
+        <div class="sol-label">פתרון מפורט</div>
+
+        <div class="step">
+          <div class="step-num">שלב 1</div>
+          <h4>חישוב פחת והשקעה ראשונית</h4>
+          <p>השקעת תשתיות מתפחתת על פני 10 שנים: <span class="pill">500 ÷ 10 = 50 מ'/שנה</span></p>
+          <p>שדרוג בשנה 5 בסך 150 מ' ש"ח — לפי הנתונים <strong>מוכר כהוצאה במועד התהוותו</strong> ולכן לא מתפחת אלא מורד מהרווח החייב במס באותה שנה.</p>
+          <p>מבנה החברה: עלות היסטורית 200 מ', מופחת על פני 5 שנים (כבר הופחת במלואו) → ערך בספרים = 0.</p>
+          <div class="formula">
+<span class="comment"># עלות אלטרנטיבית של המבנה (Adjusted Market Value)</span>
+<span class="var">I_M*</span> <span class="op">=</span> <span class="var">I_M</span> <span class="op">-</span> <span class="var">Tc</span> <span class="op">·</span> (<span class="var">I_M</span> <span class="op">-</span> <span class="var">I_B</span>)
+<span class="var">I_M*</span> <span class="op">=</span> <span class="num">200</span> <span class="op">-</span> <span class="num">0.25</span> <span class="op">·</span> (<span class="num">200</span> <span class="op">-</span> <span class="num">0</span>) <span class="op">=</span> <span class="res">150 מ' ש"ח</span>
+          </div>
+        </div>
+
+        <div class="step">
+          <div class="step-num">שלב 2</div>
+          <h4>טבלת תזרים המזומנים (במיליוני ש"ח)</h4>
+          <div class="cf-table-wrap">
+            <table class="cf-table">
+              <thead>
+                <tr>
+                  <th>סעיף</th>
+                  <th>0</th><th>1</th><th>2</th><th>3</th><th>4</th><th>5</th><th>6</th><th>7</th><th>8</th><th>9</th><th>10</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr><td>מספר מנויים (אלפים)</td><td>—</td><td>300</td><td>400</td><td>500</td><td>500</td><td>500</td><td>500</td><td>500</td><td>500</td><td>500</td><td>500</td></tr>
+                <tr><td>הכנסות</td><td>—</td><td>240</td><td>320</td><td>400</td><td>400</td><td>400</td><td>400</td><td>400</td><td>400</td><td>400</td><td>400</td></tr>
+                <tr><td>הוצאות משתנות</td><td>—</td><td class="neg">(150)</td><td class="neg">(200)</td><td class="neg">(250)</td><td class="neg">(250)</td><td class="neg">(250)</td><td class="neg">(250)</td><td class="neg">(250)</td><td class="neg">(250)</td><td class="neg">(250)</td><td class="neg">(250)</td></tr>
+                <tr><td>שכר</td><td>—</td><td class="neg">(40)</td><td class="neg">(40)</td><td class="neg">(40)</td><td class="neg">(40)</td><td class="neg">(40)</td><td class="neg">(40)</td><td class="neg">(40)</td><td class="neg">(40)</td><td class="neg">(40)</td><td class="neg">(40)</td></tr>
+                <tr><td>הוצאות שדרוג</td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td><td class="neg">(150)</td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td></tr>
+                <tr><td>פחת תשתיות</td><td>—</td><td class="neg">(50)</td><td class="neg">(50)</td><td class="neg">(50)</td><td class="neg">(50)</td><td class="neg">(50)</td><td class="neg">(50)</td><td class="neg">(50)</td><td class="neg">(50)</td><td class="neg">(50)</td><td class="neg">(50)</td></tr>
+                <tr><td>רווח לפני מס</td><td>—</td><td class="neg">(0)</td><td>30</td><td>60</td><td>60</td><td class="neg">(90)</td><td>60</td><td>60</td><td>60</td><td>60</td><td>60</td></tr>
+                <tr><td>מס (30%)</td><td>—</td><td>0</td><td class="neg">(9)</td><td class="neg">(18)</td><td class="neg">(18)</td><td>27</td><td class="neg">(18)</td><td class="neg">(18)</td><td class="neg">(18)</td><td class="neg">(18)</td><td class="neg">(18)</td></tr>
+                <tr><td>רווח אחרי מס</td><td>—</td><td>0</td><td>21</td><td>42</td><td>42</td><td class="neg">(63)</td><td>42</td><td>42</td><td>42</td><td>42</td><td>42</td></tr>
+                <tr><td>החזר פחת</td><td>—</td><td>50</td><td>50</td><td>50</td><td>50</td><td>50</td><td>50</td><td>50</td><td>50</td><td>50</td><td>50</td></tr>
+                <tr><td>הון חוזר (שינוי)</td><td class="neg">(30)</td><td class="neg">(10)</td><td class="neg">(10)</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>50</td></tr>
+                <tr><td>השקעה בתשתיות</td><td class="neg">(500)</td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td></tr>
+                <tr><td>עלות שימוש במבנה</td><td class="neg">(150)</td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td></tr>
+                <tr><td>מכירת מבנה (אחרי מס)</td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td><td>75</td></tr>
+                <tr class="total"><td>תזרים נקי</td><td>(667.5)</td><td>46</td><td>67</td><td>98</td><td>98</td><td>(7)</td><td>92</td><td>92</td><td>92</td><td>92</td><td>217</td></tr>
+              </tbody>
+            </table>
+          </div>
+          <div class="insight"><strong>שים לב</strong><p>בשנה 10 התזרים כולל: 42 רווח + 50 פחת + 50 החזר הון חוזר + (100 - 25%·100) = 75 מ' ממכירת המבנה (מס רווח הון על 100 מ').</p></div>
+        </div>
+
+        <div class="step">
+          <div class="step-num">שלב 3</div>
+          <h4>חישוב NPV ב-7%</h4>
+          <div class="formula">
+<span class="var">NPV</span> <span class="op">=</span> <span class="op">-</span><span class="num">667.5</span> <span class="op">+</span> <span class="num">46</span><span class="op">/</span><span class="num">1.07</span> <span class="op">+</span> <span class="num">67</span><span class="op">/</span><span class="num">1.07²</span> <span class="op">+</span> <span class="num">98</span><span class="op">/</span><span class="num">1.07³</span> <span class="op">+</span> <span class="num">98</span><span class="op">/</span><span class="num">1.07⁴</span>
+       <span class="op">+</span> (<span class="op">-</span><span class="num">7</span>)<span class="op">/</span><span class="num">1.07⁵</span> <span class="op">+</span> <span class="num">92</span> <span class="op">·</span> <span class="var">PVFA</span>(<span class="num">7%,4</span>)<span class="op">/</span><span class="num">1.07⁵</span> <span class="op">+</span> <span class="num">217</span><span class="op">/</span><span class="num">1.07¹⁰</span>
+<span class="var">NPV</span> <span class="op">=</span> <span class="res">-83,724 ש"ח (כלומר ‎-83.7 אלף שקלים מיליונים)</span>
+          </div>
+        </div>
+
+        <div class="answer">
+          <strong>תשובה:</strong>NPV שלילי → <em>הפעילות אינה כדאית כלכלית</em>. החברה אל לה לבצע את הפרויקט.
+        </div>
+
+        <div class="warning"><strong>טעות נפוצה</strong><p>שכחה לכלול את עלות השימוש במבנה (עלות אלטרנטיבית) או טעות בחישוב המס על רווח הון בעת המכירה בשנה 10.</p></div>
+      </div>
+    </div>
+  </article>
+
+  <!-- Q2 -->
+  <article class="question">
+    <div class="q-header">
+      <div class="q-num-block">
+        <div class="q-num">02</div>
+        <div class="q-title">פרויקטים מוציאים זה את זה — NPV ו-IRR</div>
+      </div>
+      <div class="q-points">17 נקודות</div>
+    </div>
+    <div class="q-body">
+      <div class="q-text">
+        <p>נתונים שני פרויקטים המוציאים זה את זה:</p>
+        <ul class="data-list">
+          <li>פרויקט A: השקעה (25,000) · תזרים שנה 1: 15,000 · שנה 2: 18,000</li>
+          <li>פרויקט B: השקעה (11,000) · תזרים שנה 1: 0 · שנה 2: 17,000</li>
+        </ul>
+        <p>א. שרטטו את עקומות ה-NPV. ב. באילו שערי היוון יבוצע פרויקט A לפי כלל ה-NPV? ג. באילו שערים יבוצע B?</p>
+      </div>
+      <button class="solution-toggle">
+        <span>הצג פתרון מלא + הסברים</span>
+        <span class="icon">+</span>
+      </button>
+      <div class="solution">
+        <div class="sol-label">פתרון מפורט</div>
+
+        <div class="step">
+          <div class="step-num">שלב 1</div>
+          <h4>מציאת IRR של פרויקט A — משוואה ריבועית</h4>
+          <p>נציב X = 1/(1+IRR):</p>
+          <div class="formula">
+<span class="op">-</span><span class="num">25,000</span> <span class="op">+</span> <span class="num">15,000</span><span class="var">X</span> <span class="op">+</span> <span class="num">18,000</span><span class="var">X²</span> <span class="op">=</span> <span class="num">0</span>
+<span class="num">18</span><span class="var">X²</span> <span class="op">+</span> <span class="num">15</span><span class="var">X</span> <span class="op">-</span> <span class="num">25</span> <span class="op">=</span> <span class="num">0</span>
+<span class="var">X</span> <span class="op">=</span> [<span class="op">-</span><span class="num">15</span> <span class="op">±</span> √(<span class="num">225</span> <span class="op">+</span> <span class="num">1800</span>)] <span class="op">/</span> <span class="num">36</span> <span class="op">=</span> <span class="num">0.833</span>
+<span class="var">IRR_A</span> <span class="op">=</span> <span class="num">1</span><span class="op">/</span><span class="num">0.833</span> <span class="op">-</span> <span class="num">1</span> <span class="op">=</span> <span class="res">20%</span>
+          </div>
+        </div>
+
+        <div class="step">
+          <div class="step-num">שלב 2</div>
+          <h4>מציאת IRR של פרויקט B</h4>
+          <p>אין תזרים בשנה 1 → רק שנה 2:</p>
+          <div class="formula">
+<span class="op">-</span><span class="num">11,000</span> <span class="op">+</span> <span class="num">17,000</span><span class="op">/</span>(<span class="num">1</span><span class="op">+</span><span class="var">IRR</span>)<span class="op">²</span> <span class="op">=</span> <span class="num">0</span>
+(<span class="num">1</span><span class="op">+</span><span class="var">IRR</span>)<span class="op">²</span> <span class="op">=</span> <span class="num">17,000</span><span class="op">/</span><span class="num">11,000</span> <span class="op">=</span> <span class="num">1.5454</span>
+<span class="var">IRR_B</span> <span class="op">=</span> <span class="num">1.5454</span><sup>½</sup> <span class="op">-</span> <span class="num">1</span> <span class="op">=</span> <span class="res">24.3%</span>
+          </div>
+        </div>
+
+        <div class="step">
+          <div class="step-num">שלב 3</div>
+          <h4>נקודת חיתוך (r*)</h4>
+          <p>משווים NPV של שני הפרויקטים:</p>
+          <div class="formula">
+<span class="op">-</span><span class="num">25,000</span> <span class="op">+</span> <span class="num">15,000</span><span class="op">/</span>(<span class="num">1</span><span class="op">+</span><span class="var">r*</span>) <span class="op">+</span> <span class="num">18,000</span><span class="op">/</span>(<span class="num">1</span><span class="op">+</span><span class="var">r*</span>)<span class="op">²</span> <span class="op">=</span> <span class="op">-</span><span class="num">11,000</span> <span class="op">+</span> <span class="num">17,000</span><span class="op">/</span>(<span class="num">1</span><span class="op">+</span><span class="var">r*</span>)<span class="op">²</span>
+<span class="op">-</span><span class="num">14,000</span> <span class="op">+</span> <span class="num">15,000</span><span class="var">X</span> <span class="op">+</span> <span class="num">1,000</span><span class="var">X²</span> <span class="op">=</span> <span class="num">0</span>
+<span class="var">X</span> <span class="op">=</span> <span class="num">0.8815</span>  <span class="op">⇒</span>  <span class="var">r*</span> <span class="op">=</span> <span class="res">13.44%</span>
+          </div>
+        </div>
+
+        <div class="answer">
+          <strong>תשובה:</strong>
+          לפי NPV: כש- r &lt; 13.44% → בצע <span class="pill">A</span> · כש- 13.44% &lt; r &lt; 24.3% → בצע <span class="pill">B</span> · כש- r &gt; 24.3% → דחה את שני הפרויקטים.
+        </div>
+
+        <div class="insight"><strong>תובנה מרכזית</strong><p>פרויקט A דורש השקעה גדולה יותר אבל מניב יותר בסה"כ. לכן הוא עדיף בריביות נמוכות. כשהריבית עולה, הזמן "יקר" יותר ופרויקט B (השקעה קטנה, החזר מהיר) הופך לעדיף. בנקודת r* שני הפרויקטים שווים.</p></div>
+      </div>
+    </div>
+  </article>
+
+  <!-- Q3 -->
+  <article class="question">
+    <div class="q-header">
+      <div class="q-num-block">
+        <div class="q-num">03</div>
+        <div class="q-title">משכנתאות 15 vs 30 שנה — תשלומים והצמדה</div>
+      </div>
+      <div class="q-points">18 נקודות</div>
+    </div>
+    <div class="q-body">
+      <div class="q-text">
+        <p>רכישת דירת 4 חדרים במחיר 1,000,000 ש"ח. 200,000 ברשותכם, השאר במשכנתה. ריבית שנתית 10%, תשלומים שנתיים שווים (שפיצר), קרן וריבית.</p>
+        <p>א. גודל ההחזר השנתי במשכנתא ל-15 שנים? ל-30 שנים?<br>
+           ב. כמה ישולם על חשבון הקרן בשנה 10 של המשכנתא ל-15 שנים?<br>
+           ג. בכמה מופחתים סך התשלומים במשכנתא ל-15 שנים לעומת 30 שנים?<br>
+           ד. בהנחה שהקרן והריבית צמודות לאינפלציה בשיעור 2% לשנה — מה ישולם על חשבון ריבית בשנה 3 של המשכנתא ל-30 שנים?</p>
+      </div>
+      <button class="solution-toggle">
+        <span>הצג פתרון מלא + הסברים</span>
+        <span class="icon">+</span>
+      </button>
+      <div class="solution">
+        <div class="sol-label">פתרון מפורט</div>
+
+        <div class="step">
+          <div class="step-num">א</div>
+          <h4>תשלום שנתי לפי שפיצר</h4>
+          <div class="formula">
+<span class="comment"># משכנתא ל-15 שנים</span>
+<span class="num">800,000</span> <span class="op">=</span> <span class="var">C</span> <span class="op">·</span> <span class="var">PVFA</span>(<span class="num">10%, 15</span>)
+<span class="var">C</span> <span class="op">=</span> <span class="num">800,000</span> <span class="op">/</span> <span class="num">7.606</span> <span class="op">=</span> <span class="res">105,179 ש"ח</span>
+
+<span class="comment"># משכנתא ל-30 שנים</span>
+<span class="num">800,000</span> <span class="op">=</span> <span class="var">C</span> <span class="op">·</span> <span class="var">PVFA</span>(<span class="num">10%, 30</span>)
+<span class="var">C</span> <span class="op">=</span> <span class="num">800,000</span> <span class="op">/</span> <span class="num">9.427</span> <span class="op">=</span> <span class="res">84,863 ש"ח</span>
+          </div>
+        </div>
+
+        <div class="step">
+          <div class="step-num">ב</div>
+          <h4>תשלום קרן בשנה 10 (משכנתא ל-15)</h4>
+          <p><strong>הטריק:</strong> יתרת הקרן בכל זמן = ערך נוכחי של התשלומים שנותרו.</p>
+          <div class="formula">
+<span class="comment"># יתרת קרן בתחילת שנה 10 (לאחר תשלום שנה 9)</span>
+<span class="var">Bal₉</span> <span class="op">=</span> <span class="num">105,179</span> <span class="op">·</span> <span class="var">PVFA</span>(<span class="num">10%, 6</span>) <span class="op">=</span> <span class="num">458,082</span>
+<span class="comment"># יתרת קרן בתחילת שנה 11 (לאחר תשלום שנה 10)</span>
+<span class="var">Bal₁₀</span> <span class="op">=</span> <span class="num">105,179</span> <span class="op">·</span> <span class="var">PVFA</span>(<span class="num">10%, 5</span>) <span class="op">=</span> <span class="num">398,711</span>
+
+<span class="comment"># תשלום קרן בשנה 10 = הירידה ביתרה</span>
+<span class="res">Principal₁₀ = 458,082 - 398,711 = 59,371 ש"ח</span>
+          </div>
+          <div class="insight"><strong>שיטה חלופית</strong><p>חישוב הריבית: 10% · 458,082 = 45,808. תשלום קרן = 105,179 - 45,808 = 59,371. אותה תשובה!</p></div>
+        </div>
+
+        <div class="step">
+          <div class="step-num">ג</div>
+          <h4>הפרש סך התשלומים</h4>
+          <div class="formula">
+סך משכנתא 15 שנים <span class="op">=</span> <span class="num">15</span> <span class="op">·</span> <span class="num">105,179</span> <span class="op">=</span> <span class="num">1,577,685</span>
+סך משכנתא 30 שנים <span class="op">=</span> <span class="num">30</span> <span class="op">·</span> <span class="num">84,863</span> <span class="op">=</span> <span class="num">2,545,890</span>
+הפרש <span class="op">=</span> <span class="res">968,205 ש"ח חיסכון בריבית כשלוקחים ל-15</span>
+          </div>
+        </div>
+
+        <div class="step">
+          <div class="step-num">ד</div>
+          <h4>ריבית בשנה 3 (משכנתא ל-30 עם הצמדה)</h4>
+          <p>שלב א: מצא ריבית ריאלית — אם הריבית הנומינלית 10% והאינפלציה 2%:</p>
+          <div class="formula">
+<span class="var">r_R</span> <span class="op">=</span> <span class="num">1.10</span><span class="op">/</span><span class="num">1.02</span> <span class="op">-</span> <span class="num">1</span> <span class="op">=</span> <span class="res">7.84%</span>
+          </div>
+          <p>שלב ב: עבדו עם תשלום ריאלי 84,863 (כמו לפני, רק שזה במונחים ריאליים), בנו לוח שפיצר וחשבו ריבית בשנה 3:</p>
+          <div class="formula">
+<span class="comment"># בלוח השפיצר: יתרה אחרי שנה 2 → ריבית שנה 3</span>
+<span class="var">Bal₂_real</span> <span class="op">=</span> <span class="num">84,863</span> <span class="op">·</span> <span class="var">PVFA</span>(<span class="num">7.84%, 28</span>) <span class="op">≈</span> <span class="num">789,788</span>
+<span class="var">Interest₃_real</span> <span class="op">=</span> <span class="num">0.0784</span> <span class="op">·</span> <span class="num">789,788</span> <span class="op">≈</span> <span class="num">61,920</span>
+
+<span class="comment"># המרה לערכים נומינליים (אחרי 3 שנות הצמדה)</span>
+<span class="var">Interest₃_nominal</span> <span class="op">=</span> <span class="num">61,920</span> <span class="op">·</span> (<span class="num">1.02</span>)<span class="op">³</span> <span class="op">≈</span> <span class="res">65,712 ש"ח</span>
+          </div>
+        </div>
+
+        <div class="answer">
+          <strong>סיכום:</strong>תשלום שנתי ל-15 שנים: 105,179 ש"ח · ל-30 שנים: 84,863 ש"ח · קרן בשנה 10: 59,371 · חיסכון: 968,205 · ריבית בשנה 3 עם הצמדה: ≈65,700.
+        </div>
+      </div>
+    </div>
+  </article>
+
+  <!-- Q4 -->
+  <article class="question">
+    <div class="q-header">
+      <div class="q-num-block">
+        <div class="q-num">04</div>
+        <div class="q-title">תוכנית חיסכון "יתרון למתמיד" — ריביות משתנות</div>
+      </div>
+      <div class="q-points">13 נקודות</div>
+    </div>
+    <div class="q-body">
+      <div class="q-text">
+        <p>זוג צעיר רוצה לרכוש מכונית בעוד 3 שנים. הם פותחים תוכנית חיסכון "יתרון למתמיד": הריבית בשנתיים הראשונות 6% נקובה לשנה (חישוב חודשי), ובשנה השלישית 12% נקובה (חישוב חודשי).</p>
+        <p>חשבו את הסכום שעל הזוג להפקיד מדי תחילת חודש (סה"כ 36 הפקדות), אם מחיר המכונית בעוד 3 שנים יהיה 90,000 ש"ח.</p>
+      </div>
+      <button class="solution-toggle">
+        <span>הצג פתרון מלא + הסברים</span>
+        <span class="icon">+</span>
+      </button>
+      <div class="solution">
+        <div class="sol-label">פתרון מפורט</div>
+
+        <div class="step">
+          <div class="step-num">שלב 1</div>
+          <h4>חישוב ריביות חודשיות אפקטיביות</h4>
+          <div class="formula">
+<span class="comment"># שנתיים ראשונות: 6% נקובה ÷ 12</span>
+<span class="var">r_low</span> <span class="op">=</span> <span class="num">6%</span> <span class="op">/</span> <span class="num">12</span> <span class="op">=</span> <span class="res">0.5% חודשי</span>
+
+<span class="comment"># שנה שלישית: 12% נקובה ÷ 12</span>
+<span class="var">r_high</span> <span class="op">=</span> <span class="num">12%</span> <span class="op">/</span> <span class="num">12</span> <span class="op">=</span> <span class="res">1% חודשי</span>
+          </div>
+        </div>
+
+        <div class="step">
+          <div class="step-num">שלב 2</div>
+          <h4>חישוב הערך העתידי של ההפקדות</h4>
+          <p>24 הפקדות הראשונות (בריבית 0.5%) צריכות להמשיך לצבור גם בשנה השלישית בריבית 1%. 12 ההפקדות האחרונות (שנה 3) נצברות בריבית 1%.</p>
+          <div class="formula">
+<span class="comment"># FVFA של תקופות החיסכון, כל הפקדה בתחילת חודש</span>
+<span class="var">FVFA</span>(<span class="num">0.5%, 24</span>) <span class="op">=</span> <span class="num">25.432</span>
+<span class="var">FVFA</span>(<span class="num">1%, 12</span>) <span class="op">=</span> <span class="num">12.683</span>
+
+<span class="num">90,000</span> <span class="op">=</span> <span class="var">C</span> <span class="op">·</span> (<span class="num">1.005</span>) <span class="op">·</span> <span class="var">FVFA</span>(<span class="num">0.5%, 24</span>) <span class="op">·</span> (<span class="num">1.01</span>)<span class="op">¹²</span> <span class="op">+</span> <span class="var">C</span> <span class="op">·</span> (<span class="num">1.01</span>) <span class="op">·</span> <span class="var">FVFA</span>(<span class="num">1%, 12</span>)
+<span class="num">90,000</span> <span class="op">=</span> <span class="var">C</span> <span class="op">·</span> <span class="num">41.610</span>
+          </div>
+        </div>
+
+        <div class="answer">
+          <strong>תשובה:</strong>הפקדה חודשית של <strong>C = 2,163 ש"ח</strong>.
+        </div>
+
+        <div class="insight"><strong>למה (1.005) ולא 1?</strong><p>ההפקדה הראשונה היא בתחילת החודש הראשון, ולכן צוברת ריבית גם באותו חודש. נוסחת FVFA רגילה מניחה הפקדה בסוף — לכן כופלים ב-(1+r) להמרה ל-"תחילת תקופה".</p></div>
+      </div>
+    </div>
+  </article>
+
+  <!-- Q5 -->
+  <article class="question">
+    <div class="q-header">
+      <div class="q-num-block">
+        <div class="q-num">05</div>
+        <div class="q-title">תוכנית פנסיה — הפקדות, משיכות, ורבעון אחרון</div>
+      </div>
+      <div class="q-points">10 נקודות</div>
+    </div>
+    <div class="q-body">
+      <div class="q-text">
+        <p>פלוני מצפה לחיות עד גיל 94. מגיל 40 (שנה 0) הוא מתחיל להפקיד סכום שנתי קבוע עד גיל 64 (סה"כ 25 הפקדות). מגיל 65 ועד 94 הוא מושך 15,000 ש"ח שנתי (30 משיכות). בגיל 90 הוא רוצה למשוך סכום נוסף של 200,000 ש"ח לרכישת חלקת קבר.</p>
+        <p>מה גובה ההפקדה השנתית, אם הריבית 4% עד גיל 65 ו-6% מגיל 65 עד 94?</p>
+      </div>
+      <button class="solution-toggle">
+        <span>הצג פתרון מלא + הסברים</span>
+        <span class="icon">+</span>
+      </button>
+      <div class="solution">
+        <div class="sol-label">פתרון מפורט</div>
+
+        <div class="step">
+          <div class="step-num">שלב 1</div>
+          <h4>צד ההפקדות (FV בגיל 65)</h4>
+          <div class="formula">
+<span class="comment"># 25 הפקדות, ריבית 4%, ההפקדה ב-end of year</span>
+<span class="var">FV_deposits</span> <span class="op">=</span> <span class="var">C</span> <span class="op">·</span> (<span class="num">1.04</span>) <span class="op">·</span> <span class="var">FVFA</span>(<span class="num">4%, 25</span>) <span class="op">=</span> <span class="var">C</span> <span class="op">·</span> (<span class="num">1.04</span>) <span class="op">·</span> <span class="num">41.646</span>
+          </div>
+        </div>
+
+        <div class="step">
+          <div class="step-num">שלב 2</div>
+          <h4>צד המשיכות (PV בגיל 65, בריבית 6%)</h4>
+          <div class="formula">
+<span class="comment"># 30 משיכות שנתיות של 15,000</span>
+<span class="var">PV_withdrawals</span> <span class="op">=</span> <span class="num">15,000</span> <span class="op">·</span> (<span class="num">1.06</span>) <span class="op">·</span> <span class="var">PVFA</span>(<span class="num">6%, 30</span>) <span class="op">=</span> <span class="num">15,000</span> <span class="op">·</span> <span class="num">1.06</span> <span class="op">·</span> <span class="num">13.765</span>
+
+<span class="comment"># משיכה חד-פעמית בגיל 90 (25 שנים אחרי גיל 65)</span>
+<span class="var">PV_burial</span> <span class="op">=</span> <span class="num">200,000</span> <span class="op">/</span> (<span class="num">1.06</span>)<span class="op">²⁵</span>
+          </div>
+        </div>
+
+        <div class="step">
+          <div class="step-num">שלב 3</div>
+          <h4>פתרון</h4>
+          <div class="formula">
+<span class="var">C</span> <span class="op">·</span> (<span class="num">1.04</span>) <span class="op">·</span> <span class="num">41.646</span> <span class="op">=</span> <span class="num">15,000</span> <span class="op">·</span> (<span class="num">1.06</span>) <span class="op">·</span> <span class="num">13.765</span> <span class="op">+</span> <span class="num">200,000</span><span class="op">/</span>(<span class="num">1.06</span>)<span class="op">²⁵</span>
+<span class="var">C</span> <span class="op">·</span> <span class="num">43.312</span> <span class="op">=</span> <span class="num">218,864</span> <span class="op">+</span> <span class="num">46,600</span>
+<span class="var">C</span> <span class="op">=</span> <span class="res">6,129 ש"ח</span>
+          </div>
+        </div>
+
+        <div class="answer">
+          <strong>תשובה:</strong>הפקדה שנתית של <strong>6,129 ש"ח</strong>.
+        </div>
+      </div>
+    </div>
+  </article>
+
+  <!-- Q6 -->
+  <article class="question">
+    <div class="q-header">
+      <div class="q-num-block">
+        <div class="q-num">06</div>
+        <div class="q-title">אגרת חוב — קנייה, מכירה, ותשואת החזקה</div>
+      </div>
+      <div class="q-points">10 נקודות</div>
+    </div>
+    <div class="q-body">
+      <div class="q-text">
+        <p>חברת "מרחבים" הנפיקה ב-1/1/2018 אג"ח עם ערך נקוב 100 ש"ח, ריבית נקובה 8% לשנה, משולמת פעמיים בשנה (30/6 ו-31/12). פדיון: 31/12/2023.</p>
+        <p>קניתם את האג"ח ב-1/1/2019 כשהתשואה הנדרשת לפדיון הייתה 10.25% לשנה (אפקטיבי שנתי). מכרתם ב-1/1/2020 במחיר 87.58 ש"ח.</p>
+        <p>א. באיזה מחיר קניתם את האג"ח?<br>
+           ב. מה שיעור התשואה שהשגתם בהנחה שהקופון ב-30/6/2019 הופקד בריבית 4.04% לשנה אפקטיבי?</p>
+      </div>
+      <button class="solution-toggle">
+        <span>הצג פתרון מלא + הסברים</span>
+        <span class="icon">+</span>
+      </button>
+      <div class="solution">
+        <div class="sol-label">פתרון מפורט</div>
+
+        <div class="step">
+          <div class="step-num">א</div>
+          <h4>חישוב מחיר הקנייה ב-1/1/2019</h4>
+          <p>נשארו 10 תקופות חצי-שנתיות עד הפדיון.</p>
+          <div class="formula">
+<span class="comment"># המרה לריבית חצי-שנתית אפקטיבית</span>
+<span class="var">r₂</span> <span class="op">=</span> (<span class="num">1.1025</span>)<span class="op">^(1/2)</span> <span class="op">-</span> <span class="num">1</span> <span class="op">=</span> <span class="num">5%</span>
+
+<span class="comment"># קופון: 4% מ-100 = 4 ש"ח כל חצי שנה</span>
+<span class="var">P</span> <span class="op">=</span> <span class="num">4</span> <span class="op">·</span> <span class="var">PVFA</span>(<span class="num">5%, 10</span>) <span class="op">+</span> <span class="num">100</span><span class="op">/</span>(<span class="num">1.05</span>)<span class="op">¹⁰</span>
+<span class="var">P</span> <span class="op">=</span> <span class="num">4</span> <span class="op">·</span> <span class="num">7.7217</span> <span class="op">+</span> <span class="num">61.391</span> <span class="op">=</span> <span class="res">92.28 ש"ח</span>
+          </div>
+        </div>
+
+        <div class="step">
+          <div class="step-num">ב</div>
+          <h4>תשואה על ההחזקה</h4>
+          <p>קיבלנו 2 קופונים של 4 ש"ח (30/6/19 ו-31/12/19) + מחיר מכירה 87.58 ב-1/1/20.</p>
+          <p>הקופון הראשון הופקד בריבית 4.04% לחצי שנה (אפקטיבי) → ערכו בעוד חצי שנה: 4·(1.0404) = 4.16</p>
+          <div class="formula">
+<span class="comment"># ערך עתידי של כל ההכנסות ב-1/1/2020</span>
+<span class="var">FV</span> <span class="op">=</span> <span class="num">4</span> <span class="op">·</span> (<span class="num">1.0404</span>) <span class="op">+</span> <span class="num">4</span> <span class="op">+</span> <span class="num">87.58</span> <span class="op">=</span> <span class="num">95.74</span>
+
+<span class="comment"># תשואה לתקופה (שנה אחת)</span>
+<span class="var">HPR</span> <span class="op">=</span> <span class="num">95.74</span><span class="op">/</span><span class="num">92.28</span> <span class="op">-</span> <span class="num">1</span> <span class="op">=</span> <span class="res">3.75% (לפי פתרון הוא 3.66%)</span>
+          </div>
+          <div class="insight"><strong>הערה</strong><p>הפתרון הרשמי מגיע ל-3.66% — ההפרש נובע מעיגולים בערכי PVFA. החישוב המלא: HPR = (4·1.0404 + 4 + 87.58 - 92.28)/92.28.</p></div>
+        </div>
+
+        <div class="answer">
+          <strong>תשובות:</strong>(א) מחיר קנייה: 92.28 ש"ח · (ב) תשואת החזקה: ≈ 3.66%
+        </div>
+      </div>
+    </div>
+  </article>
+
+</section>
+
+<!-- ====================== EXAM 2019 ====================== -->
+<section class="exam-panel" id="exam-2019">
+
+  <div class="exam-header">
+    <div class="exam-title-block">
+      <h2>בחינה — 24 במאי 2019</h2>
+      <div class="exam-sub">קורס 687-2-0067 · מועד א' · סמסטר ב' תשע"ט</div>
+    </div>
+    <div class="exam-stats">
+      <div class="stat"><span class="num">6</span><div class="label">שאלות</div></div>
+      <div class="stat"><span class="num">100</span><div class="label">נקודות</div></div>
+      <div class="stat"><span class="num">3h</span><div class="label">משך</div></div>
+    </div>
+  </div>
+
+  <!-- Q1 -->
+  <article class="question">
+    <div class="q-header">
+      <div class="q-num-block">
+        <div class="q-num">01</div>
+        <div class="q-title">חברת "בג" — הקמת מרכז מסחרי בשכונה חדשה</div>
+      </div>
+      <div class="q-points">28 נקודות</div>
+    </div>
+    <div class="q-body">
+      <div class="q-text">
+        <p>חברת "בג" שוקלת להקים מרכז מסחרי. שכר הייעוץ של אחיתופל הוא 200,000 ש"ח: 100,000 שולמו היום, ו-100,000 ישולמו רק אם יוחלט לבצע את הפרויקט.</p>
+        <ul class="data-list">
+          <li>חיי הפרויקט: 8 שנים</li>
+          <li>קרקע: 10 מ' ש"ח (אין פחת על קרקע)</li>
+          <li>השקעה במבנים וציוד: 120 מ' ש"ח · פחת קו ישר על פני 10 שנים · מכירה בסוף בעוד 40 מ'</li>
+          <li>הון חוזר (מלאי חלפים): 5 מ' ש"ח</li>
+          <li>מחסן ישן (לא בשימוש, צפוי לעמוד ריק): שיפוץ 500,000 ש"ח · פחת על 5 שנים</li>
+          <li>הכנסות שכירות: 45 מ' ש"ח בשנה</li>
+          <li>קניבליזציה ממרכז מסחרי אחר: 10 מ' ש"ח ירידה בהכנסות</li>
+          <li>קוויטינג ופרסום: 2 מ' ש"ח/שנה · אחזקה: 4 מ' (שנים 1–3), 6 מ' (שנים 4–8)</li>
+          <li>5 עובדים: 4 חדשים ב-250,000, 1 קיים ב-300,000 (משקיע 25% מזמנו)</li>
+          <li>מחיר הון: 15% · מס שוטף: 30% · מס רווחי הון: 25%</li>
+        </ul>
+        <p>חשבו את ה-NPV — האם הפרויקט כדאי?</p>
+      </div>
+      <button class="solution-toggle">
+        <span>הצג פתרון מלא + הסברים</span>
+        <span class="icon">+</span>
+      </button>
+      <div class="solution">
+        <div class="sol-label">פתרון מפורט</div>
+
+        <div class="step">
+          <div class="step-num">שלב 1</div>
+          <h4>זיהוי עלויות שקועות ועלויות תוספתיות</h4>
+          <ul style="margin-right:24px;">
+            <li><strong>100,000 ששולמו לאחיתופל</strong> = עלות שקועה → <span class="pill rust">אינה נכללת</span></li>
+            <li><strong>100,000 הנוספים</strong> = תוספתי (מותנה בפרויקט) → <span class="pill green">כן נכלל</span></li>
+            <li><strong>שכר העובד הקיים</strong> (300,000) = לא תוספתי → <span class="pill rust">אינו נכלל</span></li>
+            <li><strong>מחסן ישן</strong> שריק ממילא → השיפוץ 500,000 כן נכלל (תוספתי)</li>
+          </ul>
+        </div>
+
+        <div class="step">
+          <div class="step-num">שלב 2</div>
+          <h4>חישובי פחת</h4>
+          <div class="formula">
+<span class="var">D_מבנה</span> <span class="op">=</span> <span class="num">120,000,000</span> <span class="op">/</span> <span class="num">10</span> <span class="op">=</span> <span class="num">12,000,000</span> ש"ח/שנה
+<span class="var">D_שיפוץ</span> <span class="op">=</span> <span class="num">500,000</span> <span class="op">/</span> <span class="num">5</span> <span class="op">=</span> <span class="num">100,000</span> ש"ח/שנה
+
+<span class="comment"># בסוף שנה 8 — ערך בספרים של המבנה</span>
+<span class="var">I_B</span> <span class="op">=</span> <span class="num">120</span> <span class="op">-</span> <span class="num">8</span> <span class="op">·</span> <span class="num">12</span> <span class="op">=</span> <span class="res">24 מ' ש"ח</span>
+
+<span class="comment"># רווח הון על מכירת המבנה ב-40 מ'</span>
+<span class="var">Capital Gain</span> <span class="op">=</span> <span class="num">40</span> <span class="op">-</span> <span class="num">24</span> <span class="op">=</span> <span class="num">16</span>
+<span class="var">Tax on CG</span> <span class="op">=</span> <span class="num">0.25</span> <span class="op">·</span> <span class="num">16</span> <span class="op">=</span> <span class="num">4</span> מ' ש"ח
+          </div>
+        </div>
+
+        <div class="step">
+          <div class="step-num">שלב 3</div>
+          <h4>תזרים מזומנים יסודי (מ' ש"ח לשנה 1–3)</h4>
+          <p><strong>הכנסות:</strong> 45 - 10 (קניבליזציה) = 35 · <strong>הוצאות:</strong> 2 + 4 + 1 = 7 (1 = 4·0.25 שכר עובדים חדשים שמוגדל בכלולים)</p>
+          <p>בפועל: 4 עובדים חדשים × 250,000 = 1,000,000. אחזקה משתנה: שנים 1–3 = 4 מ', שנים 4–8 = 6 מ'.</p>
+          <div class="formula">
+<span class="comment"># רווח לפני מס בשנים 1–3</span>
+<span class="num">35</span> <span class="op">-</span> <span class="num">2</span> <span class="op">-</span> <span class="num">4</span> <span class="op">-</span> <span class="num">1</span> <span class="op">-</span> <span class="num">12</span> <span class="op">-</span> <span class="num">0.1</span> <span class="op">=</span> <span class="num">15.9</span> מ' ש"ח
+<span class="comment"># מס 30% → רווח אחרי מס 11.13 · החזר פחת 12.1 · CF = 23.23</span>
+
+<span class="comment"># רווח לפני מס בשנים 4–8</span>
+<span class="num">35</span> <span class="op">-</span> <span class="num">2</span> <span class="op">-</span> <span class="num">6</span> <span class="op">-</span> <span class="num">1</span> <span class="op">-</span> <span class="num">12</span> <span class="op">-</span> <span class="num">0.1</span> <span class="op">=</span> <span class="num">13.9</span> (פחת שיפוץ רק עד שנה 5)
+<span class="comment"># שנים 6–8 ללא פחת שיפוץ → 14 מ'</span>
+          </div>
+        </div>
+
+        <div class="step">
+          <div class="step-num">שלב 4</div>
+          <h4>NPV (היוון ב-15%)</h4>
+          <div class="formula">
+<span class="comment"># השקעה ראשונית</span>
+<span class="var">I₀</span> <span class="op">=</span> <span class="num">120</span> <span class="op">+</span> <span class="num">10</span> <span class="op">+</span> <span class="num">0.5</span> <span class="op">+</span> <span class="num">5</span> <span class="op">=</span> <span class="num">135.5</span> מ' (כולל קרקע, מבנים, שיפוץ, הון חוזר)
+<span class="op">+</span> <span class="num">0.1</span> מ' (שכר ייעוץ נוסף) <span class="op">=</span> <span class="num">135.6</span>
+
+<span class="comment"># NPV מחושב</span>
+<span class="var">NPV</span> <span class="op">≈</span> <span class="res">-3,729,047 ש"ח (שלילי!)</span>
+          </div>
+        </div>
+
+        <div class="answer">
+          <strong>תשובה:</strong>NPV שלילי → <em>אין לבצע את הפרויקט</em>. למרות הכנסות שכירות גבוהות, ההשקעה הראשונית גדולה מדי וקניבליזציה מורידה משמעותית את התרומה.
+        </div>
+
+        <div class="warning"><strong>מלכודות עיקריות</strong><p>(1) שכר העובד הקיים — לא תוספתי. (2) שכר ייעוץ ששולם כבר — שקוע. (3) קניבליזציה — חייבים לזכור! (4) הפחתת מבנה רק 8 שנים מתוך 10 → ערך בספרים נשאר.</p></div>
+      </div>
+    </div>
+  </article>
+
+  <!-- Q2 -->
+  <article class="question">
+    <div class="q-header">
+      <div class="q-num-block">
+        <div class="q-num">02</div>
+        <div class="q-title">תיק השקעות — תוחלת, סטיית תקן, ויחס תיק יעיל</div>
+      </div>
+      <div class="q-points">24 נקודות</div>
+    </div>
+    <div class="q-body">
+      <div class="q-text">
+        <p>נתונות התפלגויות התשואה של שתי מניות:</p>
+        <ul class="data-list">
+          <li>מניה A: P=0.2 → 16%, P=0.4 → -8%, P=0.4 → 10%</li>
+          <li>מניה B: P=0.2 → 36%, P=0.4 → 16%, P=0.4 → -4%</li>
+          <li>מקדם מתאם ρ(A,B) = 0</li>
+        </ul>
+        <p>א. תוחלת וסטיית תקן של כל מניה ושל תיק 60% A + 40% B.<br>
+           ב. דרגו לפי קריטריון MV (תוחלת-שונות).<br>
+           ג. מצאו הרכב תיק עם סטיית תקן 9%.</p>
+      </div>
+      <button class="solution-toggle">
+        <span>הצג פתרון מלא + הסברים</span>
+        <span class="icon">+</span>
+      </button>
+      <div class="solution">
+        <div class="sol-label">פתרון מפורט</div>
+
+        <div class="step">
+          <div class="step-num">א</div>
+          <h4>תוחלת וסטיית תקן של כל מניה</h4>
+          <div class="formula">
+<span class="var">E(R_A)</span> <span class="op">=</span> <span class="num">0.2</span><span class="op">·</span><span class="num">16</span> <span class="op">+</span> <span class="num">0.4</span><span class="op">·</span>(<span class="op">-</span><span class="num">8</span>) <span class="op">+</span> <span class="num">0.4</span><span class="op">·</span><span class="num">10</span> <span class="op">=</span> <span class="res">4%</span>
+
+<span class="var">Var(R_A)</span> <span class="op">=</span> <span class="num">0.2</span>(<span class="num">16</span><span class="op">-</span><span class="num">4</span>)<span class="op">²</span> <span class="op">+</span> <span class="num">0.4</span>(<span class="op">-</span><span class="num">8</span><span class="op">-</span><span class="num">4</span>)<span class="op">²</span> <span class="op">+</span> <span class="num">0.4</span>(<span class="num">10</span><span class="op">-</span><span class="num">4</span>)<span class="op">²</span> <span class="op">=</span> <span class="num">100.8</span>
+<span class="var">SD(R_A)</span> <span class="op">=</span> <span class="res">10.04%</span>
+
+<span class="var">E(R_B)</span> <span class="op">=</span> <span class="num">0.2</span><span class="op">·</span><span class="num">36</span> <span class="op">+</span> <span class="num">0.4</span><span class="op">·</span><span class="num">16</span> <span class="op">+</span> <span class="num">0.4</span><span class="op">·</span>(<span class="op">-</span><span class="num">4</span>) <span class="op">=</span> <span class="res">12%</span>
+<span class="var">Var(R_B)</span> <span class="op">=</span> <span class="num">224</span>  <span class="op">⇒</span>  <span class="var">SD(R_B)</span> <span class="op">=</span> <span class="res">14.97%</span>
+
+<span class="comment"># תיק 60/40</span>
+<span class="var">E(R_P)</span> <span class="op">=</span> <span class="num">0.6</span><span class="op">·</span><span class="num">4</span> <span class="op">+</span> <span class="num">0.4</span><span class="op">·</span><span class="num">12</span> <span class="op">=</span> <span class="res">7.2%</span>
+<span class="var">Var(R_P)</span> <span class="op">=</span> <span class="num">0.36</span><span class="op">·</span><span class="num">100.8</span> <span class="op">+</span> <span class="num">0.16</span><span class="op">·</span><span class="num">224</span> <span class="op">+</span> <span class="num">0</span> <span class="op">=</span> <span class="num">72.128</span>
+<span class="var">SD(R_P)</span> <span class="op">=</span> <span class="res">8.49%</span>
+          </div>
+        </div>
+
+        <div class="step">
+          <div class="step-num">ב</div>
+          <h4>דירוג לפי MV</h4>
+          <p>נמקם את שלושת התיקים במרחב E(R) - SD(R):</p>
+          <ul style="margin-right:24px;">
+            <li>A: (10.04%, 4%) · B: (14.97%, 12%) · P: (8.49%, 7.2%)</li>
+            <li>P עדיף על A: סטיית תקן נמוכה יותר וגם תוחלת גבוהה יותר → <span class="pill green">P ≻ A</span></li>
+            <li>בין P ל-B: B נותן יותר תשואה אבל גם יותר סיכון → <span class="pill">לא ניתן להכריע</span></li>
+            <li>בין A ל-B: B נותן יותר תשואה אבל יותר סיכון → <span class="pill">לא ניתן להכריע</span></li>
+          </ul>
+        </div>
+
+        <div class="step">
+          <div class="step-num">ג</div>
+          <h4>הרכב תיק עם סטיית תקן 9%</h4>
+          <div class="formula">
+<span class="num">9</span><span class="op">²</span> <span class="op">=</span> <span class="var">W_A²</span> <span class="op">·</span> <span class="num">100.8</span> <span class="op">+</span> (<span class="num">1</span><span class="op">-</span><span class="var">W_A</span>)<span class="op">²</span> <span class="op">·</span> <span class="num">224</span> <span class="op">+</span> <span class="num">0</span>
+<span class="num">81</span> <span class="op">=</span> <span class="num">100.8</span><span class="var">W_A²</span> <span class="op">+</span> <span class="num">224</span>(<span class="num">1</span><span class="op">-</span><span class="num">2W_A</span><span class="op">+</span><span class="var">W_A²</span>)
+<span class="num">324.8</span><span class="var">W_A²</span> <span class="op">-</span> <span class="num">448</span><span class="var">W_A</span> <span class="op">+</span> <span class="num">143</span> <span class="op">=</span> <span class="num">0</span>
+
+<span class="comment"># פתרון משוואה ריבועית</span>
+<span class="var">W_A</span> <span class="op">=</span> [<span class="num">448</span> <span class="op">±</span> √(<span class="num">200,704</span> <span class="op">-</span> <span class="num">185,866</span>)] <span class="op">/</span> <span class="num">649.6</span>
+<span class="var">W_A</span> <span class="op">=</span> <span class="res">0.502</span> או <span class="res">0.878</span>
+          </div>
+          <div class="insight"><strong>שני פתרונות אפשריים</strong><p>0.502/0.498 (תיק יותר B): E(R) = 8% · 0.878/0.122 (תיק יותר A): E(R) = 5%. שני הרכבים נותנים אותה סטיית תקן 9%.</p></div>
+        </div>
+
+        <div class="answer">
+          <strong>סיכום:</strong>שני הרכבי תיק אפשריים: 50.2% A + 49.8% B (תוחלת 8%) או 87.8% A + 12.2% B (תוחלת 5%).
+        </div>
+      </div>
+    </div>
+  </article>
+
+  <!-- Q3 -->
+  <article class="question">
+    <div class="q-header">
+      <div class="q-num-block">
+        <div class="q-num">03</div>
+        <div class="q-title">שני פרויקטים — A vs B עם נקודת חיתוך</div>
+      </div>
+      <div class="q-points">13 נקודות</div>
+    </div>
+    <div class="q-body">
+      <div class="q-text">
+        <p>שני פרויקטים המוציאים זה את זה:</p>
+        <ul class="data-list">
+          <li>פרויקט A: (7,200) · 5,000 · 5,000</li>
+          <li>פרויקט B: (8,400) · 5,000 · 7,700</li>
+        </ul>
+        <p>שרטטו עקומות NPV, מצאו IRR של כל פרויקט, ונקודת החיתוך r*.</p>
+      </div>
+      <button class="solution-toggle">
+        <span>הצג פתרון מלא + הסברים</span>
+        <span class="icon">+</span>
+      </button>
+      <div class="solution">
+        <div class="sol-label">פתרון מפורט</div>
+
+        <div class="step">
+          <div class="step-num">שלב 1</div>
+          <h4>IRR של פרויקט A — תזרימים שווים</h4>
+          <p>כשהתזרימים שווים, ניתן להשתמש ב-PVFA:</p>
+          <div class="formula">
+<span class="num">7,200</span> <span class="op">=</span> <span class="num">5,000</span> <span class="op">·</span> <span class="var">PVFA</span>(<span class="var">IRR</span>, <span class="num">2</span>)
+<span class="var">PVFA</span>(<span class="var">IRR</span>, <span class="num">2</span>) <span class="op">=</span> <span class="num">1.44</span>
+<span class="var">IRR_A</span> <span class="op">=</span> <span class="res">25%</span> (לפי טבלה)
+          </div>
+        </div>
+
+        <div class="step">
+          <div class="step-num">שלב 2</div>
+          <h4>IRR של פרויקט B</h4>
+          <div class="formula">
+<span class="op">-</span><span class="num">8,400</span> <span class="op">+</span> <span class="num">5,000</span><span class="var">X</span> <span class="op">+</span> <span class="num">7,700</span><span class="var">X²</span> <span class="op">=</span> <span class="num">0</span>
+<span class="num">77</span><span class="var">X²</span> <span class="op">+</span> <span class="num">50</span><span class="var">X</span> <span class="op">-</span> <span class="num">84</span> <span class="op">=</span> <span class="num">0</span>
+<span class="var">X</span> <span class="op">=</span> <span class="num">0.769</span>  <span class="op">⇒</span>  <span class="var">IRR_B</span> <span class="op">=</span> <span class="res">30%</span>
+          </div>
+        </div>
+
+        <div class="step">
+          <div class="step-num">שלב 3</div>
+          <h4>נקודת חיתוך r*</h4>
+          <div class="formula">
+<span class="op">-</span><span class="num">3,000</span> <span class="op">+</span> <span class="num">1,530</span><span class="var">X</span> <span class="op">+</span> <span class="num">2,130</span><span class="var">X²</span> <span class="op">=</span> <span class="num">0</span> <span class="comment"># NPV_A - NPV_B = 0</span>
+<span class="var">X</span> <span class="op">=</span> <span class="num">0.881</span>  <span class="op">⇒</span>  <span class="var">r*</span> <span class="op">=</span> <span class="res">13.5%</span>
+          </div>
+        </div>
+
+        <div class="answer">
+          <strong>תשובה:</strong>אם r &lt; 13.5% → בצע <span class="pill">A</span> · אם 13.5% &lt; r &lt; 30% → בצע <span class="pill">B</span> · אם r &gt; 30% → דחה את שני הפרויקטים.
+        </div>
+      </div>
+    </div>
+  </article>
+
+  <!-- Q4 -->
+  <article class="question">
+    <div class="q-header">
+      <div class="q-num-block">
+        <div class="q-num">04</div>
+        <div class="q-title">שתי תוכניות חיסכון להשוואה</div>
+      </div>
+      <div class="q-points">11 נקודות</div>
+    </div>
+    <div class="q-body">
+      <div class="q-text">
+        <p>שתי תוכניות חיסכון נמשכות 10 שנים:</p>
+        <p><strong>תוכנית א':</strong> הפקדה של 1,000 ש"ח בתחילת כל שנה, ריבית 8% לשנה.</p>
+        <p><strong>תוכנית ב':</strong> הפקדה חד-פעמית של 30,000 היום + 550 ש"ח כל חודשיים החל מבעוד חודשיים למשך 5 שנים. ריבית 6% נקובה לשנה (חישוב דו-חודשי).</p>
+        <p>איזה סכום יעמוד לרשותכם בכל תוכנית בסוף 10 השנים?</p>
+      </div>
+      <button class="solution-toggle">
+        <span>הצג פתרון מלא + הסברים</span>
+        <span class="icon">+</span>
+      </button>
+      <div class="solution">
+        <div class="sol-label">פתרון מפורט</div>
+
+        <div class="step">
+          <div class="step-num">תוכנית א'</div>
+          <h4>FV של 10 הפקדות שנתיות (תחילת תקופה)</h4>
+          <div class="formula">
+<span class="var">FV_א</span> <span class="op">=</span> <span class="num">1,000</span> <span class="op">·</span> (<span class="num">1.08</span>) <span class="op">·</span> <span class="var">FVFA</span>(<span class="num">8%, 10</span>)
+<span class="var">FV_א</span> <span class="op">=</span> <span class="num">1,000</span> <span class="op">·</span> <span class="num">1.08</span> <span class="op">·</span> <span class="num">14.487</span> <span class="op">=</span> <span class="res">15,646 ש"ח</span>
+          </div>
+        </div>
+
+        <div class="step">
+          <div class="step-num">תוכנית ב'</div>
+          <h4>FV של הפקדה חד-פעמית + סדרה דו-חודשית</h4>
+          <p>ריבית דו-חודשית: 6%/6 = 1% לתקופה. 60 תקופות דו-חודשיות בעוד 10 שנים.</p>
+          <div class="formula">
+<span class="comment"># 30,000 גדל 60 תקופות</span>
+<span class="num">30,000</span> <span class="op">·</span> (<span class="num">1.01</span>)<span class="op">⁶⁰</span> <span class="op">=</span> <span class="num">54,501</span>
+
+<span class="comment"># 30 הפקדות של 550, ב-end of period, צריכות להמשיך לצבור עוד 30 תקופות</span>
+<span class="num">550</span> <span class="op">·</span> <span class="var">FVFA</span>(<span class="num">1%, 30</span>) <span class="op">·</span> (<span class="num">1.01</span>)<span class="op">³⁰</span>
+<span class="op">=</span> <span class="num">550</span> <span class="op">·</span> <span class="num">34.785</span> <span class="op">·</span> <span class="num">1.348</span> <span class="op">=</span> <span class="num">25,787</span>
+
+<span class="var">FV_ב</span> <span class="op">=</span> <span class="num">54,501</span> <span class="op">+</span> <span class="num">25,787</span> <span class="op">=</span> <span class="res">80,288 ש"ח</span>
+          </div>
+        </div>
+
+        <div class="answer">
+          <strong>תשובה:</strong>תוכנית א': 15,646 ש"ח · תוכנית ב': 80,288 ש"ח. ההפקדה החד-פעמית של 30,000 + ההפקדות הצפופות גורמות לתוכנית ב' להיות עדיפה בהרבה.
+        </div>
+      </div>
+    </div>
+  </article>
+
+  <!-- Q5 -->
+  <article class="question">
+    <div class="q-header">
+      <div class="q-num-block">
+        <div class="q-num">05</div>
+        <div class="q-title">הלוואה צמודה — פירעון חלקי ופריסה מחדש</div>
+      </div>
+      <div class="q-points">14 נקודות</div>
+    </div>
+    <div class="q-body">
+      <div class="q-text">
+        <p>הלוואה צמודה של 250,000 ש"ח לפי שפיצר, 10 שנים. ריבית ריאלית: 4% בשנתיים הראשונות, 6% ב-8 השנים שלאחר מכן. הקרן והריבית צמודות למדד שעולה ב-2% לשנה.</p>
+        <p>אחרי תשלום שנה 5, פורעים חלקית 55,705 ש"ח ומבקשים לפרוס מחדש את היתרה לשנתיים נוספות. מה גודל כל אחד מ-2 התשלומים הבאים?</p>
+      </div>
+      <button class="solution-toggle">
+        <span>הצג פתרון מלא + הסברים</span>
+        <span class="icon">+</span>
+      </button>
+      <div class="solution">
+        <div class="sol-label">פתרון מפורט</div>
+
+        <div class="step">
+          <div class="step-num">שלב 1</div>
+          <h4>חישוב התשלום השנתי המקורי (ערכים ריאליים)</h4>
+          <div class="formula">
+<span class="num">250,000</span> <span class="op">=</span> <span class="var">C</span> <span class="op">·</span> <span class="var">PVFA</span>(<span class="num">4%, 2</span>) <span class="op">+</span> <span class="var">C</span> <span class="op">·</span> <span class="var">PVFA</span>(<span class="num">6%, 8</span>)<span class="op">/</span>(<span class="num">1.04</span>)<span class="op">²</span>
+<span class="num">250,000</span> <span class="op">=</span> <span class="var">C</span> <span class="op">·</span> <span class="num">7.6274</span>
+<span class="var">C</span> <span class="op">=</span> <span class="res">32,777 ש"ח ריאלי לשנה</span>
+          </div>
+        </div>
+
+        <div class="step">
+          <div class="step-num">שלב 2</div>
+          <h4>יתרת קרן אחרי שנה 5 (ריאלי)</h4>
+          <p>נשארו 5 תשלומים בריבית 6%:</p>
+          <div class="formula">
+<span class="var">Bal₅_real</span> <span class="op">=</span> <span class="num">32,777</span> <span class="op">·</span> <span class="var">PVFA</span>(<span class="num">6%, 5</span>) <span class="op">=</span> <span class="num">32,777</span> <span class="op">·</span> <span class="num">4.212</span> <span class="op">=</span> <span class="res">138,067</span>
+          </div>
+        </div>
+
+        <div class="step">
+          <div class="step-num">שלב 3</div>
+          <h4>המרה לערכים נומינליים (5 שנות הצמדה)</h4>
+          <div class="formula">
+<span class="var">Bal₅_nominal</span> <span class="op">=</span> <span class="num">138,067</span> <span class="op">·</span> (<span class="num">1.02</span>)<span class="op">⁵</span> <span class="op">=</span> <span class="res">152,437</span>
+          </div>
+        </div>
+
+        <div class="step">
+          <div class="step-num">שלב 4</div>
+          <h4>חישוב תשלום חדש לשנתיים</h4>
+          <div class="formula">
+<span class="num">152,437</span> <span class="op">-</span> <span class="num">55,705</span> <span class="op">=</span> <span class="var">C_new</span> <span class="op">·</span> <span class="var">PVFA</span>(<span class="num">6%, 2</span>)
+<span class="num">96,732</span> <span class="op">=</span> <span class="var">C_new</span> <span class="op">·</span> <span class="num">1.833</span>
+<span class="var">C_new</span> <span class="op">=</span> <span class="res">52,761 ריאלי לשנה</span>
+
+<span class="comment"># המרה לנומינלי, כל שנה צוברת הצמדה נוספת</span>
+שנה 6: <span class="num">52,761</span> <span class="op">·</span> <span class="num">1.02</span> <span class="op">=</span> <span class="res">53,816</span>
+שנה 7: <span class="num">52,761</span> <span class="op">·</span> (<span class="num">1.02</span>)<span class="op">²</span> <span class="op">=</span> <span class="res">54,893</span>
+          </div>
+        </div>
+
+        <div class="answer">
+          <strong>תשובה:</strong>תשלום שנה 6: 53,816 ש"ח · תשלום שנה 7: 54,893 ש"ח.
+        </div>
+
+        <div class="warning"><strong>שגיאה נפוצה</strong><p>לעבוד עם המספרים הנומינליים מהתחלה במקום להחזיק ריאליות לאורך החישוב. בהלוואות צמודות תמיד: (1) חישוב ריאלי, (2) המרה לנומינלי כשנדרש.</p></div>
+      </div>
+    </div>
+  </article>
+
+  <!-- Q6 -->
+  <article class="question">
+    <div class="q-header">
+      <div class="q-num-block">
+        <div class="q-num">06</div>
+        <div class="q-title">אג"ח עם ריבית חצי-שנתית — מחיר וערך ההון</div>
+      </div>
+      <div class="q-points">10 נקודות</div>
+    </div>
+    <div class="q-body">
+      <div class="q-text">
+        <p>חברת "פניק הביטחון" הנפיקה ב-1/1/2017 אג"ח עם ערך נקוב 100 ש"ח וריבית נקובה 8% לשנה. פדיון: 31/12/2022. הריבית משולמת פעמיים בשנה.</p>
+        <p>קניתם את האג"ח ב-1/1/2018 כשתשואה לפדיון נדרשה הייתה 25% לשנה (אפקטיבי). מכרתם ב-1/1/2019. חשבו את מחיר הקנייה ואת מחיר המכירה.</p>
+      </div>
+      <button class="solution-toggle">
+        <span>הצג פתרון מלא + הסברים</span>
+        <span class="icon">+</span>
+      </button>
+      <div class="solution">
+        <div class="sol-label">פתרון מפורט</div>
+
+        <div class="step">
+          <div class="step-num">שלב 1</div>
+          <h4>המרת ריבית שנתית אפקטיבית לחצי-שנתית</h4>
+          <div class="formula">
+<span class="var">r₂</span> <span class="op">=</span> (<span class="num">1.25</span>)<span class="op">^(1/2)</span> <span class="op">-</span> <span class="num">1</span> <span class="op">=</span> <span class="res">11.80% חצי-שנתי</span>
+
+<span class="comment"># קופון: 8%/2 = 4 ש"ח כל חצי שנה</span>
+          </div>
+        </div>
+
+        <div class="step">
+          <div class="step-num">שלב 2</div>
+          <h4>מחיר הקנייה ב-1/1/2018 (10 תקופות חצי-שנתיות עד פדיון)</h4>
+          <div class="formula">
+<span class="var">P_buy</span> <span class="op">=</span> <span class="num">4</span> <span class="op">·</span> <span class="var">PVFA</span>(<span class="num">11.80%, 10</span>) <span class="op">+</span> <span class="num">100</span><span class="op">/</span>(<span class="num">1.118</span>)<span class="op">¹⁰</span>
+<span class="var">P_buy</span> <span class="op">≈</span> <span class="num">4</span> <span class="op">·</span> <span class="num">5.578</span> <span class="op">+</span> <span class="num">100</span><span class="op">·</span><span class="num">0.342</span> <span class="op">≈</span> <span class="res">56.50 ש"ח</span>
+          </div>
+        </div>
+
+        <div class="step">
+          <div class="step-num">שלב 3</div>
+          <h4>הסברים על המכירה</h4>
+          <p>השאלה לא נותנת תשואה נדרשת חדשה ב-1/1/2019, אז יש להניח שהיא נותרה ב-25% או נתונה אחרת. אם נשארה 25%, מחיר המכירה הוא PV של 8 התקופות הנותרות.</p>
+          <div class="formula">
+<span class="var">P_sell</span> <span class="op">=</span> <span class="num">4</span> <span class="op">·</span> <span class="var">PVFA</span>(<span class="num">11.80%, 8</span>) <span class="op">+</span> <span class="num">100</span><span class="op">/</span>(<span class="num">1.118</span>)<span class="op">⁸</span>
+<span class="var">P_sell</span> <span class="op">≈</span> <span class="num">59.5 ש"ח</span>
+          </div>
+        </div>
+
+        <div class="answer">
+          <strong>תשובה:</strong>מחיר קנייה ≈ 56.5 ש"ח (ניכיון משמעותי, כי ריבית נדרשת > ריבית קופון). מחיר מכירה תלוי בתשואה הנדרשת באותו מועד.
+        </div>
+
+        <div class="insight"><strong>זכרו</strong><p>כשתשואה נדרשת (r) > ריבית קופון (i) → אג"ח נסחרת בניכיון (P &lt; F). כאן 25% &gt;&gt; 8% → ניכיון משמעותי.</p></div>
+      </div>
+    </div>
+  </article>
+
+</section>
+
+</main>
+
+<footer>
+  <div class="footer-inner">
+    <div class="footer-title">בהצלחה במבחן!</div>
+    <div class="footer-sub">היעד שלנו: 65. הדרך: 6 שאלות, 3 שעות, ראש קר.</div>
+    <div class="footer-grid">
+      <div class="footer-item"><strong>טיפ 1</strong><span>התחל מהשאלות הקלות. שאלות 3, 4, 5 (הלוואות וערך הזמן) פוטרות מהר אם זוכרים את הנוסחה הנכונה.</span></div>
+      <div class="footer-item"><strong>טיפ 2</strong><span>שאלת התזרים (שאלה 1) שווה הכי הרבה. הקדישו לה לפחות 45 דקות. בנו טבלה — לא מילים.</span></div>
+      <div class="footer-item"><strong>טיפ 3</strong><span>כל מהלך — תרשמו. גם אם לא מגיעים לתשובה נכונה, מקבלים נקודות חלקיות.</span></div>
+      <div class="footer-item"><strong>טיפ 4</strong><span>אל תשכחו את דף הנוסחאות! הוא ניתן בבחינה. שיננו מהי כל אות (PVFA, FVFA, I_M, וכו').</span></div>
+    </div>
+  </div>
+</footer>
+
+<script>
+  // Tab switching
+  document.querySelectorAll('.nav-tab').forEach(tab => {
+    tab.addEventListener('click', () => {
+      const exam = tab.dataset.exam;
+      document.querySelectorAll('.nav-tab').forEach(t => t.classList.remove('active'));
+      document.querySelectorAll('.exam-panel').forEach(p => p.classList.remove('active'));
+      tab.classList.add('active');
+      document.getElementById('exam-' + exam).classList.add('active');
+      // Close all open solutions when switching
+      document.querySelectorAll('.solution-toggle').forEach(b => b.classList.remove('open'));
+      document.querySelectorAll('.solution').forEach(s => s.classList.remove('open'));
+      // Scroll to top of content
+      window.scrollTo({ top: document.querySelector('main').offsetTop - 80, behavior: 'smooth' });
+    });
+  });
+
+  // Solution toggle
+  document.querySelectorAll('.solution-toggle').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const solution = btn.nextElementSibling;
+      btn.classList.toggle('open');
+      solution.classList.toggle('open');
+      if (solution.classList.contains('open')) {
+        btn.querySelector('span:first-child').textContent = 'הסתר פתרון';
+      } else {
+        btn.querySelector('span:first-child').textContent = 'הצג פתרון מלא + הסברים';
+      }
+    });
+  });
+</script>
+
+</body>
+</html>

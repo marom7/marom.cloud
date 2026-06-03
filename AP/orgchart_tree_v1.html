@@ -1,0 +1,456 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>מבנה ארגוני - חטיבת משאבים</title>
+<link href="https://fonts.googleapis.com/css2?family=Heebo:wght@300;400;500;600;700;800&family=Rubik:wght@400;500;600;700&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+<style>
+:root{--bg:#f5f7fa;--bg2:#eef1f6;--line:#94a3b8;--box-bg:#fff;--box-border:#cbd5e1;--box-shadow:0 2px 8px rgba(0,0,0,.08);--mgr-bg:linear-gradient(135deg,#1e3a5f,#2d5a8e);--mgr-color:#fff;--mgr-border:#1e3a5f;--mgr-shadow:0 4px 15px rgba(30,58,95,.25);--emp-bg:#fff;--emp-color:#334155;--emp-border:#cbd5e1;--title:#1e293b;--sub:#64748b;--accent:#2563eb;--gold:#d97706;--cyan:#0891b2;--green:#059669;--purple:#7c3aed}
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:'Heebo',sans-serif;background:var(--bg);color:var(--title);overflow:hidden;height:100vh;width:100vw}
+
+/* Top bar */
+.topbar{position:fixed;top:0;left:0;right:0;z-index:100;background:#fff;border-bottom:1px solid #e2e8f0;padding:8px 20px;display:flex;align-items:center;gap:12px;box-shadow:0 1px 4px rgba(0,0,0,.06)}
+.topbar h1{font-family:'Rubik',sans-serif;font-size:1rem;font-weight:700;color:var(--title);white-space:nowrap}
+.topbar .sep{width:1px;height:24px;background:#e2e8f0}
+.topbar .stats{font-size:.75rem;color:var(--sub);display:flex;gap:12px}
+.topbar .stats span{font-weight:600;color:var(--accent)}
+.topbar input[type=text]{flex:1;max-width:280px;padding:6px 12px;border:1px solid #e2e8f0;border-radius:8px;font-family:'Heebo',sans-serif;font-size:.8rem;outline:none;direction:rtl}
+.topbar input:focus{border-color:var(--accent);box-shadow:0 0 0 3px rgba(37,99,235,.1)}
+.topbar .btn{padding:5px 12px;border-radius:6px;border:1px solid #e2e8f0;background:#fff;color:var(--sub);font-family:'Heebo',sans-serif;font-size:.75rem;cursor:pointer;transition:all .2s;white-space:nowrap}
+.topbar .btn:hover{background:#f1f5f9;border-color:#94a3b8;color:var(--title)}
+.topbar .btn.active{background:var(--accent);color:#fff;border-color:var(--accent)}
+.zoom-controls{display:flex;align-items:center;gap:4px}
+.zoom-controls .btn{width:30px;height:30px;padding:0;display:flex;align-items:center;justify-content:center;font-size:1.1rem;border-radius:50%}
+.zoom-label{font-size:.7rem;color:var(--sub);min-width:36px;text-align:center}
+.search-count{font-size:.7rem;color:var(--accent);white-space:nowrap}
+
+/* Upload overlay */
+.upload-overlay{position:fixed;top:0;left:0;right:0;bottom:0;z-index:200;background:rgba(255,255,255,.97);display:flex;align-items:center;justify-content:center;backdrop-filter:blur(5px)}
+.upload-overlay.hidden{display:none}
+.upload-box{text-align:center;padding:60px 80px;border:3px dashed #cbd5e1;border-radius:24px;cursor:pointer;transition:all .3s;background:#fafbfc}
+.upload-box:hover{border-color:var(--accent);background:#f0f4ff;transform:translateY(-4px);box-shadow:0 20px 60px rgba(37,99,235,.1)}
+.upload-box.dragover{border-color:var(--accent);background:#e8f0fe;transform:scale(1.02)}
+.upload-box .icon{font-size:4rem;margin-bottom:20px}
+.upload-box h2{font-size:1.3rem;color:var(--title);margin-bottom:6px}
+.upload-box p{font-size:.85rem;color:var(--sub)}
+.upload-box input{display:none}
+
+/* Canvas area */
+.canvas-wrap{position:fixed;top:48px;left:0;right:0;bottom:0;overflow:auto;cursor:grab;background:var(--bg);background-image:radial-gradient(circle,#dde2ea 1px,transparent 1px);background-size:24px 24px;direction:ltr}
+.canvas-wrap:active{cursor:grabbing}
+.canvas{transform-origin:top center;transition:transform .1s ease-out;padding:60px 40px 100px;display:inline-block;min-width:100%;text-align:center;direction:rtl}
+
+/* ===== TREE STRUCTURE ===== */
+.tree{display:inline-flex;flex-direction:column;align-items:center}
+.tree ul{display:flex;justify-content:center;padding:0;margin:0;list-style:none;position:relative}
+.tree ul::before{content:'';position:absolute;top:0;right:50%;border-top:2px solid var(--line);width:50%}
+.tree ul::after{content:'';position:absolute;top:0;left:50%;border-top:2px solid var(--line);width:50%}
+.tree li{display:flex;flex-direction:column;align-items:center;padding:50px 24px 0;position:relative}
+/* vertical line down from parent */
+.tree li::before{content:'';position:absolute;top:0;height:50px;width:2px;background:var(--line)}
+/* horizontal connector */
+.tree li::after{content:'';position:absolute;top:0;right:0;left:0;border-top:2px solid var(--line)}
+.tree li:first-child::after{right:50%;left:auto;width:50%}
+.tree li:last-child::after{left:50%;right:auto;width:50%}
+.tree li:only-child::after{display:none}
+/* root level */
+.tree>ul{padding-top:0}
+.tree>ul::before,.tree>ul::after{display:none}
+.tree>ul>li::before{display:none}
+.tree>ul>li::after{display:none}
+/* vertical line down from node to children */
+.tree .has-children>.node-wrap::after{content:'';position:absolute;bottom:-50px;right:50%;transform:translateX(50%);width:2px;height:50px;background:var(--line)}
+.tree .has-children{padding-bottom:0}
+
+/* Node box */
+.node-wrap{position:relative;display:inline-block;margin-bottom:0}
+.node{padding:14px 22px;border-radius:10px;text-align:center;cursor:pointer;transition:all .25s;min-width:150px;max-width:220px;position:relative;font-size:.82rem;line-height:1.4}
+.node:hover{transform:translateY(-3px)}
+
+.node.mgr{background:var(--mgr-bg);color:var(--mgr-color);border:2px solid var(--mgr-border);box-shadow:var(--mgr-shadow);font-weight:600;font-size:.76rem}
+.node.mgr:hover{box-shadow:0 8px 25px rgba(30,58,95,.35)}
+
+.node.emp{background:var(--emp-bg);color:var(--emp-color);border:1.5px solid var(--emp-border);box-shadow:var(--box-shadow)}
+.node.emp:hover{border-color:var(--accent);box-shadow:0 4px 15px rgba(37,99,235,.15)}
+
+.node.root{background:linear-gradient(135deg,#0f172a,#1e3a5f);color:#fff;border:2px solid #0f172a;box-shadow:0 6px 25px rgba(15,23,42,.3);font-size:1rem;font-weight:700;padding:18px 36px;min-width:200px}
+
+.node.dept-head{background:linear-gradient(135deg,#1e40af,#3b82f6);color:#fff;border:2px solid #1e40af;box-shadow:0 4px 20px rgba(30,64,175,.25);font-weight:600;font-size:.85rem;padding:14px 24px;min-width:160px}
+
+.node.unit-head{background:linear-gradient(135deg,#065f46,#059669);color:#fff;border:2px solid #065f46;box-shadow:0 4px 15px rgba(6,95,70,.2);font-weight:600;font-size:.8rem;padding:12px 20px}
+
+.node .count{display:block;font-size:.65rem;opacity:.75;margin-top:3px}
+
+/* Search highlight */
+.node.highlight{outline:3px solid #f59e0b;outline-offset:3px;animation:pulse 1s ease-in-out infinite}
+@keyframes pulse{0%,100%{outline-color:#f59e0b}50%{outline-color:#ea580c}}
+
+/* Balloon popup */
+.balloon-overlay{position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,.4);backdrop-filter:blur(4px);z-index:300;display:none;align-items:center;justify-content:center}
+.balloon-overlay.active{display:flex}
+.balloon{background:#fff;border-radius:16px;padding:0;min-width:340px;max-width:400px;box-shadow:0 25px 80px rgba(0,0,0,.2);animation:balloonIn .4s cubic-bezier(.175,.885,.32,1.275);overflow:hidden}
+@keyframes balloonIn{0%{opacity:0;transform:scale(.7) translateY(30px)}100%{opacity:1;transform:scale(1) translateY(0)}}
+.balloon-head{padding:24px 24px 16px;text-align:center;position:relative}
+.balloon-head.mgr{background:linear-gradient(135deg,#1e3a5f,#2d5a8e)}
+.balloon-head.emp{background:linear-gradient(135deg,#f8fafc,#e2e8f0)}
+.balloon-avatar{width:60px;height:60px;border-radius:50%;margin:0 auto 10px;display:flex;align-items:center;justify-content:center;font-size:1.8rem;background:rgba(255,255,255,.15);border:2px solid rgba(255,255,255,.3)}
+.balloon-head.emp .balloon-avatar{background:rgba(37,99,235,.08);border-color:rgba(37,99,235,.2)}
+.balloon-bname{font-family:'Rubik',sans-serif;font-size:1.3rem;font-weight:700}
+.balloon-head.mgr .balloon-bname{color:#fff}
+.balloon-head.emp .balloon-bname{color:var(--title)}
+.balloon-btag{display:inline-block;font-size:.65rem;font-weight:600;padding:2px 10px;border-radius:12px;margin-top:4px}
+.balloon-head.mgr .balloon-btag{background:rgba(255,255,255,.15);color:rgba(255,255,255,.9)}
+.balloon-head.emp .balloon-btag{background:rgba(37,99,235,.08);color:var(--accent)}
+.balloon-body{padding:16px 24px 24px}
+.balloon-row{display:flex;align-items:center;gap:10px;padding:10px 12px;background:#f8fafc;border-radius:10px;margin-bottom:8px;border:1px solid #f1f5f9}
+.balloon-row:last-child{margin-bottom:0}
+.balloon-row-icon{font-size:1rem;width:28px;text-align:center}
+.balloon-row-label{font-size:.6rem;color:var(--sub);text-transform:uppercase;letter-spacing:.3px}
+.balloon-row-value{font-size:.82rem;color:var(--title);font-weight:500}
+.balloon-close{position:absolute;top:10px;left:10px;width:28px;height:28px;border-radius:50%;background:rgba(255,255,255,.15);border:none;color:rgba(255,255,255,.7);font-size:.9rem;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all .2s}
+.balloon-head.emp .balloon-close{background:rgba(0,0,0,.05);color:var(--sub)}
+.balloon-close:hover{background:rgba(255,0,0,.15);color:#ef4444;transform:rotate(90deg)}
+</style>
+</head>
+<body>
+
+<!-- Top Bar -->
+<div class="topbar">
+  <h1>🏛️ מבנה ארגוני</h1>
+  <div class="sep"></div>
+  <div class="stats">
+    <span id="sEmp">-</span> עובדים &nbsp;|&nbsp;
+    <span id="sDept">-</span> מחלקות &nbsp;|&nbsp;
+    <span id="sUnit">-</span> יחידות
+  </div>
+  <div class="sep"></div>
+  <input type="text" id="searchInput" placeholder="🔍 חיפוש תפקיד / שם..." oninput="handleSearch(this.value)">
+  <span class="search-count" id="searchCount"></span>
+  <div class="sep"></div>
+  <div class="zoom-controls">
+    <button class="btn" onclick="zoomOut()">−</button>
+    <span class="zoom-label" id="zoomLabel">100%</span>
+    <button class="btn" onclick="zoomIn()">+</button>
+    <button class="btn" onclick="zoomFit()">⊡</button>
+  </div>
+  <button class="btn" id="toggleBtn" onclick="toggleAll()">▶ הרחב</button>
+  <button class="btn" onclick="document.getElementById('fileInput').click()">📂 החלף קובץ</button>
+</div>
+
+<!-- Upload Overlay -->
+<div class="upload-overlay" id="uploadOverlay">
+  <div class="upload-box" id="uploadBox" onclick="document.getElementById('fileInput').click()">
+    <div class="icon">📊</div>
+    <h2>טען קובץ אקסל</h2>
+    <p>גרור לכאן או לחץ לבחירה · xlsx / xls</p>
+    <input type="file" id="fileInput" accept=".xlsx,.xls" onchange="handleFile(this.files[0])">
+  </div>
+</div>
+
+<!-- Balloon -->
+<div class="balloon-overlay" id="balloonOverlay" onclick="closeBalloon(event)">
+  <div class="balloon" onclick="event.stopPropagation()">
+    <div class="balloon-head" id="bHead">
+      <button class="balloon-close" onclick="closeBalloon()">✕</button>
+      <div class="balloon-avatar" id="bAvatar">👤</div>
+      <div class="balloon-bname" id="bName"></div>
+      <div class="balloon-btag" id="bTag"></div>
+    </div>
+    <div class="balloon-body">
+      <div class="balloon-row"><span class="balloon-row-icon">💼</span><div><div class="balloon-row-label">תפקיד</div><div class="balloon-row-value" id="bRole"></div></div></div>
+      <div class="balloon-row"><span class="balloon-row-icon">👆</span><div><div class="balloon-row-label">כפיפות ישירה</div><div class="balloon-row-value" id="bReports"></div></div></div>
+      <div class="balloon-row"><span class="balloon-row-icon">🏢</span><div><div class="balloon-row-label">מחלקה</div><div class="balloon-row-value" id="bDept"></div></div></div>
+      <div class="balloon-row"><span class="balloon-row-icon">📍</span><div><div class="balloon-row-label">יחידה</div><div class="balloon-row-value" id="bUnit"></div></div></div>
+    </div>
+  </div>
+</div>
+
+<!-- Canvas -->
+<div class="canvas-wrap" id="canvasWrap">
+  <div class="canvas" id="canvas"></div>
+</div>
+
+<script>
+// ===== NAMES =====
+function getName(role){return(typeof EMPLOYEES!=='undefined'&&EMPLOYEES[role])?EMPLOYEES[role]:role}
+
+// ===== ZOOM =====
+let zoom=1;
+const canvasEl=document.getElementById('canvas');
+const wrapEl=document.getElementById('canvasWrap');
+
+function applyZoom(){canvasEl.style.transform=`scale(${zoom})`;document.getElementById('zoomLabel').textContent=Math.round(zoom*100)+'%'}
+function zoomIn(){zoom=Math.min(zoom+.15,3);applyZoom()}
+function zoomOut(){zoom=Math.max(zoom-.15,.2);applyZoom()}
+function zoomFit(){
+  const tree=canvasEl.querySelector('.tree');
+  if(!tree)return;
+  const tw=tree.scrollWidth+120,th=tree.scrollHeight+120;
+  const ww=wrapEl.clientWidth,wh=wrapEl.clientHeight;
+  zoom=Math.min(ww/tw,wh/th,1.2);
+  zoom=Math.max(zoom,0.35);
+  applyZoom();
+  // Center scroll
+  setTimeout(()=>{
+    const cw=canvasEl.scrollWidth*zoom;
+    const ch=canvasEl.scrollHeight*zoom;
+    wrapEl.scrollLeft=Math.max(0,(cw-ww)/2);
+    wrapEl.scrollTop=0;
+  },100);
+}
+
+// Mouse wheel zoom
+wrapEl.addEventListener('wheel',e=>{
+  if(e.ctrlKey||e.metaKey){
+    e.preventDefault();
+    if(e.deltaY<0)zoomIn();else zoomOut();
+  }
+},{passive:false});
+
+// ===== DRAG & DROP =====
+const ub=document.getElementById('uploadBox');
+ub.addEventListener('dragover',e=>{e.preventDefault();ub.classList.add('dragover')});
+ub.addEventListener('dragleave',()=>ub.classList.remove('dragover'));
+ub.addEventListener('drop',e=>{e.preventDefault();ub.classList.remove('dragover');if(e.dataTransfer.files.length)handleFile(e.dataTransfer.files[0])});
+
+// ===== PAN =====
+let isPanning=false,panStart={x:0,y:0},scrollStart={x:0,y:0};
+wrapEl.addEventListener('mousedown',e=>{if(e.target.closest('.node')||e.target.closest('.balloon')||e.target.closest('.topbar'))return;isPanning=true;panStart={x:e.clientX,y:e.clientY};scrollStart={x:wrapEl.scrollLeft,y:wrapEl.scrollTop};wrapEl.style.cursor='grabbing'});
+window.addEventListener('mousemove',e=>{if(!isPanning)return;wrapEl.scrollLeft=scrollStart.x-(e.clientX-panStart.x);wrapEl.scrollTop=scrollStart.y-(e.clientY-panStart.y)});
+window.addEventListener('mouseup',()=>{isPanning=false;wrapEl.style.cursor='grab'});
+
+// ===== READ EXCEL =====
+function handleFile(file){
+  if(!file)return;
+  const reader=new FileReader();
+  reader.onload=function(e){
+    const wb=XLSX.read(e.target.result,{type:'array',cellDates:false});
+    const ws=wb.Sheets[wb.SheetNames[0]];
+    const rows=XLSX.utils.sheet_to_json(ws,{header:1,defval:''});
+    processData(rows);
+    document.getElementById('uploadOverlay').classList.add('hidden');
+  };
+  reader.readAsArrayBuffer(file);
+}
+
+// ===== PROCESS DATA =====
+let allData={departments:[],employees:[],ceo:null};
+
+function processData(rows){
+  const allEmps=[];
+
+  // 1. Parse all rows
+  for(let i=1;i<rows.length;i++){
+    const r=rows[i];
+    if(!r||r.length<6)continue;
+    const hativa=(r[0]||'').toString().trim();
+    const dept=(r[1]||'').toString().trim();
+    const unitOld=(r[3]||'').toString().trim();
+    const unitNew=(r[4]||'').toString().trim();
+    let role=(r[5]||'').toString().trim();
+    const empId=(r[6]||'').toString().trim();
+    const reportsTo=((r[7]||'').toString().trim()).replace(/\*\*/g,'').trim();
+
+    if(!role||dept==='מחלקה'||hativa==='חטיבה')continue;
+
+    const isMgr=role.startsWith('**');
+    role=role.replace(/\*\*/g,'').trim();
+    const unit=unitNew||unitOld;
+
+    allEmps.push({role,dept,unit,reportsTo,isMgr,empId});
+  }
+
+  // 2. Deduplicate: group identical (role + reportsTo) → count
+  const grouped={};
+  allEmps.forEach(e=>{
+    const key=e.role+'|||'+e.reportsTo;
+    if(!grouped[key]){grouped[key]={...e,count:1}}
+    else{grouped[key].count++}
+  });
+  const nodes=Object.values(grouped);
+
+  // 3. Build lookup: role name → exists
+  const roleSet=new Set(nodes.map(n=>n.role));
+
+  // 4. Build children map: parentRole → [childNodes]
+  const childrenOf={};
+  nodes.forEach(n=>{
+    const p=n.reportsTo;
+    if(p&&roleSet.has(p)){
+      if(!childrenOf[p])childrenOf[p]=[];
+      childrenOf[p].push(n);
+    }
+  });
+
+  // 5. Find root(s): reportsTo is empty or not found in any role
+  let roots=nodes.filter(n=>!n.reportsTo||!roleSet.has(n.reportsTo));
+
+  // If multiple roots, find the one that has the most descendants
+  if(roots.length>1){
+    function countDesc(role,visited=new Set()){
+      if(visited.has(role))return 0;
+      visited.add(role);
+      const ch=childrenOf[role]||[];
+      return ch.reduce((sum,c)=>sum+c.count+countDesc(c.role,visited),0);
+    }
+    roots.sort((a,b)=>countDesc(b.role)-countDesc(a.role));
+    // The one with most descendants is the real root
+    // Others become children of root if they report to nothing
+  }
+
+  // 6. Count stats
+  const deptSet=new Set(allEmps.map(e=>e.dept));
+  const unitSet=new Set(allEmps.map(e=>e.unit));
+  document.getElementById('sEmp').textContent=allEmps.length;
+  document.getElementById('sDept').textContent=deptSet.size;
+  document.getElementById('sUnit').textContent=unitSet.size;
+
+  allData={nodes,roots,childrenOf,allEmps};
+  renderTree();
+  setTimeout(zoomFit,300);
+}
+
+// ===== RENDER TREE =====
+function renderTree(){
+  const {roots,childrenOf}=allData;
+
+  function getNodeClass(level,hasChildren){
+    if(level===0)return 'root';
+    if(level===1)return 'dept-head';
+    if(hasChildren)return 'unit-head';
+    return 'emp';
+  }
+
+  function renderNode(node,level,visited){
+    // Prevent circular references
+    if(visited.has(node.role))return '';
+    visited.add(node.role);
+
+    const children=childrenOf[node.role]||[];
+    const hasCh=children.length>0;
+    const cls=getNodeClass(level,hasCh);
+    const isMgr=node.isMgr||hasCh;
+    const countLabel=node.count>1?' ('+node.count+')':'';
+    const deptLabel=(level===1&&node.dept)?`<span class="count">${esc(node.dept)} (${countDescendants(node.role)})</span>`:'';
+    const unitLabel=(level===2&&hasCh)?`<span class="count">${esc(node.unit||'')}</span>`:'';
+
+    let h=`<li class="${hasCh?'has-children':''}">`;
+    h+=`<div class="node-wrap"><div class="node ${cls}" onclick="showBalloon('${esc(node.role)}','${esc(node.dept)}','${esc(node.unit)}','${esc(node.reportsTo)}',${isMgr})" data-search="${esc(node.role)} ${esc(node.dept)} ${esc(node.unit)}">${esc(node.role)}${countLabel}${deptLabel}${unitLabel}</div></div>`;
+
+    if(hasCh){
+      h+='<ul>';
+      // Sort: managers first, then by role name
+      const sorted=[...children].sort((a,b)=>{
+        if(a.isMgr&&!b.isMgr)return-1;
+        if(!a.isMgr&&b.isMgr)return 1;
+        const aCh=(childrenOf[a.role]||[]).length;
+        const bCh=(childrenOf[b.role]||[]).length;
+        if(aCh!==bCh)return bCh-aCh;
+        return 0;
+      });
+      sorted.forEach(ch=>{ h+=renderNode(ch,level+1,visited) });
+      h+='</ul>';
+    }
+    h+='</li>';
+    return h;
+  }
+
+  function countDescendants(role,visited=new Set()){
+    if(visited.has(role))return 0;
+    visited.add(role);
+    const ch=childrenOf[role]||[];
+    return ch.reduce((sum,c)=>sum+c.count+countDescendants(c.role,visited),0);
+  }
+
+  let html='<div class="tree"><ul>';
+  if(roots.length===1){
+    html+=renderNode(roots[0],0,new Set());
+  } else {
+    // Multiple roots — render the top one as root, rest as its children
+    const mainRoot=roots[0];
+    const otherRoots=roots.slice(1);
+    // Temporarily add others as children of main root
+    if(!childrenOf[mainRoot.role])childrenOf[mainRoot.role]=[];
+    otherRoots.forEach(r=>{
+      if(!childrenOf[mainRoot.role].find(c=>c.role===r.role)){
+        childrenOf[mainRoot.role].push(r);
+      }
+    });
+    html+=renderNode(mainRoot,0,new Set());
+  }
+  html+='</ul></div>';
+
+  canvasEl.innerHTML=html;
+  indexSearch();
+}
+
+function esc(s){return String(s||'').replace(/'/g,"\\'").replace(/"/g,'&quot;').replace(/</g,'&lt;')}
+
+// ===== BALLOON =====
+function showBalloon(role,dept,unit,reportsTo,isMgr){
+  const name=getName(role);
+  document.getElementById('bName').textContent=name;
+  document.getElementById('bRole').textContent=role;
+  document.getElementById('bReports').textContent=reportsTo||'—';
+  document.getElementById('bDept').textContent=dept;
+  document.getElementById('bUnit').textContent=unit;
+  const head=document.getElementById('bHead');
+  const avatar=document.getElementById('bAvatar');
+  const tag=document.getElementById('bTag');
+  if(isMgr){head.className='balloon-head mgr';avatar.textContent='⭐';tag.textContent='👑 דרג ניהולי'}
+  else{head.className='balloon-head emp';avatar.textContent='👤';tag.textContent='עובד/ת'}
+  document.getElementById('balloonOverlay').classList.add('active');
+}
+function closeBalloon(e){if(e&&e.target!==document.getElementById('balloonOverlay'))return;document.getElementById('balloonOverlay').classList.remove('active')}
+
+// ===== TOGGLE ALL =====
+let expanded=false;
+function toggleAll(){
+  // Toggle between full tree and collapsed
+  expanded=!expanded;
+  document.getElementById('toggleBtn').textContent=expanded?'◀ כווץ':'▶ הרחב';
+  // In tree view, nothing to collapse per se — but we could hide staff level
+}
+
+// ===== SEARCH =====
+const searchItems=[];
+function indexSearch(){
+  searchItems.length=0;
+  document.querySelectorAll('.node[data-search]').forEach(el=>{
+    const text=(el.dataset.search+' '+getName(el.dataset.search.split(' ')[0])).toLowerCase();
+    searchItems.push({el,text});
+  });
+}
+
+let sTimeout;
+function handleSearch(q){
+  clearTimeout(sTimeout);
+  document.querySelectorAll('.node.highlight').forEach(el=>el.classList.remove('highlight'));
+  document.getElementById('searchCount').textContent='';
+  if(!q)return;
+  sTimeout=setTimeout(()=>{
+    const ql=q.toLowerCase();
+    const matches=searchItems.filter(s=>s.text.includes(ql));
+    matches.forEach(m=>m.el.classList.add('highlight'));
+    document.getElementById('searchCount').textContent=matches.length?`${matches.length} תוצאות`:'אין תוצאות';
+    if(matches.length){
+      const el=matches[0].el;
+      const rect=el.getBoundingClientRect();
+      const wrapRect=wrapEl.getBoundingClientRect();
+      wrapEl.scrollTo({
+        left:wrapEl.scrollLeft+(rect.left-wrapRect.left)-wrapRect.width/2+rect.width/2,
+        top:wrapEl.scrollTop+(rect.top-wrapRect.top)-wrapRect.height/2+rect.height/2,
+        behavior:'smooth'
+      });
+    }
+  },250);
+}
+
+// ESC
+document.addEventListener('keydown',e=>{if(e.key==='Escape'){const o=document.getElementById('balloonOverlay');if(o.classList.contains('active'))o.classList.remove('active');else{document.getElementById('searchInput').value='';handleSearch('')}}});
+</script>
+</body>
+</html>
