@@ -1,422 +1,533 @@
 <!DOCTYPE html>
 <html lang="he" dir="rtl">
+
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>MBA · בן-גוריון · חומרי לימוד</title>
-<link href="https://fonts.googleapis.com/css2?family=Frank+Ruhl+Libre:wght@300;400;700;900&family=Heebo:wght@300;400;500;700&display=swap" rel="stylesheet">
-<style>
-*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>MBA · בן-גוריון · חומרי לימוד</title>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Frank+Ruhl+Libre:wght@300;400;700;900&family=Heebo:wght@300;400;500;700&display=swap"
+    rel="stylesheet">
+  <style>
+    *,
+    *::before,
+    *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
 
-:root {
-  --bg: #0e0e14;
-  --bg2: #13131c;
-  --line: rgba(255,255,255,0.07);
-  --text: #f0eee8;
-  --muted: rgba(240,238,232,0.45);
+    :root {
+      --bg: #0e0e14;
+      --bg2: #13131c;
+      --line: rgba(255, 255, 255, 0.07);
+      --text: #f0eee8;
+      --muted: rgba(240, 238, 232, 0.45);
 
-  --c1: #e8b84b; /* behavior - gold */
-  --c2: #4ecdc4; /* econ - teal */
-  --c3: #a78bfa; /* accounting - violet */
-  --c4: #f97316; /* finance - orange */
-  --c5: #34d399; /* operations - emerald */
-  --c6: #fb7185; /* leadership - rose */
-}
+      --c1: #e8b84b;
+      /* behavior - gold */
+      --c2: #4ecdc4;
+      /* econ - teal */
+      --c3: #a78bfa;
+      /* accounting - violet */
+      --c4: #f97316;
+      /* finance - orange */
+      --c5: #34d399;
+      /* operations - emerald */
+      --c6: #fb7185;
+      /* leadership - rose */
+    }
 
-html { scroll-behavior: smooth; }
+    html {
+      scroll-behavior: smooth;
+    }
 
-body {
-  font-family: 'Heebo', sans-serif;
-  background: var(--bg);
-  color: var(--text);
-  min-height: 100vh;
-  overflow-x: hidden;
-}
+    body {
+      font-family: 'Heebo', sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      min-height: 100vh;
+      overflow-x: hidden;
+    }
 
-/* ── GRID BACKGROUND ── */
-body::before {
-  content: '';
-  position: fixed;
-  inset: 0;
-  background-image:
-    linear-gradient(var(--line) 1px, transparent 1px),
-    linear-gradient(90deg, var(--line) 1px, transparent 1px);
-  background-size: 60px 60px;
-  pointer-events: none;
-  z-index: 0;
-}
+    /* ── GRID BACKGROUND ── */
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background-image:
+        linear-gradient(var(--line) 1px, transparent 1px),
+        linear-gradient(90deg, var(--line) 1px, transparent 1px);
+      background-size: 60px 60px;
+      pointer-events: none;
+      z-index: 0;
+    }
 
-/* ── HEADER ── */
-header {
-  position: relative;
-  z-index: 10;
-  padding: 56px 32px 0;
-  max-width: 1080px;
-  margin: 0 auto;
-  text-align: center;
-}
+    /* ── HEADER ── */
+    header {
+      position: relative;
+      z-index: 10;
+      padding: 56px 32px 0;
+      max-width: 1080px;
+      margin: 0 auto;
+      text-align: center;
+    }
 
-.uni-badge {
-  display: inline-flex;
-  align-items: center;
-  gap: 8px;
-  font-size: 0.72rem;
-  font-weight: 700;
-  letter-spacing: 2.5px;
-  text-transform: uppercase;
-  color: var(--muted);
-  border: 1px solid var(--line);
-  border-radius: 100px;
-  padding: 6px 18px;
-  margin-bottom: 28px;
-  backdrop-filter: blur(8px);
-}
-.uni-badge .dot {
-  width: 6px; height: 6px;
-  border-radius: 50%;
-  background: var(--c1);
-  animation: pulse 2s ease-in-out infinite;
-}
-@keyframes pulse {
-  0%,100% { opacity: 1; transform: scale(1); }
-  50% { opacity: 0.4; transform: scale(0.7); }
-}
+    .uni-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 0.72rem;
+      font-weight: 700;
+      letter-spacing: 2.5px;
+      text-transform: uppercase;
+      color: var(--muted);
+      border: 1px solid var(--line);
+      border-radius: 100px;
+      padding: 6px 18px;
+      margin-bottom: 28px;
+      backdrop-filter: blur(8px);
+    }
 
-h1 {
-  font-family: 'Frank Ruhl Libre', serif;
-  font-size: clamp(2.4rem, 6vw, 4.2rem);
-  font-weight: 900;
-  line-height: 1.1;
-  letter-spacing: -1px;
-  color: var(--text);
-  margin-bottom: 14px;
-}
-h1 em {
-  font-style: normal;
-  background: linear-gradient(135deg, var(--c1) 0%, var(--c4) 100%);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
-}
+    .uni-badge .dot {
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: var(--c1);
+      animation: pulse 2s ease-in-out infinite;
+    }
 
-.subtitle {
-  font-size: 0.95rem;
-  color: var(--muted);
-  margin-bottom: 60px;
-  font-weight: 300;
-}
+    @keyframes pulse {
 
-/* ── GRID ── */
-.grid {
-  position: relative;
-  z-index: 10;
-  max-width: 1080px;
-  margin: 0 auto;
-  padding: 0 24px 80px;
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 20px;
-}
+      0%,
+      100% {
+        opacity: 1;
+        transform: scale(1);
+      }
 
-@media (max-width: 900px) { .grid { grid-template-columns: repeat(2, 1fr); } }
-@media (max-width: 560px) { .grid { grid-template-columns: 1fr; } }
+      50% {
+        opacity: 0.4;
+        transform: scale(0.7);
+      }
+    }
 
-/* ── CARD ── */
-.card {
-  position: relative;
-  background: var(--bg2);
-  border: 1px solid var(--line);
-  border-radius: 18px;
-  padding: 32px 28px 28px;
-  cursor: pointer;
-  text-decoration: none;
-  color: inherit;
-  display: flex;
-  flex-direction: column;
-  gap: 14px;
-  overflow: hidden;
-  transition: transform 0.3s cubic-bezier(.22,.68,0,.98), border-color 0.3s, box-shadow 0.3s;
-}
+    h1 {
+      font-family: 'Frank Ruhl Libre', serif;
+      font-size: clamp(2.4rem, 6vw, 4.2rem);
+      font-weight: 900;
+      line-height: 1.1;
+      letter-spacing: -1px;
+      color: var(--text);
+      margin-bottom: 14px;
+    }
 
-/* glow blob */
-.card::before {
-  content: '';
-  position: absolute;
-  top: -40px;
-  right: -40px;
-  width: 140px;
-  height: 140px;
-  border-radius: 50%;
-  background: var(--accent);
-  opacity: 0.12;
-  filter: blur(40px);
-  transition: opacity 0.3s, transform 0.3s;
-}
+    h1 em {
+      font-style: normal;
+      background: linear-gradient(135deg, var(--c1) 0%, var(--c4) 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
 
-.card:hover {
-  transform: translateY(-6px);
-  border-color: var(--accent);
-  box-shadow: 0 20px 48px rgba(0,0,0,0.5), 0 0 0 1px var(--accent);
-}
-.card:hover::before { opacity: 0.22; transform: scale(1.2); }
+    .subtitle {
+      font-size: 0.95rem;
+      color: var(--muted);
+      margin-bottom: 60px;
+      font-weight: 300;
+    }
 
-/* number label */
-.card-num {
-  position: absolute;
-  top: 20px;
-  left: 24px;
-  font-family: 'Frank Ruhl Libre', serif;
-  font-size: 3.5rem;
-  font-weight: 900;
-  color: rgba(255,255,255,0.04);
-  line-height: 1;
-  pointer-events: none;
-  transition: color 0.3s;
-}
-.card:hover .card-num { color: rgba(255,255,255,0.07); }
+    /* ── GRID ── */
+    .grid {
+      position: relative;
+      z-index: 10;
+      max-width: 1080px;
+      margin: 0 auto;
+      padding: 0 24px 80px;
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 20px;
+    }
 
-/* icon */
-.card-icon {
-  width: 52px; height: 52px;
-  border-radius: 14px;
-  background: rgba(255,255,255,0.06);
-  border: 1px solid rgba(255,255,255,0.1);
-  display: flex; align-items: center; justify-content: center;
-  font-size: 1.6rem;
-  flex-shrink: 0;
-  transition: background 0.3s, border-color 0.3s;
-}
-.card:hover .card-icon {
-  background: color-mix(in srgb, var(--accent) 20%, transparent);
-  border-color: color-mix(in srgb, var(--accent) 50%, transparent);
-}
+    @media (max-width: 900px) {
+      .grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+    }
 
-.card-title {
-  font-family: 'Frank Ruhl Libre', serif;
-  font-size: 1.4rem;
-  font-weight: 700;
-  line-height: 1.2;
-  color: var(--text);
-}
+    @media (max-width: 560px) {
+      .grid {
+        grid-template-columns: 1fr;
+      }
+    }
 
-.card-desc {
-  font-size: 0.82rem;
-  line-height: 1.65;
-  color: var(--muted);
-  flex: 1;
-}
+    /* ── CARD ── */
+    .card {
+      position: relative;
+      background: var(--bg2);
+      border: 1px solid var(--line);
+      border-radius: 18px;
+      padding: 32px 28px 28px;
+      cursor: pointer;
+      text-decoration: none;
+      color: inherit;
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+      overflow: hidden;
+      transition: transform 0.3s cubic-bezier(.22, .68, 0, .98), border-color 0.3s, box-shadow 0.3s;
+    }
 
-.card-chips {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 6px;
-  margin-top: 4px;
-}
-.chip {
-  font-size: 0.68rem;
-  font-weight: 700;
-  letter-spacing: 0.5px;
-  padding: 3px 10px;
-  border-radius: 100px;
-  background: rgba(255,255,255,0.06);
-  color: var(--muted);
-  border: 1px solid rgba(255,255,255,0.08);
-  transition: background 0.2s, color 0.2s;
-}
-.card:hover .chip {
-  background: color-mix(in srgb, var(--accent) 15%, transparent);
-  color: var(--accent);
-  border-color: color-mix(in srgb, var(--accent) 35%, transparent);
-}
+    /* glow blob */
+    .card::before {
+      content: '';
+      position: absolute;
+      top: -40px;
+      right: -40px;
+      width: 140px;
+      height: 140px;
+      border-radius: 50%;
+      background: var(--accent);
+      opacity: 0.12;
+      filter: blur(40px);
+      transition: opacity 0.3s, transform 0.3s;
+    }
 
-.card-arrow {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  margin-top: 6px;
-  padding-top: 16px;
-  border-top: 1px solid var(--line);
-}
-.card-status {
-  font-size: 0.72rem;
-  color: var(--muted);
-  font-weight: 500;
-}
-.card-status.ready { color: var(--c5); }
-.card-status.soon { color: var(--muted); }
+    .card:hover {
+      transform: translateY(-6px);
+      border-color: var(--accent);
+      box-shadow: 0 20px 48px rgba(0, 0, 0, 0.5), 0 0 0 1px var(--accent);
+    }
 
-.arrow-btn {
-  width: 34px; height: 34px;
-  border-radius: 50%;
-  background: rgba(255,255,255,0.06);
-  border: 1px solid rgba(255,255,255,0.1);
-  display: flex; align-items: center; justify-content: center;
-  font-size: 1rem;
-  color: var(--muted);
-  transition: background 0.2s, color 0.2s, border-color 0.2s;
-}
-.card:hover .arrow-btn {
-  background: var(--accent);
-  color: #000;
-  border-color: var(--accent);
-}
+    .card:hover::before {
+      opacity: 0.22;
+      transform: scale(1.2);
+    }
 
-/* ── COLORS per card ── */
-.c1 { --accent: var(--c1); }
-.c2 { --accent: var(--c2); }
-.c3 { --accent: var(--c3); }
-.c4 { --accent: var(--c4); }
-.c5 { --accent: var(--c5); }
-.c6 { --accent: var(--c6); }
+    /* number label */
+    .card-num {
+      position: absolute;
+      top: 20px;
+      left: 24px;
+      font-family: 'Frank Ruhl Libre', serif;
+      font-size: 3.5rem;
+      font-weight: 900;
+      color: rgba(255, 255, 255, 0.04);
+      line-height: 1;
+      pointer-events: none;
+      transition: color 0.3s;
+    }
 
-/* ── FOOTER ── */
-footer {
-  position: relative;
-  z-index: 10;
-  text-align: center;
-  padding: 0 0 40px;
-  font-size: 0.75rem;
-  color: rgba(255,255,255,0.2);
-  font-weight: 300;
-}
+    .card:hover .card-num {
+      color: rgba(255, 255, 255, 0.07);
+    }
 
-/* ── FADE-IN ── */
-@keyframes fadeUp {
-  from { opacity: 0; transform: translateY(24px); }
-  to   { opacity: 1; transform: translateY(0); }
-}
-header { animation: fadeUp 0.6s ease both; }
-.card {
-  opacity: 0;
-  animation: fadeUp 0.55s ease both;
-}
-.card:nth-child(1) { animation-delay: 0.1s; }
-.card:nth-child(2) { animation-delay: 0.18s; }
-.card:nth-child(3) { animation-delay: 0.26s; }
-.card:nth-child(4) { animation-delay: 0.34s; }
-.card:nth-child(5) { animation-delay: 0.42s; }
-.card:nth-child(6) { animation-delay: 0.50s; }
-</style>
+    /* icon */
+    .card-icon {
+      width: 52px;
+      height: 52px;
+      border-radius: 14px;
+      background: rgba(255, 255, 255, 0.06);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.6rem;
+      flex-shrink: 0;
+      transition: background 0.3s, border-color 0.3s;
+    }
+
+    .card:hover .card-icon {
+      background: color-mix(in srgb, var(--accent) 20%, transparent);
+      border-color: color-mix(in srgb, var(--accent) 50%, transparent);
+    }
+
+    .card-title {
+      font-family: 'Frank Ruhl Libre', serif;
+      font-size: 1.4rem;
+      font-weight: 700;
+      line-height: 1.2;
+      color: var(--text);
+    }
+
+    .card-desc {
+      font-size: 0.82rem;
+      line-height: 1.65;
+      color: var(--muted);
+      flex: 1;
+    }
+
+    .card-chips {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      margin-top: 4px;
+    }
+
+    .chip {
+      font-size: 0.68rem;
+      font-weight: 700;
+      letter-spacing: 0.5px;
+      padding: 3px 10px;
+      border-radius: 100px;
+      background: rgba(255, 255, 255, 0.06);
+      color: var(--muted);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      transition: background 0.2s, color 0.2s;
+    }
+
+    .card:hover .chip {
+      background: color-mix(in srgb, var(--accent) 15%, transparent);
+      color: var(--accent);
+      border-color: color-mix(in srgb, var(--accent) 35%, transparent);
+    }
+
+    .card-arrow {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-top: 6px;
+      padding-top: 16px;
+      border-top: 1px solid var(--line);
+    }
+
+    .card-status {
+      font-size: 0.72rem;
+      color: var(--muted);
+      font-weight: 500;
+    }
+
+    .card-status.ready {
+      color: var(--c5);
+    }
+
+    .card-status.soon {
+      color: var(--muted);
+    }
+
+    .arrow-btn {
+      width: 34px;
+      height: 34px;
+      border-radius: 50%;
+      background: rgba(255, 255, 255, 0.06);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1rem;
+      color: var(--muted);
+      transition: background 0.2s, color 0.2s, border-color 0.2s;
+    }
+
+    .card:hover .arrow-btn {
+      background: var(--accent);
+      color: #000;
+      border-color: var(--accent);
+    }
+
+    /* ── COLORS per card ── */
+    .c1 {
+      --accent: var(--c1);
+    }
+
+    .c2 {
+      --accent: var(--c2);
+    }
+
+    .c3 {
+      --accent: var(--c3);
+    }
+
+    .c4 {
+      --accent: var(--c4);
+    }
+
+    .c5 {
+      --accent: var(--c5);
+    }
+
+    .c6 {
+      --accent: var(--c6);
+    }
+
+    /* ── FOOTER ── */
+    footer {
+      position: relative;
+      z-index: 10;
+      text-align: center;
+      padding: 0 0 40px;
+      font-size: 0.75rem;
+      color: rgba(255, 255, 255, 0.2);
+      font-weight: 300;
+    }
+
+    /* ── FADE-IN ── */
+    @keyframes fadeUp {
+      from {
+        opacity: 0;
+        transform: translateY(24px);
+      }
+
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    header {
+      animation: fadeUp 0.6s ease both;
+    }
+
+    .card {
+      opacity: 0;
+      animation: fadeUp 0.55s ease both;
+    }
+
+    .card:nth-child(1) {
+      animation-delay: 0.1s;
+    }
+
+    .card:nth-child(2) {
+      animation-delay: 0.18s;
+    }
+
+    .card:nth-child(3) {
+      animation-delay: 0.26s;
+    }
+
+    .card:nth-child(4) {
+      animation-delay: 0.34s;
+    }
+
+    .card:nth-child(5) {
+      animation-delay: 0.42s;
+    }
+
+    .card:nth-child(6) {
+      animation-delay: 0.50s;
+    }
+  </style>
 </head>
+
 <body>
 
-<header>
-  <div class="uni-badge"><span class="dot"></span> אוניברסיטת בן-גוריון · MBA</div>
-  <h1>חומרי <em>לימוד</em><br>לתואר שני</h1>
-  <p class="subtitle">פתרונות מבחנים · הסברים · הכנה לבחינות · 2025–2026</p>
-</header>
+  <header>
+    <div class="uni-badge"><span class="dot"></span> אוניברסיטת בן-גוריון · MBA</div>
+    <h1>חומרי <em>לימוד</em><br>לתואר שני</h1>
+    <p class="subtitle">פתרונות מבחנים · הסברים · הכנה לבחינות · 2025–2026</p>
+  </header>
 
-<div class="grid">
+  <div class="grid">
+    <!-- behavioral-science-exam.html -->
+    <!-- מד' התנהגות -->
+    <a class="card c1" href="/behavioral/">
+      <div class="card-num">01</div>
+      <div class="card-icon">🧠</div>
+      <div class="card-title">מדעי ההתנהגות</div>
+      <div class="card-desc">לחץ, למידה, אישיות, מוטיבציה, רגשות וניהול בין-דורי. מועד א׳ מלא + שאלות חזרה.</div>
+      <div class="card-chips">
+        <span class="chip">GAS & Lazarus</span>
+        <span class="chip">Big Five</span>
+        <span class="chip">Equity Theory</span>
+        <span class="chip">BASIC PH</span>
+      </div>
+      <div class="card-arrow">
+        <span class="card-status ready">✦ פתרונות זמינים</span>
+        <div class="arrow-btn">←</div>
+      </div>
+    </a>
 
-  <!-- מד' התנהגות -->
-  <a class="card c1" href="behavioral-science-exam.html">
-    <div class="card-num">01</div>
-    <div class="card-icon">🧠</div>
-    <div class="card-title">מדעי ההתנהגות</div>
-    <div class="card-desc">לחץ, למידה, אישיות, מוטיבציה, רגשות וניהול בין-דורי. מועד א׳ מלא + שאלות חזרה.</div>
-    <div class="card-chips">
-      <span class="chip">GAS & Lazarus</span>
-      <span class="chip">Big Five</span>
-      <span class="chip">Equity Theory</span>
-      <span class="chip">BASIC PH</span>
-    </div>
-    <div class="card-arrow">
-      <span class="card-status ready">✦ פתרונות זמינים</span>
-      <div class="arrow-btn">←</div>
-    </div>
-  </a>
+    <!-- כלכלה -->
+    <a class="card c2" href="econ-exams.html">
+      <div class="card-num">02</div>
+      <div class="card-icon">📈</div>
+      <div class="card-title">כלכלה</div>
+      <div class="card-desc">מיקרו ומאקרו. ביקוש/היצע, עלויות, מסים, מסחר עולמי, מכפיל קיינסיאני ומשק פתוח.</div>
+      <div class="card-chips">
+        <span class="chip">יצרן עגבניות</span>
+        <span class="chip">Demand-Control</span>
+        <span class="chip">מכפיל</span>
+        <span class="chip">שע"ח</span>
+      </div>
+      <div class="card-arrow">
+        <span class="card-status ready">✦ פתרונות זמינים</span>
+        <div class="arrow-btn">←</div>
+      </div>
+    </a>
 
-  <!-- כלכלה -->
-  <a class="card c2" href="econ-exams.html">
-    <div class="card-num">02</div>
-    <div class="card-icon">📈</div>
-    <div class="card-title">כלכלה</div>
-    <div class="card-desc">מיקרו ומאקרו. ביקוש/היצע, עלויות, מסים, מסחר עולמי, מכפיל קיינסיאני ומשק פתוח.</div>
-    <div class="card-chips">
-      <span class="chip">יצרן עגבניות</span>
-      <span class="chip">Demand-Control</span>
-      <span class="chip">מכפיל</span>
-      <span class="chip">שע"ח</span>
-    </div>
-    <div class="card-arrow">
-      <span class="card-status ready">✦ פתרונות זמינים</span>
-      <div class="arrow-btn">←</div>
-    </div>
-  </a>
+    <!-- חשבונאות -->
+    <a class="card c3" href="#">
+      <div class="card-num">03</div>
+      <div class="card-icon">🧾</div>
+      <div class="card-title">חשבונאות</div>
+      <div class="card-desc">דוחות כספיים, מאזן, דוח רווח והפסד, ניתוח יחסים פיננסיים וחשבונאות ניהולית.</div>
+      <div class="card-chips">
+        <span class="chip">מאזן</span>
+        <span class="chip">ת"פ</span>
+        <span class="chip">יחסים פיננסיים</span>
+      </div>
+      <div class="card-arrow">
+        <span class="card-status soon">⏳ בקרוב</span>
+        <div class="arrow-btn">←</div>
+      </div>
+    </a>
 
-  <!-- חשבונאות -->
-  <a class="card c3" href="#">
-    <div class="card-num">03</div>
-    <div class="card-icon">🧾</div>
-    <div class="card-title">חשבונאות</div>
-    <div class="card-desc">דוחות כספיים, מאזן, דוח רווח והפסד, ניתוח יחסים פיננסיים וחשבונאות ניהולית.</div>
-    <div class="card-chips">
-      <span class="chip">מאזן</span>
-      <span class="chip">ת"פ</span>
-      <span class="chip">יחסים פיננסיים</span>
-    </div>
-    <div class="card-arrow">
-      <span class="card-status soon">⏳ בקרוב</span>
-      <div class="arrow-btn">←</div>
-    </div>
-  </a>
+    <!-- מימון -->
+    <a class="card c4" href="#">
+      <div class="card-num">04</div>
+      <div class="card-icon">💰</div>
+      <div class="card-title">מימון</div>
+      <div class="card-desc">ניהול תיקים, שווי נוכחי, NPV, IRR, מבנה הון, CAPM ועלות הון ממוצעת.</div>
+      <div class="card-chips">
+        <span class="chip">NPV / IRR</span>
+        <span class="chip">CAPM</span>
+        <span class="chip">WACC</span>
+        <span class="chip">אג"ח</span>
+      </div>
+      <div class="card-arrow">
+        <span class="card-status soon">⏳ בקרוב</span>
+        <div class="arrow-btn">←</div>
+      </div>
+    </a>
 
-  <!-- מימון -->
-  <a class="card c4" href="#">
-    <div class="card-num">04</div>
-    <div class="card-icon">💰</div>
-    <div class="card-title">מימון</div>
-    <div class="card-desc">ניהול תיקים, שווי נוכחי, NPV, IRR, מבנה הון, CAPM ועלות הון ממוצעת.</div>
-    <div class="card-chips">
-      <span class="chip">NPV / IRR</span>
-      <span class="chip">CAPM</span>
-      <span class="chip">WACC</span>
-      <span class="chip">אג"ח</span>
-    </div>
-    <div class="card-arrow">
-      <span class="card-status soon">⏳ בקרוב</span>
-      <div class="arrow-btn">←</div>
-    </div>
-  </a>
+    <!-- תפעול -->
+    <a class="card c5" href="#">
+      <div class="card-num">05</div>
+      <div class="card-icon">⚙️</div>
+      <div class="card-title">תפעול</div>
+      <div class="card-desc">ניהול שרשרת אספקה, תורת התורים, תכנון קיבולת, מלאי EOQ ושיטות ייצור רזה.</div>
+      <div class="card-chips">
+        <span class="chip">EOQ</span>
+        <span class="chip">תורת התורים</span>
+        <span class="chip">Lean</span>
+        <span class="chip">SCM</span>
+      </div>
+      <div class="card-arrow">
+        <span class="card-status soon">⏳ בקרוב</span>
+        <div class="arrow-btn">←</div>
+      </div>
+    </a>
 
-  <!-- תפעול -->
-  <a class="card c5" href="#">
-    <div class="card-num">05</div>
-    <div class="card-icon">⚙️</div>
-    <div class="card-title">תפעול</div>
-    <div class="card-desc">ניהול שרשרת אספקה, תורת התורים, תכנון קיבולת, מלאי EOQ ושיטות ייצור רזה.</div>
-    <div class="card-chips">
-      <span class="chip">EOQ</span>
-      <span class="chip">תורת התורים</span>
-      <span class="chip">Lean</span>
-      <span class="chip">SCM</span>
-    </div>
-    <div class="card-arrow">
-      <span class="card-status soon">⏳ בקרוב</span>
-      <div class="arrow-btn">←</div>
-    </div>
-  </a>
+    <!-- מנהיגות -->
+    <a class="card c6" href="#">
+      <div class="card-num">06</div>
+      <div class="card-icon">🎯</div>
+      <div class="card-title">מנהיגות</div>
+      <div class="card-desc">סגנונות מנהיגות, תיאוריות מנהיגות טרנספורמציונית, תרבות ארגונית ושינוי ארגוני.</div>
+      <div class="card-chips">
+        <span class="chip">Transformational</span>
+        <span class="chip">תרבות ארגונית</span>
+        <span class="chip">שינוי</span>
+      </div>
+      <div class="card-arrow">
+        <span class="card-status soon">⏳ בקרוב</span>
+        <div class="arrow-btn">←</div>
+      </div>
+    </a>
 
-  <!-- מנהיגות -->
-  <a class="card c6" href="#">
-    <div class="card-num">06</div>
-    <div class="card-icon">🎯</div>
-    <div class="card-title">מנהיגות</div>
-    <div class="card-desc">סגנונות מנהיגות, תיאוריות מנהיגות טרנספורמציונית, תרבות ארגונית ושינוי ארגוני.</div>
-    <div class="card-chips">
-      <span class="chip">Transformational</span>
-      <span class="chip">תרבות ארגונית</span>
-      <span class="chip">שינוי</span>
-    </div>
-    <div class="card-arrow">
-      <span class="card-status soon">⏳ בקרוב</span>
-      <div class="arrow-btn">←</div>
-    </div>
-  </a>
+  </div>
 
-</div>
-
-<footer>marom.cloud · 2026 · כל הזכויות שמורות</footer>
+  <footer>marom.cloud · 2026 · כל הזכויות שמורות</footer>
 
 </body>
+
 </html>
