@@ -1,0 +1,1047 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>מיקרו-כלכלה · 67.codes</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Heebo:wght@300;400;500;700;900&family=Frank+Ruhl+Libre:wght@500;700;900&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --ink:#0e1a14;
+  --paper:#f4f1e8;
+  --paper-2:#eae5d6;
+  --green:#1f6f54;
+  --green-dark:#114635;
+  --green-light:#3fa882;
+  --gold:#c98a1f;
+  --gold-light:#e8b94a;
+  --red:#c2452d;
+  --blue:#2c6e9b;
+  --line:#cfc8b4;
+  --shadow:rgba(17,70,53,.14);
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{
+  font-family:'Heebo',sans-serif;
+  background:var(--paper);
+  color:var(--ink);
+  line-height:1.65;
+  background-image:
+    radial-gradient(circle at 15% 8%, rgba(63,168,130,.06), transparent 40%),
+    radial-gradient(circle at 85% 92%, rgba(201,138,31,.06), transparent 40%);
+  min-height:100vh;
+}
+
+/* ===== Top bar ===== */
+.topbar{
+  position:sticky;top:0;z-index:100;
+  background:var(--green-dark);
+  color:var(--paper);
+  display:flex;align-items:center;justify-content:space-between;
+  padding:.7rem 1.4rem;
+  box-shadow:0 2px 20px var(--shadow);
+  border-bottom:3px solid var(--gold);
+}
+.brand{display:flex;align-items:center;gap:.6rem;font-weight:900;font-size:1.15rem;letter-spacing:-.5px}
+.brand .turtle{font-size:1.4rem}
+.brand small{font-weight:400;opacity:.7;font-size:.78rem;font-family:'JetBrains Mono',monospace}
+.progress-mini{font-family:'JetBrains Mono',monospace;font-size:.8rem;opacity:.85}
+
+/* ===== Layout ===== */
+.shell{display:flex;max-width:1280px;margin:0 auto;gap:0}
+nav.side{
+  width:230px;flex-shrink:0;
+  position:sticky;top:57px;height:calc(100vh - 57px);
+  overflow-y:auto;padding:1.4rem .9rem;
+  border-left:1px solid var(--line);
+}
+nav.side h3{
+  font-size:.72rem;text-transform:uppercase;letter-spacing:1.5px;
+  color:var(--gold);margin:1.2rem .5rem .5rem;font-weight:700;
+}
+nav.side h3:first-child{margin-top:0}
+.navlink{
+  display:flex;align-items:center;gap:.6rem;
+  padding:.55rem .7rem;border-radius:10px;
+  color:var(--ink);text-decoration:none;font-weight:500;font-size:.92rem;
+  cursor:pointer;transition:.18s;margin-bottom:.15rem;
+}
+.navlink:hover{background:var(--paper-2)}
+.navlink.active{background:var(--green);color:var(--paper);box-shadow:0 3px 10px var(--shadow)}
+.navlink .n{
+  font-family:'JetBrains Mono',monospace;font-weight:700;font-size:.78rem;
+  background:var(--paper-2);color:var(--green-dark);
+  width:26px;height:26px;display:grid;place-items:center;border-radius:7px;flex-shrink:0;
+}
+.navlink.active .n{background:var(--gold);color:var(--green-dark)}
+.navlink.done .n::after{content:'✓';position:absolute;font-size:.6rem}
+
+main{flex:1;padding:2rem 2.4rem 5rem;min-width:0}
+
+/* ===== Sections ===== */
+.lesson{display:none;animation:fade .4s ease}
+.lesson.active{display:block}
+@keyframes fade{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:none}}
+
+.lesson-head{margin-bottom:1.6rem;padding-bottom:1.2rem;border-bottom:2px solid var(--line)}
+.lesson-tag{
+  display:inline-block;font-family:'JetBrains Mono',monospace;font-size:.75rem;
+  background:var(--green);color:var(--paper);padding:.25rem .7rem;border-radius:20px;
+  margin-bottom:.7rem;font-weight:700;letter-spacing:.5px;
+}
+.lesson-tag.macro{background:var(--blue)}
+.lesson h1{
+  font-family:'Frank Ruhl Libre',serif;font-size:2.2rem;font-weight:900;
+  line-height:1.2;color:var(--green-dark);
+}
+.lesson .sub{font-size:1.05rem;color:#5a6b60;margin-top:.4rem}
+
+h2.block{
+  font-family:'Frank Ruhl Libre',serif;font-size:1.5rem;font-weight:700;
+  color:var(--green-dark);margin:2.2rem 0 .9rem;
+  display:flex;align-items:center;gap:.6rem;
+}
+h2.block .ico{
+  font-size:.85rem;background:var(--gold);color:#fff;
+  width:30px;height:30px;display:grid;place-items:center;border-radius:9px;flex-shrink:0;
+}
+h3.sub-block{font-size:1.15rem;font-weight:700;color:var(--green);margin:1.4rem 0 .5rem}
+p{margin:.7rem 0}
+strong{color:var(--green-dark);font-weight:700}
+
+/* ===== Cards & callouts ===== */
+.card{
+  background:#fff;border:1px solid var(--line);border-radius:16px;
+  padding:1.3rem 1.5rem;margin:1.1rem 0;box-shadow:0 4px 18px var(--shadow);
+}
+.idea{
+  background:linear-gradient(135deg,var(--green-dark),var(--green));
+  color:var(--paper);border:none;
+}
+.idea h2.block,.idea strong{color:var(--gold-light)}
+.idea .ico{background:var(--gold)}
+
+.key{
+  border-right:5px solid var(--gold);background:var(--paper-2);
+  border-radius:8px;padding:.9rem 1.2rem;margin:1rem 0;
+}
+.key b{color:var(--gold)}
+.trick{
+  border-right:5px solid var(--red);
+  background:#fbeae6;border-radius:8px;padding:.9rem 1.2rem;margin:1rem 0;
+}
+.trick::before{content:'⚡ טריק למבחן';display:block;font-weight:900;color:var(--red);font-size:.85rem;margin-bottom:.3rem}
+
+/* ===== Tables ===== */
+.tbl-wrap{overflow-x:auto;margin:1.1rem 0;border-radius:12px;border:1px solid var(--line)}
+table{border-collapse:collapse;width:100%;background:#fff;font-size:.92rem}
+th,td{padding:.6rem .8rem;text-align:center;border:1px solid var(--line)}
+th{background:var(--green-dark);color:var(--paper);font-weight:700;font-size:.85rem}
+tr:nth-child(even) td{background:var(--paper)}
+td.hl{background:var(--gold-light)!important;font-weight:700}
+.formula-cell{font-family:'JetBrains Mono',monospace;color:var(--green);font-weight:700}
+
+/* ===== Formula box ===== */
+.fbox{
+  font-family:'JetBrains Mono',monospace;
+  background:var(--green-dark);color:var(--gold-light);
+  padding:.5rem 1rem;border-radius:8px;display:inline-block;
+  font-weight:700;margin:.3rem .2rem;font-size:1rem;
+}
+.fbox-row{display:flex;flex-wrap:wrap;gap:.4rem;margin:1rem 0}
+
+/* ===== Interactive calculator ===== */
+.calc{
+  background:linear-gradient(160deg,#fff,var(--paper));
+  border:2px solid var(--green-light);border-radius:18px;
+  padding:1.4rem 1.5rem;margin:1.4rem 0;box-shadow:0 6px 24px var(--shadow);
+}
+.calc-title{
+  font-weight:900;color:var(--green-dark);font-size:1.1rem;margin-bottom:.3rem;
+  display:flex;align-items:center;gap:.5rem;
+}
+.calc-title::before{content:'🧮';font-size:1.2rem}
+.calc-desc{font-size:.9rem;color:#5a6b60;margin-bottom:1rem}
+.calc-inputs{display:flex;flex-wrap:wrap;gap:1rem;margin-bottom:1rem}
+.inp-group{display:flex;flex-direction:column;gap:.25rem}
+.inp-group label{font-size:.8rem;font-weight:700;color:var(--green)}
+.inp-group input,.inp-group select{
+  font-family:'JetBrains Mono',monospace;font-size:1rem;
+  padding:.5rem .7rem;border:1.5px solid var(--line);border-radius:9px;
+  width:120px;background:#fff;color:var(--ink);text-align:center;
+}
+.inp-group input:focus,.inp-group select:focus{outline:none;border-color:var(--green-light)}
+.calc-out{
+  background:var(--green-dark);color:var(--paper);border-radius:12px;
+  padding:1rem 1.2rem;font-size:.95rem;min-height:48px;
+}
+.calc-out .res{font-family:'JetBrains Mono',monospace;color:var(--gold-light);font-weight:700;font-size:1.15rem}
+.calc-out .step{display:block;font-size:.85rem;opacity:.85;margin:.2rem 0;font-family:'JetBrains Mono',monospace}
+
+/* ===== Buttons ===== */
+button.btn{
+  font-family:'Heebo',sans-serif;font-weight:700;cursor:pointer;
+  background:var(--green);color:var(--paper);border:none;
+  padding:.55rem 1.2rem;border-radius:10px;font-size:.92rem;transition:.18s;
+}
+button.btn:hover{background:var(--green-dark);transform:translateY(-1px)}
+button.btn.gold{background:var(--gold)}
+button.btn.gold:hover{background:var(--gold-light);color:var(--green-dark)}
+button.btn.ghost{background:transparent;color:var(--green);border:1.5px solid var(--green)}
+
+/* ===== Quiz ===== */
+.quiz{background:#fff;border:1px solid var(--line);border-radius:16px;padding:1.3rem 1.5rem;margin:1.1rem 0;box-shadow:0 4px 18px var(--shadow)}
+.quiz .q{font-weight:700;color:var(--green-dark);margin-bottom:.8rem;font-size:1.02rem}
+.opt{
+  display:block;width:100%;text-align:right;background:var(--paper);
+  border:1.5px solid var(--line);border-radius:10px;padding:.6rem .9rem;
+  margin:.4rem 0;cursor:pointer;font-size:.92rem;font-family:'Heebo',sans-serif;transition:.15s;
+}
+.opt:hover{border-color:var(--green-light);background:var(--paper-2)}
+.opt.correct{background:#d8f0e4;border-color:var(--green);color:var(--green-dark);font-weight:700}
+.opt.wrong{background:#fbeae6;border-color:var(--red);color:var(--red)}
+.opt:disabled{cursor:default}
+.quiz-fb{margin-top:.7rem;font-size:.9rem;padding:.6rem .9rem;border-radius:9px;display:none}
+.quiz-fb.show{display:block}
+.quiz-fb.ok{background:#d8f0e4;color:var(--green-dark)}
+.quiz-fb.no{background:#fbeae6;color:var(--red)}
+
+/* ===== SVG charts ===== */
+.chart-wrap{background:#fff;border:1px solid var(--line);border-radius:14px;padding:1rem;margin:1.1rem 0;text-align:center}
+.chart-wrap svg{max-width:100%;height:auto}
+.chart-cap{font-size:.85rem;color:#5a6b60;margin-top:.5rem}
+
+/* ===== Footer nav ===== */
+.lesson-nav{display:flex;justify-content:space-between;margin-top:3rem;padding-top:1.5rem;border-top:2px solid var(--line);gap:1rem}
+.lesson-nav button{flex:1;max-width:240px}
+.lesson-nav .spacer{flex:1}
+
+/* ===== Intro/home ===== */
+.hero{text-align:center;padding:2rem 1rem 1rem}
+.hero .turtle-big{font-size:3.5rem;margin-bottom:.5rem}
+.hero h1{font-family:'Frank Ruhl Libre',serif;font-size:2.6rem;font-weight:900;color:var(--green-dark);line-height:1.15}
+.hero .sub{font-size:1.15rem;color:#5a6b60;max-width:600px;margin:.8rem auto 0}
+.cards-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:1rem;margin-top:2rem}
+.topic-card{
+  background:#fff;border:1px solid var(--line);border-radius:16px;padding:1.3rem;
+  cursor:pointer;transition:.2s;box-shadow:0 4px 18px var(--shadow);
+  border-top:4px solid var(--green);
+}
+.topic-card:hover{transform:translateY(-4px);box-shadow:0 10px 30px var(--shadow)}
+.topic-card.macro{border-top-color:var(--blue)}
+.topic-card .tc-n{font-family:'JetBrains Mono',monospace;font-size:.8rem;color:var(--gold);font-weight:700}
+.topic-card h3{font-family:'Frank Ruhl Libre',serif;font-size:1.25rem;color:var(--green-dark);margin:.3rem 0}
+.topic-card p{font-size:.88rem;color:#5a6b60;margin:0}
+
+.exam-strip{
+  background:linear-gradient(135deg,var(--gold),var(--gold-light));
+  color:var(--green-dark);border-radius:14px;padding:1rem 1.4rem;margin:1.5rem 0;
+  display:flex;align-items:center;gap:1rem;font-weight:700;
+}
+.exam-strip .big{font-size:1.6rem}
+
+/* responsive */
+@media(max-width:880px){
+  nav.side{display:none}
+  main{padding:1.4rem 1.1rem 4rem}
+  .lesson h1{font-size:1.7rem}
+  .hero h1{font-size:2rem}
+}
+.mobile-nav{display:none}
+@media(max-width:880px){
+  .mobile-nav{display:block;background:#fff;border:1px solid var(--line);border-radius:12px;padding:.6rem;margin-bottom:1.2rem}
+  .mobile-nav select{width:100%;padding:.6rem;font-family:'Heebo';font-size:1rem;border:1.5px solid var(--line);border-radius:9px;background:var(--paper)}
+}
+</style>
+</head>
+<body>
+
+<div class="topbar">
+  <div class="brand">
+    <span class="turtle">🐢</span>
+    <span>מיקרו-כלכלה <small>67.codes</small></span>
+  </div>
+  <div style="display:flex;align-items:center;gap:1rem">
+    <div class="progress-mini" id="progressMini">0 / 6 שיעורים</div>
+    <div style="display:flex;gap:.4rem">
+      <a href="index.html" style="color:var(--paper);text-decoration:none;font-size:.8rem;font-weight:500;padding:.35rem .7rem;border-radius:8px;opacity:.75;transition:.15s" onmouseover="this.style.opacity=1;this.style.background='rgba(255,255,255,.1)'" onmouseout="this.style.opacity=.75;this.style.background='transparent'">⌂ מרכז</a>
+      <a href="macro.html" style="color:var(--paper);text-decoration:none;font-size:.8rem;font-weight:500;padding:.35rem .7rem;border-radius:8px;opacity:.75;transition:.15s" onmouseover="this.style.opacity=1;this.style.background='rgba(255,255,255,.1)'" onmouseout="this.style.opacity=.75;this.style.background='transparent'">מאקרו →</a>
+    </div>
+  </div>
+</div>
+
+<div class="shell">
+  <nav class="side" id="sidenav"></nav>
+  <main id="main"></main>
+</div>
+
+<script>
+/* ============ STATE ============ */
+const visited = new Set();
+
+/* ============ NAV STRUCTURE ============ */
+const NAV = [
+  {id:'home', n:'⌂', title:'דף הבית', group:'התחלה'},
+  {id:'l1', n:'1', title:'מבוא ומחסור', group:'מיקרו · החומר למבחן'},
+  {id:'l2', n:'2', title:'היצע היצרן', group:'מיקרו · החומר למבחן'},
+  {id:'l3', n:'3', title:'היצע — המשך', group:'מיקרו · החומר למבחן'},
+  {id:'l4', n:'4', title:'שיווי משקל ורווחה', group:'מיקרו · החומר למבחן'},
+  {id:'l5', n:'5', title:'התערבות ממשלתית', group:'מיקרו · החומר למבחן'},
+  {id:'l6', n:'6', title:'מונופול', group:'מיקרו · החומר למבחן'},
+  {id:'cheat', n:'∑', title:'דף נוסחאות', group:'כלים'},
+];
+
+/* ============ BUILD SIDEBAR ============ */
+function buildNav(){
+  const nav = document.getElementById('sidenav');
+  let html=''; let lastGroup='';
+  NAV.forEach(item=>{
+    if(item.group!==lastGroup){ html+=`<h3>${item.group}</h3>`; lastGroup=item.group; }
+    html+=`<a class="navlink" data-id="${item.id}" onclick="go('${item.id}')">
+      <span class="n">${item.n}</span><span>${item.title}</span></a>`;
+  });
+  nav.innerHTML=html;
+}
+
+/* ============ ROUTER ============ */
+function go(id){
+  document.querySelectorAll('.lesson').forEach(l=>l.classList.remove('active'));
+  const el=document.getElementById(id);
+  if(el) el.classList.add('active');
+  document.querySelectorAll('.navlink').forEach(n=>n.classList.toggle('active', n.dataset.id===id));
+  if(id.startsWith('l')){ visited.add(id); updateProgress(); }
+  window.scrollTo({top:0,behavior:'smooth'});
+  // sync mobile selects
+  document.querySelectorAll('.mnav').forEach(s=>s.value=id);
+}
+function updateProgress(){
+  const count=[...visited].filter(v=>/^l[1-6]$/.test(v)).length;
+  document.getElementById('progressMini').textContent=`${count} / 6 שיעורים`;
+  document.querySelectorAll('.navlink').forEach(n=>{
+    if(visited.has(n.dataset.id)) n.classList.add('done');
+  });
+}
+
+/* ============ QUIZ HANDLER ============ */
+function answer(btn, correct, fbId, explain){
+  const parent=btn.closest('.quiz');
+  const opts=parent.querySelectorAll('.opt');
+  opts.forEach(o=>o.disabled=true);
+  const fb=document.getElementById(fbId);
+  if(correct){
+    btn.classList.add('correct');
+    fb.className='quiz-fb show ok'; fb.innerHTML='✓ נכון! '+explain;
+  }else{
+    btn.classList.add('wrong');
+    opts.forEach(o=>{ if(o.dataset.correct==='1') o.classList.add('correct'); });
+    fb.className='quiz-fb show no'; fb.innerHTML='✗ לא מדויק. '+explain;
+  }
+}
+
+/* ============ PAGE BUILDERS (defined in next blocks) ============ */
+const PAGES={};
+
+/* ---------- HOME ---------- */
+PAGES.home=`
+<section id="home" class="lesson active">
+  <div class="hero">
+    <div class="turtle-big">🐢🚀</div>
+    <h1>מיקרו-כלכלה</h1>
+    <p class="sub">כל החומר למבחן — שיעור אחר שיעור, עם מחשבונים, גרפים וחידונים. לחץ על נושא כדי להתחיל.</p>
+  </div>
+
+  <div class="exam-strip">
+    <span class="big">📅</span>
+    <span>מועד מיוחד בכלכלה — 21.6.2026. המבחן הוא 6 השיעורים שכאן. תרגל את המחשבונים עד שהם הופכים לאוטומטיים.</span>
+  </div>
+
+  <div class="cards-grid">
+    <div class="topic-card" onclick="go('l1')">
+      <div class="tc-n">שיעור 1</div><h3>מבוא ומחסור</h3>
+      <p>הבעיה הכלכלית, עקומת התמורה (PPF), עלות אלטרנטיבית ותחרות משוכללת.</p>
+    </div>
+    <div class="topic-card" onclick="go('l2')">
+      <div class="tc-n">שיעור 2</div><h3>היצע היצרן</h3>
+      <p>MP, TVC, FC, AVC, AC, MC, כלל היצרן, מחיר סגירה ומחיר איזון.</p>
+    </div>
+    <div class="topic-card" onclick="go('l3')">
+      <div class="tc-n">שיעור 3</div><h3>היצע — המשך</h3>
+      <p>טווח קצר מול ארוך, הוצאות שקועות ונמנעות, היצע מצרפי וגמישות היצע.</p>
+    </div>
+    <div class="topic-card" onclick="go('l4')">
+      <div class="tc-n">שיעור 4</div><h3>שיווי משקל ורווחה</h3>
+      <p>מפגש היצע-ביקוש, עודף צרכן ויצרן, השפעות בין שווקים ופתיחה לסחר.</p>
+    </div>
+    <div class="topic-card" onclick="go('l5')">
+      <div class="tc-n">שיעור 5</div><h3>התערבות ממשלתית</h3>
+      <p>כשלי שוק, מס קנייה, סובסידיה, נטל המס ומי באמת משלם אותו.</p>
+    </div>
+    <div class="topic-card" onclick="go('l6')">
+      <div class="tc-n">שיעור 6</div><h3>מונופול</h3>
+      <p>יצרן יחיד, פדיון שולי (MR), כלל המונופול, הנזק החברתי ואפליית מחירים.</p>
+    </div>
+  </div>
+</section>`;
+
+/* ---------- LESSON 1 ---------- */
+PAGES.l1=`
+<section id="l1" class="lesson">
+  <div class="mobile-nav"><select class="mnav" onchange="go(this.value)"></select></div>
+  <div class="lesson-head">
+    <span class="lesson-tag">שיעור 1 · מיקרו</span>
+    <h1>מבוא לכלכלה — בעיית המחסור</h1>
+    <p class="sub">למה בכלל צריך לבחור, ואיך מציירים את זה.</p>
+  </div>
+
+  <div class="card idea">
+    <h2 class="block"><span class="ico">💡</span> הרעיון בגדול</h2>
+    <p>כלכלה עוסקת בשאלה אחת: <strong>איך מקצים משאבים מוגבלים מול רצונות בלתי-מוגבלים.</strong> לכל אדם, עסק וממשלה יש זמן, כסף וכוח-אדם מוגבלים — אבל הרצונות אינסופיים. לכן <strong>חייבים לבחור</strong>, וכל בחירה היא בעצם ויתור על משהו אחר.</p>
+  </div>
+
+  <h2 class="block"><span class="ico">1</span> בעיית המחסור</h2>
+  <p>המשאבים מוגבלים, הרצונות אינסופיים, ומכאן נובע <strong>פער קבוע</strong> בין מה שרוצים למה שאפשר לייצר. כל החלטה כלכלית היא בחירה: לעבוד עוד שעה? לקנות איזה מוצר? לחסוך כמה? באיזה תחום ללמוד?</p>
+
+  <h2 class="block"><span class="ico">2</span> מיקרו מול מאקרו</h2>
+  <div class="tbl-wrap"><table>
+    <tr><th>גישה</th><th>מסתכלת על...</th></tr>
+    <tr><td><strong>מיקרו</strong></td><td>שוק או ענף בודד בנפרד — זה החלק שלנו במבחן</td></tr>
+    <tr><td><strong>מאקרו</strong></td><td>המשק כולו, התמונה הרחבה</td></tr>
+  </table></div>
+
+  <h2 class="block"><span class="ico">3</span> עקומת התמורה (PPF)</h2>
+  <p>נניח משק עם <strong>6 עובדים</strong>. כל עובד מייצר ביום או <strong>פיצה אחת</strong> או <strong>2 נקניקיות</strong>. עקומת התמורה מראה את כל שילובי הייצור המקסימליים.</p>
+  <div class="tbl-wrap"><table>
+    <tr><th>עובדים בפיצה</th><th>פיצות (X)</th><th>עובדים בנקניק</th><th>נקניקיות (Y)</th></tr>
+    <tr><td>6</td><td class="hl">6</td><td>0</td><td>0</td></tr>
+    <tr><td>2</td><td>2</td><td>4</td><td>8</td></tr>
+    <tr><td>1</td><td>1</td><td>5</td><td>10</td></tr>
+    <tr><td>0</td><td>0</td><td>6</td><td class="hl">12</td></tr>
+  </table></div>
+
+  <div class="chart-wrap">
+    <svg viewBox="0 0 420 300" xmlns="http://www.w3.org/2000/svg">
+      <line x1="55" y1="250" x2="390" y2="250" stroke="#114635" stroke-width="2"/>
+      <line x1="55" y1="250" x2="55" y2="30" stroke="#114635" stroke-width="2"/>
+      <line x1="55" y1="50" x2="350" y2="250" stroke="#1f6f54" stroke-width="3"/>
+      <circle cx="55" cy="50" r="5" fill="#c98a1f"/>
+      <circle cx="350" cy="250" r="5" fill="#c98a1f"/>
+      <circle cx="203" cy="150" r="4" fill="#c2452d"/>
+      <text x="200" y="285" text-anchor="middle" font-size="13" fill="#114635" font-weight="700">פיצות (X)</text>
+      <text x="20" y="145" text-anchor="middle" font-size="13" fill="#114635" font-weight="700" transform="rotate(-90 20 145)">נקניקיות (Y)</text>
+      <text x="45" y="48" text-anchor="end" font-size="11" fill="#666">12</text>
+      <text x="355" y="268" font-size="11" fill="#666">6</text>
+      <text x="215" y="148" font-size="10" fill="#c2452d">נקודה יעילה</text>
+    </svg>
+    <div class="chart-cap">עקומת תמורה ישרה — כי כל העובדים זהים. השיפוע = העלות האלטרנטיבית.</div>
+  </div>
+
+  <div class="key"><b>עלות אלטרנטיבית:</b> מה שמוותרים עליו כדי לייצר משהו אחר. כאן: כל פיצה נוספת "עולה" 2 נקניקיות. זה גם <strong>שיפוע עקומת התמורה</strong>.</div>
+  <div class="trick">כשהעובדים <strong>זהים</strong> → עקומה היא <strong>קו ישר</strong> (עלות אלטרנטיבית קבועה). כשיש <strong>סוגים שונים</strong> של עובדים → העקומה <strong>קעורה</strong> (מתעקלת), כי העלות האלטרנטיבית עולה.</div>
+
+  <h2 class="block"><span class="ico">4</span> תחרות משוכללת — 5 התנאים</h2>
+  <p>המודל של שוק שפועל בצורה חופשית ויעילה. שווה לזכור בעל-פה:</p>
+  <div class="card">
+    <p><strong>1. הרבה קונים והרבה מוכרים</strong> — אף אחד לא גדול מספיק כדי להשפיע על המחיר ("מקבלי מחיר").</p>
+    <p><strong>2. מוצר הומוגני</strong> — כל היצרנים מוכרים מוצר זהה לחלוטין.</p>
+    <p><strong>3. כניסה ויציאה חופשית</strong> — אין חסמים. כל עוד יש רווחים, נכנסים יצרנים חדשים עד שהרווחים מתאזנים.</p>
+    <p><strong>4. מידע מלא</strong> — כולם יודעים מחירים, עלויות ואיכויות.</p>
+    <p><strong>5. כולם רציונליים</strong> — צרכן ממקסם תועלת, יצרן ממקסם רווח.</p>
+  </div>
+
+  <h2 class="block"><span class="ico">5</span> הביקוש — למה הוא יורד</h2>
+  <p>הביקוש מתאר את <strong>הקשר בין מחיר המוצר לכמות שהצרכן רוצה לקנות.</strong> דוגמה: כמה תשלם על כוס הקפה הראשונה? נניח 35 ₪. על השנייה? 22 ₪. על השלישית? עוד פחות.</p>
+  <div class="key">ככל שצורכים יותר יחידות, <b>התועלת השולית יורדת</b> → מוכנים לשלם פחות על כל יחידה נוספת → לכן עקומת הביקוש <b>יורדת</b> משמאל-למעלה לימין-למטה.</div>
+
+  <div class="quiz">
+    <div class="q">🎯 בדיקה: בעקומת תמורה עם עובדים זהים, אם העלות האלטרנטיבית של פיצה היא 2 נקניקיות — איך נראית העקומה?</div>
+    <button class="opt" data-correct="1" onclick="answer(this,true,'fb-l1','קו ישר = שיפוע קבוע = עלות אלטרנטיבית קבועה לכל אורך העקומה.')">קו ישר עם שיפוע קבוע</button>
+    <button class="opt" onclick="answer(this,false,'fb-l1','קעורה מתקבלת רק כשהעובדים שונים זה מזה. כאן הם זהים.')">קעורה (מתעקלת כלפי חוץ)</button>
+    <button class="opt" onclick="answer(this,false,'fb-l1','עקומת תמורה תמיד יורדת — אי אפשר לייצר יותר משניהם בו-זמנית.')">עולה משמאל לימין</button>
+    <div class="quiz-fb" id="fb-l1"></div>
+  </div>
+
+  <div class="lesson-nav">
+    <div class="spacer"></div>
+    <button class="btn" onclick="go('l2')">השיעור הבא: היצע היצרן ←</button>
+  </div>
+</section>`;
+
+/* ---------- LESSON 2 ---------- */
+PAGES.l2=`
+<section id="l2" class="lesson">
+  <div class="mobile-nav"><select class="mnav" onchange="go(this.value)"></select></div>
+  <div class="lesson-head">
+    <span class="lesson-tag">שיעור 2 · מיקרו</span>
+    <h1>היצע היצרן</h1>
+    <p class="sub">איך יצרן מחליט כמה לייצר — וכל העלויות שצריך להכיר.</p>
+  </div>
+
+  <div class="card idea">
+    <h2 class="block"><span class="ico">💡</span> הרעיון בגדול</h2>
+    <p>היצרן בוחר כמות ייצור לפי כלל פשוט: <strong>לייצר כל עוד העלות של היחידה הבאה (MC) לא גבוהה מהמחיר (P)</strong>. עקומת ה-MC היא בעצם <strong>עקומת ההיצע</strong> של היצרן. כל השאר בשיעור זה רק עוזר לבנות אותה.</p>
+  </div>
+
+  <h2 class="block"><span class="ico">📖</span> מילון המושגים</h2>
+  <div class="tbl-wrap"><table>
+    <tr><th>קיצור</th><th>שם</th><th>נוסחה</th></tr>
+    <tr><td><b>MP</b></td><td>תפוקה שולית</td><td class="formula-cell">ΔTP / ΔL</td></tr>
+    <tr><td><b>TVC</b></td><td>הוצאות משתנות</td><td class="formula-cell">L × W</td></tr>
+    <tr><td><b>FC</b></td><td>הוצאות קבועות</td><td class="formula-cell">נתון</td></tr>
+    <tr><td><b>TC</b></td><td>סך הוצאות</td><td class="formula-cell">TVC + FC</td></tr>
+    <tr><td><b>AVC</b></td><td>עלות משתנה ממוצעת</td><td class="formula-cell">TVC / TP</td></tr>
+    <tr><td><b>AC</b></td><td>עלות כוללת ממוצעת</td><td class="formula-cell">TC / TP</td></tr>
+    <tr><td><b>MC</b></td><td>עלות שולית</td><td class="formula-cell">W / MP</td></tr>
+    <tr><td><b>TR</b></td><td>סך הכנסות</td><td class="formula-cell">P × Q</td></tr>
+  </table></div>
+
+  <h2 class="block"><span class="ico">📊</span> הטבלה המלאה מהתרגיל</h2>
+  <p>נתון: שכר לעובד <strong>W = 180 ₪</strong>, הוצאות קבועות <strong>FC = 200 ₪</strong>. זאת הטבלה שצריך לדעת לבנות לבד:</p>
+  <div class="tbl-wrap"><table>
+    <tr><th>L</th><th>TP</th><th>MP</th><th>TVC</th><th>TC</th><th>AVC</th><th>AC</th><th>MC</th></tr>
+    <tr><td>0</td><td>0</td><td>–</td><td>0</td><td>200</td><td>–</td><td>–</td><td>–</td></tr>
+    <tr><td>1</td><td>10</td><td>10</td><td>180</td><td>380</td><td class="hl">18</td><td>38</td><td>18</td></tr>
+    <tr><td>2</td><td>16</td><td>6</td><td>360</td><td>560</td><td>22.5</td><td class="hl">35</td><td>30</td></tr>
+    <tr><td>3</td><td>20</td><td>4</td><td>540</td><td>740</td><td>27</td><td>37</td><td>45</td></tr>
+    <tr><td>4</td><td>23</td><td>3</td><td>720</td><td>920</td><td>31.3</td><td>40</td><td>60</td></tr>
+  </table></div>
+  <div class="key">שים לב לעמודת ה-MC: <b>18 → 30 → 45 → 60</b>. זו עקומת ההיצע. וגם: ה-AVC המינימלי = <b>18</b>, וה-AC המינימלי = <b>35</b>. תכף נראה למה זה חשוב.</div>
+
+  <h2 class="block"><span class="ico">⚖️</span> כלל היצרן</h2>
+  <div class="fbox-row"><span class="fbox">לייצר כל עוד: MC ≤ P</span></div>
+  <p>אם העלות לייצר יחידה נוספת גבוהה מהמחיר בשוק → מפסידים עליה → לא כדאי. היצרן מוסיף עובדים עד הרגע שבו ה-MC של העובד הבא כבר עובר את המחיר.</p>
+
+  <div class="calc">
+    <div class="calc-title">מחשבון כמות ייצור</div>
+    <div class="calc-desc">הזן מחיר שוק, ותראה כמה היצרן ייצר לפי הטבלה למעלה (MC: 18, 30, 45, 60 ליחידות 10, 16, 20, 23).</div>
+    <div class="calc-inputs">
+      <div class="inp-group"><label>מחיר שוק P (₪)</label><input type="number" id="p2" value="50" oninput="calcQty()"></div>
+    </div>
+    <div class="calc-out" id="out2">—</div>
+  </div>
+
+  <h2 class="block"><span class="ico">🚪</span> מחיר סגירה ומחיר איזון</h2>
+  <div class="tbl-wrap"><table>
+    <tr><th></th><th>מחיר סגירה</th><th>מחיר איזון</th></tr>
+    <tr><td>טווח</td><td>קצר</td><td>ארוך</td></tr>
+    <tr><td>נוסחה</td><td class="formula-cell">min(AVC)</td><td class="formula-cell">min(AC)</td></tr>
+    <tr><td>בדוגמה</td><td class="hl">18 ₪</td><td class="hl">35 ₪</td></tr>
+    <tr><td>הרעיון</td><td>מתחת לזה — סוגר מיד (לא מכסה אפילו הוצאות משתנות)</td><td>מתחת לזה — יוצא בטווח הארוך (לא מכסה הכל)</td></tr>
+  </table></div>
+  <div class="trick"><strong>בטווח קצר</strong> מספיק לכסות הוצאות משתנות (כי הקבועות כבר שולמו). <strong>בטווח ארוך</strong> חייבים לכסות הכל. לכן מחיר הסגירה (18) תמיד נמוך או שווה למחיר האיזון (35).</div>
+
+  <h2 class="block"><span class="ico">💰</span> רווח ועודף יצרן</h2>
+  <div class="fbox-row">
+    <span class="fbox">TR = P × Q</span>
+    <span class="fbox">עודף יצרן = TR − TVC</span>
+    <span class="fbox">רווח = TR − TC</span>
+  </div>
+  <p>דוגמה במחיר P=50, Q=20: TR = 50×20 = 1000. עודף יצרן = 1000 − 540 = <strong>460 ₪</strong>. רווח = 1000 − 740 = <strong>260 ₪</strong>.</p>
+
+  <div class="calc">
+    <div class="calc-title">מחשבון עלות שולית MC</div>
+    <div class="calc-desc">MC = השכר חלקי התפוקה השולית. הזן את שני הנתונים.</div>
+    <div class="calc-inputs">
+      <div class="inp-group"><label>שכר W (₪)</label><input type="number" id="w2" value="180" oninput="calcMC()"></div>
+      <div class="inp-group"><label>תפוקה שולית MP</label><input type="number" id="mp2" value="6" oninput="calcMC()"></div>
+    </div>
+    <div class="calc-out" id="outMC">—</div>
+  </div>
+
+  <div class="quiz">
+    <div class="q">🎯 בדיקה: המחיר בשוק הוא 38 ₪. כמה ייצר היצרן (לפי הטבלה)?</div>
+    <button class="opt" onclick="answer(this,false,'fb-l2','MC של יחידה 20 הוא 45 > 38, אז על העובד השלישי הוא מפסיד.')">20 יחידות</button>
+    <button class="opt" data-correct="1" onclick="answer(this,true,'fb-l2','MC=30 (≤38) עוד משתלם, אבל MC=45 (>38) כבר לא. עוצרים ב-16.')">16 יחידות</button>
+    <button class="opt" onclick="answer(this,false,'fb-l2','10 יחידות זה אם המחיר היה בין 18 ל-30. כאן הוא 38.')">10 יחידות</button>
+    <div class="quiz-fb" id="fb-l2"></div>
+  </div>
+
+  <div class="lesson-nav">
+    <button class="btn ghost" onclick="go('l1')">→ הקודם</button>
+    <button class="btn" onclick="go('l3')">השיעור הבא: היצע — המשך ←</button>
+  </div>
+</section>`;
+
+/* ---------- LESSON 3 ---------- */
+PAGES.l3=`
+<section id="l3" class="lesson">
+  <div class="mobile-nav"><select class="mnav" onchange="go(this.value)"></select></div>
+  <div class="lesson-head">
+    <span class="lesson-tag">שיעור 3 · מיקרו</span>
+    <h1>היצע — המשך</h1>
+    <p class="sub">טווח קצר מול ארוך, הוצאות שקועות, היצע מצרפי וגמישות.</p>
+  </div>
+
+  <div class="card idea">
+    <h2 class="block"><span class="ico">💡</span> הרעיון בגדול</h2>
+    <p>אותו יצרן, אבל עכשיו מבחינים בין <strong>טווח קצר</strong> (חלק מההוצאות כבר שולמו ולא חוזרות — "שקועות") ל<strong>טווח ארוך</strong> (אפשר לוותר על הכל). ההבחנה הזו קובעת מאיזה מחיר כדאי לייצר. בנוסף: איך מחברים יצרנים להיצע מצרפי, ומהי גמישות היצע.</p>
+  </div>
+
+  <h2 class="block"><span class="ico">🧱</span> הוצאות שקועות מול נמנעות</h2>
+  <div class="tbl-wrap"><table>
+    <tr><th>סוג</th><th>הגדרה</th><th>רלוונטי להחלטה?</th></tr>
+    <tr><td><strong>שקועה</strong> (Sunk)</td><td>כבר שולמה / התחייבת אליה — תקרה גם אם תסגור</td><td>❌ לא — להתעלם ממנה בטווח קצר</td></tr>
+    <tr><td><strong>נמנעת</strong> (Avoidable)</td><td>אפשר להימנע ממנה אם תסגור</td><td>✓ כן — מוסיפים אותה להוצאות הרלוונטיות</td></tr>
+  </table></div>
+  <div class="trick">הנחת ברירת המחדל בקורס: <strong>כל ההוצאות הקבועות הן שקועות</strong> — אלא אם נאמר במפורש אחרת. אם חלק נמנע, מוסיפים אותו לחישוב הטווח הקצר. שים לב לזה במיוחד בשאלות עם "רק X מתוך השכירות שקוע".</div>
+
+  <h2 class="block"><span class="ico">🚪</span> מחיר סגירה כשיש הוצאות נמנעות</h2>
+  <p>דוגמה ממוחזרת מהשיעור (מכונת צילום): שכירות 500 ₪. אם <strong>כל ה-500 שקועים</strong> → מחיר הסגירה מבוסס רק על העלות המשתנה לצילום. אבל אם <strong>רק 300 שקועים ו-200 נמנעים</strong> → ה-200 חוזרים להיות רלוונטיים, ומחיר הסגירה עולה (כי צריך לכסות גם אותם).</p>
+  <div class="key"><b>הכלל:</b> מחיר סגירה בטווח קצר = min של <b>(עלות משתנה ממוצעת + הוצאות נמנעות ממוצעות)</b>. ככל שיותר הוצאות נמנעות → מחיר הסגירה גבוה יותר.</div>
+
+  <h2 class="block"><span class="ico">🏭</span> אלטרנטיבה (עלות הזדמנות מפורשת)</h2>
+  <p>אם למשרד יש שימוש חלופי — למשל אפשר להשכיר אותו ב-10,000 ₪ — אז הוויתור על ההשכרה הוא <strong>עלות אלטרנטיבית אמיתית</strong> שנכנסת לחישוב. זה מעלה את הרף שממנו כדאי לייצר.</p>
+
+  <h2 class="block"><span class="ico">➕</span> היצע מצרפי (חיבור יצרנים)</h2>
+  <p>היצע מצרפי = <strong>סכום הכמויות</strong> שכל היצרנים מציעים בכל מחיר. שים לב — מחברים <strong>אופקית</strong> (כמויות), לא מחירים.</p>
+  <div class="card">
+    <p>דוגמה: בענף יש <strong>5 יצרנים זהים</strong>, וההיצע של כל אחד הוא <span class="fbox">q = 10P</span></p>
+    <p>ההיצע המצרפי: <span class="fbox">Q = 5 × 10P = 50P</span></p>
+    <p>👉 כדי להפוך נוסחה מהצורה P=0.1q ל-q, פשוט מבודדים: q=10P. ואז מכפילים במספר היצרנים.</p>
+  </div>
+
+  <div class="calc">
+    <div class="calc-title">מחשבון היצע מצרפי</div>
+    <div class="calc-desc">לכל יצרן יש היצע q = a·P. הזן את a ואת מספר היצרנים — תקבל את ההיצע המצרפי.</div>
+    <div class="calc-inputs">
+      <div class="inp-group"><label>מקדם a (q=a·P)</label><input type="number" id="a3" value="10" oninput="calcAgg()"></div>
+      <div class="inp-group"><label>מספר יצרנים n</label><input type="number" id="n3" value="5" oninput="calcAgg()"></div>
+    </div>
+    <div class="calc-out" id="out3">—</div>
+  </div>
+
+  <h2 class="block"><span class="ico">📐</span> גמישות היצע</h2>
+  <p>מודדת כמה הכמות המוצעת רגישה לשינוי במחיר:</p>
+  <div class="fbox-row"><span class="fbox">גמישות = %שינוי בכמות / %שינוי במחיר</span></div>
+  <div class="tbl-wrap"><table>
+    <tr><th>סוג היצע</th><th>גמישות</th><th>צורה בגרף</th></tr>
+    <tr><td>קשיח לחלוטין</td><td>0</td><td>קו אנכי — כמות קבועה בכל מחיר</td></tr>
+    <tr><td>רגיל</td><td>בין 0 ל-∞</td><td>עולה משמאל לימין</td></tr>
+    <tr><td>גמיש לחלוטין</td><td>∞</td><td>קו אופקי — מחיר אחד בלבד</td></tr>
+  </table></div>
+  <div class="key">גמישות = 4 פירושה: אם המחיר עולה ב-1%, הכמות המוצעת עולה ב-<b>4%</b>. ככל שהמספר גדול יותר → ההיצע גמיש יותר (תגובתי יותר).</div>
+
+  <div class="quiz">
+    <div class="q">🎯 בדיקה: בשאלה נאמר ששכירות = 500 ₪, מתוכה רק 300 ₪ שקועים. מה זה אומר על מחיר הסגירה בטווח קצר?</div>
+    <button class="opt" onclick="answer(this,false,'fb-l3','אם הכל היה שקוע, מחיר הסגירה היה מבוסס רק על העלות המשתנה. כאן זה לא המצב.')">מבוסס רק על העלות המשתנה</button>
+    <button class="opt" data-correct="1" onclick="answer(this,true,'fb-l3','200 ₪ נמנעים → הם רלוונטיים → צריך לכסות גם אותם → מחיר הסגירה גבוה יותר.')">גבוה יותר — צריך לכסות גם את ה-200 הנמנעים</button>
+    <button class="opt" onclick="answer(this,false,'fb-l3','להפך — הוצאות נמנעות מעלות את מחיר הסגירה, לא מורידות.')">נמוך יותר מאשר אם הכל היה שקוע</button>
+    <div class="quiz-fb" id="fb-l3"></div>
+  </div>
+
+  <div class="lesson-nav">
+    <button class="btn ghost" onclick="go('l2')">→ הקודם</button>
+    <button class="btn" onclick="go('l4')">השיעור הבא: שיווי משקל ←</button>
+  </div>
+</section>`;
+
+/* ---------- LESSON 4 ---------- */
+PAGES.l4=`
+<section id="l4" class="lesson">
+  <div class="mobile-nav"><select class="mnav" onchange="go(this.value)"></select></div>
+  <div class="lesson-head">
+    <span class="lesson-tag">שיעור 4 · מיקרו</span>
+    <h1>שיווי משקל ורווחה</h1>
+    <p class="sub">איפה ההיצע פוגש את הביקוש, ומי מרוויח כמה.</p>
+  </div>
+
+  <div class="card idea">
+    <h2 class="block"><span class="ico">💡</span> הרעיון בגדול</h2>
+    <p><strong>שיווי משקל</strong> = נקודת החיתוך של עקומת ההיצע והביקוש. שם הכמות המבוקשת = הכמות המוצעת, ואין לחץ לשינוי מחיר. מעל המחיר הזה → עודף היצע → לחץ לירידה. מתחתיו → עודף ביקוש → לחץ לעלייה.</p>
+  </div>
+
+  <h2 class="block"><span class="ico">🎯</span> מציאת שיווי משקל — אלגברה</h2>
+  <p>פשוט משווים את שתי המשוואות. דוגמה: היצע <span class="fbox">P=2Q</span> וביקוש <span class="fbox">P=90−Q</span></p>
+  <div class="card">
+    <p style="font-family:'JetBrains Mono',monospace">2Q = 90 − Q<br>3Q = 90<br>Q* = 30<br>P* = 2×30 = 60</p>
+  </div>
+
+  <div class="calc">
+    <div class="calc-title">מחשבון שיווי משקל</div>
+    <div class="calc-desc">ביקוש: P = a − bQ &nbsp;|&nbsp; היצע: P = cQ. הזן את הפרמטרים וקבל את נקודת שיווי המשקל.</div>
+    <div class="calc-inputs">
+      <div class="inp-group"><label>a (חותך ביקוש)</label><input type="number" id="a4" value="90" oninput="calcEq()"></div>
+      <div class="inp-group"><label>b (שיפוע ביקוש)</label><input type="number" id="b4" value="1" oninput="calcEq()"></div>
+      <div class="inp-group"><label>c (שיפוע היצע)</label><input type="number" id="c4" value="2" oninput="calcEq()"></div>
+    </div>
+    <div class="calc-out" id="out4">—</div>
+  </div>
+
+  <div class="chart-wrap">
+    <svg viewBox="0 0 420 300" xmlns="http://www.w3.org/2000/svg">
+      <line x1="55" y1="250" x2="390" y2="250" stroke="#114635" stroke-width="2"/>
+      <line x1="55" y1="250" x2="55" y2="30" stroke="#114635" stroke-width="2"/>
+      <!-- supply (up) -->
+      <line x1="55" y1="250" x2="330" y2="50" stroke="#1f6f54" stroke-width="3"/>
+      <!-- demand (down) -->
+      <line x1="55" y1="60" x2="360" y2="250" stroke="#c2452d" stroke-width="3"/>
+      <!-- eq point -->
+      <circle cx="190" cy="148" r="6" fill="#c98a1f"/>
+      <line x1="190" y1="148" x2="190" y2="250" stroke="#c98a1f" stroke-width="1" stroke-dasharray="4"/>
+      <line x1="190" y1="148" x2="55" y2="148" stroke="#c98a1f" stroke-width="1" stroke-dasharray="4"/>
+      <text x="335" y="48" font-size="13" fill="#1f6f54" font-weight="700">היצע</text>
+      <text x="360" y="245" font-size="13" fill="#c2452d" font-weight="700">ביקוש</text>
+      <text x="195" y="140" font-size="11" fill="#c98a1f" font-weight="700">שיווי משקל</text>
+      <text x="200" y="285" text-anchor="middle" font-size="12" fill="#114635" font-weight="700">כמות Q</text>
+      <text x="18" y="145" text-anchor="middle" font-size="12" fill="#114635" font-weight="700" transform="rotate(-90 18 145)">מחיר P</text>
+    </svg>
+    <div class="chart-cap">שיווי משקל = נקודת החיתוך. מעליה עודף היצע, מתחתיה עודף ביקוש.</div>
+  </div>
+
+  <h2 class="block"><span class="ico">📦</span> עודף צרכן ועודף יצרן</h2>
+  <div class="tbl-wrap"><table>
+    <tr><th>מושג</th><th>מה זה</th><th>בגרף</th></tr>
+    <tr><td><strong>עודף צרכן</strong></td><td>כמה הצרכן היה מוכן לשלם פחות כמה ששילם בפועל</td><td>שטח <b>מתחת לביקוש</b> ומעל המחיר</td></tr>
+    <tr><td><strong>עודף יצרן</strong></td><td>כמה היצרן קיבל יותר מהעלות המשתנה</td><td>שטח <b>מעל ההיצע</b> ומתחת למחיר</td></tr>
+    <tr><td><strong>הוצאות צרכנים</strong></td><td>סך מה ששולם בשוק</td><td class="formula-cell">P × Q</td></tr>
+  </table></div>
+  <div class="key">לחישוב שטח של משולש: <b>½ × בסיס × גובה</b>. הבסיס הוא הכמות, הגובה הוא הפרש המחירים.</div>
+
+  <h2 class="block"><span class="ico">🔀</span> השפעות בין שווקים</h2>
+  <p>כשמוצרים קשורים, שינוי באחד משפיע על השני:</p>
+  <div class="tbl-wrap"><table>
+    <tr><th>סוג קשר</th><th>דוגמה</th><th>אם מחיר A עולה...</th></tr>
+    <tr><td><strong>תחליפים</strong></td><td>קפה ותה</td><td>הביקוש ל-B עולה (עוברים אליו)</td></tr>
+    <tr><td><strong>משלימים</strong></td><td>קפה וסוכר</td><td>הביקוש ל-B יורד</td></tr>
+  </table></div>
+  <div class="key">מה מזיז את עקומת הביקוש ימינה? עלייה במספר הצרכנים, עלייה בהכנסה (במוצר נורמלי), עליית מחיר תחליף, ירידת מחיר משלים.<br>מה מזיז את ההיצע ימינה? עלייה במספר היצרנים, שיפור טכנולוגי, ירידה במחיר גורם הייצור.</div>
+
+  <h2 class="block"><span class="ico">🌍</span> פתיחה לסחר עם העולם</h2>
+  <p>כשאפשר לסחור במחיר עולמי, משווים אותו למחיר המקומי שהיה ללא סחר. 3 המצבים:</p>
+  <div class="card">
+    <p><strong>מצב I:</strong> מחיר עולמי = מחיר מקומי → אין יבוא ואין יצוא, כלום לא משתנה.</p>
+    <p><strong>מצב II:</strong> מחיר עולמי <strong>נמוך</strong> מהמקומי → משתלם לייבא → <strong>יבוא</strong>. הצרכנים מרוויחים, היצרנים המקומיים מפסידים.</p>
+    <p><strong>מצב III:</strong> מחיר עולמי <strong>גבוה</strong> מהמקומי → משתלם לייצא → <strong>יצוא</strong>. היצרנים מרוויחים.</p>
+  </div>
+  <div class="trick">בשאלות יש לרוב גם <strong>עלות הובלה</strong> ליחידה. מוסיפים אותה למחיר היבוא (מייקר) ומחסירים אותה ממחיר היצוא (מוזיל) — וזה מצמצם את כדאיות הסחר.</div>
+
+  <div class="quiz">
+    <div class="q">🎯 בדיקה: היצע P=3Q וביקוש P=100−2Q. מהי כמות שיווי המשקל?</div>
+    <button class="opt" onclick="answer(this,false,'fb-l4','בדוק שוב: 3Q = 100−2Q → 5Q = 100 → Q=20, לא 25.')">Q = 25</button>
+    <button class="opt" data-correct="1" onclick="answer(this,true,'fb-l4','3Q = 100−2Q → 5Q = 100 → Q*=20, ואז P=3×20=60.')">Q = 20</button>
+    <button class="opt" onclick="answer(this,false,'fb-l4','100 זה החותך של הביקוש, לא הכמות. צריך להשוות את שתי המשוואות.')">Q = 100</button>
+    <div class="quiz-fb" id="fb-l4"></div>
+  </div>
+
+  <div class="lesson-nav">
+    <button class="btn ghost" onclick="go('l3')">→ הקודם</button>
+    <button class="btn" onclick="go('l5')">השיעור הבא: התערבות ממשלתית ←</button>
+  </div>
+</section>`;
+
+/* ---------- LESSON 5 ---------- */
+PAGES.l5=`
+<section id="l5" class="lesson">
+  <div class="mobile-nav"><select class="mnav" onchange="go(this.value)"></select></div>
+  <div class="lesson-head">
+    <span class="lesson-tag">שיעור 5 · מיקרו</span>
+    <h1>התערבות ממשלתית</h1>
+    <p class="sub">מתי הממשלה מתערבת, ואיך מס וסובסידיה מזיזים את השוק.</p>
+  </div>
+
+  <div class="card idea">
+    <h2 class="block"><span class="ico">💡</span> הרעיון בגדול</h2>
+    <p>עד עכשיו הנחנו שאין התערבות. עכשיו מסירים את ההנחה. הממשלה מתערבת בעיקר כשיש <strong>כשל שוק</strong>. הכלי המרכזי במבחן: <strong>מס קנייה</strong> — שמזיז את עקומת ההיצע מעלה, והשאלה הגדולה היא <strong>מי באמת נושא בנטל</strong>.</p>
+  </div>
+
+  <h2 class="block"><span class="ico">⚠️</span> כשלי שוק — מתי מצדיקים התערבות</h2>
+  <div class="card">
+    <p><strong>1. מוצרים ציבוריים</strong> — מוצר שכולם נהנים ממנו ואי אפשר למנוע ממישהו (ביטחון, תאורת רחוב). השוק לא יספק אותו כי קשה לגבות תשלום.</p>
+    <p><strong>2. השפעות חיצוניות</strong> — כשייצור/צריכה משפיעים על אחרים והמחיר לא משקף זאת (זיהום אוויר = חיצוניות שלילית).</p>
+    <p><strong>3. שווקים לא תחרותיים</strong> — כשיש מונופול בענף.</p>
+    <p><strong>+</strong> גם: הבטחת צמיחה כלכלית וצדק חברתי (צמצום אי-שוויון).</p>
+  </div>
+
+  <h2 class="block"><span class="ico">🛠️</span> דרכי התערבות</h2>
+  <p>צווים ופיקוח · הטלת מסים או מתן סובסידיות · התערבות ישירה (קונה/מוכר בשוק) · ייצור עצמי של מוצרים ציבוריים.</p>
+
+  <h2 class="block"><span class="ico">💸</span> מס קנייה — איך זה עובד</h2>
+  <p>מס קנייה <strong>t</strong> ₪ ליחידה מזיז את עקומת ההיצע <strong>מעלה ב-t</strong> (כי כל יחידה עכשיו "עולה" ליצרן t יותר). עקומת הביקוש לא זזה.</p>
+  <div class="card">
+    <p>דוגמה: ביקוש P=18−Q, היצע P=2Q. מס t=3.</p>
+    <p style="font-family:'JetBrains Mono',monospace">היצע חדש: P = 2Q + 3<br>18−Q = 2Q+3 → 15 = 3Q → Q* = 5<br>מחיר לצרכן P = 13</p>
+  </div>
+
+  <div class="calc">
+    <div class="calc-title">מחשבון מס קנייה ונטל המס</div>
+    <div class="calc-desc">ביקוש P=a−bQ, היצע P=cQ, מס t ליחידה. מחשב שיווי משקל חדש ומפצל את הנטל.</div>
+    <div class="calc-inputs">
+      <div class="inp-group"><label>a</label><input type="number" id="a5" value="18" oninput="calcTax()"></div>
+      <div class="inp-group"><label>b</label><input type="number" id="b5" value="1" oninput="calcTax()"></div>
+      <div class="inp-group"><label>c</label><input type="number" id="c5" value="2" oninput="calcTax()"></div>
+      <div class="inp-group"><label>מס t</label><input type="number" id="t5" value="3" oninput="calcTax()"></div>
+    </div>
+    <div class="calc-out" id="out5">—</div>
+  </div>
+
+  <h2 class="block"><span class="ico">⚖️</span> מי משלם את המס? (נטל המס)</h2>
+  <p>זה הלב של השיעור. בדוגמה למעלה: לפני המס המחיר היה 12, אחרי המס הצרכן משלם 13. כלומר:</p>
+  <div class="tbl-wrap"><table>
+    <tr><th></th><th>לפני מס</th><th>אחרי מס</th><th>נטל</th></tr>
+    <tr><td>מחיר לצרכן</td><td>12</td><td>13</td><td class="hl">+1 ₪ (הצרכן)</td></tr>
+    <tr><td>מחיר נטו ליצרן</td><td>12</td><td>10 (=13−3)</td><td class="hl">−2 ₪ (היצרן)</td></tr>
+    <tr><td>סך המס</td><td colspan="2">3 ₪ ליחידה</td><td>1 + 2 = 3 ✓</td></tr>
+  </table></div>
+  <div class="trick">המס תמיד <strong>מתחלק</strong> בין הצרכן ליצרן — גם אם גובים אותו "מהיצרן". המחיר לצרכן עולה, אבל פחות מגובה המס המלא. ההפרש נופל על היצרן. החלוקה תלויה בגמישויות.</div>
+
+  <h2 class="block"><span class="ico">📈</span> הכנסות הממשלה</h2>
+  <div class="fbox-row"><span class="fbox">הכנסות מס = t × Q (החדש)</span></div>
+  <p>בדוגמה: 3 × 5 = <strong>15 ₪</strong>.</p>
+
+  <h2 class="block"><span class="ico">🎁</span> סובסידיה = מס שלילי</h2>
+  <p>סובסידיה עושה את ההפך ממס — מזיזה את עקומת ההיצע <strong>מטה</strong> (היצרן צריך פחות, כי הוא מקבל תוספת). התוצאה: מחיר נמוך יותר לצרכן וכמות גדולה יותר.</p>
+
+  <div class="quiz">
+    <div class="q">🎯 בדיקה: הוטל מס של 4 ₪ ליחידה. מחיר השוק עלה מ-20 ל-23. מה נטל המס על הצרכן והיצרן?</div>
+    <button class="opt" data-correct="1" onclick="answer(this,true,'fb-l5','הצרכן: 23−20=3 ₪. היצרן נושא ביתרה: 4−3=1 ₪. סך הכל 4 ✓')">צרכן 3 ₪, יצרן 1 ₪</button>
+    <button class="opt" onclick="answer(this,false,'fb-l5','המחיר עלה רק ב-3, אז הצרכן נושא ב-3 ולא ב-4 המלאים.')">צרכן 4 ₪, יצרן 0 ₪</button>
+    <button class="opt" onclick="answer(this,false,'fb-l5','המחיר עלה ב-3 (מ-20 ל-23), זה הנטל על הצרכן. היצרן נושא ב-1.')">צרכן 2 ₪, יצרן 2 ₪</button>
+    <div class="quiz-fb" id="fb-l5"></div>
+  </div>
+
+  <div class="lesson-nav">
+    <button class="btn ghost" onclick="go('l4')">→ הקודם</button>
+    <button class="btn" onclick="go('l6')">השיעור האחרון: מונופול ←</button>
+  </div>
+</section>`;
+
+/* ---------- LESSON 6 ---------- */
+PAGES.l6=`
+<section id="l6" class="lesson">
+  <div class="mobile-nav"><select class="mnav" onchange="go(this.value)"></select></div>
+  <div class="lesson-head">
+    <span class="lesson-tag">שיעור 6 · מיקרו</span>
+    <h1>מונופול</h1>
+    <p class="sub">יצרן יחיד — איך הוא קובע מחיר וכמה זה עולה לחברה.</p>
+  </div>
+
+  <div class="card idea">
+    <h2 class="block"><span class="ico">💡</span> הרעיון בגדול</h2>
+    <p><strong>מונופול</strong> = יצרן יחיד בשוק, ללא תחליפים קרובים. בניגוד לתחרות משוכללת, הוא <strong>קובע מחיר</strong> ולא מקבל אותו. הכלל שלו: לייצר כל עוד <strong>הפדיון השולי (MR) גדול מהעלות השולית (MC)</strong>. התוצאה: כמות נמוכה יותר ומחיר גבוה יותר מאשר בתחרות.</p>
+  </div>
+
+  <h2 class="block"><span class="ico">🔑</span> למה נוצר מונופול? 4 סיבות</h2>
+  <div class="card">
+    <p><strong>1. בעלות בלעדית</strong> על גורם ייצור חיוני או טכנולוגיה ייחודית.</p>
+    <p><strong>2. יתרונות לגודל</strong> → יצרן גדול אחד מספק את כל השוק בזול יותר ("מונופול טבעי" — חשמל, מים, תשתית).</p>
+    <p><strong>3. זיכיון ממשלתי</strong> — המדינה נותנת בלעדיות (ודואג, תחת פיקוח).</p>
+    <p><strong>4. התארגנות יצרנים</strong> לגוף אחד כדי להעלות מחיר (קרטל, OPEC).</p>
+  </div>
+
+  <h2 class="block"><span class="ico">📉</span> פדיון שולי MR — המושג המרכזי</h2>
+  <p>כשהמונופול רוצה למכור עוד יחידה, הוא חייב <strong>להוריד את המחיר לכולם</strong> — לכן הפדיון השולי תמיד <strong>נמוך מהמחיר</strong>, ויורד מהר יותר מהביקוש.</p>
+  <div class="key">אם הביקוש הוא <b>P = a − bQ</b>, אז הפדיון השולי הוא <b>MR = a − 2bQ</b>. <br>(אותו חותך, שיפוע כפול). זה הכלי שצריך לשלוף בכל שאלת מונופול עם נוסחאות.</div>
+
+  <h2 class="block"><span class="ico">⚖️</span> כלל המונופול</h2>
+  <div class="fbox-row"><span class="fbox">ייצר כל עוד MR > MC</span><span class="fbox">נקודת אופטימום: MR = MC</span></div>
+  <p>שלבים בשאלה: (1) מצא MR מהביקוש. (2) השווה MR=MC ומצא את הכמות Q. (3) הצב את Q <strong>בעקומת הביקוש</strong> (לא ב-MR!) כדי למצוא את המחיר.</p>
+
+  <div class="card">
+    <p>דוגמה: ביקוש P=60−2Q, עלות MC=2Q.</p>
+    <p style="font-family:'JetBrains Mono',monospace">MR = 60 − 4Q<br>60−4Q = 2Q → 60 = 6Q → Q = 10<br>מחיר: P = 60 − 2×10 = 40 ₪</p>
+  </div>
+
+  <div class="calc">
+    <div class="calc-title">מחשבון מונופול</div>
+    <div class="calc-desc">ביקוש P=a−bQ, עלות שולית MC=m·Q. מחשב את הכמות והמחיר שהמונופול יקבע.</div>
+    <div class="calc-inputs">
+      <div class="inp-group"><label>a (חותך ביקוש)</label><input type="number" id="a6" value="60" oninput="calcMono()"></div>
+      <div class="inp-group"><label>b (שיפוע ביקוש)</label><input type="number" id="b6" value="2" oninput="calcMono()"></div>
+      <div class="inp-group"><label>m (שיפוע MC)</label><input type="number" id="m6" value="2" oninput="calcMono()"></div>
+    </div>
+    <div class="calc-out" id="out6">—</div>
+  </div>
+
+  <div class="chart-wrap">
+    <svg viewBox="0 0 420 300" xmlns="http://www.w3.org/2000/svg">
+      <line x1="55" y1="250" x2="390" y2="250" stroke="#114635" stroke-width="2"/>
+      <line x1="55" y1="250" x2="55" y2="30" stroke="#114635" stroke-width="2"/>
+      <!-- demand -->
+      <line x1="55" y1="55" x2="360" y2="250" stroke="#c2452d" stroke-width="3"/>
+      <!-- MR steeper -->
+      <line x1="55" y1="55" x2="210" y2="250" stroke="#2c6e9b" stroke-width="2.5" stroke-dasharray="6"/>
+      <!-- MC -->
+      <line x1="55" y1="250" x2="330" y2="60" stroke="#1f6f54" stroke-width="3"/>
+      <!-- monopoly Q where MR=MC -->
+      <circle cx="148" cy="148" r="5" fill="#c98a1f"/>
+      <line x1="148" y1="148" x2="148" y2="250" stroke="#c98a1f" stroke-width="1" stroke-dasharray="4"/>
+      <!-- price up on demand -->
+      <circle cx="148" cy="103" r="5" fill="#c2452d"/>
+      <line x1="148" y1="103" x2="55" y2="103" stroke="#c2452d" stroke-width="1" stroke-dasharray="4"/>
+      <text x="362" y="248" font-size="12" fill="#c2452d" font-weight="700">D</text>
+      <text x="200" y="248" font-size="12" fill="#2c6e9b" font-weight="700">MR</text>
+      <text x="332" y="58" font-size="12" fill="#1f6f54" font-weight="700">MC</text>
+      <text x="50" y="106" text-anchor="end" font-size="11" fill="#c2452d" font-weight="700">P</text>
+      <text x="148" y="265" text-anchor="middle" font-size="11" fill="#c98a1f" font-weight="700">Q</text>
+    </svg>
+    <div class="chart-cap">המונופול מוצא Q בנקודת MR=MC, ואז מטפס לעקומת הביקוש כדי לקבוע מחיר גבוה יותר.</div>
+  </div>
+
+  <h2 class="block"><span class="ico">🚫</span> הנזק של מונופול</h2>
+  <p>לעומת תחרות משוכללת, המונופול מייצר <strong>כמות נמוכה יותר</strong> ומוכר ב<strong>מחיר גבוה יותר</strong>. הרווחה החברתית הכוללת נמוכה יותר — יש צרכנים שמוכנים לשלם מעל עלות הייצור אבל לא מקבלים את המוצר. זה <strong>עיוות בהקצאת המשאבים</strong>.</p>
+
+  <h2 class="block"><span class="ico">🏷️</span> אפליית מחירים</h2>
+  <div class="tbl-wrap"><table>
+    <tr><th>דרגה</th><th>מה זה</th></tr>
+    <tr><td>ראשונה</td><td>כל יחידה נמכרת במחיר המקסימלי שהצרכן מוכן לשלם</td></tr>
+    <tr><td>שנייה</td><td>כמויות שונות נמכרות במחירים שונים (הנחת כמות)</td></tr>
+    <tr><td>שלישית</td><td>קבוצות שונות משלמות מחיר שונה (סטודנט / גמלאי)</td></tr>
+  </table></div>
+  <div class="key"><b>תעריף דו-שלבי:</b> היצרן גובה גם מחיר ליחידה וגם דמי כניסה קבועים (כמו מנוי חדר כושר + תשלום לכל ביקור).</div>
+
+  <div class="quiz">
+    <div class="q">🎯 בדיקה: ביקוש P=80−3Q, עלות MC=2Q. מה הכמות שהמונופול ייצר?</div>
+    <button class="opt" onclick="answer(this,false,'fb-l6','שכחת להכפיל את השיפוע ב-MR. MR=80−6Q, לא 80−3Q.')">Q = 13.3</button>
+    <button class="opt" data-correct="1" onclick="answer(this,true,'fb-l6','MR=80−6Q. משווים: 80−6Q=2Q → 80=8Q → Q=10. ואז P=80−30=50.')">Q = 10</button>
+    <button class="opt" onclick="answer(this,false,'fb-l6','זו הכמות התחרותית (P=MC). מונופול מייצר פחות — צריך MR=MC.')">Q = 16</button>
+    <div class="quiz-fb" id="fb-l6"></div>
+  </div>
+
+  <div class="lesson-nav">
+    <button class="btn ghost" onclick="go('l5')">→ הקודם</button>
+    <button class="btn gold" onclick="go('cheat')">לסיכום: דף הנוסחאות ∑</button>
+  </div>
+</section>`;
+
+/* ---------- CHEAT SHEET ---------- */
+PAGES.cheat=`
+<section id="cheat" class="lesson">
+  <div class="mobile-nav"><select class="mnav" onchange="go(this.value)"></select></div>
+  <div class="lesson-head">
+    <span class="lesson-tag">כלים</span>
+    <h1>דף נוסחאות — מיקרו</h1>
+    <p class="sub">כל מה שצריך לשלוף במבחן, במקום אחד.</p>
+  </div>
+
+  <h2 class="block"><span class="ico">🏭</span> עלויות היצרן</h2>
+  <div class="tbl-wrap"><table>
+    <tr><th>מושג</th><th>נוסחה</th></tr>
+    <tr><td>תפוקה שולית</td><td class="formula-cell">MP = ΔTP / ΔL</td></tr>
+    <tr><td>הוצאות משתנות</td><td class="formula-cell">TVC = L × W</td></tr>
+    <tr><td>סך הוצאות</td><td class="formula-cell">TC = TVC + FC</td></tr>
+    <tr><td>עלות משתנה ממוצעת</td><td class="formula-cell">AVC = TVC / TP</td></tr>
+    <tr><td>עלות כוללת ממוצעת</td><td class="formula-cell">AC = TC / TP</td></tr>
+    <tr><td>עלות שולית</td><td class="formula-cell">MC = W / MP</td></tr>
+  </table></div>
+
+  <h2 class="block"><span class="ico">💰</span> הכנסות ורווח</h2>
+  <div class="tbl-wrap"><table>
+    <tr><td>סך הכנסות</td><td class="formula-cell">TR = P × Q</td></tr>
+    <tr><td>עודף יצרן</td><td class="formula-cell">PS = TR − TVC</td></tr>
+    <tr><td>רווח כלכלי</td><td class="formula-cell">π = TR − TC</td></tr>
+  </table></div>
+
+  <h2 class="block"><span class="ico">⚖️</span> כללי החלטה</h2>
+  <div class="tbl-wrap"><table>
+    <tr><td>כלל היצרן (תחרות)</td><td class="formula-cell">ייצר עד MC = P</td></tr>
+    <tr><td>מחיר סגירה (טווח קצר)</td><td class="formula-cell">min(AVC)</td></tr>
+    <tr><td>מחיר איזון (טווח ארוך)</td><td class="formula-cell">min(AC)</td></tr>
+    <tr><td>כלל המונופול</td><td class="formula-cell">ייצר עד MR = MC</td></tr>
+  </table></div>
+
+  <h2 class="block"><span class="ico">🎯</span> שוק ומונופול</h2>
+  <div class="tbl-wrap"><table>
+    <tr><td>שיווי משקל תחרותי</td><td class="formula-cell">היצע = ביקוש</td></tr>
+    <tr><td>פדיון שולי (אם D: P=a−bQ)</td><td class="formula-cell">MR = a − 2bQ</td></tr>
+    <tr><td>היצע מצרפי (n יצרנים)</td><td class="formula-cell">Q = n × q(P)</td></tr>
+    <tr><td>גמישות היצע</td><td class="formula-cell">%ΔQ / %ΔP</td></tr>
+    <tr><td>שטח עודף (משולש)</td><td class="formula-cell">½ × בסיס × גובה</td></tr>
+  </table></div>
+
+  <div class="trick" style="margin-top:2rem">
+    <strong style="display:block;margin-bottom:.4rem">5 הטעויות שעולות נקודות:</strong>
+    1. במונופול — להציב Q ב-MR במקום בעקומת הביקוש למציאת המחיר.<br>
+    2. לשכוח להכפיל את השיפוע ב-2 כשמחשבים MR.<br>
+    3. להתעלם מהוצאות נמנעות במחיר הסגירה (כשלא הכל שקוע).<br>
+    4. לחשוב שהצרכן נושא בכל המס — הוא תמיד מתחלק עם היצרן.<br>
+    5. לשכוח עלות הובלה בשאלות סחר עם העולם.
+  </div>
+
+  <div class="card idea" style="margin-top:2rem;text-align:center">
+    <p style="font-size:1.3rem;font-weight:900;color:var(--gold-light)">🐢🚀 בהצלחה במבחן, מרום</p>
+    <p style="margin:.3rem 0 0">הכל מאת השם. תרגל את המחשבונים עד שהיד עובדת לבד.</p>
+  </div>
+
+  <div class="lesson-nav">
+    <button class="btn ghost" onclick="go('l6')">→ חזרה למונופול</button>
+    <button class="btn" onclick="go('home')">⌂ דף הבית</button>
+  </div>
+</section>`;
+
+/* ============ ASSEMBLE & INIT ============ */
+function init(){
+  const main=document.getElementById('main');
+  main.innerHTML = PAGES.home+PAGES.l1+PAGES.l2+PAGES.l3+PAGES.l4+PAGES.l5+PAGES.l6+PAGES.cheat;
+  buildNav();
+  document.querySelectorAll('.mnav').forEach(sel=>{
+    sel.innerHTML = NAV.map(i=>`<option value="${i.id}">${(i.n==='⌂'||i.n==='∑')?i.title:'שיעור '+i.n+' · '+i.title}</option>`).join('');
+  });
+  go('home');
+  calcQty(); calcMC(); calcAgg(); calcEq(); calcTax(); calcMono();
+}
+
+/* ============ CALCULATORS ============ */
+function calcQty(){
+  const p=+document.getElementById('p2').value;
+  const out=document.getElementById('out2');
+  const mc=[18,30,45,60], q=[10,16,20,23], L=[1,2,3,4];
+  let chosen=0, chosenQ=0;
+  for(let i=0;i<mc.length;i++){ if(mc[i]<=p){ chosen=L[i]; chosenQ=q[i]; } }
+  if(chosen===0){
+    out.innerHTML=`<span class="res">לא מייצר כלל</span><span class="step">המחיר ${p}₪ נמוך מ-MC הראשון (18). לא משתלם אפילו עובד אחד.</span>`;
+    return;
+  }
+  out.innerHTML=`<span class="res">${chosenQ} יחידות</span>
+    <span class="step">עם ${chosen} עובדים. ה-MC האחרון שעדיין ≤ ${p} הוא של היחידה ה-${chosenQ}.</span>
+    <span class="step">הכנסות TR = ${p} × ${chosenQ} = ${p*chosenQ} ₪</span>`;
+}
+function calcMC(){
+  const w=+document.getElementById('w2').value, mp=+document.getElementById('mp2').value;
+  const out=document.getElementById('outMC');
+  if(mp===0){ out.innerHTML='<span class="step">תפוקה שולית לא יכולה להיות 0</span>'; return; }
+  out.innerHTML=`<span class="res">MC = ${(w/mp).toFixed(2)} ₪</span><span class="step">${w} ÷ ${mp} = עלות היחידה האחרונה</span>`;
+}
+function calcAgg(){
+  const a=+document.getElementById('a3').value, n=+document.getElementById('n3').value;
+  const out=document.getElementById('out3');
+  out.innerHTML=`<span class="res">Q = ${a*n}P</span><span class="step">${n} יצרנים × (q=${a}P) = היצע מצרפי. ככל שיש יותר יצרנים, ההיצע גדל וזז ימינה.</span>`;
+}
+function calcEq(){
+  const a=+document.getElementById('a4').value, b=+document.getElementById('b4').value, c=+document.getElementById('c4').value;
+  const out=document.getElementById('out4');
+  const q=a/(b+c), p=c*q;
+  out.innerHTML=`<span class="res">Q* = ${q.toFixed(2)} , P* = ${p.toFixed(2)} ₪</span>
+    <span class="step">${a} − ${b}Q = ${c}Q → ${a} = ${b+c}Q → Q* = ${q.toFixed(2)}</span>
+    <span class="step">מציבים: P* = ${c} × ${q.toFixed(2)} = ${p.toFixed(2)} ₪</span>`;
+}
+function calcTax(){
+  const a=+document.getElementById('a5').value, b=+document.getElementById('b5').value,
+        c=+document.getElementById('c5').value, t=+document.getElementById('t5').value;
+  const out=document.getElementById('out5');
+  const q0=a/(b+c), p0=c*q0;
+  const q1=(a-t)/(b+c), pc=a-b*q1;
+  const pn=pc-t;
+  const burdenC=pc-p0, burdenP=p0-pn;
+  out.innerHTML=`<span class="res">Q=${q1.toFixed(2)} | מחיר לצרכן=${pc.toFixed(2)} | נטו ליצרן=${pn.toFixed(2)} ₪</span>
+    <span class="step">לפני מס: Q=${q0.toFixed(2)}, P=${p0.toFixed(2)}</span>
+    <span class="step">נטל הצרכן: +${burdenC.toFixed(2)} ₪ | נטל היצרן: ${burdenP.toFixed(2)} ₪ | סה"כ = ${t} ✓</span>
+    <span class="step">הכנסות הממשלה: ${t} × ${q1.toFixed(2)} = ${(t*q1).toFixed(2)} ₪</span>`;
+}
+function calcMono(){
+  const a=+document.getElementById('a6').value, b=+document.getElementById('b6').value, m=+document.getElementById('m6').value;
+  const out=document.getElementById('out6');
+  const q=a/(2*b+m), p=a-b*q;
+  const qc=a/(b+m);
+  out.innerHTML=`<span class="res">Q = ${q.toFixed(2)} , מחיר = ${p.toFixed(2)} ₪</span>
+    <span class="step">MR = ${a} − ${2*b}Q. משווים ל-MC: ${a}−${2*b}Q = ${m}Q → Q = ${q.toFixed(2)}</span>
+    <span class="step">מציבים בביקוש: P = ${a} − ${b}×${q.toFixed(2)} = ${p.toFixed(2)} ₪</span>
+    <span class="step">להשוואה — בתחרות הכמות הייתה ${qc.toFixed(2)} (גדולה יותר!)</span>`;
+}
+
+/* ============ START ============ */
+init();
+</script>
+</body>
+</html>
