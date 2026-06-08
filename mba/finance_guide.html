@@ -1,0 +1,1750 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>מדריך מימון למנהלים — מרום</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Frank+Ruhl+Libre:wght@400;500;700;900&family=Heebo:wght@300;400;500;700;900&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+<style>
+:root {
+  --ink: #1a1a1a;
+  --ink-soft: #3a3a3a;
+  --paper: #f5f1e8;
+  --paper-warm: #ebe5d4;
+  --accent: #c9302c;
+  --accent-soft: #e8b8b6;
+  --gold: #b8893d;
+  --green: #2d5f3f;
+  --green-soft: #d4e4d8;
+  --rule: #2a2a2a;
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+html { scroll-behavior: smooth; }
+
+body {
+  font-family: 'Heebo', -apple-system, sans-serif;
+  background: var(--paper);
+  color: var(--ink);
+  line-height: 1.6;
+  font-weight: 400;
+  background-image:
+    radial-gradient(circle at 20% 30%, rgba(184,137,61,0.04) 0%, transparent 50%),
+    radial-gradient(circle at 80% 70%, rgba(201,48,44,0.03) 0%, transparent 50%);
+  min-height: 100vh;
+}
+
+/* ============ HEADER ============ */
+.masthead {
+  border-bottom: 3px double var(--rule);
+  padding: 24px 40px 16px;
+  background: var(--paper);
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  backdrop-filter: blur(8px);
+  background: rgba(245,241,232,0.97);
+}
+
+.masthead-inner {
+  max-width: 1400px;
+  margin: 0 auto;
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 32px;
+  flex-wrap: wrap;
+}
+
+.brand {
+  font-family: 'Frank Ruhl Libre', serif;
+  font-weight: 900;
+  font-size: 28px;
+  letter-spacing: -0.02em;
+  line-height: 1;
+}
+
+.brand .accent { color: var(--accent); }
+
+.brand-sub {
+  font-size: 11px;
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 0.15em;
+  color: var(--ink-soft);
+  margin-top: 6px;
+}
+
+.exam-countdown {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 12px;
+  color: var(--ink-soft);
+  text-align: left;
+  direction: ltr;
+}
+
+.exam-countdown strong {
+  display: block;
+  font-size: 22px;
+  color: var(--accent);
+  font-weight: 700;
+}
+
+/* ============ NAV TABS ============ */
+.tabs {
+  display: flex;
+  gap: 0;
+  margin-top: 18px;
+  border-bottom: 1px solid var(--rule);
+  overflow-x: auto;
+  scrollbar-width: thin;
+}
+
+.tab {
+  padding: 12px 18px;
+  font-family: 'Heebo', sans-serif;
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--ink-soft);
+  background: transparent;
+  border: none;
+  border-bottom: 3px solid transparent;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: all 0.2s;
+  letter-spacing: 0.02em;
+  position: relative;
+}
+
+.tab:hover { color: var(--ink); }
+
+.tab.active {
+  color: var(--ink);
+  border-bottom-color: var(--accent);
+  font-weight: 700;
+}
+
+.tab .num {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 10px;
+  color: var(--gold);
+  margin-left: 6px;
+  font-weight: 600;
+}
+
+/* ============ MAIN ============ */
+main {
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 40px;
+}
+
+.section { display: none; animation: fadeIn 0.4s; }
+.section.active { display: block; }
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(8px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.section-head {
+  display: grid;
+  grid-template-columns: auto 1fr auto;
+  gap: 24px;
+  align-items: end;
+  padding-bottom: 20px;
+  border-bottom: 1px solid var(--rule);
+  margin-bottom: 32px;
+}
+
+.section-num {
+  font-family: 'Frank Ruhl Libre', serif;
+  font-weight: 900;
+  font-size: 88px;
+  line-height: 0.8;
+  color: var(--accent);
+  letter-spacing: -0.04em;
+}
+
+.section-title {
+  font-family: 'Frank Ruhl Libre', serif;
+  font-weight: 700;
+  font-size: 36px;
+  line-height: 1.1;
+  letter-spacing: -0.02em;
+}
+
+.section-title small {
+  display: block;
+  font-family: 'Heebo', sans-serif;
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--ink-soft);
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  margin-bottom: 8px;
+}
+
+.section-priority {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 11px;
+  padding: 4px 10px;
+  border: 1px solid var(--rule);
+  background: var(--paper-warm);
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+}
+
+.priority-hot { color: var(--accent); border-color: var(--accent); }
+.priority-warm { color: var(--gold); border-color: var(--gold); }
+.priority-cool { color: var(--green); border-color: var(--green); }
+
+/* ============ CONTENT BLOCKS ============ */
+.grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 28px; }
+.grid-3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 20px; }
+
+@media (max-width: 880px) {
+  .grid-2, .grid-3 { grid-template-columns: 1fr; }
+}
+
+.card {
+  background: rgba(255,255,255,0.5);
+  border: 1px solid var(--rule);
+  padding: 24px;
+  margin-bottom: 24px;
+  position: relative;
+}
+
+.card-title {
+  font-family: 'Frank Ruhl Libre', serif;
+  font-weight: 700;
+  font-size: 22px;
+  margin-bottom: 14px;
+  display: flex;
+  align-items: baseline;
+  gap: 10px;
+}
+
+.card-title::before {
+  content: '';
+  width: 8px;
+  height: 8px;
+  background: var(--accent);
+  display: inline-block;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+.concept {
+  margin-bottom: 18px;
+  padding-right: 18px;
+  border-right: 3px solid var(--paper-warm);
+}
+
+.concept-name {
+  font-weight: 700;
+  font-size: 15px;
+  color: var(--accent);
+  margin-bottom: 4px;
+}
+
+.concept-name .en {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 11px;
+  color: var(--ink-soft);
+  font-weight: 500;
+  margin-right: 8px;
+}
+
+.concept-body {
+  font-size: 14px;
+  line-height: 1.65;
+}
+
+/* ============ FORMULA ============ */
+.formula {
+  font-family: 'JetBrains Mono', monospace;
+  background: var(--ink);
+  color: var(--paper);
+  padding: 16px 20px;
+  margin: 12px 0;
+  font-size: 14px;
+  direction: ltr;
+  text-align: center;
+  overflow-x: auto;
+  border-right: 4px solid var(--gold);
+  letter-spacing: 0.02em;
+  line-height: 1.8;
+}
+
+.formula .var { color: var(--accent-soft); }
+.formula .op { color: var(--gold); }
+.formula .note {
+  display: block;
+  font-size: 11px;
+  color: rgba(245,241,232,0.6);
+  margin-top: 6px;
+  font-family: 'Heebo', sans-serif;
+  direction: rtl;
+}
+
+/* ============ ALERT BOXES ============ */
+.alert {
+  padding: 16px 20px;
+  margin: 16px 0;
+  font-size: 14px;
+  position: relative;
+  border-right: 4px solid;
+}
+
+.alert-tip {
+  background: var(--green-soft);
+  border-color: var(--green);
+}
+
+.alert-warn {
+  background: #f9e8d3;
+  border-color: var(--gold);
+}
+
+.alert-danger {
+  background: var(--accent-soft);
+  border-color: var(--accent);
+}
+
+.alert-label {
+  font-weight: 700;
+  text-transform: uppercase;
+  font-size: 11px;
+  letter-spacing: 0.1em;
+  margin-bottom: 4px;
+}
+
+/* ============ TABLES ============ */
+table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 16px 0;
+  font-size: 13px;
+}
+
+th, td {
+  padding: 10px 12px;
+  text-align: right;
+  border-bottom: 1px solid var(--paper-warm);
+}
+
+th {
+  background: var(--ink);
+  color: var(--paper);
+  font-weight: 600;
+  font-size: 12px;
+  letter-spacing: 0.05em;
+}
+
+tr:nth-child(even) td { background: rgba(184,137,61,0.05); }
+
+/* ============ CALCULATOR ============ */
+.calculator {
+  background: var(--paper-warm);
+  border: 2px solid var(--rule);
+  padding: 24px;
+  margin: 20px 0;
+}
+
+.calc-title {
+  font-family: 'Frank Ruhl Libre', serif;
+  font-weight: 700;
+  font-size: 18px;
+  margin-bottom: 4px;
+}
+
+.calc-sub {
+  font-size: 12px;
+  color: var(--ink-soft);
+  margin-bottom: 16px;
+}
+
+.calc-row {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+  margin-bottom: 10px;
+  flex-wrap: wrap;
+}
+
+.calc-row label {
+  flex: 1;
+  min-width: 180px;
+  font-size: 13px;
+  font-weight: 500;
+}
+
+.calc-row input {
+  width: 140px;
+  padding: 8px 10px;
+  border: 1px solid var(--rule);
+  background: white;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 13px;
+  direction: ltr;
+  text-align: left;
+}
+
+.calc-row input:focus {
+  outline: 2px solid var(--accent);
+  outline-offset: -1px;
+}
+
+.calc-result {
+  margin-top: 16px;
+  padding: 16px;
+  background: var(--ink);
+  color: var(--paper);
+  font-family: 'JetBrains Mono', monospace;
+}
+
+.calc-result .label {
+  font-size: 11px;
+  color: rgba(245,241,232,0.6);
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+}
+
+.calc-result .value {
+  font-size: 24px;
+  font-weight: 600;
+  color: var(--gold);
+  margin-top: 4px;
+  direction: ltr;
+  text-align: left;
+}
+
+.calc-btn {
+  padding: 10px 20px;
+  background: var(--accent);
+  color: var(--paper);
+  border: none;
+  font-family: 'Heebo', sans-serif;
+  font-weight: 600;
+  font-size: 13px;
+  cursor: pointer;
+  letter-spacing: 0.05em;
+  transition: all 0.15s;
+  margin-top: 8px;
+}
+
+.calc-btn:hover { background: var(--ink); }
+
+/* ============ EXAMPLE ============ */
+.example {
+  background: var(--paper-warm);
+  padding: 20px;
+  margin: 16px 0;
+  border-top: 2px solid var(--gold);
+  position: relative;
+}
+
+.example::before {
+  content: 'דוגמה';
+  position: absolute;
+  top: -12px;
+  right: 16px;
+  background: var(--gold);
+  color: var(--paper);
+  padding: 2px 12px;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+
+.example-step {
+  margin: 10px 0;
+  padding-right: 24px;
+  position: relative;
+  font-size: 14px;
+}
+
+.example-step::before {
+  content: '◆';
+  position: absolute;
+  right: 0;
+  color: var(--accent);
+  font-size: 10px;
+  top: 6px;
+}
+
+/* ============ CHECKLIST ============ */
+.checklist {
+  list-style: none;
+  padding: 0;
+}
+
+.checklist li {
+  padding: 10px 0 10px 0;
+  padding-right: 32px;
+  border-bottom: 1px dashed var(--paper-warm);
+  position: relative;
+  font-size: 14px;
+  cursor: pointer;
+  user-select: none;
+  transition: all 0.2s;
+}
+
+.checklist li::before {
+  content: '';
+  position: absolute;
+  right: 0;
+  top: 12px;
+  width: 18px;
+  height: 18px;
+  border: 2px solid var(--rule);
+  background: white;
+}
+
+.checklist li.done {
+  color: var(--ink-soft);
+  text-decoration: line-through;
+}
+
+.checklist li.done::before {
+  background: var(--green);
+  border-color: var(--green);
+}
+
+.checklist li.done::after {
+  content: '✓';
+  position: absolute;
+  right: 3px;
+  top: 8px;
+  color: white;
+  font-weight: 700;
+  font-size: 14px;
+}
+
+/* ============ MNEMONIC ============ */
+.mnemonic {
+  font-family: 'Frank Ruhl Libre', serif;
+  font-size: 16px;
+  font-style: italic;
+  padding: 12px 18px;
+  background: linear-gradient(90deg, var(--paper-warm) 0%, transparent 100%);
+  border-right: 3px solid var(--accent);
+  margin: 14px 0;
+}
+
+.mnemonic strong {
+  font-style: normal;
+  color: var(--accent);
+  font-weight: 700;
+}
+
+/* ============ FOOTER NAV ============ */
+.section-nav {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 48px;
+  padding-top: 24px;
+  border-top: 1px solid var(--rule);
+}
+
+.nav-btn {
+  padding: 12px 24px;
+  background: transparent;
+  border: 1px solid var(--rule);
+  font-family: 'Heebo', sans-serif;
+  font-size: 13px;
+  cursor: pointer;
+  transition: all 0.15s;
+  font-weight: 500;
+}
+
+.nav-btn:hover {
+  background: var(--ink);
+  color: var(--paper);
+}
+
+.nav-btn:disabled {
+  opacity: 0.3;
+  cursor: not-allowed;
+}
+
+/* ============ KEY/VALUE LISTS ============ */
+.kv {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: 8px 16px;
+  margin: 12px 0;
+  font-size: 14px;
+}
+
+.kv dt {
+  font-weight: 700;
+  color: var(--accent);
+  white-space: nowrap;
+}
+
+/* ============ FLASHCARD ============ */
+.flashcards {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+  gap: 12px;
+  margin: 20px 0;
+}
+
+.flashcard {
+  background: white;
+  border: 1px solid var(--rule);
+  padding: 16px;
+  cursor: pointer;
+  min-height: 110px;
+  position: relative;
+  transition: transform 0.3s, box-shadow 0.2s;
+  perspective: 800px;
+}
+
+.flashcard:hover {
+  box-shadow: 4px 4px 0 var(--ink);
+  transform: translate(-2px, -2px);
+}
+
+.flashcard .front, .flashcard .back {
+  font-size: 14px;
+}
+
+.flashcard .back { display: none; color: var(--accent); font-weight: 500; }
+.flashcard.flipped .front { display: none; }
+.flashcard.flipped .back { display: block; }
+
+.flashcard-q {
+  font-size: 11px;
+  color: var(--gold);
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  margin-bottom: 6px;
+  font-weight: 700;
+}
+
+/* ============ TIMELINE ============ */
+.timeline {
+  position: relative;
+  padding: 20px 0;
+}
+
+.timeline::before {
+  content: '';
+  position: absolute;
+  right: 20px;
+  top: 0;
+  bottom: 0;
+  width: 2px;
+  background: var(--rule);
+}
+
+.timeline-item {
+  padding-right: 48px;
+  margin-bottom: 24px;
+  position: relative;
+}
+
+.timeline-item::before {
+  content: '';
+  position: absolute;
+  right: 14px;
+  top: 4px;
+  width: 14px;
+  height: 14px;
+  background: var(--accent);
+  border: 3px solid var(--paper);
+  border-radius: 50%;
+}
+
+.timeline-item h4 {
+  font-family: 'Frank Ruhl Libre', serif;
+  font-size: 18px;
+  margin-bottom: 4px;
+}
+
+/* ============ MOBILE ============ */
+@media (max-width: 640px) {
+  .masthead { padding: 16px 20px; }
+  main { padding: 24px 20px; }
+  .section-num { font-size: 56px; }
+  .section-title { font-size: 24px; }
+  .section-head { grid-template-columns: 1fr; gap: 8px; }
+}
+
+/* ============ PRINT ============ */
+@media print {
+  .tabs, .masthead, .section-nav, .calc-btn { display: none; }
+  .section { display: block !important; page-break-after: always; }
+}
+</style>
+</head>
+<body>
+
+<header class="masthead">
+  <div class="masthead-inner">
+    <div>
+      <div class="brand">מימון <span class="accent">למנהלים</span></div>
+      <div class="brand-sub">מדריך מבחן · MBA · בן־גוריון</div>
+    </div>
+    <div class="exam-countdown">
+      <span>EXAM DATE</span>
+      <strong>29.05.2026</strong>
+      <span id="days-left">טוען...</span>
+    </div>
+  </div>
+  <nav class="tabs" id="tabs">
+    <button class="tab active" data-section="overview"><span class="num">00</span>סקירה</button>
+    <button class="tab" data-section="cashflow"><span class="num">01</span>תזרים מזומנים</button>
+    <button class="tab" data-section="depreciation"><span class="num">02</span>פחת</button>
+    <button class="tab" data-section="workingcap"><span class="num">03</span>הון חוזר</button>
+    <button class="tab" data-section="tvm"><span class="num">04</span>ערך זמן של כסף</button>
+    <button class="tab" data-section="npv"><span class="num">05</span>NPV & IRR</button>
+    <button class="tab" data-section="inflation"><span class="num">06</span>אינפלציה</button>
+    <button class="tab" data-section="risk"><span class="num">07</span>סיכון ותשואה</button>
+    <button class="tab" data-section="capm"><span class="num">08</span>CAPM</button>
+    <button class="tab" data-section="strategy"><span class="num">09</span>אסטרטגיית מבחן</button>
+    <button class="tab" data-section="flashcards"><span class="num">10</span>כרטיסיות</button>
+  </nav>
+</header>
+
+<main>
+
+<!-- ============ OVERVIEW ============ -->
+<section class="section active" id="overview">
+  <div class="section-head">
+    <div class="section-num">00</div>
+    <h1 class="section-title"><small>הקדמה ומפת דרכים</small>סקירה אסטרטגית</h1>
+    <span class="section-priority priority-hot">קריטי</span>
+  </div>
+
+  <div class="grid-2">
+    <div class="card">
+      <h3 class="card-title">המטרה — ציון 65+</h3>
+      <p>הבחינה במימון מבוססת על שאלת תזרים מזומנים גדולה (28 נק') + שאלות קצרות יותר על ערך זמן של כסף, NPV/IRR, אינפלציה, סיכון ו-CAPM.</p>
+      <div class="mnemonic">
+        <strong>עיקרון מנחה:</strong> תזרים מזומנים תפעולי ≠ רווח חשבונאי. אל תתבלבל בין השניים.
+      </div>
+    </div>
+
+    <div class="card">
+      <h3 class="card-title">משקלות משוערות</h3>
+      <table>
+        <thead><tr><th>נושא</th><th>משקל</th><th>קושי</th></tr></thead>
+        <tbody>
+          <tr><td>בניית תזרים מזומנים</td><td>~28%</td><td>גבוה</td></tr>
+          <tr><td>NPV / IRR / Payback</td><td>~20%</td><td>בינוני</td></tr>
+          <tr><td>ערך זמן של כסף + אנונה</td><td>~15%</td><td>בינוני</td></tr>
+          <tr><td>אינפלציה (ריאלי/נומינלי)</td><td>~12%</td><td>נמוך</td></tr>
+          <tr><td>סיכון ותשואה + CAPM</td><td>~15%</td><td>בינוני</td></tr>
+          <tr><td>פחת + הון חוזר</td><td>~10%</td><td>נמוך</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <div class="card">
+    <h3 class="card-title">מסלול 48 שעות — תוכנית קרב</h3>
+    <div class="timeline">
+      <div class="timeline-item">
+        <h4>יום 1 בוקר — היסודות (4 שעות)</h4>
+        <p>תזרים מזומנים, פחת, הון חוזר. תרגיל אחד מלא של תזרים מקצה לקצה.</p>
+      </div>
+      <div class="timeline-item">
+        <h4>יום 1 צהריים — ערך זמן של כסף (3 שעות)</h4>
+        <p>הוון, אנונה, אנונה גדלה. 5-6 תרגילים מספריים.</p>
+      </div>
+      <div class="timeline-item">
+        <h4>יום 1 ערב — NPV/IRR/Payback (3 שעות)</h4>
+        <p>פתרון פרויקטים, השוואת חלופות, מתי לבחור במה.</p>
+      </div>
+      <div class="timeline-item">
+        <h4>יום 2 בוקר — אינפלציה + סיכון (3 שעות)</h4>
+        <p>נומינלי vs ריאלי, סטיית תקן, תוחלת תשואה.</p>
+      </div>
+      <div class="timeline-item">
+        <h4>יום 2 צהריים — CAPM (2 שעות)</h4>
+        <p>בטא, פרמיית סיכון, מודל בסיסי.</p>
+      </div>
+      <div class="timeline-item">
+        <h4>יום 2 ערב — סימולציה (3 שעות)</h4>
+        <p>פתרון בחינה לדוגמה תחת לחץ זמן. סיכום נקודות חולשה.</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="alert alert-tip">
+    <div class="alert-label">🐢🚀 KISS</div>
+    "Slow is smooth, smooth is fast" — אל תרוץ דרך החומר. עדיף להבין 6 נושאים לעומק מאשר 10 שטחית. הציון יבוא מהיסודות.
+  </div>
+</section>
+
+<!-- ============ CASHFLOW ============ -->
+<section class="section" id="cashflow">
+  <div class="section-head">
+    <div class="section-num">01</div>
+    <h1 class="section-title"><small>שאלה 1 · 28 נקודות</small>בניית תזרים מזומנים</h1>
+    <span class="section-priority priority-hot">קריטי</span>
+  </div>
+
+  <div class="card">
+    <h3 class="card-title">העיקרון המרכזי</h3>
+    <p>תזרים מזומנים (Cash Flow) שונה מרווח חשבונאי. במימון אנחנו <strong>סופרים רק כסף שנכנס או יוצא בפועל</strong>, לא חיובים חשבונאיים.</p>
+    
+    <div class="alert alert-danger">
+      <div class="alert-label">⚠️ טעות נפוצה</div>
+      פחת <strong>אינו</strong> תזרים מזומנים יוצא. הוא הוצאה חשבונאית בלבד. הוא מקטין מס — וזו ההשפעה היחידה שלו על התזרים.
+    </div>
+  </div>
+
+  <div class="card">
+    <h3 class="card-title">המבנה הסטנדרטי של תזרים מזומנים</h3>
+    
+    <div class="formula">
+      Revenue (הכנסות)<br>
+      <span class="op">−</span> Operating Costs (עלויות תפעוליות)<br>
+      <span class="op">−</span> Depreciation (פחת)<br>
+      <span class="op">=</span> EBIT (רווח תפעולי)<br>
+      <span class="op">−</span> Tax (מס · EBIT × T)<br>
+      <span class="op">=</span> NOPAT (רווח תפעולי אחרי מס)<br>
+      <span class="op">+</span> Depreciation (מחזירים את הפחת!)<br>
+      <span class="op">−</span> ΔWorking Capital (שינוי בהון חוזר)<br>
+      <span class="op">−</span> CAPEX (השקעות הון)<br>
+      <span class="op">=</span> <span class="var">Free Cash Flow</span>
+      <span class="note">המבנה הזה הוא הליבה. שננו אותו ויזואלית.</span>
+    </div>
+
+    <div class="alert alert-tip">
+      <div class="alert-label">למה מחזירים את הפחת?</div>
+      הורדנו אותו רק כדי להגיע ל-EBIT ולחשב מס נכון. אבל בפועל לא יצא כסף — אז מוסיפים אותו בחזרה.
+    </div>
+  </div>
+
+  <div class="grid-2">
+    <div class="card">
+      <h3 class="card-title">רכיבים שאסור לשכוח</h3>
+      <div class="concept">
+        <div class="concept-name">CAPEX <span class="en">Capital Expenditure</span></div>
+        <div class="concept-body">השקעה במכונות/ציוד. תזרים שלילי בשנה 0 (או בשנה שבה ההשקעה מתבצעת).</div>
+      </div>
+      <div class="concept">
+        <div class="concept-name">Salvage Value · ערך גרט</div>
+        <div class="concept-body">ערך המכירה של הנכס בסוף חיי הפרויקט. תזרים חיובי בשנה האחרונה. שימו לב למיסוי שלו!</div>
+      </div>
+      <div class="concept">
+        <div class="concept-name">Sunk Costs · עלויות שכבר הוצאו</div>
+        <div class="concept-body"><strong>לא נכללות</strong> בתזרים! מחקר שוק שכבר שילמנו עליו — לא רלוונטי לקבלת ההחלטה.</div>
+      </div>
+      <div class="concept">
+        <div class="concept-name">Erosion · קניבליזציה</div>
+        <div class="concept-body">אם פרויקט חדש פוגע במכירות של מוצר קיים — צריך להוריד את ההפסד מהתזרים.</div>
+      </div>
+      <div class="concept">
+        <div class="concept-name">Opportunity Cost · עלות הזדמנות</div>
+        <div class="concept-body">אם משתמשים במשאב קיים (קרקע שיכלה להיות מושכרת) — חייבים לזקוף לו ערך.</div>
+      </div>
+    </div>
+
+    <div class="card">
+      <h3 class="card-title">מיסוי ערך גרט</h3>
+      <p>אם מוכרים נכס בסוף הפרויקט, יש פוטנציאל למס:</p>
+      <div class="formula">
+        Tax on Sale = (Sale Price <span class="op">−</span> Book Value) <span class="op">×</span> T
+        <span class="note">Book Value = ערך מאזני שנותר אחרי כל הפחת המצטבר</span>
+      </div>
+      <div class="example">
+        <div class="example-step">מכונה נקנתה ב-100,000, פחת מצטבר 80,000 → ערך מאזני 20,000</div>
+        <div class="example-step">נמכרה ב-30,000 → רווח הון 10,000</div>
+        <div class="example-step">מס (25%) על הרווח = 2,500</div>
+        <div class="example-step">תזרים נטו ממכירה = 30,000 − 2,500 = <strong>27,500</strong></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <h3 class="card-title">דוגמה מלאה — תזרים מזומנים</h3>
+    <p>פרויקט בן 3 שנים. השקעה ראשונית 100,000. הכנסות שנתיות 80,000. עלויות תפעוליות 30,000. פחת 33,333 בשנה (לינארי). מס 25%. הון חוזר נדרש 10,000 (יוחזר בסוף). אין ערך גרט.</p>
+    
+    <table>
+      <thead>
+        <tr><th>פריט</th><th>שנה 0</th><th>שנה 1</th><th>שנה 2</th><th>שנה 3</th></tr>
+      </thead>
+      <tbody>
+        <tr><td>הכנסות</td><td>—</td><td>80,000</td><td>80,000</td><td>80,000</td></tr>
+        <tr><td>− עלויות</td><td>—</td><td>(30,000)</td><td>(30,000)</td><td>(30,000)</td></tr>
+        <tr><td>− פחת</td><td>—</td><td>(33,333)</td><td>(33,333)</td><td>(33,333)</td></tr>
+        <tr><td><strong>= EBIT</strong></td><td>—</td><td><strong>16,667</strong></td><td><strong>16,667</strong></td><td><strong>16,667</strong></td></tr>
+        <tr><td>− מס 25%</td><td>—</td><td>(4,167)</td><td>(4,167)</td><td>(4,167)</td></tr>
+        <tr><td><strong>= NOPAT</strong></td><td>—</td><td><strong>12,500</strong></td><td><strong>12,500</strong></td><td><strong>12,500</strong></td></tr>
+        <tr><td>+ פחת</td><td>—</td><td>33,333</td><td>33,333</td><td>33,333</td></tr>
+        <tr><td>− CAPEX</td><td>(100,000)</td><td>—</td><td>—</td><td>—</td></tr>
+        <tr><td>− ΔWC</td><td>(10,000)</td><td>—</td><td>—</td><td>+10,000</td></tr>
+        <tr style="background:#1a1a1a;color:#f5f1e8;"><td><strong>FCF</strong></td><td><strong>(110,000)</strong></td><td><strong>45,833</strong></td><td><strong>45,833</strong></td><td><strong>55,833</strong></td></tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+
+<!-- ============ DEPRECIATION ============ -->
+<section class="section" id="depreciation">
+  <div class="section-head">
+    <div class="section-num">02</div>
+    <h1 class="section-title"><small>חישוב הוצאה שלא יוצאת מהבנק</small>פחת — Depreciation</h1>
+    <span class="section-priority priority-warm">חשוב</span>
+  </div>
+
+  <div class="card">
+    <h3 class="card-title">מהו פחת?</h3>
+    <p>פירוס עלות נכס פיזי (מכונה, בניין, רכב) לאורך תקופת חיי השירות שלו. <strong>זו הוצאה חשבונאית — לא יציאת כסף בפועל.</strong></p>
+    
+    <div class="alert alert-warn">
+      <div class="alert-label">תפקיד הפחת בתזרים</div>
+      הפחת חשוב <strong>רק</strong> כי הוא מקטין את המס. בלעדיו היינו משלמים יותר מס. זו ההשפעה האמיתית שלו על תזרים המזומנים.
+    </div>
+  </div>
+
+  <div class="grid-2">
+    <div class="card">
+      <h3 class="card-title">פחת לינארי (Straight Line)</h3>
+      <div class="formula">
+        <span class="var">Annual Depreciation</span> <span class="op">=</span><br>
+        (Cost − Salvage) <span class="op">/</span> Useful Life
+      </div>
+      <div class="example">
+        <div class="example-step">עלות מכונה: 120,000 ₪</div>
+        <div class="example-step">ערך גרט צפוי: 20,000 ₪</div>
+        <div class="example-step">חיי שירות: 5 שנים</div>
+        <div class="example-step">פחת שנתי = (120,000 − 20,000) / 5 = <strong>20,000 ₪</strong></div>
+      </div>
+    </div>
+
+    <div class="card">
+      <h3 class="card-title">מחשבון פחת לינארי</h3>
+      <div class="calculator">
+        <div class="calc-row">
+          <label>עלות הנכס (₪)</label>
+          <input type="number" id="dep-cost" value="120000">
+        </div>
+        <div class="calc-row">
+          <label>ערך גרט (₪)</label>
+          <input type="number" id="dep-salvage" value="20000">
+        </div>
+        <div class="calc-row">
+          <label>חיי שירות (שנים)</label>
+          <input type="number" id="dep-years" value="5">
+        </div>
+        <button class="calc-btn" onclick="calcDepreciation()">חשב</button>
+        <div class="calc-result">
+          <div class="label">פחת שנתי</div>
+          <div class="value" id="dep-result">—</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <h3 class="card-title">השפעת הפחת על תזרים מס</h3>
+    <p>הפחת יוצר "מגן מס" (Tax Shield) — הוא מקטין את ההכנסה החייבת ולכן את המס.</p>
+    <div class="formula">
+      <span class="var">Tax Shield</span> <span class="op">=</span> Depreciation <span class="op">×</span> Tax Rate
+      <span class="note">לדוגמה: פחת 20,000 × 25% = חיסכון מס 5,000 ₪</span>
+    </div>
+    
+    <div class="alert alert-tip">
+      <div class="alert-label">תובנה אסטרטגית</div>
+      ככל שמס גבוה יותר — מגן המס של הפחת שווה יותר. בישראל (מס חברות ~23%), הפחת מחזיר ~23% מהשקעת ההון דרך חיסכון במס.
+    </div>
+  </div>
+</section>
+
+<!-- ============ WORKING CAPITAL ============ -->
+<section class="section" id="workingcap">
+  <div class="section-head">
+    <div class="section-num">03</div>
+    <h1 class="section-title"><small>הכסף שתקוע בעסק</small>הון חוזר — Working Capital</h1>
+    <span class="section-priority priority-warm">חשוב</span>
+  </div>
+
+  <div class="card">
+    <h3 class="card-title">הגדרה</h3>
+    <div class="formula">
+      <span class="var">Working Capital</span> <span class="op">=</span> Current Assets <span class="op">−</span> Current Liabilities
+      <span class="note">נכסים שוטפים פחות התחייבויות שוטפות</span>
+    </div>
+    <p>הון חוזר הוא הכסף שצריך כדי להפעיל את העסק — מלאי, חייבים (לקוחות שטרם שילמו), פחות זכאים (ספקים שטרם שילמנו להם).</p>
+  </div>
+
+  <div class="grid-2">
+    <div class="card">
+      <h3 class="card-title">למה זה חשוב לתזרים?</h3>
+      <p>כאשר הפרויקט מתחיל, צריך להקצות כסף להון חוזר → <strong>תזרים שלילי בתחילת הפרויקט</strong>.</p>
+      <p>בסוף הפרויקט, ההון החוזר משתחרר → <strong>תזרים חיובי בסוף</strong>.</p>
+      
+      <div class="mnemonic">
+        <strong>זכרו:</strong> ΔWC (שינוי בהון חוזר) הוא מה שנכנס לתזרים — לא רמת ההון החוזר עצמה.
+      </div>
+    </div>
+
+    <div class="card">
+      <h3 class="card-title">דוגמה</h3>
+      <div class="example">
+        <div class="example-step">פרויקט 3 שנים. דרוש הון חוזר 15,000.</div>
+        <div class="example-step">שנה 0: ΔWC = −15,000 (הקצאה)</div>
+        <div class="example-step">שנים 1–2: ΔWC = 0 (לא משתנה)</div>
+        <div class="example-step">שנה 3 (סוף): ΔWC = +15,000 (שחרור)</div>
+      </div>
+      
+      <div class="alert alert-warn">
+        <div class="alert-label">מקרה מורכב</div>
+        אם ההכנסות גדלות מדי שנה → ההון החוזר נדרש גדל בהתאם → ΔWC שלילי בכל שנה גדלה.
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ TVM ============ -->
+<section class="section" id="tvm">
+  <div class="section-head">
+    <div class="section-num">04</div>
+    <h1 class="section-title"><small>הליבה של מימון</small>ערך זמן של כסף</h1>
+    <span class="section-priority priority-hot">קריטי</span>
+  </div>
+
+  <div class="card">
+    <h3 class="card-title">העיקרון</h3>
+    <p>שקל היום שווה יותר משקל מחר. למה? כי אפשר להשקיע אותו ולקבל ריבית, וגם בגלל אי־ודאות ואינפלציה.</p>
+  </div>
+
+  <div class="grid-2">
+    <div class="card">
+      <h3 class="card-title">ערך עתידי (FV)</h3>
+      <div class="formula">
+        <span class="var">FV</span> <span class="op">=</span> PV <span class="op">×</span> (1 + r)<sup>n</sup>
+        <span class="note">PV = הסכום היום · r = ריבית · n = שנים</span>
+      </div>
+      <div class="example">
+        <div class="example-step">PV = 10,000, r = 8%, n = 5</div>
+        <div class="example-step">FV = 10,000 × (1.08)<sup>5</sup> = <strong>14,693</strong></div>
+      </div>
+    </div>
+
+    <div class="card">
+      <h3 class="card-title">ערך נוכחי (PV)</h3>
+      <div class="formula">
+        <span class="var">PV</span> <span class="op">=</span> FV <span class="op">/</span> (1 + r)<sup>n</sup>
+        <span class="note">היוון: כמה שווה היום סכום עתידי</span>
+      </div>
+      <div class="example">
+        <div class="example-step">FV = 10,000, r = 8%, n = 5</div>
+        <div class="example-step">PV = 10,000 / (1.08)<sup>5</sup> = <strong>6,806</strong></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <h3 class="card-title">מחשבון ערך נוכחי / עתידי</h3>
+    <div class="calculator">
+      <div class="calc-row">
+        <label>סוג חישוב</label>
+        <select id="tvm-mode" style="padding:8px 10px;border:1px solid var(--rule);">
+          <option value="fv">חשב ערך עתידי (FV)</option>
+          <option value="pv">חשב ערך נוכחי (PV)</option>
+        </select>
+      </div>
+      <div class="calc-row">
+        <label>סכום (PV או FV)</label>
+        <input type="number" id="tvm-amount" value="10000">
+      </div>
+      <div class="calc-row">
+        <label>ריבית שנתית (%)</label>
+        <input type="number" id="tvm-rate" value="8" step="0.1">
+      </div>
+      <div class="calc-row">
+        <label>מספר שנים</label>
+        <input type="number" id="tvm-years" value="5">
+      </div>
+      <button class="calc-btn" onclick="calcTVM()">חשב</button>
+      <div class="calc-result">
+        <div class="label">תוצאה</div>
+        <div class="value" id="tvm-result">—</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <h3 class="card-title">אנונה — Annuity</h3>
+    <p>סדרה של תשלומים זהים בתדירות קבועה (כמו משכנתא, פנסיה).</p>
+    
+    <div class="grid-2">
+      <div>
+        <div class="concept-name">ערך נוכחי של אנונה (PVA)</div>
+        <div class="formula">
+          PVA <span class="op">=</span> PMT <span class="op">×</span> [1 − (1+r)<sup>−n</sup>] / r
+        </div>
+      </div>
+      <div>
+        <div class="concept-name">ערך עתידי של אנונה (FVA)</div>
+        <div class="formula">
+          FVA <span class="op">=</span> PMT <span class="op">×</span> [(1+r)<sup>n</sup> − 1] / r
+        </div>
+      </div>
+    </div>
+
+    <div class="example">
+      <div class="example-step">משכנתא: 5,000 ₪ בחודש למשך 20 שנה, ריבית 4% שנתי</div>
+      <div class="example-step">r חודשי = 4%/12 = 0.333%, n = 240 חודשים</div>
+      <div class="example-step">PVA = 5,000 × [1 − 1.00333<sup>−240</sup>] / 0.00333 ≈ <strong>825,200 ₪</strong></div>
+    </div>
+  </div>
+
+  <div class="card">
+    <h3 class="card-title">אנונה גדלה (Growing Annuity)</h3>
+    <p>תשלומים שגדלים בקצב קבוע g כל תקופה.</p>
+    <div class="formula">
+      PV <span class="op">=</span> PMT<sub>1</sub> <span class="op">/</span> (r − g) <span class="op">×</span> [1 − ((1+g)/(1+r))<sup>n</sup>]
+      <span class="note">חייב r > g. אחרת הסדרה מתבדרת.</span>
+    </div>
+    
+    <div class="card" style="background:var(--paper-warm); border:1px dashed var(--rule); margin-top:14px;">
+      <h4 style="font-family:'Frank Ruhl Libre',serif;margin-bottom:8px;">פרפטואטי גדל (Gordon Growth)</h4>
+      <div class="formula">
+        PV <span class="op">=</span> PMT<sub>1</sub> <span class="op">/</span> (r − g)
+        <span class="note">לפרפטואטי אינסופי. בסיס לשערוך מניות.</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <h3 class="card-title">ריבית אפקטיבית vs נומינלית</h3>
+    <p>כאשר הריבית מצוטטת שנתית אך נצברת תכופה יותר (חודשית, יומית) — הריבית האפקטיבית גבוהה יותר מהנומינלית.</p>
+    <div class="formula">
+      <span class="var">r<sub>effective</sub></span> <span class="op">=</span> (1 + r<sub>nominal</sub>/m)<sup>m</sup> <span class="op">−</span> 1
+      <span class="note">m = מספר תקופות הצבירה בשנה</span>
+    </div>
+    <div class="example">
+      <div class="example-step">ריבית נומינלית שנתית 12%, צבירה חודשית (m=12)</div>
+      <div class="example-step">r<sub>effective</sub> = (1 + 0.12/12)<sup>12</sup> − 1 = (1.01)<sup>12</sup> − 1</div>
+      <div class="example-step">= <strong>12.68%</strong> (יותר מ-12%!)</div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ NPV / IRR ============ -->
+<section class="section" id="npv">
+  <div class="section-head">
+    <div class="section-num">05</div>
+    <h1 class="section-title"><small>מתי כדאי להשקיע?</small>NPV, IRR, Payback</h1>
+    <span class="section-priority priority-hot">קריטי</span>
+  </div>
+
+  <div class="card">
+    <h3 class="card-title">ערך נוכחי נקי — NPV</h3>
+    <p>סכום הערכים הנוכחיים של כל תזרימי הפרויקט (חיוביים ושליליים).</p>
+    <div class="formula">
+      <span class="var">NPV</span> <span class="op">=</span> <span class="op">−</span>CF<sub>0</sub> <span class="op">+</span> Σ [CF<sub>t</sub> / (1+r)<sup>t</sup>]
+      <span class="note">CF<sub>0</sub> = השקעה ראשונית · r = ריבית היוון</span>
+    </div>
+    
+    <div class="alert alert-tip">
+      <div class="alert-label">כלל ההחלטה</div>
+      <strong>NPV &gt; 0</strong> → קבל את הפרויקט · <strong>NPV &lt; 0</strong> → דחה · <strong>NPV = 0</strong> → אדיש
+    </div>
+  </div>
+
+  <div class="card">
+    <h3 class="card-title">מחשבון NPV</h3>
+    <div class="calculator">
+      <div class="calc-row">
+        <label>השקעה ראשונית (תזרים שנה 0, חיובי)</label>
+        <input type="number" id="npv-cf0" value="100000">
+      </div>
+      <div class="calc-row">
+        <label>תזרים שנה 1</label>
+        <input type="number" id="npv-cf1" value="35000">
+      </div>
+      <div class="calc-row">
+        <label>תזרים שנה 2</label>
+        <input type="number" id="npv-cf2" value="40000">
+      </div>
+      <div class="calc-row">
+        <label>תזרים שנה 3</label>
+        <input type="number" id="npv-cf3" value="45000">
+      </div>
+      <div class="calc-row">
+        <label>תזרים שנה 4</label>
+        <input type="number" id="npv-cf4" value="0">
+      </div>
+      <div class="calc-row">
+        <label>ריבית היוון (%)</label>
+        <input type="number" id="npv-rate" value="10" step="0.1">
+      </div>
+      <button class="calc-btn" onclick="calcNPV()">חשב NPV ו-IRR</button>
+      <div class="calc-result">
+        <div class="label">NPV / IRR</div>
+        <div class="value" id="npv-result">—</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <h3 class="card-title">שיעור תשואה פנימי — IRR</h3>
+    <p>הריבית שמאפסת את ה-NPV. כלומר: באיזו ריבית הפרויקט "שווה בדיוק כמה שעולה"?</p>
+    <div class="formula">
+      0 <span class="op">=</span> <span class="op">−</span>CF<sub>0</sub> <span class="op">+</span> Σ [CF<sub>t</sub> / (1+<span class="var">IRR</span>)<sup>t</sup>]
+    </div>
+    
+    <div class="grid-2">
+      <div class="alert alert-tip">
+        <div class="alert-label">כלל ההחלטה</div>
+        IRR &gt; שיעור היוון (cost of capital) → קבל. אחרת — דחה.
+      </div>
+      <div class="alert alert-warn">
+        <div class="alert-label">מגבלות IRR</div>
+        בפרויקטים עם תזרימים לא רגילים (חיובי-שלילי-חיובי) יכולים להיות מספר IRRs. בהשוואת פרויקטים — NPV עדיף.
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <h3 class="card-title">Payback Period — תקופת החזר</h3>
+    <p>כמה שנים עוברות עד שתזרימי הפרויקט מצטברים מכסים את ההשקעה הראשונית.</p>
+    
+    <div class="example">
+      <div class="example-step">השקעה: 100,000. תזרימים: 30/40/50</div>
+      <div class="example-step">סוף שנה 1: צבר 30,000 (חסר 70,000)</div>
+      <div class="example-step">סוף שנה 2: צבר 70,000 (חסר 30,000)</div>
+      <div class="example-step">שנה 3: 30,000/50,000 = 0.6 → Payback = <strong>2.6 שנים</strong></div>
+    </div>
+    
+    <div class="alert alert-danger">
+      <div class="alert-label">חיסרון מרכזי</div>
+      Payback מתעלם מערך הזמן של הכסף ומתזרימים אחרי תקופת ההחזר. <strong>Discounted Payback</strong> פותר את הראשון (מהוונים תחילה ואז מחשבים).
+    </div>
+  </div>
+
+  <div class="card">
+    <h3 class="card-title">השוואת פרויקטים — מה כדאי לבחור?</h3>
+    <table>
+      <thead><tr><th>מצב</th><th>קריטריון מועדף</th><th>למה</th></tr></thead>
+      <tbody>
+        <tr><td>פרויקטים בלתי תלויים</td><td>NPV או IRR</td><td>שניהם נותנים אותה תשובה</td></tr>
+        <tr><td>פרויקטים מתחרים (Mutually Exclusive)</td><td><strong>NPV</strong></td><td>IRR יכול להטעות בגדלים שונים</td></tr>
+        <tr><td>תקציב מוגבל (Capital Rationing)</td><td>Profitability Index</td><td>NPV ליחידת השקעה</td></tr>
+        <tr><td>פרויקטים באורך שונה</td><td>EAA — Equivalent Annual Annuity</td><td>השוואה הוגנת לאורך אינסופי</td></tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+
+<!-- ============ INFLATION ============ -->
+<section class="section" id="inflation">
+  <div class="section-head">
+    <div class="section-num">06</div>
+    <h1 class="section-title"><small>נומינלי vs ריאלי</small>אינפלציה</h1>
+    <span class="section-priority priority-warm">חשוב</span>
+  </div>
+
+  <div class="card">
+    <h3 class="card-title">העיקרון: לעולם אל תערבב!</h3>
+    <div class="alert alert-danger">
+      <div class="alert-label">כלל ברזל</div>
+      <strong>תזרימים נומינליים</strong> מוונים בריבית <strong>נומינלית</strong>. <strong>תזרימים ריאליים</strong> מוונים בריבית <strong>ריאלית</strong>. ערבוב = טעות חמורה.
+    </div>
+  </div>
+
+  <div class="card">
+    <h3 class="card-title">משוואת Fisher</h3>
+    <div class="formula">
+      (1 + r<sub>nominal</sub>) <span class="op">=</span> (1 + r<sub>real</sub>) <span class="op">×</span> (1 + π)
+      <span class="note">π = שיעור אינפלציה</span>
+    </div>
+    <p>קירוב מהיר (לריביות נמוכות):</p>
+    <div class="formula">
+      r<sub>nominal</sub> <span class="op">≈</span> r<sub>real</sub> <span class="op">+</span> π
+    </div>
+  </div>
+
+  <div class="grid-2">
+    <div class="card">
+      <h3 class="card-title">חישוב מדויק</h3>
+      <div class="example">
+        <div class="example-step">r<sub>nominal</sub> = 8%, π = 3%</div>
+        <div class="example-step">1 + r<sub>real</sub> = 1.08 / 1.03 = 1.0485</div>
+        <div class="example-step">r<sub>real</sub> = <strong>4.85%</strong> (לא 5%!)</div>
+      </div>
+    </div>
+
+    <div class="card">
+      <h3 class="card-title">המרת תזרימים</h3>
+      <div class="formula">
+        CF<sub>real</sub> <span class="op">=</span> CF<sub>nominal</sub> <span class="op">/</span> (1+π)<sup>t</sup>
+        <span class="note">לחילופין: CF<sub>nominal</sub> = CF<sub>real</sub> × (1+π)<sup>t</sup></span>
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <h3 class="card-title">מחשבון Fisher</h3>
+    <div class="calculator">
+      <div class="calc-row">
+        <label>ריבית נומינלית (%)</label>
+        <input type="number" id="fisher-nom" value="8" step="0.1">
+      </div>
+      <div class="calc-row">
+        <label>אינפלציה (%)</label>
+        <input type="number" id="fisher-inf" value="3" step="0.1">
+      </div>
+      <button class="calc-btn" onclick="calcFisher()">חשב ריבית ריאלית</button>
+      <div class="calc-result">
+        <div class="label">ריבית ריאלית</div>
+        <div class="value" id="fisher-result">—</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ RISK ============ -->
+<section class="section" id="risk">
+  <div class="section-head">
+    <div class="section-num">07</div>
+    <h1 class="section-title"><small>מה אנחנו לוקחים על עצמנו</small>סיכון ותשואה</h1>
+    <span class="section-priority priority-warm">חשוב</span>
+  </div>
+
+  <div class="card">
+    <h3 class="card-title">תוחלת תשואה — Expected Return</h3>
+    <div class="formula">
+      <span class="var">E(R)</span> <span class="op">=</span> Σ P<sub>i</sub> <span class="op">×</span> R<sub>i</sub>
+      <span class="note">סכום (הסתברות × תשואה אפשרית)</span>
+    </div>
+    <div class="example">
+      <div class="example-step">מניה: 30% סיכוי לתשואה 20%, 50% סיכוי ל-10%, 20% סיכוי ל-(−5%)</div>
+      <div class="example-step">E(R) = 0.3×0.20 + 0.5×0.10 + 0.2×(−0.05)</div>
+      <div class="example-step">= 0.06 + 0.05 − 0.01 = <strong>10%</strong></div>
+    </div>
+  </div>
+
+  <div class="card">
+    <h3 class="card-title">סטיית תקן — Standard Deviation (σ)</h3>
+    <p>מדד לסיכון: כמה התשואה בפועל סוטה מהתוחלת.</p>
+    <div class="formula">
+      <span class="var">σ²</span> <span class="op">=</span> Σ P<sub>i</sub> <span class="op">×</span> [R<sub>i</sub> <span class="op">−</span> E(R)]²<br>
+      <span class="var">σ</span> <span class="op">=</span> √σ²
+    </div>
+    
+    <div class="example">
+      <div class="example-step">ממשיכים את הדוגמה הקודמת (E(R) = 10%):</div>
+      <div class="example-step">σ² = 0.3×(0.20−0.10)² + 0.5×(0.10−0.10)² + 0.2×(−0.05−0.10)²</div>
+      <div class="example-step">= 0.3×0.01 + 0 + 0.2×0.0225 = 0.003 + 0.0045 = 0.0075</div>
+      <div class="example-step">σ = √0.0075 = <strong>8.66%</strong></div>
+    </div>
+  </div>
+
+  <div class="grid-2">
+    <div class="card">
+      <h3 class="card-title">סיכון תיק (Portfolio)</h3>
+      <p>בתיק של שתי מניות, הסיכון אינו ממוצע פשוט — תלוי בקורלציה.</p>
+      <div class="formula">
+        σ²<sub>p</sub> = w<sub>A</sub>²σ<sub>A</sub>² + w<sub>B</sub>²σ<sub>B</sub>² + 2w<sub>A</sub>w<sub>B</sub>σ<sub>A</sub>σ<sub>B</sub>ρ
+        <span class="note">ρ = קורלציה בין הנכסים</span>
+      </div>
+      <div class="alert alert-tip">
+        <div class="alert-label">פיזור (Diversification)</div>
+        ככל ש-ρ קטן יותר (לא מתואמים) → הסיכון של התיק נמוך מממוצע סיכוני הנכסים.
+      </div>
+    </div>
+
+    <div class="card">
+      <h3 class="card-title">סוגי סיכון</h3>
+      <div class="concept">
+        <div class="concept-name">סיכון שיטתי <span class="en">Systematic</span></div>
+        <div class="concept-body">סיכון שוק — לא ניתן לפזר. מודד ע"י בטא (β). זה הסיכון ש-CAPM מתמחר.</div>
+      </div>
+      <div class="concept">
+        <div class="concept-name">סיכון לא-שיטתי <span class="en">Idiosyncratic</span></div>
+        <div class="concept-body">סיכון ספציפי לחברה — ניתן לפזר. השוק לא נותן עליו פרמיה.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ CAPM ============ -->
+<section class="section" id="capm">
+  <div class="section-head">
+    <div class="section-num">08</div>
+    <h1 class="section-title"><small>מודל תמחור נכסי הון</small>CAPM</h1>
+    <span class="section-priority priority-warm">חשוב</span>
+  </div>
+
+  <div class="card">
+    <h3 class="card-title">המודל</h3>
+    <div class="formula">
+      <span class="var">E(R<sub>i</sub>)</span> <span class="op">=</span> R<sub>f</sub> <span class="op">+</span> β<sub>i</sub> <span class="op">×</span> [E(R<sub>m</sub>) <span class="op">−</span> R<sub>f</sub>]
+    </div>
+    <div class="kv">
+      <dt>R<sub>f</sub></dt><dd>תשואה חסרת סיכון (אג"ח מדינה)</dd>
+      <dt>β<sub>i</sub></dt><dd>בטא — רגישות הנכס לתנודות השוק</dd>
+      <dt>E(R<sub>m</sub>)</dt><dd>תוחלת תשואת השוק</dd>
+      <dt>E(R<sub>m</sub>) − R<sub>f</sub></dt><dd>פרמיית סיכון השוק (Market Risk Premium)</dd>
+    </div>
+  </div>
+
+  <div class="grid-2">
+    <div class="card">
+      <h3 class="card-title">משמעות בטא</h3>
+      <table>
+        <tbody>
+          <tr><td>β = 1</td><td>נע בדיוק כמו השוק</td></tr>
+          <tr><td>β &gt; 1</td><td>תנודתי יותר מהשוק (אגרסיבי)</td></tr>
+          <tr><td>β &lt; 1</td><td>תנודתי פחות מהשוק (דפנסיבי)</td></tr>
+          <tr><td>β = 0</td><td>חסר סיכון (כמו אג"ח מדינה)</td></tr>
+          <tr><td>β &lt; 0</td><td>נע נגד השוק (נדיר — זהב לעיתים)</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="card">
+      <h3 class="card-title">דוגמה</h3>
+      <div class="example">
+        <div class="example-step">R<sub>f</sub> = 3%, E(R<sub>m</sub>) = 11%, β = 1.4</div>
+        <div class="example-step">פרמיית סיכון שוק = 11% − 3% = 8%</div>
+        <div class="example-step">E(R<sub>i</sub>) = 3% + 1.4 × 8%</div>
+        <div class="example-step">= 3% + 11.2% = <strong>14.2%</strong></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <h3 class="card-title">מחשבון CAPM</h3>
+    <div class="calculator">
+      <div class="calc-row">
+        <label>תשואה חסרת סיכון Rf (%)</label>
+        <input type="number" id="capm-rf" value="3" step="0.1">
+      </div>
+      <div class="calc-row">
+        <label>תוחלת תשואת השוק E(Rm) (%)</label>
+        <input type="number" id="capm-rm" value="11" step="0.1">
+      </div>
+      <div class="calc-row">
+        <label>בטא (β)</label>
+        <input type="number" id="capm-beta" value="1.4" step="0.1">
+      </div>
+      <button class="calc-btn" onclick="calcCAPM()">חשב תשואה צפויה</button>
+      <div class="calc-result">
+        <div class="label">E(R) — תשואה צפויה</div>
+        <div class="value" id="capm-result">—</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <h3 class="card-title">SML — Security Market Line</h3>
+    <p>הקו שמייצג את ה-CAPM גרפית. כל נכס "הוגן" נמצא על הקו.</p>
+    <div class="alert alert-tip">
+      <div class="alert-label">כלל קריאת SML</div>
+      <strong>מעל הקו</strong> = הנכס מציע תשואה גבוהה מהמצופה לסיכון → קנייה. <strong>מתחת לקו</strong> = תשואה נמוכה מהמצופה → מכירה/הימנעות.
+    </div>
+  </div>
+
+  <div class="card">
+    <h3 class="card-title">הנחות CAPM (חשוב לבחינה)</h3>
+    <ul style="list-style:none; padding:0;">
+      <li style="padding:6px 0; padding-right:24px; position:relative;"><span style="position:absolute;right:0;color:var(--accent);">▸</span>משקיעים רציונליים ומעדיפים תשואה גבוהה בסיכון נמוך</li>
+      <li style="padding:6px 0; padding-right:24px; position:relative;"><span style="position:absolute;right:0;color:var(--accent);">▸</span>אופק השקעה זהה לכל המשקיעים</li>
+      <li style="padding:6px 0; padding-right:24px; position:relative;"><span style="position:absolute;right:0;color:var(--accent);">▸</span>אפשר ללוות ולהלוות בריבית חסרת סיכון</li>
+      <li style="padding:6px 0; padding-right:24px; position:relative;"><span style="position:absolute;right:0;color:var(--accent);">▸</span>אין מיסים ועלויות עסקה</li>
+      <li style="padding:6px 0; padding-right:24px; position:relative;"><span style="position:absolute;right:0;color:var(--accent);">▸</span>שוק יעיל — כל המידע מתומחר במחיר</li>
+      <li style="padding:6px 0; padding-right:24px; position:relative;"><span style="position:absolute;right:0;color:var(--accent);">▸</span>כל המשקיעים מחזיקים בתיק השוק המגוון</li>
+    </ul>
+  </div>
+</section>
+
+<!-- ============ STRATEGY ============ -->
+<section class="section" id="strategy">
+  <div class="section-head">
+    <div class="section-num">09</div>
+    <h1 class="section-title"><small>איך לעבור — ולא רק לעבור</small>אסטרטגיית מבחן</h1>
+    <span class="section-priority priority-cool">טקטיקה</span>
+  </div>
+
+  <div class="card">
+    <h3 class="card-title">סדר הפעולות בבחינה (חובה!)</h3>
+    <ol style="list-style:decimal; padding-right:24px;">
+      <li style="margin-bottom:10px;"><strong>קרא את כל הבחינה לפני שמתחילים.</strong> 5 דקות שיחסכו 30.</li>
+      <li style="margin-bottom:10px;"><strong>שאלת התזרים (28 נק') ראשונה — אם אתה חזק בה.</strong> אחרת — תקבל קודם את ה"קלות" כדי לבנות נקודות.</li>
+      <li style="margin-bottom:10px;"><strong>סמן בכל שאלה: מה נתון, מה נשאל.</strong> רשום ליד הנוסחה הרלוונטית.</li>
+      <li style="margin-bottom:10px;"><strong>תמיד כתוב את הנוסחה לפני ההצבה.</strong> גם אם תטעה בחישוב — תקבל נקודות על הגישה.</li>
+      <li style="margin-bottom:10px;"><strong>תוצאות תמיד עם יחידות.</strong> ₪, %, שנים. אל תכתוב "12" סתם.</li>
+      <li style="margin-bottom:10px;"><strong>בדוק תזרימים בסוף.</strong> NPV ירדה? IRR מעל ריבית ההיוון? הפרויקט הגיוני כלכלית?</li>
+    </ol>
+  </div>
+
+  <div class="grid-2">
+    <div class="card">
+      <h3 class="card-title">5 טעויות שאסור לעשות</h3>
+      <ul class="checklist" id="mistakes-list">
+        <li>שכחתי להחזיר את הפחת אחרי המס</li>
+        <li>חישבתי מס על תזרים במקום על EBIT</li>
+        <li>ערבבתי ריבית נומינלית עם תזרים ריאלי</li>
+        <li>שכחתי לשחרר הון חוזר בסוף הפרויקט</li>
+        <li>חישבתי IRR במקום NPV בהשוואת פרויקטים</li>
+        <li>לא חישבתי מס על ערך גרט</li>
+        <li>לקחתי עלות שקועה (sunk cost) לתזרים</li>
+      </ul>
+    </div>
+
+    <div class="card">
+      <h3 class="card-title">חלוקת זמן (בחינה של 3 שעות)</h3>
+      <table>
+        <thead><tr><th>פעילות</th><th>זמן</th></tr></thead>
+        <tbody>
+          <tr><td>קריאה ראשונית של כל הבחינה</td><td>5 ד'</td></tr>
+          <tr><td>שאלת תזרים (28 נק')</td><td>50 ד'</td></tr>
+          <tr><td>שאלות NPV/IRR</td><td>35 ד'</td></tr>
+          <tr><td>שאלת ערך זמן של כסף</td><td>25 ד'</td></tr>
+          <tr><td>שאלת סיכון/CAPM</td><td>25 ד'</td></tr>
+          <tr><td>שאלה תיאורית/הבנה</td><td>15 ד'</td></tr>
+          <tr><td>בדיקה כללית</td><td>25 ד'</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <div class="card">
+    <h3 class="card-title">איך לקבל ציון 65 במקום 50</h3>
+    <div class="alert alert-tip">
+      <div class="alert-label">🎯 טכניקת "הציון המינימלי"</div>
+      <p style="margin-top:6px;">בכל שאלה — אם אתה לא בטוח, <strong>תמיד כתוב משהו</strong>. רוב המורים נותנים נקודות חלקיות על:</p>
+      <ul style="padding-right:20px; margin-top:8px;">
+        <li>זיהוי נכון של המודל ("זה NPV", "זה CAPM")</li>
+        <li>כתיבת הנוסחה הרלוונטית</li>
+        <li>הצבת הנתונים במקום הנכון</li>
+        <li>הסבר מילולי של הגישה</li>
+      </ul>
+      <p style="margin-top:8px;">פתרון חלקי = 5-10 נקודות. דף ריק = 0.</p>
+    </div>
+  </div>
+
+  <div class="card">
+    <h3 class="card-title">צ'ק-ליסט אחרון לפני הבחינה</h3>
+    <ul class="checklist" id="final-checklist">
+      <li>מחשבון פיננסי טעון + מחשבון רגיל גיבוי</li>
+      <li>עפרון, מחק, עט, סרגל</li>
+      <li>שעון (לא טלפון!)</li>
+      <li>תעודת זהות</li>
+      <li>בקבוק מים + נשנוש קל</li>
+      <li>הגעה 30 דקות לפני</li>
+      <li>שינה של 7+ שעות בלילה לפני</li>
+      <li>לא חוזרים על חומר חדש בבוקר — רק סקירה</li>
+    </ul>
+  </div>
+</section>
+
+<!-- ============ FLASHCARDS ============ -->
+<section class="section" id="flashcards">
+  <div class="section-head">
+    <div class="section-num">10</div>
+    <h1 class="section-title"><small>חזרה מהירה — לחץ על כרטיסיה להפיכה</small>כרטיסיות לימוד</h1>
+    <span class="section-priority priority-cool">חזרה</span>
+  </div>
+
+  <div class="card">
+    <p style="margin-bottom:16px;">לחץ על כל כרטיסיה כדי לראות את התשובה. עבור עליהן שוב ושוב עד שאתה יודע את כולן בעל פה.</p>
+    
+    <div class="flashcards" id="flashcards-container">
+      <!-- מתמלא ב-JS -->
+    </div>
+  </div>
+
+  <div class="alert alert-tip" style="margin-top:24px;">
+    <div class="alert-label">💡 טכניקת לימוד יעילה (Active Recall)</div>
+    אל תקרא רק — נסה לענות לפני שאתה הופך את הכרטיסיה. גם אם טעית, הניסיון לאחזר את המידע מחזק את הזיכרון יותר מקריאה פסיבית.
+  </div>
+</section>
+
+<div class="section-nav">
+  <button class="nav-btn" id="prev-btn" onclick="navSection(-1)">← הקודם</button>
+  <button class="nav-btn" id="next-btn" onclick="navSection(1)">הבא →</button>
+</div>
+
+</main>
+
+<script>
+// ============ NAVIGATION ============
+const sections = ['overview', 'cashflow', 'depreciation', 'workingcap', 'tvm', 'npv', 'inflation', 'risk', 'capm', 'strategy', 'flashcards'];
+let currentSection = 0;
+
+document.querySelectorAll('.tab').forEach((tab, idx) => {
+  tab.addEventListener('click', () => {
+    showSection(idx);
+  });
+});
+
+function showSection(idx) {
+  document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+  document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+  document.getElementById(sections[idx]).classList.add('active');
+  document.querySelectorAll('.tab')[idx].classList.add('active');
+  currentSection = idx;
+  document.getElementById('prev-btn').disabled = idx === 0;
+  document.getElementById('next-btn').disabled = idx === sections.length - 1;
+  window.scrollTo({top: 0, behavior: 'smooth'});
+}
+
+function navSection(dir) {
+  const next = currentSection + dir;
+  if (next >= 0 && next < sections.length) showSection(next);
+}
+
+// ============ COUNTDOWN ============
+function updateCountdown() {
+  const examDate = new Date('2026-05-29T09:00:00');
+  const now = new Date();
+  const diff = examDate - now;
+  if (diff > 0) {
+    const days = Math.floor(diff / (1000*60*60*24));
+    const hours = Math.floor((diff % (1000*60*60*24)) / (1000*60*60));
+    document.getElementById('days-left').textContent = `${days}d ${hours}h remaining`;
+  } else {
+    document.getElementById('days-left').textContent = 'הבחינה החלה / הסתיימה';
+  }
+}
+updateCountdown();
+setInterval(updateCountdown, 60000);
+
+// ============ CALCULATORS ============
+function calcDepreciation() {
+  const cost = parseFloat(document.getElementById('dep-cost').value);
+  const salvage = parseFloat(document.getElementById('dep-salvage').value);
+  const years = parseFloat(document.getElementById('dep-years').value);
+  if (years <= 0) { alert('שנים חייבות להיות > 0'); return; }
+  const dep = (cost - salvage) / years;
+  document.getElementById('dep-result').textContent = '₪ ' + dep.toLocaleString(undefined, {maximumFractionDigits: 2});
+}
+
+function calcTVM() {
+  const mode = document.getElementById('tvm-mode').value;
+  const amt = parseFloat(document.getElementById('tvm-amount').value);
+  const rate = parseFloat(document.getElementById('tvm-rate').value) / 100;
+  const n = parseFloat(document.getElementById('tvm-years').value);
+  let result;
+  if (mode === 'fv') {
+    result = amt * Math.pow(1 + rate, n);
+    document.getElementById('tvm-result').textContent = 'FV = ₪ ' + result.toLocaleString(undefined, {maximumFractionDigits: 2});
+  } else {
+    result = amt / Math.pow(1 + rate, n);
+    document.getElementById('tvm-result').textContent = 'PV = ₪ ' + result.toLocaleString(undefined, {maximumFractionDigits: 2});
+  }
+}
+
+function calcNPV() {
+  const cf0 = parseFloat(document.getElementById('npv-cf0').value);
+  const cfs = [
+    parseFloat(document.getElementById('npv-cf1').value),
+    parseFloat(document.getElementById('npv-cf2').value),
+    parseFloat(document.getElementById('npv-cf3').value),
+    parseFloat(document.getElementById('npv-cf4').value)
+  ];
+  const rate = parseFloat(document.getElementById('npv-rate').value) / 100;
+  
+  let npv = -cf0;
+  cfs.forEach((cf, i) => {
+    npv += cf / Math.pow(1 + rate, i + 1);
+  });
+  
+  // IRR via bisection
+  const allCFs = [-cf0, ...cfs];
+  let lo = -0.99, hi = 5;
+  for (let iter = 0; iter < 100; iter++) {
+    const mid = (lo + hi) / 2;
+    let val = 0;
+    allCFs.forEach((cf, i) => val += cf / Math.pow(1 + mid, i));
+    if (Math.abs(val) < 0.01) { lo = mid; break; }
+    if (val > 0) lo = mid; else hi = mid;
+  }
+  const irr = ((lo + hi) / 2) * 100;
+  
+  document.getElementById('npv-result').innerHTML = 
+    `NPV = ₪ ${npv.toLocaleString(undefined, {maximumFractionDigits: 0})}<br>IRR ≈ ${irr.toFixed(2)}%`;
+}
+
+function calcFisher() {
+  const nom = parseFloat(document.getElementById('fisher-nom').value) / 100;
+  const inf = parseFloat(document.getElementById('fisher-inf').value) / 100;
+  const real = ((1 + nom) / (1 + inf) - 1) * 100;
+  document.getElementById('fisher-result').textContent = real.toFixed(3) + '%';
+}
+
+function calcCAPM() {
+  const rf = parseFloat(document.getElementById('capm-rf').value);
+  const rm = parseFloat(document.getElementById('capm-rm').value);
+  const beta = parseFloat(document.getElementById('capm-beta').value);
+  const er = rf + beta * (rm - rf);
+  document.getElementById('capm-result').textContent = er.toFixed(2) + '%';
+}
+
+// ============ CHECKLIST ============
+document.querySelectorAll('.checklist li').forEach(li => {
+  li.addEventListener('click', () => li.classList.toggle('done'));
+});
+
+// ============ FLASHCARDS ============
+const flashcards = [
+  {q: "מהי הנוסחה ל-NPV?", a: "NPV = −CF₀ + Σ [CF_t / (1+r)^t]"},
+  {q: "מהי משוואת Fisher?", a: "(1+r_nominal) = (1+r_real) × (1+π)"},
+  {q: "מהי נוסחת CAPM?", a: "E(R) = Rf + β × [E(Rm) − Rf]"},
+  {q: "מתי NPV עדיף על IRR?", a: "בפרויקטים מתחרים (mutually exclusive) או עם תזרימים לא רגילים"},
+  {q: "למה מחזירים את הפחת לתזרים?", a: "כי זו הוצאה חשבונאית בלבד — לא יציאת כסף בפועל. הורדנו אותו רק כדי לחשב מס נכון"},
+  {q: "מהו מגן מס (Tax Shield)?", a: "Tax Shield = Depreciation × Tax Rate. החיסכון במס שהפחת יוצר"},
+  {q: "מהי נוסחת פחת לינארי?", a: "(Cost − Salvage) / Useful Life"},
+  {q: "מתי משחררים הון חוזר?", a: "בסוף הפרויקט — תזרים חיובי בשנה האחרונה"},
+  {q: "מהי בטא (β)?", a: "מדד לרגישות הנכס לתנודות השוק. β=1 כמו השוק, β>1 אגרסיבי, β<1 דפנסיבי"},
+  {q: "מה לא נכלל בתזרים מזומנים?", a: "Sunk Costs (עלויות שקועות שכבר שולמו). הן לא רלוונטיות להחלטה"},
+  {q: "מהי PVA (אנונה)?", a: "PVA = PMT × [1 − (1+r)^(−n)] / r"},
+  {q: "מהי תוחלת תשואה?", a: "E(R) = Σ P_i × R_i — סכום (הסתברות × תשואה אפשרית)"},
+  {q: "מהי סטיית תקן (σ)?", a: "σ = √[Σ P_i × (R_i − E(R))²]. מודדת תנודתיות/סיכון"},
+  {q: "מהו פרפטואטי גדל?", a: "PV = PMT₁ / (r − g). דורש r > g"},
+  {q: "מהו חיסרון מרכזי של Payback?", a: "מתעלם מערך הזמן של כסף ומתזרימים אחרי תקופת ההחזר"},
+  {q: "מהי ריבית אפקטיבית?", a: "r_eff = (1 + r_nom/m)^m − 1. m = תקופות צבירה בשנה"},
+  {q: "מה הקשר בין סיכון לקורלציה?", a: "פיזור עובד הכי טוב כשהקורלציה נמוכה/שלילית. ρ=1 = אין פיזור"},
+  {q: "מהי FCF (Free Cash Flow)?", a: "NOPAT + פחת − ΔWC − CAPEX"},
+  {q: "מתי נסכים לפרויקט לפי IRR?", a: "כאשר IRR > שיעור היוון (cost of capital)"},
+  {q: "מהי סיכון שיטתי vs לא-שיטתי?", a: "שיטתי = סיכון שוק שלא ניתן לפזר (β). לא-שיטתי = ספציפי לחברה, ניתן לפזר"}
+];
+
+const fcContainer = document.getElementById('flashcards-container');
+flashcards.forEach((card, idx) => {
+  const div = document.createElement('div');
+  div.className = 'flashcard';
+  div.innerHTML = `
+    <div class="front">
+      <div class="flashcard-q">שאלה ${idx+1}</div>
+      ${card.q}
+    </div>
+    <div class="back">
+      <div class="flashcard-q" style="color:var(--green);">תשובה</div>
+      ${card.a}
+    </div>
+  `;
+  div.addEventListener('click', () => div.classList.toggle('flipped'));
+  fcContainer.appendChild(div);
+});
+
+// ============ KEYBOARD NAV ============
+document.addEventListener('keydown', (e) => {
+  if (e.key === 'ArrowLeft') navSection(1); // RTL: left = next
+  if (e.key === 'ArrowRight') navSection(-1);
+});
+
+// Initial state
+document.getElementById('prev-btn').disabled = true;
+</script>
+
+</body>
+</html>

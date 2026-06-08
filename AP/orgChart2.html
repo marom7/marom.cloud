@@ -1,0 +1,804 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>מבנה ארגוני - חטיבת משאבים</title>
+  <link href="https://fonts.googleapis.com/css2?family=Heebo:wght@300;400;500;600;700;800&family=Rubik:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+  <style>
+    :root {
+      /* Modern Color Palette */
+      --bg: #f1f5f9;
+      --line: #cbd5e1;
+      --box-bg: #ffffff;
+      --box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -1px rgba(0, 0, 0, 0.03);
+      --box-shadow-hover: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+      
+      --title: #1e293b;
+      --sub: #64748b;
+      --accent: #2563eb;
+      
+      /* Gradients for different levels */
+      --grad-root: linear-gradient(135deg, #1e1b4b, #312e81);
+      --grad-dept: linear-gradient(135deg, #1e3a8a, #2563eb);
+      --grad-unit: linear-gradient(135deg, #064e3b, #059669);
+    }
+
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+      font-family: 'Heebo', sans-serif;
+      background: var(--bg);
+      color: var(--title);
+      overflow: hidden;
+      height: 100vh;
+      width: 100vw;
+    }
+
+    /* ===== TOP BAR ===== */
+    .topbar {
+      position: fixed;
+      top: 0; left: 0; right: 0; z-index: 100;
+      background: rgba(255, 255, 255, 0.95);
+      backdrop-filter: blur(8px);
+      border-bottom: 1px solid #e2e8f0;
+      padding: 10px 24px;
+      display: flex; align-items: center; gap: 16px;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+    }
+
+    .topbar h1 {
+      font-family: 'Rubik', sans-serif;
+      font-size: 1.1rem; font-weight: 700;
+      color: #0f172a; white-space: nowrap;
+    }
+
+    .topbar .sep { width: 1px; height: 24px; background: #e2e8f0; }
+
+    .topbar .stats {
+      font-size: 0.85rem; color: var(--sub); display: flex; gap: 12px;
+    }
+    .topbar .stats span { font-weight: 600; color: var(--accent); }
+
+    .topbar input[type=text] {
+      flex: 1; max-width: 300px; padding: 8px 16px;
+      border: 1px solid #cbd5e1; border-radius: 20px;
+      font-family: 'Heebo', sans-serif; font-size: 0.85rem;
+      outline: none; transition: all 0.2s; background: #f8fafc;
+    }
+    .topbar input[type=text]:focus {
+      background: #fff; border-color: var(--accent);
+      box-shadow: 0 0 0 3px rgba(37,99,235,0.15);
+    }
+
+    .topbar .btn {
+      padding: 6px 16px; border-radius: 8px;
+      border: 1px solid #cbd5e1; background: #fff; color: #475569;
+      font-family: 'Heebo', sans-serif; font-size: 0.85rem; font-weight: 500;
+      cursor: pointer; transition: all 0.2s; white-space: nowrap;
+      display: flex; align-items: center; gap: 6px;
+    }
+    .topbar .btn:hover { background: #f1f5f9; border-color: #94a3b8; color: #0f172a; }
+    .topbar .btn.primary { background: var(--accent); color: #fff; border-color: var(--accent); }
+    .topbar .btn.primary:hover { background: #1d4ed8; }
+
+    .zoom-controls { display: flex; align-items: center; gap: 4px; background: #f8fafc; border-radius: 8px; padding: 2px; border: 1px solid #e2e8f0; }
+    .zoom-controls .btn { border: none; background: transparent; padding: 4px 10px; box-shadow: none; }
+    .zoom-controls .btn:hover { background: #e2e8f0; }
+    .zoom-label { font-size: 0.75rem; color: var(--sub); min-width: 40px; text-align: center; font-weight: 600; }
+    .search-count { font-size: 0.8rem; color: var(--accent); font-weight: 600; white-space: nowrap; }
+
+    /* ===== UPLOAD OVERLAY ===== */
+    .upload-overlay {
+      position: fixed; top: 0; left: 0; right: 0; bottom: 0; z-index: 200;
+      background: rgba(241, 245, 249, 0.9); backdrop-filter: blur(8px);
+      display: flex; align-items: center; justify-content: center;
+    }
+    .upload-overlay.hidden { display: none; }
+    .upload-box {
+      background: #fff; padding: 60px 80px; text-align: center;
+      border: 2px dashed #94a3b8; border-radius: 24px; cursor: pointer;
+      box-shadow: 0 20px 40px rgba(0,0,0,0.05); transition: all 0.3s;
+    }
+    .upload-box:hover, .upload-box.dragover {
+      border-color: var(--accent); background: #f0fdf4;
+      transform: translateY(-5px); box-shadow: 0 25px 50px rgba(37,99,235,0.1);
+    }
+    .upload-box .icon { font-size: 4rem; margin-bottom: 16px; }
+    .upload-box h2 { font-size: 1.5rem; color: var(--title); margin-bottom: 8px; font-family: 'Rubik'; }
+    .upload-box p { color: var(--sub); font-size: 0.95rem; }
+    .upload-box input { display: none; }
+
+    /* ===== CANVAS ===== */
+    .canvas-wrap {
+      position: fixed; top: 56px; left: 0; right: 0; bottom: 0; overflow: auto; cursor: grab;
+      background-image: radial-gradient(circle, #cbd5e1 1px, transparent 1px);
+      background-size: 30px 30px; direction: ltr;
+    }
+    .canvas-wrap:active { cursor: grabbing; }
+    .canvas-sizer { position: relative; margin: 0 auto; }
+    .canvas {
+      transform-origin: top left; transition: transform 0.1s ease-out;
+      padding: 40px 60px 120px; display: inline-block; direction: rtl;
+      position: absolute; top: 0; left: 0;
+    }
+
+    /* ===== TREE STRUCTURE ===== */
+    .tree { display: inline-block; direction: ltr; }
+    .tree .node { direction: rtl; }
+    .tree ul { position: relative; padding-top: 30px; display: flex; justify-content: center; margin: 0; list-style: none; }
+    .tree > ul { padding-top: 0; }
+    
+    /* Standard Branch Lines */
+    .tree li { position: relative; padding: var(--leg, 30px) 15px 0; display: flex; flex-direction: column; align-items: center; }
+    .tree > ul > li { padding-top: 0; }
+    .tree li::before, .tree li::after {
+      content: ''; position: absolute; top: 0; right: 50%;
+      border-top: 2px solid var(--line); width: 50%; height: var(--leg, 30px);
+    }
+    .tree li::after { right: auto; left: 50%; border-left: 2px solid var(--line); }
+    .tree li:only-child::after, .tree li:only-child::before { display: none; }
+    .tree li:only-child { padding-top: var(--leg, 30px); }
+    .tree li:first-child::before, .tree li:last-child::after { border: 0 none; }
+    .tree li:last-child::before { border-right: 2px solid var(--line); border-radius: 0 10px 0 0; }
+    .tree li:first-child::after { border-radius: 10px 0 0 0; }
+    .tree > ul > li::before, .tree > ul > li::after { display: none; }
+    
+    /* Connection from Manager to Branches */
+    .tree ul ul::before {
+      content: ''; position: absolute; top: 0; left: 50%;
+      border-left: 2px solid var(--line); width: 0; height: 30px;
+    }
+
+    /* ===== COMPACT LEAVES (ZIPPER LAYOUT) ===== */
+    /* This handles employees with NO subordinates under them */
+    .leaves-container {
+      position: relative;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      width: 100%;
+    }
+    .leaf-row {
+      position: relative;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      width: 100%;
+      min-width: 360px;
+      padding: 6px 0;
+      z-index: 1;
+    }
+    
+    /* Vertical Spine through Leaves */
+    .leaf-row::before {
+      content: ''; position: absolute;
+      top: -4px; bottom: -4px; left: 50%;
+      border-left: 2px solid var(--line);
+      margin-left: -1px; z-index: 0;
+    }
+    /* Connect first leaf row to manager */
+    .leaf-row:first-child { margin-top: 30px; }
+    .leaf-row:first-child::after {
+      content: ''; position: absolute;
+      bottom: 100%; left: 50%; height: 30px;
+      border-left: 2px solid var(--line); margin-left: -1px;
+    }
+    /* Stop spine if no branches below */
+    .leaves-container.no-branches .leaf-row:last-child::before { bottom: 50%; }
+    
+    .leaf-wrapper {
+      position: relative;
+      display: flex;
+      align-items: center;
+    }
+    
+    /* Left and Right Alternating */
+    .leaf-row.right .leaf-wrapper { grid-column: 2; justify-content: flex-start; padding-left: 20px; }
+    .leaf-row.left .leaf-wrapper { grid-column: 1; justify-content: flex-end; padding-right: 20px; }
+    
+    /* Horizontal lines connecting leaf to spine */
+    .leaf-row.right .leaf-wrapper::before {
+      content: ''; position: absolute; left: 0; top: 50%; width: 20px;
+      border-top: 2px solid var(--line);
+    }
+    .leaf-row.left .leaf-wrapper::after {
+      content: ''; position: absolute; right: 0; top: 50%; width: 20px;
+      border-top: 2px solid var(--line);
+    }
+
+    /* ===== NODES ===== */
+    .node-wrap { position: relative; display: flex; flex-direction: column; align-items: center; z-index: 2; }
+    .node {
+      padding: 10px 16px; border-radius: 12px; text-align: center; cursor: pointer;
+      transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+      min-width: 150px; max-width: 240px; font-size: 0.85rem; line-height: 1.4;
+      box-shadow: var(--box-shadow); border: 1px solid rgba(255,255,255,0.8);
+      background: #ffffff; color: #334155; border: 1px solid #cbd5e1;
+      font-weight: 500;
+    }
+    .node:hover { transform: translateY(-3px); box-shadow: var(--box-shadow-hover); border-color: #93c5fd; background: #f8fafc; }
+
+    .node.root {
+      background: var(--grad-root); color: #fff; border: 2px solid #1e1b4b;
+      font-size: 1.1rem; font-weight: 700; padding: 14px 36px; min-width: 220px;
+      box-shadow: 0 10px 25px rgba(30, 27, 75, 0.2);
+    }
+    .node.root:hover { border-color: #312e81; background: var(--grad-root); color: #fff; }
+
+    .node.dept-head {
+      background: var(--grad-dept); color: #fff; border: 2px solid #1e3a8a;
+      font-weight: 600; font-size: 0.95rem; padding: 12px 28px; min-width: 190px;
+    }
+    .node.dept-head:hover { border-color: #1e3a8a; background: var(--grad-dept); color: #fff; }
+
+    .node.unit-head {
+      background: var(--grad-unit); color: #fff; border: 2px solid #064e3b;
+      font-weight: 600; font-size: 0.85rem; padding: 10px 20px; min-width: 170px;
+    }
+    .node.unit-head:hover { border-color: #064e3b; background: var(--grad-unit); color: #fff; }
+
+    .node .count { display: block; font-size: 0.7rem; opacity: 0.85; margin-top: 4px; font-weight: 400; }
+    .node.leaf .count { color: #64748b; }
+
+    .node.highlight { outline: 3px solid #fbbf24; outline-offset: 4px; animation: pulse 1.5s infinite; }
+    @keyframes pulse { 0%, 100% { outline-color: #fbbf24; } 50% { outline-color: #f59e0b; } }
+
+    /* ===== MODALS / BALLOONS ===== */
+    .modal-overlay, .balloon-overlay {
+      position: fixed; top: 0; left: 0; right: 0; bottom: 0; z-index: 300;
+      background: rgba(15, 23, 42, 0.5); backdrop-filter: blur(4px);
+      display: none; align-items: center; justify-content: center;
+    }
+    .modal-overlay.active, .balloon-overlay.active { display: flex; }
+
+    .balloon, .modal {
+      background: #fff; border-radius: 16px; min-width: 340px; max-width: 420px;
+      box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+      animation: popIn 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275); overflow: hidden;
+    }
+    @keyframes popIn { 0% { opacity: 0; transform: scale(0.9) translateY(20px); } 100% { opacity: 1; transform: scale(1) translateY(0); } }
+
+    .balloon-head { padding: 24px; text-align: center; position: relative; }
+    .balloon-head.mgr { background: var(--grad-dept); color: #fff; }
+    .balloon-head.emp { background: #f8fafc; border-bottom: 1px solid #e2e8f0; color: #0f172a; }
+    .balloon-avatar {
+      width: 64px; height: 64px; border-radius: 50%; margin: 0 auto 12px;
+      display: flex; align-items: center; justify-content: center; font-size: 2rem;
+      background: rgba(255, 255, 255, 0.2); border: 3px solid rgba(255,255,255,0.4);
+    }
+    .balloon-head.emp .balloon-avatar { background: #e0e7ff; border-color: #c7d2fe; }
+    .balloon-bname { font-family: 'Rubik', sans-serif; font-size: 1.4rem; font-weight: 700; }
+    .balloon-btag { display: inline-block; font-size: 0.7rem; font-weight: 600; padding: 4px 12px; border-radius: 20px; margin-top: 8px; }
+    .balloon-head.mgr .balloon-btag { background: rgba(255,255,255,0.2); color: #fff; }
+    .balloon-head.emp .balloon-btag { background: #dbeafe; color: #1e40af; }
+
+    .balloon-body, .modal-body { padding: 20px 24px; }
+    .balloon-row { display: flex; align-items: center; gap: 12px; padding: 12px; background: #f8fafc; border-radius: 12px; margin-bottom: 8px; border: 1px solid #e2e8f0; }
+    .balloon-row:last-child { margin-bottom: 0; }
+    .balloon-row-icon { font-size: 1.2rem; width: 32px; text-align: center; }
+    .balloon-row-label { font-size: 0.7rem; color: var(--sub); font-weight: 600; }
+    .balloon-row-value { font-size: 0.9rem; color: var(--title); font-weight: 500; }
+
+    .balloon-close, .modal-close {
+      position: absolute; top: 12px; left: 12px; width: 32px; height: 32px; border-radius: 50%;
+      background: rgba(0,0,0,0.1); border: none; color: inherit; font-size: 1rem;
+      cursor: pointer; display: flex; align-items: center; justify-content: center; transition: all 0.2s;
+    }
+    .balloon-head.mgr .balloon-close { color: #fff; background: rgba(255,255,255,0.2); }
+    .balloon-close:hover, .modal-close:hover { background: #ef4444; color: #fff; transform: rotate(90deg); }
+
+    .modal-head { display: flex; align-items: center; justify-content: space-between; padding: 20px 24px; background: var(--grad-root); color: #fff; }
+    .modal-head h3 { font-size: 1.1rem; font-weight: 700; margin: 0; }
+    .modal-head .modal-close { position: relative; top: 0; left: 0; color: #fff; background: rgba(255,255,255,0.2); }
+
+    .field-toggle { display: flex; align-items: center; gap: 12px; padding: 12px 16px; background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 12px; cursor: pointer; transition: all 0.2s; margin-bottom: 8px; }
+    .field-toggle:hover { background: #f0fdf4; border-color: #86efac; }
+    .field-toggle input { width: 20px; height: 20px; accent-color: #059669; cursor: pointer; }
+    .field-toggle .ft-icon { font-size: 1.2rem; }
+    .field-toggle .ft-label { font-size: 0.9rem; font-weight: 500; }
+
+    /* ===== SMART PRINT OPTIMIZATIONS ===== */
+    @media print {
+      @page { size: A4 landscape; margin: 8mm; }
+      
+      body, .canvas-wrap { 
+        background: #fff !important; 
+        background-image: none !important; 
+        overflow: visible !important; 
+        position: static !important;
+        height: auto !important;
+        width: auto !important;
+      }
+      
+      .topbar, .upload-overlay, .balloon-overlay, .modal-overlay, .zoom-controls { 
+        display: none !important; 
+      }
+      
+      .canvas-sizer, .canvas { 
+        position: static !important; 
+        width: 100% !important; 
+        height: auto !important; 
+        transform: none !important; 
+        padding: 0 !important;
+        margin: 0 !important;
+      }
+
+      /* Using CSS zoom calculated via JS to perfectly fit width without clipping */
+      .tree { 
+        width: max-content !important; 
+        display: block !important; 
+        margin: 0 auto !important;
+        zoom: var(--print-zoom, 1) !important;
+      }
+      
+      .node-wrap, .leaf-row { page-break-inside: avoid; }
+      
+      .node {
+        box-shadow: none !important;
+        border: 1.5px solid #475569 !important;
+        padding: 6px 10px !important;
+        min-width: 130px !important;
+        max-width: 180px !important;
+        font-size: 9pt !important;
+        line-height: 1.3 !important;
+        background: #fff !important;
+        color: #000 !important;
+      }
+      
+      .node.root, .node.dept-head, .node.unit-head {
+        background: #f1f5f9 !important;
+        border: 2px solid #0f172a !important;
+        color: #000 !important;
+        font-weight: bold !important;
+        -webkit-print-color-adjust: exact; print-color-adjust: exact;
+      }
+      
+      .node .count { font-size: 8pt !important; color: #475569 !important; }
+      
+      .tree ul ul::before, .tree li::before, .tree li::after, 
+      .leaf-row::before, .leaf-row:first-child::after, 
+      .leaf-row.right .leaf-wrapper::before, .leaf-row.left .leaf-wrapper::after {
+        border-color: #475569 !important;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <div class="topbar">
+    <h1>🏛️ מבנה ארגוני</h1>
+    <div class="sep"></div>
+    <div class="stats">
+      <span id="sEmp">-</span> עובדים &nbsp;|&nbsp;
+      <span id="sDept">-</span> מחלקות &nbsp;|&nbsp;
+      <span id="sUnit">-</span> יחידות
+    </div>
+    <div class="sep"></div>
+    <input type="text" id="searchInput" placeholder="🔍 חיפוש תפקיד, מחלקה או שם..." oninput="handleSearch(this.value)">
+    <span class="search-count" id="searchCount"></span>
+    <div style="flex:1"></div>
+    <div class="zoom-controls">
+      <button class="btn" onclick="zoomOut()" title="הקטן">−</button>
+      <span class="zoom-label" id="zoomLabel">100%</span>
+      <button class="btn" onclick="zoomIn()" title="הגדל">+</button>
+      <button class="btn" onclick="zoomFit()" title="התאם למסך">⊡</button>
+    </div>
+    <button class="btn" id="toggleBtn" onclick="toggleAll()">▶ הרחב הכל</button>
+    <button class="btn" onclick="openFieldsModal()">⚙️ שדות יוצגו</button>
+    <button class="btn primary" onclick="prepareAndPrint()">🖨️ הדפסה חכמה (A4)</button>
+    <button class="btn" onclick="document.getElementById('fileInput').click()">📂 החלף קובץ</button>
+  </div>
+
+  <div class="upload-overlay" id="uploadOverlay">
+    <div class="upload-box" id="uploadBox" onclick="document.getElementById('fileInput').click()">
+      <div class="icon">📊</div>
+      <h2>טען קובץ אקסל חטיבתי</h2>
+      <p>גרור לכאן את הקובץ או לחץ לבחירה (פורמט xlsx / xls)</p>
+      <input type="file" id="fileInput" accept=".xlsx,.xls" onchange="handleFile(this.files[0])">
+    </div>
+  </div>
+
+  <div class="balloon-overlay" id="balloonOverlay" onclick="closeBalloon(event)">
+    <div class="balloon" onclick="event.stopPropagation()">
+      <div class="balloon-head" id="bHead">
+        <button class="balloon-close" onclick="closeBalloon()">✕</button>
+        <div class="balloon-avatar" id="bAvatar">👤</div>
+        <div class="balloon-bname" id="bName"></div>
+        <div class="balloon-btag" id="bTag"></div>
+      </div>
+      <div class="balloon-body" id="balloonBody"></div>
+    </div>
+  </div>
+
+  <div class="modal-overlay" id="fieldsModal" onclick="closeFieldsModal(event)">
+    <div class="modal" onclick="event.stopPropagation()">
+      <div class="modal-head">
+        <h3>⚙️ בחירת שדות לכרטיס עובד</h3>
+        <button class="modal-close" onclick="closeFieldsModal()">✕</button>
+      </div>
+      <div class="modal-body" id="fieldToggles"></div>
+    </div>
+  </div>
+
+  <div class="canvas-wrap" id="canvasWrap">
+    <div class="canvas-sizer" id="canvasSizer">
+      <div class="canvas" id="canvas"></div>
+    </div>
+  </div>
+
+  <script>
+    function getName(role) { return (typeof EMPLOYEES !== 'undefined' && EMPLOYEES[role]) ? EMPLOYEES[role] : role }
+
+    let zoom = 1;
+    const canvasEl = document.getElementById('canvas');
+    const sizerEl = document.getElementById('canvasSizer');
+    const wrapEl = document.getElementById('canvasWrap');
+
+    function applyZoom() {
+      canvasEl.style.transform = `scale(${zoom})`;
+      document.getElementById('zoomLabel').textContent = Math.round(zoom * 100) + '%';
+      const cw = canvasEl.offsetWidth * zoom;
+      const ch = canvasEl.offsetHeight * zoom;
+      sizerEl.style.width = cw + 'px';
+      sizerEl.style.height = ch + 'px';
+    }
+    function zoomIn() { zoom = Math.min(zoom + 0.15, 3); applyZoom() }
+    function zoomOut() { zoom = Math.max(zoom - 0.15, 0.2); applyZoom() }
+    function zoomFit() {
+      const tree = canvasEl.querySelector('.tree');
+      if (!tree) return;
+      const tw = canvasEl.offsetWidth, th = canvasEl.offsetHeight;
+      const ww = wrapEl.clientWidth, wh = wrapEl.clientHeight;
+      zoom = Math.min(ww / tw, wh / th, 1.2);
+      zoom = Math.max(zoom, 0.3);
+      applyZoom();
+      setTimeout(() => {
+        const cw = canvasEl.offsetWidth * zoom;
+        wrapEl.scrollLeft = Math.max(0, (cw - ww) / 2);
+        wrapEl.scrollTop = 0;
+      }, 100);
+    }
+
+    wrapEl.addEventListener('wheel', e => {
+      if (e.ctrlKey || e.metaKey) {
+        e.preventDefault();
+        if (e.deltaY < 0) zoomIn(); else zoomOut();
+      }
+    }, { passive: false });
+
+    const ub = document.getElementById('uploadBox');
+    ub.addEventListener('dragover', e => { e.preventDefault(); ub.classList.add('dragover') });
+    ub.addEventListener('dragleave', () => ub.classList.remove('dragover'));
+    ub.addEventListener('drop', e => { e.preventDefault(); ub.classList.remove('dragover'); if (e.dataTransfer.files.length) handleFile(e.dataTransfer.files[0]) });
+
+    let isPanning = false, panStart = { x: 0, y: 0 }, scrollStart = { x: 0, y: 0 };
+    wrapEl.addEventListener('mousedown', e => { if (e.target.closest('.node') || e.target.closest('.balloon') || e.target.closest('.topbar')) return; isPanning = true; panStart = { x: e.clientX, y: e.clientY }; scrollStart = { x: wrapEl.scrollLeft, y: wrapEl.scrollTop }; wrapEl.style.cursor = 'grabbing' });
+    window.addEventListener('mousemove', e => { if (!isPanning) return; wrapEl.scrollLeft = scrollStart.x - (e.clientX - panStart.x); wrapEl.scrollTop = scrollStart.y - (e.clientY - panStart.y) });
+    window.addEventListener('mouseup', () => { isPanning = false; wrapEl.style.cursor = 'grab' });
+
+    function handleFile(file) {
+      if (!file) return;
+      const reader = new FileReader();
+      reader.onload = function (e) {
+        const wb = XLSX.read(e.target.result, { type: 'array', cellDates: false });
+        const ws = wb.Sheets[wb.SheetNames[0]];
+        const rows = XLSX.utils.sheet_to_json(ws, { header: 1, defval: '' });
+        processData(rows);
+        document.getElementById('uploadOverlay').classList.add('hidden');
+      };
+      reader.readAsArrayBuffer(file);
+    }
+
+    let allData = { departments: [], employees: [], ceo: null };
+
+    function processData(rows) {
+      const allEmps = [];
+      for (let i = 1; i < rows.length; i++) {
+        const r = rows[i];
+        if (!r || r.length < 6) continue;
+        const hativa = (r[0] || '').toString().trim();
+        const dept = (r[1] || '').toString().trim();
+        const unitOld = (r[3] || '').toString().trim();
+        const unitNew = (r[4] || '').toString().trim();
+        let role = (r[5] || '').toString().trim();
+        const empId = (r[6] || '').toString().trim();
+        const reportsTo = ((r[7] || '').toString().trim()).replace(/\*\*/g, '').trim();
+
+        if (!role || dept === 'מחלקה' || hativa === 'חטיבה') continue;
+        const isMgr = role.startsWith('**');
+        role = role.replace(/\*\*/g, '').trim();
+        const unit = unitNew || unitOld;
+        allEmps.push({ role, dept, unit, reportsTo, isMgr, empId });
+      }
+
+      const grouped = {};
+      allEmps.forEach(e => {
+        const key = e.role + '|||' + e.reportsTo;
+        if (!grouped[key]) { grouped[key] = { ...e, count: 1 } }
+        else { grouped[key].count++ }
+      });
+      const nodes = Object.values(grouped);
+      const roleSet = new Set(nodes.map(n => n.role));
+
+      const childrenOf = {};
+      nodes.forEach(n => {
+        const p = n.reportsTo;
+        if (p && roleSet.has(p)) {
+          if (!childrenOf[p]) childrenOf[p] = [];
+          childrenOf[p].push(n);
+        }
+      });
+
+      let roots = nodes.filter(n => !n.reportsTo || !roleSet.has(n.reportsTo));
+      if (roots.length > 1) {
+        roots.sort((a, b) => countDescendants(b.role) - countDescendants(a.role));
+      }
+
+      const deptSet = new Set(allEmps.map(e => e.dept));
+      const unitSet = new Set(allEmps.map(e => e.unit));
+      document.getElementById('sEmp').textContent = allEmps.length;
+      document.getElementById('sDept').textContent = deptSet.size;
+      document.getElementById('sUnit').textContent = unitSet.size;
+
+      allData = { nodes, roots, childrenOf, allEmps };
+      renderTree();
+      setTimeout(zoomFit, 200);
+    }
+
+    function countDescendants(role, visited = new Set()) {
+      if (visited.has(role)) return 0;
+      visited.add(role);
+      const ch = allData.childrenOf[role] || [];
+      return ch.reduce((sum, c) => sum + c.count + countDescendants(c.role, visited), 0);
+    }
+
+    function renderTree() {
+      const { roots, childrenOf } = allData;
+
+      function getNodeClass(level, hasChildren, isMgr) {
+        if (level === 0) return 'root';
+        if (level === 1) return 'dept-head';
+        if (hasChildren || isMgr) return 'unit-head';
+        return 'leaf';
+      }
+
+      function renderNode(node, level, visited, childIndex, siblingCount) {
+        if (visited.has(node.role)) return '';
+        visited.add(node.role);
+
+        const children = childrenOf[node.role] || [];
+        
+        // הפרדת הילדים ל-2 קבוצות: 
+        // 1. צוות ללא כפופים (Leaves) - יודפסו בצורה מדורגת
+        // 2. מנהלי ביניים (Branches) - יפתחו ענפים אופקיים חדשים
+        let leaves = [];
+        let branches = [];
+        
+        children.forEach(c => {
+          const cCh = childrenOf[c.role] || [];
+          if (cCh.length === 0 && !c.isMgr) leaves.push(c);
+          else branches.push(c);
+        });
+        
+        // מיון מנהלי הביניים לפי גודל הענף
+        branches.sort((a, b) => countDescendants(b.role) - countDescendants(a.role));
+
+        const hasCh = children.length > 0;
+        const isMgr = node.isMgr || hasCh;
+        const cls = getNodeClass(level, hasCh, node.isMgr);
+        const countLabel = node.count > 1 ? ' (' + node.count + ')' : '';
+        const deptLabel = (level === 1 && node.dept) ? `<span class="count">${esc(node.dept)} (${countDescendants(node.role)})</span>` : '';
+        const unitLabel = (level === 2 && hasCh) ? `<span class="count">${esc(node.unit || '')}</span>` : '';
+
+        // התאמת גודל זרועות למנהלים בכירים למניעת חפיפה
+        let legStyle = '';
+        if (level === 1 && siblingCount > 1) {
+          const pattern = [30, 75, 120, 75, 30, 100, 50, 130];
+          const leg = pattern[childIndex % pattern.length];
+          legStyle = ` style="--leg:${leg}px"`;
+        }
+
+        let h = `<li${legStyle}>`;
+        h += `<div class="node-wrap"><div class="node ${cls}" onclick="showBalloon('${esc(node.role)}','${esc(node.dept)}','${esc(node.unit)}','${esc(node.reportsTo)}',${isMgr})" data-search="${esc(node.role)} ${esc(node.dept)} ${esc(node.unit)}">${esc(node.role)}${countLabel}${deptLabel}${unitLabel}</div></div>`;
+
+        // ציור הצוות בקצה בצורת רוכסן מדורג (Zipper Layout)
+        if (leaves.length > 0) {
+          const noBranches = branches.length === 0 ? 'no-branches' : 'has-branches';
+          h += `<div class="leaves-container ${noBranches}">`;
+          leaves.forEach((l, i) => {
+            visited.add(l.role);
+            const lCls = getNodeClass(level + 1, false, l.isMgr);
+            const lCount = l.count > 1 ? ' (' + l.count + ')' : '';
+            // פיזור לסירוגין ימין-שמאל (LTR)
+            const side = i % 2 === 0 ? 'right' : 'left'; 
+            
+            h += `
+              <div class="leaf-row ${side}">
+                <div class="leaf-wrapper">
+                  <div class="node ${lCls}" onclick="showBalloon('${esc(l.role)}','${esc(l.dept)}','${esc(l.unit)}','${esc(l.reportsTo)}',false)" data-search="${esc(l.role)} ${esc(l.dept)} ${esc(l.unit)}">${esc(l.role)}${lCount}</div>
+                </div>
+              </div>
+            `;
+          });
+          h += `</div>`;
+        }
+
+        // ציור תתי-המחלקות בפריסה אופקית מתחת לצוות
+        if (branches.length > 0) {
+          h += `<ul>`;
+          branches.forEach((b, i) => {
+            h += renderNode(b, level + 1, visited, i, branches.length);
+          });
+          h += `</ul>`;
+        }
+
+        h += `</li>`;
+        return h;
+      }
+
+      let html = '<div class="tree"><ul>';
+      if (roots.length === 1) {
+        html += renderNode(roots[0], 0, new Set(), 0, 1);
+      } else if (roots.length > 1) {
+        const mainRoot = roots[0];
+        const otherRoots = roots.slice(1);
+        if (!childrenOf[mainRoot.role]) childrenOf[mainRoot.role] = [];
+        otherRoots.forEach(r => {
+          if (!childrenOf[mainRoot.role].find(c => c.role === r.role)) childrenOf[mainRoot.role].push(r);
+        });
+        html += renderNode(mainRoot, 0, new Set(), 0, 1);
+      }
+      html += '</ul></div>';
+      canvasEl.innerHTML = html;
+      indexSearch();
+    }
+
+    function esc(s) { return String(s || '').replace(/'/g, "\\'").replace(/"/g, '&quot;').replace(/</g, '&lt;') }
+
+    const FIELD_DEFS = [
+      { key: 'role', icon: '💼', label: 'תפקיד' },
+      { key: 'name', icon: '👤', label: 'שם מלא' },
+      { key: 'reportsTo', icon: '👆', label: 'כפיפות ישירה' },
+      { key: 'dept', icon: '🏢', label: 'מחלקה' },
+      { key: 'unit', icon: '📍', label: 'יחידה ארגונית' }
+    ];
+    let visibleFields = { role: true, name: true, reportsTo: true, dept: true, unit: true };
+    let currentBalloonData = {};
+
+    function showBalloon(role, dept, unit, reportsTo, isMgr) {
+      const name = getName(role);
+      currentBalloonData = { role, name, dept, unit, reportsTo, isMgr };
+
+      document.getElementById('bName').textContent = name;
+      const head = document.getElementById('bHead');
+      const avatar = document.getElementById('bAvatar');
+      const tag = document.getElementById('bTag');
+      if (isMgr) { head.className = 'balloon-head mgr'; avatar.textContent = '⭐'; tag.textContent = 'דרג ניהולי' }
+      else { head.className = 'balloon-head emp'; avatar.textContent = '👤'; tag.textContent = 'צוות עובדים' }
+
+      renderBalloonBody();
+      document.getElementById('balloonOverlay').classList.add('active');
+    }
+
+    function renderBalloonBody() {
+      const d = currentBalloonData;
+      const values = { role: d.role, name: d.name, reportsTo: d.reportsTo || '—', dept: d.dept, unit: d.unit };
+      let h = '';
+      FIELD_DEFS.forEach(f => {
+        if (f.key === 'name') return;
+        if (visibleFields[f.key]) {
+          h += `<div class="balloon-row"><span class="balloon-row-icon">${f.icon}</span><div style="flex:1"><div class="balloon-row-label">${f.label}</div><div class="balloon-row-value">${esc(values[f.key] || '—')}</div></div></div>`;
+        }
+      });
+      document.getElementById('balloonBody').innerHTML = h;
+    }
+
+    function closeBalloon(e) { if (e && e.target !== document.getElementById('balloonOverlay')) return; document.getElementById('balloonOverlay').classList.remove('active') }
+
+    function openFieldsModal() {
+      const cont = document.getElementById('fieldToggles');
+      cont.innerHTML = '';
+      FIELD_DEFS.forEach(f => {
+        const checked = visibleFields[f.key] ? 'checked' : '';
+        const lbl = document.createElement('label');
+        lbl.className = 'field-toggle';
+        lbl.innerHTML = `<input type="checkbox" ${checked} onchange="toggleField('${f.key}',this.checked)"><span class="ft-icon">${f.icon}</span><span class="ft-label">${f.label}</span>`;
+        cont.appendChild(lbl);
+      });
+      document.getElementById('fieldsModal').classList.add('active');
+    }
+    function closeFieldsModal(e) { if (e && e.target !== document.getElementById('fieldsModal')) return; document.getElementById('fieldsModal').classList.remove('active') }
+    function toggleField(key, val) {
+      visibleFields[key] = val;
+      if (document.getElementById('balloonOverlay').classList.contains('active')) renderBalloonBody();
+    }
+
+    // ==== מנגנון הדפסה חכם ====
+    function prepareAndPrint() {
+      const currentZoom = zoom;
+      
+      // ביטול זום זמני כדי למדוד את הגודל האמיתי של העץ
+      zoom = 1; 
+      canvasEl.style.transform = 'none'; 
+      
+      setTimeout(() => {
+        const tree = document.querySelector('.tree');
+        if (tree) {
+          const treeWidth = tree.scrollWidth;
+          
+          // רוחב טיפוסי של A4 לרוחב (Landspace) לאחר שוליים הוא באזור 1040px 
+          const maxPrintWidth = 1040; 
+          let printScale = 1;
+          
+          // אם העץ רחב מדי, אנחנו מכווצים אותו פרופורציונלית לרוחב הדף.
+          // העומק (גובה) אינו מוגבל, כך שהוא יישפך אוטומטית לעמודים נוספים כלפי מטה.
+          if (treeWidth > maxPrintWidth) {
+            printScale = (maxPrintWidth / treeWidth) * 0.98; // 2% מרווח ביטחון
+          }
+          
+          // הגדרת משתנה ה-CSS שמכתיב את הזום בהדפסה
+          document.documentElement.style.setProperty('--print-zoom', printScale);
+        }
+
+        window.print();
+        
+        // חזרה לתצוגה רגילה לאחר ההדפסה
+        setTimeout(() => {
+          zoom = currentZoom;
+          applyZoom();
+        }, 500);
+      }, 100);
+    }
+
+    let expanded = false;
+    function toggleAll() {
+      expanded = !expanded;
+      document.getElementById('toggleBtn').textContent = expanded ? '◀ כווץ הכל' : '▶ הרחב הכל';
+    }
+
+    const searchItems = [];
+    function indexSearch() {
+      searchItems.length = 0;
+      document.querySelectorAll('[data-search]').forEach(el => {
+        const text = (el.dataset.search + ' ' + getName(el.dataset.search.split(' ')[0])).toLowerCase();
+        searchItems.push({ el, text });
+      });
+    }
+
+    let sTimeout;
+    function handleSearch(q) {
+      clearTimeout(sTimeout);
+      document.querySelectorAll('.node.highlight').forEach(el => el.classList.remove('highlight'));
+      document.getElementById('searchCount').textContent = '';
+      if (!q) return;
+      sTimeout = setTimeout(() => {
+        const ql = q.toLowerCase();
+        const matches = searchItems.filter(s => s.text.includes(ql));
+        matches.forEach(m => m.el.classList.add('highlight'));
+        document.getElementById('searchCount').textContent = matches.length ? `${matches.length} תוצאות` : 'לא נמצא';
+        if (matches.length) {
+          const el = matches[0].el;
+          const rect = el.getBoundingClientRect();
+          const wrapRect = wrapEl.getBoundingClientRect();
+          wrapEl.scrollTo({
+            left: wrapEl.scrollLeft + (rect.left - wrapRect.left) - wrapRect.width / 2 + rect.width / 2,
+            top: wrapEl.scrollTop + (rect.top - wrapRect.top) - wrapRect.height / 2 + rect.height / 2,
+            behavior: 'smooth'
+          });
+        }
+      }, 300);
+    }
+
+    document.addEventListener('keydown', e => { 
+      if (e.key === 'Escape') { 
+        if (document.getElementById('balloonOverlay').classList.contains('active')) closeBalloon();
+        else if (document.getElementById('fieldsModal').classList.contains('active')) closeFieldsModal();
+        else { document.getElementById('searchInput').value = ''; handleSearch(''); }
+      } 
+    });
+  </script>
+</body>
+</html>

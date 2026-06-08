@@ -1,0 +1,1544 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>מדריך 65 — מימון למנהלים</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Frank+Ruhl+Libre:wght@400;500;700;900&family=Heebo:wght@300;400;500;700;900&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #0f1419;
+    --panel: #1a2028;
+    --panel-2: #232a35;
+    --ink: #e8e6e0;
+    --ink-soft: #a8a39a;
+    --ink-dim: #6b6862;
+    --rule: #2d3540;
+    --hot: #ff6b35;
+    --hot-soft: #ffa07a;
+    --gold: #f4c430;
+    --green: #6bcf7f;
+    --formula-bg: #14191f;
+    --highlight: rgba(244, 196, 48, 0.15);
+    --serif: 'Frank Ruhl Libre', Georgia, serif;
+    --sans: 'Heebo', system-ui, sans-serif;
+    --mono: 'JetBrains Mono', 'Courier New', monospace;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    background: var(--bg);
+    color: var(--ink);
+    font-family: var(--sans);
+    font-size: 15px;
+    line-height: 1.7;
+    min-height: 100vh;
+    background-image:
+      radial-gradient(ellipse at top right, rgba(255, 107, 53, 0.08), transparent 50%),
+      radial-gradient(ellipse at bottom left, rgba(244, 196, 48, 0.05), transparent 50%);
+  }
+
+  .app {
+    display: grid;
+    grid-template-columns: 300px 1fr;
+    min-height: 100vh;
+    max-width: 1400px;
+    margin: 0 auto;
+  }
+
+  /* Sidebar */
+  .sidebar {
+    background: var(--panel);
+    border-left: 1px solid var(--rule);
+    padding: 28px 22px;
+    position: sticky;
+    top: 0;
+    height: 100vh;
+    overflow-y: auto;
+  }
+
+  .brand {
+    font-family: var(--serif);
+    font-weight: 900;
+    font-size: 28px;
+    line-height: 1;
+    color: var(--ink);
+    margin-bottom: 2px;
+    letter-spacing: -0.02em;
+  }
+  .brand .hot { color: var(--hot); }
+  .brand-sub {
+    font-size: 11px;
+    color: var(--ink-dim);
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    margin-bottom: 24px;
+  }
+
+  .exam-card {
+    background: linear-gradient(135deg, var(--hot) 0%, #d4471f 100%);
+    color: #fff;
+    padding: 16px 18px;
+    border-radius: 6px;
+    margin-bottom: 28px;
+    position: relative;
+    overflow: hidden;
+  }
+  .exam-card::before {
+    content: '';
+    position: absolute;
+    top: -20px;
+    left: -20px;
+    width: 80px;
+    height: 80px;
+    background: rgba(255,255,255,0.1);
+    border-radius: 50%;
+  }
+  .exam-card strong {
+    display: block;
+    font-family: var(--serif);
+    font-size: 16px;
+    margin-bottom: 4px;
+    position: relative;
+  }
+  .exam-card .sub {
+    font-size: 12px;
+    opacity: 0.9;
+    position: relative;
+  }
+  .exam-countdown {
+    font-family: var(--mono);
+    font-size: 11px;
+    margin-top: 8px;
+    font-weight: 700;
+    background: rgba(0,0,0,0.25);
+    display: inline-block;
+    padding: 3px 8px;
+    border-radius: 3px;
+    position: relative;
+  }
+
+  .goal-badge {
+    background: var(--panel-2);
+    border: 1px solid var(--gold);
+    border-radius: 4px;
+    padding: 12px 14px;
+    margin-bottom: 24px;
+    text-align: center;
+  }
+  .goal-badge .num {
+    font-family: var(--serif);
+    font-size: 32px;
+    font-weight: 900;
+    color: var(--gold);
+    line-height: 1;
+    display: block;
+  }
+  .goal-badge .label {
+    font-size: 11px;
+    letter-spacing: 0.15em;
+    color: var(--ink-soft);
+    text-transform: uppercase;
+    margin-top: 4px;
+  }
+
+  .toc-title {
+    font-size: 10px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--ink-dim);
+    margin-bottom: 10px;
+    padding-bottom: 6px;
+    border-bottom: 1px solid var(--rule);
+  }
+
+  .toc {
+    list-style: none;
+  }
+  .toc li {
+    margin-bottom: 3px;
+  }
+  .toc a {
+    display: grid;
+    grid-template-columns: 28px 1fr auto;
+    align-items: center;
+    gap: 10px;
+    padding: 10px 10px;
+    border-radius: 4px;
+    text-decoration: none;
+    color: var(--ink-soft);
+    font-size: 13.5px;
+    line-height: 1.3;
+    transition: all 0.15s ease;
+    cursor: pointer;
+    border-right: 2px solid transparent;
+  }
+  .toc a:hover {
+    background: var(--panel-2);
+    color: var(--ink);
+  }
+  .toc a.active {
+    background: var(--panel-2);
+    color: var(--ink);
+    border-right-color: var(--hot);
+  }
+  .ch-num {
+    font-family: var(--mono);
+    font-size: 12px;
+    font-weight: 700;
+    color: var(--hot);
+  }
+  .ch-points {
+    font-family: var(--mono);
+    font-size: 10px;
+    color: var(--ink-dim);
+    background: var(--bg);
+    padding: 2px 6px;
+    border-radius: 10px;
+  }
+  .toc a.active .ch-points {
+    color: var(--gold);
+  }
+  .toc a.skip {
+    opacity: 0.4;
+  }
+  .toc a.skip::after {
+    content: 'דלג';
+    font-size: 9px;
+    background: var(--ink-dim);
+    color: var(--bg);
+    padding: 1px 5px;
+    border-radius: 2px;
+  }
+
+  /* Main content */
+  .main {
+    padding: 48px 56px 120px;
+    max-width: 900px;
+  }
+
+  .crumb {
+    font-size: 11px;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--ink-dim);
+    margin-bottom: 14px;
+  }
+  .crumb .sep { margin: 0 8px; opacity: 0.4; }
+
+  h1.title {
+    font-family: var(--serif);
+    font-weight: 900;
+    font-size: 48px;
+    line-height: 1.05;
+    margin-bottom: 8px;
+    letter-spacing: -0.02em;
+  }
+  h1 .num {
+    color: var(--hot);
+    font-family: var(--mono);
+    font-size: 32px;
+    display: inline-block;
+    margin-left: 12px;
+  }
+  .tagline {
+    font-family: var(--serif);
+    font-style: italic;
+    font-size: 19px;
+    color: var(--ink-soft);
+    margin-bottom: 8px;
+  }
+
+  .strip {
+    display: flex;
+    gap: 0;
+    padding: 14px 0;
+    margin: 24px 0 40px;
+    border-top: 1px solid var(--rule);
+    border-bottom: 1px solid var(--rule);
+    font-size: 12px;
+  }
+  .strip-cell {
+    flex: 1;
+    padding: 0 16px;
+    border-left: 1px solid var(--rule);
+    color: var(--ink-soft);
+  }
+  .strip-cell:last-child { border-left: none; }
+  .strip-cell strong {
+    display: block;
+    font-size: 10px;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--ink-dim);
+    margin-bottom: 4px;
+    font-weight: 700;
+  }
+  .strip-cell .val {
+    font-family: var(--serif);
+    font-size: 18px;
+    font-weight: 700;
+    color: var(--ink);
+  }
+  .strip-cell .val.hot { color: var(--hot); }
+  .strip-cell .val.gold { color: var(--gold); }
+
+  /* Sections */
+  section { margin-bottom: 48px; }
+
+  h2 {
+    font-family: var(--serif);
+    font-weight: 700;
+    font-size: 26px;
+    margin-bottom: 14px;
+    padding-bottom: 8px;
+    border-bottom: 2px solid var(--hot);
+    display: flex;
+    align-items: baseline;
+    gap: 12px;
+  }
+  h2 .num {
+    font-family: var(--mono);
+    font-size: 14px;
+    color: var(--hot);
+    font-weight: 700;
+  }
+  h3 {
+    font-family: var(--serif);
+    font-weight: 700;
+    font-size: 19px;
+    margin-top: 28px;
+    margin-bottom: 10px;
+    color: var(--ink);
+  }
+
+  p { margin-bottom: 12px; color: var(--ink); }
+  .lead {
+    font-family: var(--serif);
+    font-size: 17px;
+    line-height: 1.6;
+    color: var(--ink);
+    margin-bottom: 16px;
+  }
+
+  /* Pattern box - the core teaching unit */
+  .pattern {
+    background: var(--panel);
+    border: 1px solid var(--rule);
+    border-right: 4px solid var(--hot);
+    border-radius: 6px;
+    padding: 22px 26px;
+    margin: 20px 0;
+  }
+  .pattern-label {
+    display: inline-block;
+    font-size: 10px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--hot);
+    font-weight: 700;
+    margin-bottom: 10px;
+    background: rgba(255, 107, 53, 0.12);
+    padding: 3px 10px;
+    border-radius: 3px;
+  }
+  .pattern h3 {
+    margin-top: 0;
+    color: var(--ink);
+  }
+  .pattern ol, .pattern ul {
+    padding-right: 22px;
+    margin: 10px 0;
+  }
+  .pattern li {
+    margin-bottom: 6px;
+    color: var(--ink);
+  }
+  .pattern li strong {
+    color: var(--gold);
+  }
+
+  /* Formula */
+  .formula {
+    background: var(--formula-bg);
+    border: 1px solid var(--rule);
+    padding: 20px;
+    margin: 14px 0;
+    border-radius: 6px;
+    text-align: center;
+    direction: ltr;
+  }
+  .formula-name {
+    display: block;
+    font-family: var(--sans);
+    font-size: 10px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin-bottom: 10px;
+    direction: rtl;
+    font-weight: 700;
+  }
+  .formula code {
+    font-family: var(--mono);
+    font-size: 18px;
+    font-weight: 500;
+    color: var(--ink);
+    letter-spacing: 0.02em;
+    display: block;
+    margin: 4px 0;
+  }
+  .formula .vars {
+    font-family: var(--sans);
+    font-size: 12px;
+    color: var(--ink-soft);
+    margin-top: 10px;
+    direction: rtl;
+    line-height: 1.6;
+  }
+
+  /* Example */
+  .example {
+    border: 1px solid var(--rule);
+    border-radius: 6px;
+    margin: 20px 0;
+    overflow: hidden;
+    background: var(--panel);
+  }
+  .example-header {
+    background: var(--bg);
+    color: var(--gold);
+    padding: 12px 20px;
+    font-size: 11px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    font-weight: 700;
+    border-bottom: 1px solid var(--rule);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  .example-header .src {
+    color: var(--ink-dim);
+    font-size: 10px;
+    font-family: var(--mono);
+  }
+  .example-body {
+    padding: 18px 22px;
+  }
+  .example-body p { margin-bottom: 10px; }
+  .example-body p:last-child { margin-bottom: 0; }
+  .calc {
+    font-family: var(--mono);
+    font-size: 14px;
+    background: var(--formula-bg);
+    padding: 12px 16px;
+    margin: 10px 0;
+    border-radius: 4px;
+    direction: ltr;
+    text-align: left;
+    color: var(--ink);
+    line-height: 1.8;
+    border-right: 2px solid var(--hot);
+  }
+  .answer {
+    display: inline-block;
+    background: var(--highlight);
+    color: var(--gold);
+    padding: 4px 12px;
+    font-weight: 700;
+    border-radius: 4px;
+    font-family: var(--mono);
+    border: 1px solid var(--gold);
+  }
+
+  /* Trap box */
+  .trap {
+    background: rgba(255, 107, 53, 0.08);
+    border-right: 3px solid var(--hot);
+    padding: 16px 20px;
+    margin: 16px 0;
+    border-radius: 0 4px 4px 0;
+  }
+  .trap-label {
+    font-size: 10px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--hot);
+    font-weight: 700;
+    margin-bottom: 6px;
+    display: block;
+  }
+  .trap-label::before { content: '⚠ '; }
+  .trap p:last-child { margin-bottom: 0; }
+  .trap ul { padding-right: 20px; }
+  .trap li { margin-bottom: 4px; }
+
+  /* Win box */
+  .win {
+    background: rgba(107, 207, 127, 0.08);
+    border-right: 3px solid var(--green);
+    padding: 16px 20px;
+    margin: 16px 0;
+    border-radius: 0 4px 4px 0;
+  }
+  .win-label {
+    font-size: 10px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--green);
+    font-weight: 700;
+    margin-bottom: 6px;
+    display: block;
+  }
+  .win-label::before { content: '✓ '; }
+
+  /* Strategy table */
+  .strategy {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 16px 0;
+    font-size: 13px;
+  }
+  .strategy th {
+    background: var(--panel-2);
+    color: var(--gold);
+    text-align: right;
+    padding: 10px 12px;
+    font-size: 11px;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    border-bottom: 2px solid var(--hot);
+  }
+  .strategy td {
+    padding: 10px 12px;
+    border-bottom: 1px solid var(--rule);
+    color: var(--ink);
+  }
+  .strategy td.points {
+    font-family: var(--mono);
+    font-weight: 700;
+    color: var(--gold);
+    text-align: center;
+  }
+  .strategy tr.must td { background: rgba(244, 196, 48, 0.05); }
+
+  /* Step list */
+  .steps {
+    counter-reset: step;
+    padding: 0;
+    list-style: none;
+    margin: 16px 0;
+  }
+  .steps > li {
+    counter-increment: step;
+    padding: 12px 16px 12px 60px;
+    margin-bottom: 8px;
+    background: var(--panel);
+    border-radius: 4px;
+    position: relative;
+    border-right: 3px solid var(--rule);
+  }
+  .steps > li::before {
+    content: counter(step);
+    position: absolute;
+    right: 16px;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 28px;
+    height: 28px;
+    background: var(--hot);
+    color: var(--bg);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: var(--mono);
+    font-weight: 700;
+    font-size: 14px;
+  }
+  .steps > li {
+    padding-right: 60px;
+    padding-left: 16px;
+  }
+
+  /* Chapter nav */
+  .chap-nav {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+    margin-top: 56px;
+    padding-top: 24px;
+    border-top: 1px solid var(--rule);
+  }
+  .nav-btn {
+    background: var(--panel);
+    border: 1px solid var(--rule);
+    padding: 14px 18px;
+    border-radius: 6px;
+    text-decoration: none;
+    color: var(--ink);
+    transition: all 0.2s ease;
+    cursor: pointer;
+    font-family: inherit;
+    text-align: right;
+  }
+  .nav-btn:hover:not(:disabled) {
+    border-color: var(--hot);
+    background: var(--panel-2);
+  }
+  .nav-btn:disabled {
+    opacity: 0.3;
+    cursor: not-allowed;
+  }
+  .nav-btn .lab {
+    display: block;
+    font-size: 10px;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--ink-dim);
+    margin-bottom: 4px;
+  }
+  .nav-btn .tit {
+    font-family: var(--serif);
+    font-weight: 700;
+    font-size: 14px;
+  }
+
+  article { display: none; }
+  article.active { display: block; animation: fadeIn 0.3s ease; }
+  @keyframes fadeIn {
+    from { opacity: 0; transform: translateY(8px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  /* Cover page */
+  .cover h1.title { font-size: 56px; }
+  .cover .hero-num {
+    font-family: var(--serif);
+    font-size: 180px;
+    line-height: 1;
+    font-weight: 900;
+    color: var(--hot);
+    letter-spacing: -0.05em;
+    margin: 20px 0;
+  }
+  .cover .hero-num small {
+    font-size: 32px;
+    color: var(--ink-soft);
+    font-weight: 400;
+    margin-right: 8px;
+  }
+
+  table.budget {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 24px 0;
+  }
+  table.budget th, table.budget td {
+    padding: 12px;
+    text-align: right;
+    border-bottom: 1px solid var(--rule);
+  }
+  table.budget th {
+    background: var(--panel-2);
+    font-size: 11px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--gold);
+  }
+  table.budget td:nth-child(3),
+  table.budget th:nth-child(3) {
+    font-family: var(--mono);
+    color: var(--gold);
+    font-weight: 700;
+    text-align: center;
+  }
+  table.budget tr.total td {
+    background: var(--panel-2);
+    font-weight: 700;
+    color: var(--hot);
+    border-bottom: none;
+  }
+
+  /* Mobile */
+  @media (max-width: 900px) {
+    .app { grid-template-columns: 1fr; }
+    .sidebar {
+      position: relative;
+      height: auto;
+      border-left: none;
+      border-bottom: 1px solid var(--rule);
+    }
+    .main { padding: 28px 20px 80px; }
+    h1.title { font-size: 32px; }
+    h2 { font-size: 22px; }
+    .cover .hero-num { font-size: 100px; }
+    .strip { flex-wrap: wrap; }
+    .strip-cell { flex: 1 1 50%; margin-bottom: 8px; }
+  }
+</style>
+</head>
+<body>
+<div class="app">
+
+  <!-- SIDEBAR -->
+  <aside class="sidebar">
+    <div class="brand">מדריך <span class="hot">65</span></div>
+    <div class="brand-sub">מימון למנהלים · פלד</div>
+
+    <div class="exam-card">
+      <strong>בחינה: 29.05.2026</strong>
+      <div class="sub">3 שעות · 6 שאלות · 100 נק'</div>
+      <div class="exam-countdown" id="countdown"></div>
+    </div>
+
+    <div class="goal-badge">
+      <span class="num">65</span>
+      <div class="label">היעד</div>
+    </div>
+
+    <div class="toc-title">פרקי המדריך</div>
+    <ul class="toc" id="toc">
+      <li><a data-ch="cover" class="active"><span class="ch-num">★</span><span>הסקירה הכוללת</span><span class="ch-points">חובה</span></a></li>
+      <li><a data-ch="ch4"><span class="ch-num">01</span><span>קצבאות (שאלה 4)</span><span class="ch-points">15 נק'</span></a></li>
+      <li><a data-ch="ch5"><span class="ch-num">02</span><span>הלוואות / שפיצר (שאלה 5)</span><span class="ch-points">14 נק'</span></a></li>
+      <li><a data-ch="ch3"><span class="ch-num">03</span><span>NPV מול IRR (שאלה 3)</span><span class="ch-points">13 נק'</span></a></li>
+      <li><a data-ch="ch6"><span class="ch-num">04</span><span>אג"ח (שאלה 6)</span><span class="ch-points">10 נק'</span></a></li>
+      <li><a data-ch="ch1"><span class="ch-num">05</span><span>פרויקט גדול (שאלה 1)</span><span class="ch-points">15+ נק'</span></a></li>
+      <li><a data-ch="ch2" class="skip"><span class="ch-num">06</span><span>תיק השקעות (שאלה 2)</span></a></li>
+      <li><a data-ch="formulas"><span class="ch-num">∑</span><span>דף נוסחאות מסומן</span><span class="ch-points">קריטי</span></a></li>
+      <li><a data-ch="strategy"><span class="ch-num">⚡</span><span>יום המבחן</span><span class="ch-points">חובה</span></a></li>
+    </ul>
+  </aside>
+
+  <!-- MAIN -->
+  <main class="main">
+
+    <!-- COVER -->
+    <article data-content="cover" class="active cover">
+      <div class="crumb">מימון למנהלים <span class="sep">/</span> סקירה</div>
+      <h1 class="title">מדריך 65</h1>
+      <p class="tagline">לא ללמוד הכל. ללמוד את מה שמספיק לעבור.</p>
+
+      <div class="hero-num">65<small>נק'</small></div>
+
+      <p class="lead">המטרה לא 90, לא 80, גם לא 70. רק <strong style="color:var(--gold)">65</strong> — וזה אפשרי גם ביומיים. עברתי על 3 בחינות עבר של פלד ועל שאלות החזרה. המבנה זהה כל שנה. הנה התוכנית.</p>
+
+      <section>
+        <h2><span class="num">★</span> מבנה הבחינה</h2>
+        <p>פלד נאמן לפורמט שלו. ב-2016, 2018, 2019, ותשע"ט — אותו דבר:</p>
+        <table class="strategy">
+          <thead>
+            <tr><th>שאלה</th><th>נושא</th><th>נק'</th><th>תכנון</th></tr>
+          </thead>
+          <tbody>
+            <tr class="must"><td>1</td><td>פרויקט NPV ענק</td><td class="points">27-28</td><td>חלקית — לוקחים מה שאפשר</td></tr>
+            <tr><td>2</td><td>תיק השקעות (תוחלת/ס.תקן)</td><td class="points">24-25</td><td>מדלגים</td></tr>
+            <tr class="must"><td>3</td><td>NPV מול IRR — סתירה</td><td class="points">11-15</td><td>חובה</td></tr>
+            <tr class="must"><td>4</td><td>קצבאות / חיסכון</td><td class="points">11-15</td><td>חובה — הקל ביותר</td></tr>
+            <tr class="must"><td>5</td><td>הלוואות / שפיצר</td><td class="points">12-14</td><td>חובה</td></tr>
+            <tr class="must"><td>6</td><td>אג"ח</td><td class="points">10</td><td>חובה — הכי קצר</td></tr>
+          </tbody>
+        </table>
+      </section>
+
+      <section>
+        <h2><span class="num">∑</span> חישוב התקציב לציון 65</h2>
+        <p>הנה איך מגיעים ל-65 בלי שאלה 2 ובלי שאלה 1 מלאה:</p>
+
+        <table class="budget">
+          <tr><th>מה אני פותר</th><th>איך</th><th>נק'</th></tr>
+          <tr><td>שאלה 4 — קצבאות</td><td>FVA, FV של סכום חד-פעמי. נוסחאות חד-משמעיות.</td><td>13</td></tr>
+          <tr><td>שאלה 5 — הלוואות</td><td>PVA לחישוב תשלום, יתרת קרן, הצמדה.</td><td>12</td></tr>
+          <tr><td>שאלה 3 — NPV/IRR</td><td>גרף, נקודות חיתוך עם הצירים, נקודת חיתוך בין שתיהן.</td><td>11</td></tr>
+          <tr><td>שאלה 6 — אג"ח</td><td>תשואה לפדיון, מחיר אג"ח, ריבית חצי-שנתית.</td><td>10</td></tr>
+          <tr><td>שאלה 1 — סעיף הכנסות/הוצאות</td><td>רק הזרם השוטף. בלי השאר.</td><td>10</td></tr>
+          <tr class="total"><td colspan="2">סה"כ פוטנציאל</td><td>56</td></tr>
+        </table>
+
+        <p>56 זה לא 65 — וזו הסיבה שצריך לבצע <strong>כל</strong> אחת מהשאלות לעיל היטב, לא ברישול. אם אתה פותר את שאלה 6 מלאה ו-3 ו-4 ו-5 מלאות — אתה ב-50. כל סעיף בשאלה 1 שאתה מצליח לסחוט = עוד 3-5 נק'. <strong style="color:var(--green)">המסע ל-65 עובר דרך כל-שאלה-בטוחה-עד-הסוף.</strong></p>
+      </section>
+
+      <section>
+        <h2><span class="num">⚡</span> סדר ההכנה שלך ב-48 שעות</h2>
+        <ol class="steps">
+          <li><strong style="color:var(--gold)">היום (ערב/לילה):</strong> פרקים 1, 2, 3 — קצבאות, הלוואות, NPV/IRR. אלה השאלות הקלות והבטוחות.</li>
+          <li><strong style="color:var(--gold)">מחר בבוקר:</strong> פרק 4 — אג"ח. נוסחה אחת בעצם, רק להתאמן.</li>
+          <li><strong style="color:var(--gold)">מחר אחה"צ:</strong> פרק 5 — שאלת הפרויקט. ללמוד לזהות את המרכיבים, לא לפתור הכל.</li>
+          <li><strong style="color:var(--gold)">ערב הבחינה:</strong> דף הנוסחאות + עמוד "יום הבחינה". לישון מוקדם.</li>
+          <li><strong style="color:var(--gold)">בוקר הבחינה:</strong> רענון של 30 דקות בלבד. לא ללמוד דברים חדשים.</li>
+        </ol>
+      </section>
+
+      <div class="chap-nav">
+        <button class="nav-btn" disabled>
+          <span class="lab">→ הקודם</span>
+          <span class="tit">פתיחה</span>
+        </button>
+        <button class="nav-btn" onclick="goTo('ch4')">
+          <span class="lab">הבא ←</span>
+          <span class="tit">שאלה 4 — קצבאות</span>
+        </button>
+      </div>
+    </article>
+
+    <!-- CH 4 — Annuities (Q4) -->
+    <article data-content="ch4">
+      <div class="crumb">פרק 01 <span class="sep">/</span> שאלה 4</div>
+      <h1 class="title">קצבאות וחיסכון <span class="num">Q4</span></h1>
+      <p class="tagline">השאלה הכי "ידידותית" במבחן — אם אתה זוכר 2 נוסחאות, אתה מסיים תוך 15 דקות.</p>
+
+      <div class="strip">
+        <div class="strip-cell"><strong>שווי נק'</strong><div class="val gold">11-15</div></div>
+        <div class="strip-cell"><strong>זמן ביצוע</strong><div class="val">15-20 דק'</div></div>
+        <div class="strip-cell"><strong>קושי</strong><div class="val">★★☆☆☆</div></div>
+        <div class="strip-cell"><strong>מקור בבחינה</strong><div class="val">שאלה 4</div></div>
+      </div>
+
+      <section>
+        <h2><span class="num">1.1</span> איך פלד שואל את זה</h2>
+        <p>תמיד אותו דפוס: יש סכומים שמופקדים בנקודות זמן שונות, ריבית שמשתנה לפעמים, ושואלים <em>"כמה יהיה בסוף?"</em> או <em>"כמה כדאי להפקיד היום?"</em></p>
+
+        <div class="pattern">
+          <span class="pattern-label">דפוס מנצח</span>
+          <h3>שלוש שאלות שצריך לשאול לפני שמתחילים</h3>
+          <ol>
+            <li><strong>זה תשלום אחד או סדרה?</strong> סכום אחד = (1+r)^n. סדרה = נוסחת FVA/PVA.</li>
+            <li><strong>איפה נקודת הזמן שאליה אני מהוון?</strong> רגיל = סוף תקופה. אם ההפקדות בתחילת תקופה — כפול (1+r) נוסף.</li>
+            <li><strong>הריבית משתנה?</strong> מחלקים לתתי-תקופות עם ריביות שונות.</li>
+          </ol>
+        </div>
+
+        <h3>שתי הנוסחאות שאתה חייב לזכור</h3>
+
+        <div class="formula">
+          <span class="formula-name">FVA — ערך עתידי של קצבה</span>
+          <code>FVA = C × [ ((1+r)<sup>n</sup> − 1) ÷ r ]</code>
+          <div class="vars">לחיסכון / פנסיה — כמה יצטבר בסוף</div>
+        </div>
+
+        <div class="formula">
+          <span class="formula-name">PVA — ערך נוכחי של קצבה</span>
+          <code>PVA = C × [ (1 − (1+r)<sup>−n</sup>) ÷ r ]</code>
+          <div class="vars">להלוואות / הערכה — כמה שווה היום זרם תשלומים</div>
+        </div>
+      </section>
+
+      <section>
+        <h2><span class="num">1.2</span> דוגמה מלאה — שאלה 4, מועד תשע"ט</h2>
+        <div class="example">
+          <div class="example-header">
+            <span>שאלת חיסכון בשתי תכניות</span>
+            <span class="src">24.05.2019</span>
+          </div>
+          <div class="example-body">
+            <p><strong>תוכנית א:</strong> 1,000 ש"ח בתחילת כל שנה, 10 שנים, ריבית 8% לשנה.</p>
+            <p><strong>תוכנית ב:</strong> הפקדה היום של 30,000 ש"ח. אחר כך 550 ש"ח כל חודשיים, במשך 5 שנים. ריבית נקובה 6% בחישוב דו-חודשי.</p>
+            <p>השאלה: כמה יהיה בכל תוכנית בעוד 10 שנים?</p>
+
+            <h3 style="color:var(--hot);margin-top:18px;">תוכנית א:</h3>
+            <div class="calc">FV = 1,000 × 1.08 × FVFA(8%, 10)<br>= 1,000 × 1.08 × 14.487<br>= <span class="answer">15,646 ₪</span></div>
+            <p style="font-size:13px;color:var(--ink-soft);">למה כפול 1.08? כי ההפקדות בתחילת שנה — צריך לדחוף את כל הסדרה שנה אחת קדימה.</p>
+
+            <h3 style="color:var(--hot);margin-top:18px;">תוכנית ב:</h3>
+            <p>קודם: ריבית דו-חודשית אפקטיבית = 6%/6 = 1%</p>
+            <p>בעוד 5 שנים יש 30 תקופות של חודשיים. אחר כך עוד 5 שנים = 30 תקופות נוספות של נוח (בלי הפקדות).</p>
+            <div class="calc">FV = 30,000 × (1.01)<sup>60</sup> + 550 × FVFA(1%, 30) × (1.01)<sup>30</sup><br>= 54,501 + 25,787<br>= <span class="answer">80,288 ₪</span></div>
+          </div>
+        </div>
+
+        <div class="trap">
+          <span class="trap-label">מלכודת מהדוגמה</span>
+          <p>למה כפול (1.01)<sup>30</sup> בסוף? כי הסדרה של ה-550 ש"ח מסתיימת בסוף שנה 5, אבל אנחנו רוצים לדעת מה יש לנו <em>בסוף שנה 10</em>. כלומר הסכום שהצטבר ממשיך לצבור ריבית עוד 30 תקופות של חודשיים. שכחת? איבדת 4 נקודות.</p>
+        </div>
+      </section>
+
+      <section>
+        <h2><span class="num">1.3</span> מלכודות פלד הקבועות בשאלת הקצבה</h2>
+
+        <div class="trap">
+          <span class="trap-label">תחילת תקופה מול סוף תקופה</span>
+          <p>הנוסחאות הסטנדרטיות הן ל<strong>סוף תקופה</strong>. אם פלד כותב "בתחילת כל שנה" — כפול (1+r) נוסף.</p>
+        </div>
+
+        <div class="trap">
+          <span class="trap-label">ריבית שמשתנה לאורך הזמן</span>
+          <p>בשאלה 1 של שאלות החזרה: 4% ב-3 שנים, 7% ב-2 שנים, 10% בשנה 6. מחלקים לתתי-קטעים — כל קטע מהוון בריבית שלו.</p>
+        </div>
+
+        <div class="trap">
+          <span class="trap-label">המרת ריבית נקובה לאפקטיבית</span>
+          <p>ריבית נקובה 6% בחישוב חודשי = 0.5% לחודש (חלוקה פשוטה). אבל בשאלת אג"ח עם ריבית "אפקטיבית 8.16% שנתית" → לחצי-שנה: <code style="font-family:var(--mono);background:var(--formula-bg);padding:2px 6px;border-radius:3px;">r = (1.0816)<sup>0.5</sup> - 1 = 4%</code>. שני דברים שונים לחלוטין.</p>
+        </div>
+
+        <div class="win">
+          <span class="win-label">איך מרוויחים נקודות</span>
+          <p>תמיד תכתוב את הנוסחה <strong>לפני</strong> שמציבים מספרים. גם אם בסוף תטעה בחשבון, פלד נותן נקודות חלקיות על נוסחה נכונה. זה הקסם של שאלות מימון.</p>
+        </div>
+      </section>
+
+      <div class="chap-nav">
+        <button class="nav-btn" onclick="goTo('cover')">
+          <span class="lab">→ הקודם</span>
+          <span class="tit">סקירה</span>
+        </button>
+        <button class="nav-btn" onclick="goTo('ch5')">
+          <span class="lab">הבא ←</span>
+          <span class="tit">שאלה 5 — הלוואות</span>
+        </button>
+      </div>
+    </article>
+
+    <!-- CH 5 — Loans (Q5) -->
+    <article data-content="ch5">
+      <div class="crumb">פרק 02 <span class="sep">/</span> שאלה 5</div>
+      <h1 class="title">הלוואות וסילוקין <span class="num">Q5</span></h1>
+      <p class="tagline">נוסחה אחת. עם הצמדה — נוסחה אחת + מכפלה. זה הכל.</p>
+
+      <div class="strip">
+        <div class="strip-cell"><strong>שווי נק'</strong><div class="val gold">12-14</div></div>
+        <div class="strip-cell"><strong>זמן ביצוע</strong><div class="val">20-25 דק'</div></div>
+        <div class="strip-cell"><strong>קושי</strong><div class="val">★★★☆☆</div></div>
+        <div class="strip-cell"><strong>מקור בבחינה</strong><div class="val">שאלה 5</div></div>
+      </div>
+
+      <section>
+        <h2><span class="num">2.1</span> הנוסחה היחידה שאתה צריך</h2>
+        <div class="formula">
+          <span class="formula-name">תשלום שפיצר קבוע</span>
+          <code>PV = C × PVFA(r, n)</code>
+          <code>⟹  C = PV ÷ PVFA(r, n)</code>
+          <div class="vars">PV = סכום ההלוואה · C = תשלום קבוע · PVFA = פקטור ערך נוכחי לקצבה</div>
+        </div>
+
+        <p>זה הכל. כל שאלה של הלוואות בנויה על הנוסחה הזו עם וריאציה אחת או שתיים.</p>
+      </section>
+
+      <section>
+        <h2><span class="num">2.2</span> תבנית הפתרון — שלבים קבועים</h2>
+        <ol class="steps">
+          <li><strong>חשב C</strong> — התשלום הקבוע. PV/PVFA(r,n). הצב r ו-n של תקופת התשלום (חודשי/שנתי).</li>
+          <li><strong>שאלת יתרת קרן בשנה k?</strong> יתרת הקרן = PV של התשלומים שנותרו = C × PVFA(r, n−k).</li>
+          <li><strong>שאלת ריבית/קרן בתשלום הבא?</strong> ריבית = יתרת קרן × r. קרן = C − ריבית.</li>
+          <li><strong>הצמדה?</strong> מבצעים את כל החישוב בריבית הריאלית, אחר כך מכפילים את כל תשלום בשנה k במכפיל (1+אינפלציה)^k.</li>
+          <li><strong>שינוי תנאים באמצע?</strong> מחשבים את היתרה (שלב 2), משחקים עם זה כמו על הלוואה חדשה.</li>
+        </ol>
+      </section>
+
+      <section>
+        <h2><span class="num">2.3</span> דוגמה מלאה — שאלה 5, מועד תשע"ט</h2>
+        <div class="example">
+          <div class="example-header">
+            <span>הלוואה צמודה עם פירעון חלקי</span>
+            <span class="src">24.05.2019</span>
+          </div>
+          <div class="example-body">
+            <p>הלוואה 250,000 ש"ח. 10 שנים, שפיצר. <strong>ריבית ריאלית משתנה:</strong> 4% בשנתיים הראשונות, 6% בשמונה השנים שאחר. אינפלציה 2% לשנה. אחרי 5 תשלומים — פירעון חלקי של 55,705. נשאר לשלם בשנתיים. כמה התשלום בכל שנה (כולל הצמדה)?</p>
+
+            <h3 style="color:var(--hot);">שלב 1 — תשלום מקורי C</h3>
+            <p>הריבית משתנה — מהוונים בשני שלבים:</p>
+            <div class="calc">250,000 = C × [PVFA(4%, 2) + PVFA(6%, 8)/(1.04)<sup>2</sup>]<br>250,000 = C × 7.6274<br>C = <span class="answer">32,777 ₪</span></div>
+
+            <h3 style="color:var(--hot);">שלב 2 — יתרת קרן אחרי 5 תשלומים</h3>
+            <p>נותרו 5 תשלומים, כולם בריבית 6%:</p>
+            <div class="calc">יתרה = 32,777 × PVFA(6%, 5)<br>= 32,777 × 4.212<br>= <span class="answer">138,067 ₪</span></div>
+
+            <h3 style="color:var(--hot);">שלב 3 — הצמדה של היתרה</h3>
+            <p>הקרן צמודה — מכפילים באינפלציה ל-5 שנים:</p>
+            <div class="calc">138,067 × (1.02)<sup>5</sup> = 152,437 ₪</div>
+
+            <h3 style="color:var(--hot);">שלב 4 — תשלום אחרי הפירעון החלקי</h3>
+            <p>נותר 152,437 − 55,705 = 96,732. פורסים על שנתיים ב-6%:</p>
+            <div class="calc">96,732 = C × PVFA(6%, 2)<br>96,732 = C × 1.833<br>C = <span class="answer">52,761 ₪</span></div>
+
+            <h3 style="color:var(--hot);">שלב 5 — הוסף הצמדה לכל תשלום</h3>
+            <div class="calc">שנה 6: 52,761 × 1.02 = <span class="answer">53,816 ₪</span><br>שנה 7: 52,761 × (1.02)<sup>2</sup> = <span class="answer">54,893 ₪</span></div>
+          </div>
+        </div>
+      </section>
+
+      <section>
+        <h2><span class="num">2.4</span> מלכודות פלד בשאלת הלוואות</h2>
+
+        <div class="trap">
+          <span class="trap-label">ריבית נקובה לא = ריבית אפקטיבית</span>
+          <p>"ריבית נקובה 6% בחישוב חודשי" → לחודש זה <strong>0.5%</strong>. לא 0.5021% ולא משהו אחר. חלוקה פשוטה.</p>
+        </div>
+
+        <div class="trap">
+          <span class="trap-label">תקופת תשלום ראשון</span>
+          <p>אם התשלום הראשון בעוד 12 חודשים (במקום בעוד חודש) — צריך לדחוס את כל הסדרה שנה אחת אחורה <em>או</em> להכפיל ב-(1+r)<sup>12</sup>. תקרא את השאלה לאט.</p>
+        </div>
+
+        <div class="trap">
+          <span class="trap-label">"מותר לוותר 6 חודשים"</span>
+          <p>שאלה 2 חלק ב' של מבחן תשע"ו — הבנק מציע לוותר על 6 תשלומים תמורת תוספת. מחשבים את <strong>הערך הנוכחי של מה שנחסך</strong> מול <strong>הערך הנוכחי של מה שמשולם נוסף</strong>. אם נוסף > נחסך — לא להסכים.</p>
+        </div>
+
+        <div class="win">
+          <span class="win-label">הצמדה — הטריק הפשוט</span>
+          <p>תמיד תעשה את כל החישובים בריבית הריאלית קודם. את ההצמדה תוסיף רק בסוף, על התשלום בשנה k, על ידי כפל ב-(1+π)<sup>k</sup>. אל תערבב אותם באמצע.</p>
+        </div>
+      </section>
+
+      <div class="chap-nav">
+        <button class="nav-btn" onclick="goTo('ch4')">
+          <span class="lab">→ הקודם</span>
+          <span class="tit">שאלה 4 — קצבאות</span>
+        </button>
+        <button class="nav-btn" onclick="goTo('ch3')">
+          <span class="lab">הבא ←</span>
+          <span class="tit">שאלה 3 — NPV/IRR</span>
+        </button>
+      </div>
+    </article>
+
+    <!-- CH 3 — NPV vs IRR (Q3) -->
+    <article data-content="ch3">
+      <div class="crumb">פרק 03 <span class="sep">/</span> שאלה 3</div>
+      <h1 class="title">NPV מול IRR <span class="num">Q3</span></h1>
+      <p class="tagline">פלד חוזר על אותו הדפוס שנה אחרי שנה. תכיר אותו = הנקודות בכיס.</p>
+
+      <div class="strip">
+        <div class="strip-cell"><strong>שווי נק'</strong><div class="val gold">11-15</div></div>
+        <div class="strip-cell"><strong>זמן ביצוע</strong><div class="val">15-20 דק'</div></div>
+        <div class="strip-cell"><strong>קושי</strong><div class="val">★★☆☆☆</div></div>
+        <div class="strip-cell"><strong>מקור בבחינה</strong><div class="val">שאלה 3</div></div>
+      </div>
+
+      <section>
+        <h2><span class="num">3.1</span> מה השאלה מבקשת — אותו דבר כל שנה</h2>
+        <p>שני פרויקטים מוציאים זה את זה (A ו-B). יש להם תזרימי מזומנים. השאלה היא תמיד:</p>
+        <ul style="padding-right:22px;">
+          <li><strong>"התוו עקומות NPV באותו גרף"</strong> — צריך לציין נקודות חיתוך עם הצירים.</li>
+          <li><strong>"מצאו את שער ההיוון בנקודת החיתוך בין השניים"</strong> — שווה NPV של A ל-NPV של B.</li>
+          <li><strong>"באילו שערי היוון יש סתירה בין כלל הענ"ן לכלל השת"פ?"</strong></li>
+        </ul>
+      </section>
+
+      <section>
+        <h2><span class="num">3.2</span> תבנית הפתרון — 4 צעדים</h2>
+        <ol class="steps">
+          <li><strong>נקודה על ציר ה-Y (r=0):</strong> NPV = סכום של כל התזרימים בלי היוון. פשוט מחבר.</li>
+          <li><strong>נקודה על ציר ה-X (NPV=0):</strong> זה ה-IRR של כל פרויקט. אם יש 2 תקופות בלבד — מציבים X = 1/(1+IRR) ופותרים משוואה ריבועית.</li>
+          <li><strong>נקודת חיתוך בין שני הפרויקטים:</strong> NPV(A) = NPV(B). מעבירים אגף וגם פותרים משוואה ריבועית.</li>
+          <li><strong>סתירה בדירוג:</strong> זה התחום שבין נקודת החיתוך בין השניים לבין IRR של הפרויקט הנמוך יותר. שם הענ"ן והשת"פ נותנים תשובות סותרות.</li>
+        </ol>
+      </section>
+
+      <section>
+        <h2><span class="num">3.3</span> דוגמה מלאה — שאלה 3, מועד תשע"ט</h2>
+        <div class="example">
+          <div class="example-header">
+            <span>שני פרויקטים מוציאים זה את זה</span>
+            <span class="src">24.05.2019</span>
+          </div>
+          <div class="example-body">
+            <p><strong>A:</strong> תזרים −7,200 / 5,000 / 5,000 &nbsp; &nbsp; <strong>B:</strong> תזרים −8,400 / 5,000 / 7,700</p>
+
+            <h3 style="color:var(--hot);">צעד 1 — ענ"ן ב-r=0</h3>
+            <div class="calc">NPV(A) = −7,200 + 5,000 + 5,000 = 2,800<br>NPV(B) = −8,400 + 5,000 + 7,700 = 4,300</div>
+
+            <h3 style="color:var(--hot);">צעד 2 — IRR של כל אחד</h3>
+            <p>A: זה קצבה רגילה (אותם 5,000 פעמיים), אז:</p>
+            <div class="calc">7,200 = 5,000 × PVFA(IRR, 2)<br>PVFA(IRR, 2) = 1.440<br>מלוח: <span class="answer">IRR(A) = 25%</span></div>
+
+            <p>B: תזרים לא אחיד — פתרון משוואה ריבועית. נציב X = 1/(1+IRR):</p>
+            <div class="calc">−8,400 + 5,000X + 7,700X² = 0<br>77X² + 50X − 84 = 0<br>X = (−50 + √(2500 + 25,872)) / 154<br>X = 0.769  ⟹  <span class="answer">IRR(B) = 30%</span></div>
+
+            <h3 style="color:var(--hot);">צעד 3 — נקודת חיתוך בין השניים</h3>
+            <div class="calc">NPV(A) = NPV(B)<br>−7,200 + 5,000/(1+r) + 5,000/(1+r)² = −8,400 + 5,000/(1+r) + 7,700/(1+r)²<br>1,200 = 2,700/(1+r)²<br>(1+r)² = 2.25  ⟹  <span class="answer">r* = 50%</span></div>
+
+            <h3 style="color:var(--hot);">צעד 4 — באילו r תבוצע ההשקעה ב-B?</h3>
+            <p>פרויקט B עדיף על A כשהענ"ן שלו גבוה יותר, וגם NPV שלו חיובי. מהגרף ומהחישובים: B עדיף ב-r&lt;50% (לפני נקודת החיתוך), אבל NPV חיובי רק עד IRR(B)=30%.</p>
+            <div class="answer">תשובה: r &lt; 30%</div>
+          </div>
+        </div>
+      </section>
+
+      <section>
+        <h2><span class="num">3.4</span> טריק החישוב — משוואה ריבועית</h2>
+        <div class="pattern">
+          <span class="pattern-label">חובה לזכור</span>
+          <h3>איך פותרים IRR בלי מחשבון מתקדם</h3>
+          <p>כשהתזרים על שתי תקופות (CF<sub>0</sub>, CF<sub>1</sub>, CF<sub>2</sub>):</p>
+          <div class="formula">
+            <code>CF<sub>0</sub> + CF<sub>1</sub>·X + CF<sub>2</sub>·X² = 0</code>
+            <div class="vars">כאשר X = 1/(1+IRR). אחר כך: IRR = 1/X − 1</div>
+          </div>
+          <p>נוסחת השורשים של משוואה ריבועית aX² + bX + c = 0:</p>
+          <div class="formula">
+            <code>X = (−b ± √(b² − 4ac)) / 2a</code>
+          </div>
+          <p>קח את הפתרון החיובי (אם יש שניים). אם הפתרון שלילי או X&gt;1 — IRR שלילי, לא רלוונטי.</p>
+        </div>
+      </section>
+
+      <div class="chap-nav">
+        <button class="nav-btn" onclick="goTo('ch5')">
+          <span class="lab">→ הקודם</span>
+          <span class="tit">שאלה 5 — הלוואות</span>
+        </button>
+        <button class="nav-btn" onclick="goTo('ch6')">
+          <span class="lab">הבא ←</span>
+          <span class="tit">שאלה 6 — אג"ח</span>
+        </button>
+      </div>
+    </article>
+
+    <!-- CH 6 — Bonds (Q6) -->
+    <article data-content="ch6">
+      <div class="crumb">פרק 04 <span class="sep">/</span> שאלה 6</div>
+      <h1 class="title">אגרות חוב <span class="num">Q6</span></h1>
+      <p class="tagline">10 נקודות, 15 דקות. השאלה הכי קומפקטית במבחן.</p>
+
+      <div class="strip">
+        <div class="strip-cell"><strong>שווי נק'</strong><div class="val gold">10</div></div>
+        <div class="strip-cell"><strong>זמן ביצוע</strong><div class="val">10-15 דק'</div></div>
+        <div class="strip-cell"><strong>קושי</strong><div class="val">★★☆☆☆</div></div>
+        <div class="strip-cell"><strong>מקור בבחינה</strong><div class="val">שאלה 6</div></div>
+      </div>
+
+      <section>
+        <h2><span class="num">4.1</span> הנוסחה היחידה</h2>
+        <div class="formula">
+          <span class="formula-name">מחיר אג"ח</span>
+          <code>P = C × PVFA(r, n) + F ÷ (1+r)<sup>n</sup></code>
+          <div class="vars">F = ערך נקוב · C = תשלום קופון לתקופה (= ריבית נקובה × F) · r = תשואה לפדיון לתקופה · n = מספר התקופות עד פדיון</div>
+        </div>
+
+        <p>זהו. כל שאלות האג"ח של פלד הן וריאציה של זה.</p>
+      </section>
+
+      <section>
+        <h2><span class="num">4.2</span> שני סוגי השאלות</h2>
+
+        <h3>סוג 1 — נתון המחיר, חפש את התשואה</h3>
+        <p>כשנתון P ומבקשים r — זו משוואה במשתנה אחד. אם n קטן (1-3 תקופות) — מציבים X=1/(1+r) ופותרים ריבועית. אם n גדול — מהוונים ידנית בלוח של 4-5% ומתקרבים.</p>
+
+        <h3>סוג 2 — נתונה התשואה, חפש את המחיר</h3>
+        <p>פשוט מציבים בנוסחה. זה החישוב הקל ביותר במבחן.</p>
+      </section>
+
+      <section>
+        <h2><span class="num">4.3</span> דוגמה מלאה — שאלה 6, מועד תשע"ט</h2>
+        <div class="example">
+          <div class="example-header">
+            <span>חברת "נירית" — תשואה לפדיון ומכירה</span>
+            <span class="src">24.05.2019</span>
+          </div>
+          <div class="example-body">
+            <p><strong>נתון:</strong> אג"ח עם ערך נקוב 100, ריבית נקובה 8% לשנה, משולמת חצי-שנתית. הונפקה 1/1/17, פדיון 31/12/22. נרכשה 1/1/18 בתשואה אפקטיבית 10.25%. נמכרה 1/1/19 ב-90.90.</p>
+
+            <h3 style="color:var(--hot);">סעיף א — מחיר הרכישה</h3>
+            <p>קודם נמיר את כל הנתונים לתקופה חצי-שנתית:</p>
+            <div class="calc">תקופות נותרות מ-1/1/18: n = 2 × 5 = 10<br>קופון חצי-שנתי: i = 8%/2 = 4%<br>תשואה חצי-שנתית: r = (1.1025)<sup>0.5</sup> − 1 = 5%</div>
+            <p>עכשיו הצב בנוסחה:</p>
+            <div class="calc">P = 0.04 × 100 × PVFA(5%, 10) + 100/(1.05)<sup>10</sup><br>= 4 × 7.722 + 61.39<br>= <span class="answer">92.28 ₪</span></div>
+
+            <h3 style="color:var(--hot);">סעיף ב — שיעור התשואה (שת"פ)</h3>
+            <p>החזקת את האג"ח שנה. קיבלת 2 קופונים של 4 ש"ח (אחד באמצע ואחד בסוף). מכרת ב-90.90 בסוף:</p>
+            <div class="calc">−92.28 + 4/(1+IRR) + (4+90.90)/(1+IRR)² = 0</div>
+            <p>הצב X=1/(1+IRR):</p>
+            <div class="calc">94.90X² + 4X − 92.28 = 0<br>X = 0.965<br>IRR חצי-שנתי = 1/0.965 − 1 = 3.6%</div>
+            <p>בהמרה לשנתי אפקטיבי:</p>
+            <div class="calc">IRR שנתי = (1.036)² − 1 ≈ <span class="answer">7.3%</span></div>
+          </div>
+        </div>
+      </section>
+
+      <section>
+        <h2><span class="num">4.4</span> מלכודות באג"ח</h2>
+
+        <div class="trap">
+          <span class="trap-label">חצי-שנתי / רבעוני</span>
+          <p>אם ריבית נקובה 8% משולמת פעמיים בשנה — קופון לתקופה = 4%. ריבית נקובה 8% משולמת רבעונית — קופון לתקופה = 2%. תמיד תעבוד <strong>בתקופה</strong> של הקופון, לא שנתי.</p>
+        </div>
+
+        <div class="trap">
+          <span class="trap-label">תשואה אפקטיבית שנתית ↔ תשואה לתקופה</span>
+          <p>אם נותנים תשואה אפקטיבית שנתית 10.25%, ואתה צריך חצי-שנתי: <code>(1.1025)^0.5 − 1 = 5%</code>. לא 5.125% ולא משהו אחר. <strong>שורש</strong>, לא חלוקה.</p>
+        </div>
+
+        <div class="trap">
+          <span class="trap-label">הצמדה</span>
+          <p>אם האג"ח צמודה — תוסיף אינפלציה רק בסוף. תעשה את כל החישוב בריבית הריאלית, ואז תכפיל את הסכומים בכל שנה במכפיל ההצמדה. כמו בהלוואות.</p>
+        </div>
+
+        <div class="win">
+          <span class="win-label">איך מרוויחים את כל 10 הנקודות</span>
+          <p>תזכור: גם אם המספר היוצא לא נכון, פלד נותן ניקוד מלא על הנוסחה הנכונה ועל הגישה. תכתוב בבירור: "r לתקופה = ...", "n = ...", "P = ...". פירוט = נקודות.</p>
+        </div>
+      </section>
+
+      <div class="chap-nav">
+        <button class="nav-btn" onclick="goTo('ch3')">
+          <span class="lab">→ הקודם</span>
+          <span class="tit">שאלה 3 — NPV/IRR</span>
+        </button>
+        <button class="nav-btn" onclick="goTo('ch1')">
+          <span class="lab">הבא ←</span>
+          <span class="tit">שאלה 1 — פרויקט</span>
+        </button>
+      </div>
+    </article>
+
+    <!-- CH 1 — Big project (Q1) -->
+    <article data-content="ch1">
+      <div class="crumb">פרק 05 <span class="sep">/</span> שאלה 1</div>
+      <h1 class="title">פרויקט NPV ענק <span class="num">Q1</span></h1>
+      <p class="tagline">לא להבהל. אנחנו לוקחים רק נתחים שאפשר לנצח.</p>
+
+      <div class="strip">
+        <div class="strip-cell"><strong>שווי מלא</strong><div class="val">27-28 נק'</div></div>
+        <div class="strip-cell"><strong>היעד שלנו</strong><div class="val gold">10-15 נק'</div></div>
+        <div class="strip-cell"><strong>זמן ביצוע</strong><div class="val">25-30 דק'</div></div>
+        <div class="strip-cell"><strong>קושי</strong><div class="val">★★★★★</div></div>
+      </div>
+
+      <section>
+        <h2><span class="num">5.1</span> אסטרטגיה — לא לפתור הכל</h2>
+        <div class="pattern">
+          <span class="pattern-label">המהלך החכם</span>
+          <h3>גש לשאלה 1 רק אחרי שסיימת את 3, 4, 5, 6</h3>
+          <p>בשלב הזה כבר יש לך 35-50 נק' בטוחות. עכשיו, מה לעשות בשאלה 1?</p>
+          <ol>
+            <li><strong>תקרא את כל הנתונים ותסמן.</strong> 3-4 דקות שיהיה לך זמן לחשוב.</li>
+            <li><strong>חשב את ההכנסות וההוצאות השוטפות.</strong> זה הקל ביותר. דרך PVFA. שווה 5-8 נק'.</li>
+            <li><strong>חשב את הפחת.</strong> השקעה/אורך חיים. הכפל בשיעור המס. הוסף ל-PV. שווה 3-5 נק'.</li>
+            <li><strong>חשב את ההשקעה הראשונית והערך השיורי.</strong> שווה 2-4 נק'.</li>
+            <li><strong>סכום את הענ"ן ותכתוב מסקנה.</strong> גם אם המספרים לא מדויקים — אם הסיכום נראה הגיוני, יש עוד 2 נק'.</li>
+          </ol>
+        </div>
+      </section>
+
+      <section>
+        <h2><span class="num">5.2</span> מבנה תזרים מזומנים סטנדרטי של פלד</h2>
+        <table class="strategy">
+          <thead>
+            <tr><th>רכיב</th><th>איך מחשבים</th><th>סימן</th></tr>
+          </thead>
+          <tbody>
+            <tr><td>השקעה ראשונית</td><td>−I (כל ההשקעה במכונות + מבנים + הון חוזר)</td><td>שנה 0</td></tr>
+            <tr><td>הכנסות שוטפות (אחרי מס)</td><td>R × (1−t) × PVFA(r,n)</td><td>+</td></tr>
+            <tr><td>הוצאות שוטפות (אחרי מס)</td><td>C × (1−t) × PVFA(r,n)</td><td>−</td></tr>
+            <tr><td>מגן מס מפחת</td><td>D × t × PVFA(r,n) — כאשר D = השקעה/אורך פחת</td><td>+</td></tr>
+            <tr><td>הון חוזר חוזר בסוף</td><td>+W / (1+r)<sup>n</sup></td><td>+</td></tr>
+            <tr><td>ערך שיורי אחרי מס</td><td>[Salvage − t<sub>הון</sub> × (Salvage − ערך ספרי)] / (1+r)<sup>n</sup></td><td>+</td></tr>
+          </tbody>
+        </table>
+      </section>
+
+      <section>
+        <h2><span class="num">5.3</span> מלכודות פלד הקבועות — שווה זהב</h2>
+
+        <div class="trap">
+          <span class="trap-label">עלות שקועה (Sunk Cost)</span>
+          <p>בכל בחינה פלד שותל "יועץ כלכלי שכבר שולם" או "סקר שכבר בוצע". <strong>זה לא נכלל בחישוב.</strong> כסף ששולם — שולם. רק שווה לזהות אותו ולכתוב במפורש: "100,000 ש"ח של היועץ הם עלות שקועה ולא רלוונטיים."</p>
+        </div>
+
+        <div class="trap">
+          <span class="trap-label">עובד קיים שמשקיע 25% מזמנו</span>
+          <p>אם עובד <strong>ממילא מועסק</strong> ושכרו לא ישתנה — <strong>עלות לא תוספתית = לא בחישוב</strong>. רק העלויות שמופיעות בגלל הפרויקט נכנסות.</p>
+        </div>
+
+        <div class="trap">
+          <span class="trap-label">מבנה קיים שאי אפשר היה למכור</span>
+          <p>אם מבנה קיים <em>היה</em> נמכר היום ב-150 מיליון אלמלא הפרויקט — אז 150 מיליון הם <strong>עלות אלטרנטיבית</strong>, וכן נכלל. אם אי אפשר היה למכור / לא צפוי שימוש — אפס.</p>
+        </div>
+
+        <div class="trap">
+          <span class="trap-label">מס שונה על רווחי הון</span>
+          <p>פלד תמיד מבדיל: מס שוטף 30-40%, מס רווחי הון 15-25%. במכירת ציוד בסוף הפרויקט: רווח הון = מחיר − ערך ספרי. ההון רק על הרווח, לא על כל המחיר.</p>
+        </div>
+
+        <div class="trap">
+          <span class="trap-label">דמי שכירות בתחילת שנה</span>
+          <p>אם הכנסה בתחילת שנה — תכפיל את ה-PVFA ב-(1+r). אם בסוף שנה — PVFA רגיל.</p>
+        </div>
+
+        <div class="win">
+          <span class="win-label">השאלה הסופית</span>
+          <p>תמיד תכתוב בסוף: <strong>"NPV &gt; 0 ⟹ הפרויקט כדאי"</strong> או הפוך. גם אם המספר שלך לא מדויק, המסקנה הנכונה לפי המספר שיצא לך = נקודה.</p>
+        </div>
+      </section>
+
+      <section>
+        <h2><span class="num">5.4</span> דוגמה — הקטעים שאתה חייב להצליח</h2>
+        <div class="example">
+          <div class="example-header">
+            <span>פרויקט "נגב" — מרכז מסחרי</span>
+            <span class="src">24.05.2019</span>
+          </div>
+          <div class="example-body">
+            <p>נתונים מקוצרים: השקעה 130.5 מיליון, אורך 8 שנים, הכנסות 45 מ' בתחילת שנה, הקטנת הכנסות אחרת 10 מ' בתחילת שנה, שיווק 2 מ' בסוף, אחזקה 4 מ' ב-3 שנים ו-6 מ' ב-5 שנים, עובדים 4×250,000, מחיר הון 15%, מס שוטף 30%, מס הון 25%.</p>
+
+            <h3 style="color:var(--hot);">קטע א — הכנסות נטו (אחרי מס) בתחילת שנה</h3>
+            <p>הכנסות נטו ממרכז = 45 מ' − 10 מ' (קניבליזציה) = 35 מ' לשנה. בתחילת שנה ⟹ כפול (1.15):</p>
+            <div class="calc">PV הכנסות = 35,000,000 × (1−0.3) × PVFA(15%, 8) × 1.15<br>= 35M × 0.7 × 4.487 × 1.15<br>≈ 126.3 מיליון</div>
+
+            <h3 style="color:var(--hot);">קטע ב — מגן מס מפחת</h3>
+            <p>פחת על מבנים+ציוד: 120M/10 = 12M לשנה (אבל רק 8 שנים בפרויקט). פחת על שיפוץ: 500K/5 = 100K לשנה (5 שנים).</p>
+            <div class="calc">מגן מבנים = 12M × 0.3 × PVFA(15%, 8) = 16.15 מ'<br>מגן שיפוץ = 100K × 0.3 × PVFA(15%, 5) = 100.5K</div>
+
+            <p>זה כבר ~145 מ' של ערך נוכחי לטובת הפרויקט, מאלה לבד. עוד צריך לחבר הוצאות (לפלמינוס), השקעה ראשונית, ערך שיורי, ובאלה הענ"ן יוצא <span class="answer">−3.74 מ' &lt; 0 ⟹ לא כדאי</span>.</p>
+
+            <p style="color:var(--ink-soft);font-size:13px;margin-top:14px;">המסר: גם אם לא תפתור הכל — אם פתחת את התזרים, חישבת את ה-PV של ההכנסות עם המס, וזיהית את הפחת — כבר יש 10-12 נק' בכיס.</p>
+          </div>
+        </div>
+      </section>
+
+      <div class="chap-nav">
+        <button class="nav-btn" onclick="goTo('ch6')">
+          <span class="lab">→ הקודם</span>
+          <span class="tit">שאלה 6 — אג"ח</span>
+        </button>
+        <button class="nav-btn" onclick="goTo('formulas')">
+          <span class="lab">הבא ←</span>
+          <span class="tit">דף נוסחאות</span>
+        </button>
+      </div>
+    </article>
+
+    <!-- CH 2 — Skip (placeholder) -->
+    <article data-content="ch2">
+      <div class="crumb">פרק 06 <span class="sep">/</span> שאלה 2 — מדלגים</div>
+      <h1 class="title">תיק השקעות <span class="num">Q2</span></h1>
+      <p class="tagline">24-25 נקודות שאנחנו מוותרים עליהם. למה — והאם יש דרך לקחת כמה נקודות בכל זאת.</p>
+
+      <section>
+        <h2><span class="num">6.1</span> למה אנחנו מדלגים</h2>
+        <div class="pattern">
+          <span class="pattern-label">החלטה אסטרטגית</span>
+          <h3>החישוב הוא הזמן/נקודות הכי גרוע במבחן</h3>
+          <p>שאלה 2 דורשת:</p>
+          <ul>
+            <li>חישוב תוחלות תשואה — קל</li>
+            <li>חישוב סטיית תקן של תיק עם נוסחה ארוכה (משלוש איברים — תוחלות, שונויות, מתאמים)</li>
+            <li>גרף תוחלת-סטיית תקן עם הצבעה של עדיפויות</li>
+            <li>פתרון משוואה ריבועית כדי למצוא הרכב תיק נתון</li>
+            <li>חישוב הרכב MVP (תיק עם סטיית תקן מינימלית)</li>
+          </ul>
+          <p>זה <strong>הרבה</strong> עבודה. וגם אם תצליח בחצי, סיכוי גבוה שתפסיד חצי מהנקודות.</p>
+        </div>
+      </section>
+
+      <section>
+        <h2><span class="num">6.2</span> אבל אם נשאר זמן — לקחת 3-5 נק' קלות</h2>
+        <p>אם סיימת את כל השאלות הבטוחות עם זמן עודף, יש סעיף אחד בשאלה 2 שתמיד נותן 3-5 נק' בקלות:</p>
+
+        <div class="formula">
+          <span class="formula-name">תוחלת תשואה של תיק</span>
+          <code>E(R<sub>p</sub>) = w<sub>A</sub>·E(R<sub>A</sub>) + w<sub>B</sub>·E(R<sub>B</sub>)</code>
+          <div class="vars">w = משקל של כל מניה · ממוצע משוקלל פשוט</div>
+        </div>
+
+        <p>זה ממוצע משוקלל. אם המשקלים שווים (50-50): פשוט (E(R<sub>A</sub>) + E(R<sub>B</sub>)) / 2. תיכנס לסעיף "חישוב תוחלת תשואה של תיק" — תעשה את החישוב הזה — תרוויח 3 נק'. אחר כך תמשיך הלאה.</p>
+
+        <div class="win">
+          <span class="win-label">קח רק את הקל ועזוב</span>
+          <p>אל תיכנס לחישוב סטיית תקן או גרף. רק תוחלות. תכתוב משפט אחד "חישוב סטיית התקן דורש את נוסחת השונות עם מתאמים — לא הספקתי" ועבור לסעיף הבא או חזור לחפש איפה הספקת לטעות.</p>
+        </div>
+      </section>
+
+      <div class="chap-nav">
+        <button class="nav-btn" onclick="goTo('ch1')">
+          <span class="lab">→ הקודם</span>
+          <span class="tit">שאלה 1 — פרויקט</span>
+        </button>
+        <button class="nav-btn" onclick="goTo('formulas')">
+          <span class="lab">הבא ←</span>
+          <span class="tit">דף נוסחאות</span>
+        </button>
+      </div>
+    </article>
+
+    <!-- FORMULAS -->
+    <article data-content="formulas">
+      <div class="crumb">דף נוסחאות <span class="sep">/</span> חיתוך לעיקר</div>
+      <h1 class="title">דף נוסחאות מסומן <span class="num">∑</span></h1>
+      <p class="tagline">דף הנוסחאות מותר בבחינה. הנה איזה לשלוף בכל שאלה.</p>
+
+      <section>
+        <h2><span class="num">∑.1</span> שאלה 4 — קצבאות</h2>
+        <table class="strategy">
+          <thead><tr><th>נוסחה</th><th>מתי</th></tr></thead>
+          <tbody>
+            <tr><td><code style="font-family:var(--mono);">FV = PV × (1+r)<sup>n</sup></code></td><td>סכום חד-פעמי גדל</td></tr>
+            <tr><td><code style="font-family:var(--mono);">PV = FV / (1+r)<sup>n</sup></code></td><td>סכום עתידי בערך של היום</td></tr>
+            <tr><td><code style="font-family:var(--mono);">FVA = C × [((1+r)<sup>n</sup>−1)/r]</code></td><td>סדרת הפקדות → סכום סופי</td></tr>
+            <tr><td><code style="font-family:var(--mono);">PVA = C × [(1−(1+r)<sup>−n</sup>)/r]</code></td><td>סדרת תשלומים → ערך היום</td></tr>
+            <tr><td>כפול (1+r)</td><td>אם תשלום בתחילת תקופה במקום בסוף</td></tr>
+          </tbody>
+        </table>
+      </section>
+
+      <section>
+        <h2><span class="num">∑.2</span> שאלה 5 — הלוואות</h2>
+        <table class="strategy">
+          <thead><tr><th>נוסחה</th><th>מתי</th></tr></thead>
+          <tbody>
+            <tr><td><code style="font-family:var(--mono);">C = PV / PVFA(r,n)</code></td><td>גודל תשלום חודשי/שנתי</td></tr>
+            <tr><td><code style="font-family:var(--mono);">יתרת קרן<sub>k</sub> = C × PVFA(r, n−k)</code></td><td>כמה חייבים אחרי k תשלומים</td></tr>
+            <tr><td><code style="font-family:var(--mono);">ריבית<sub>k</sub> = יתרת קרן × r</code></td><td>כמה מהתשלום הולך לריבית</td></tr>
+            <tr><td><code style="font-family:var(--mono);">תשלום עם הצמדה = C × (1+π)<sup>k</sup></code></td><td>הלוואה צמודה</td></tr>
+            <tr><td><code style="font-family:var(--mono);">r<sub>אפק' לחודש</sub> = (1+r<sub>שנתי</sub>)<sup>1/12</sup>−1</code></td><td>המרה אפקטיבית</td></tr>
+            <tr><td><code style="font-family:var(--mono);">r<sub>נקובה</sub>/m = r<sub>תקופתי</sub></code></td><td>המרה נקובה — חלוקה פשוטה</td></tr>
+          </tbody>
+        </table>
+      </section>
+
+      <section>
+        <h2><span class="num">∑.3</span> שאלה 3 — NPV/IRR</h2>
+        <table class="strategy">
+          <thead><tr><th>נוסחה</th><th>מתי</th></tr></thead>
+          <tbody>
+            <tr><td><code style="font-family:var(--mono);">NPV = ΣCF<sub>t</sub>/(1+r)<sup>t</sup></code></td><td>חישוב ערך נוכחי נטו</td></tr>
+            <tr><td><code style="font-family:var(--mono);">NPV(r=0) = ΣCF<sub>t</sub></code></td><td>נקודת חיתוך עם ציר Y</td></tr>
+            <tr><td><code style="font-family:var(--mono);">a·X² + b·X + c = 0</code> ו-<code style="font-family:var(--mono);">X = 1/(1+IRR)</code></td><td>למצוא IRR בתזרים 2-תקופות</td></tr>
+            <tr><td>X = (−b ± √(b²−4ac)) / 2a</td><td>נוסחת השורשים</td></tr>
+          </tbody>
+        </table>
+      </section>
+
+      <section>
+        <h2><span class="num">∑.4</span> שאלה 6 — אג"ח</h2>
+        <table class="strategy">
+          <thead><tr><th>נוסחה</th><th>מתי</th></tr></thead>
+          <tbody>
+            <tr><td><code style="font-family:var(--mono);">P = C × PVFA(r,n) + F/(1+r)<sup>n</sup></code></td><td>מחיר אג"ח</td></tr>
+            <tr><td><code style="font-family:var(--mono);">i<sub>חצי-שנתי</sub> = i<sub>שנתי</sub>/2</code></td><td>קופון חצי-שנתי (חלוקה פשוטה)</td></tr>
+            <tr><td><code style="font-family:var(--mono);">r<sub>חצי</sub> = (1+r<sub>שנתי</sub>)<sup>0.5</sup>−1</code></td><td>תשואה חצי-שנתית מאפקטיבית (שורש!)</td></tr>
+            <tr><td><code style="font-family:var(--mono);">r<sub>שנתי</sub> = (1+r<sub>חצי</sub>)<sup>2</sup>−1</code></td><td>תשואה חזרה לשנתי</td></tr>
+          </tbody>
+        </table>
+      </section>
+
+      <div class="chap-nav">
+        <button class="nav-btn" onclick="goTo('ch2')">
+          <span class="lab">→ הקודם</span>
+          <span class="tit">שאלה 2 — מדלגים</span>
+        </button>
+        <button class="nav-btn" onclick="goTo('strategy')">
+          <span class="lab">הבא ←</span>
+          <span class="tit">יום המבחן</span>
+        </button>
+      </div>
+    </article>
+
+    <!-- STRATEGY -->
+    <article data-content="strategy">
+      <div class="crumb">יום המבחן <span class="sep">/</span> אסטרטגיה</div>
+      <h1 class="title">יום המבחן <span class="num">⚡</span></h1>
+      <p class="tagline">תוכנית 180 דקות. סדר ההתקפה.</p>
+
+      <section>
+        <h2><span class="num">⚡.1</span> סדר הפתיחה — לא לפי מספר השאלה!</h2>
+
+        <table class="strategy">
+          <thead>
+            <tr><th>סדר</th><th>שאלה</th><th>זמן יעד</th><th>נק' יעד</th></tr>
+          </thead>
+          <tbody>
+            <tr class="must"><td>1</td><td>שאלה 6 — אג"ח</td><td>15 דק'</td><td class="points">10</td></tr>
+            <tr class="must"><td>2</td><td>שאלה 4 — קצבאות</td><td>20 דק'</td><td class="points">13</td></tr>
+            <tr class="must"><td>3</td><td>שאלה 5 — הלוואות</td><td>30 דק'</td><td class="points">12</td></tr>
+            <tr class="must"><td>4</td><td>שאלה 3 — NPV/IRR</td><td>30 דק'</td><td class="points">11</td></tr>
+            <tr><td>5</td><td>שאלה 1 — פרויקט (חלקי)</td><td>40 דק'</td><td class="points">10-15</td></tr>
+            <tr><td>6</td><td>שאלה 2 — רק E(R) של תיק</td><td>10 דק'</td><td class="points">3-5</td></tr>
+            <tr style="border-top:2px solid var(--hot);"><td colspan="2"><strong>בדיקה ועריכה</strong></td><td>35 דק'</td><td class="points">—</td></tr>
+          </tbody>
+        </table>
+
+        <div class="win">
+          <span class="win-label">למה בסדר הזה</span>
+          <p>פתיחה ב-6 (אג"ח) = ביטחון בתוך 15 דקות. זה מרגיע. אחר כך 4 ו-5 — נושאי קצבה ושפיצר שעובדים על אותה לוגיקה. אחר כך 3 — דורש קצת זמן לחשוב. ובסוף ניגשים לפרויקט עם 35-50 נק' כבר בכיס. גם אם נדפקת בשאלה 1 — עברת.</p>
+        </div>
+      </section>
+
+      <section>
+        <h2><span class="num">⚡.2</span> מה לקחת איתך</h2>
+        <ul style="padding-right:22px;">
+          <li>מחשבון מדעי (עם <code style="font-family:var(--mono);">x<sup>y</sup></code>)</li>
+          <li>שני עטים — שחור וכחול</li>
+          <li>עיפרון + מחק (לטיוטה ולגרפים)</li>
+          <li>סרגל (לגרף שאלה 3)</li>
+          <li>טישו / מים — תייבש את הראש לאמצע הבחינה</li>
+          <li>שעון אנלוגי או דיגיטלי קטן (לא בטלפון)</li>
+        </ul>
+      </section>
+
+      <section>
+        <h2><span class="num">⚡.3</span> 10 כללי זהב</h2>
+        <ol style="padding-right:22px;">
+          <li><strong>תכתוב את הנוסחה לפני הצבת המספרים.</strong> חצי מהניקוד על הנוסחה הנכונה.</li>
+          <li><strong>תזהה ותכתוב במפורש: "זו עלות שקועה, לא נכלל".</strong> פלד נותן על זה נקודה.</li>
+          <li><strong>בכל חישוב — תציין יחידות.</strong> "ש"ח", "%", "שנים".</li>
+          <li><strong>תקרא את השאלה פעמיים</strong> לפני שמתחילים לכתוב.</li>
+          <li><strong>אם תקועים — תכתוב את מה שיש לך ועוברים.</strong> חוזרים בסוף.</li>
+          <li><strong>מסקנה בסוף כל שאלה.</strong> "NPV &gt; 0 ⟹ כדאי" / "המסלול ב' עדיף". נקודה חינם.</li>
+          <li><strong>אל תמחק תשובה שגויה — תקיף בעיגול</strong> ותכתוב חדשה לידה. אם הבודק לא מסכים עם החדשה, יש לו את הישנה.</li>
+          <li><strong>השאלות לא חובה לפי הסדר.</strong> סמן "שאלה 6" בראש הדף ואל תפחד.</li>
+          <li><strong>אם הזמן נגמר — לפחות תכתוב את הנוסחה</strong> אפילו בלי לסיים. נקודה אחת לפחות.</li>
+          <li><strong>כשתסיים — תקדיש 15 דק' לעבור הכל מחדש.</strong> טעויות חשבון = הכי שכיח להפסיד נקודות.</li>
+        </ol>
+      </section>
+
+      <section>
+        <h2><span class="num">⚡.4</span> בלילה לפני הבחינה</h2>
+        <p>אל תלמד דברים חדשים. תעבור על דף הנוסחאות פעם אחת. תוודא שיש לך מחשבון. תלך לישון ב-11. מחר ב-7 תשתה קפה ותעבור על הטבלאות שבנינו. תגיע לבחינה רגוע ומאוחד. <strong style="color:var(--gold)">אתה הולך לעבור.</strong></p>
+      </section>
+
+      <div class="chap-nav">
+        <button class="nav-btn" onclick="goTo('formulas')">
+          <span class="lab">→ הקודם</span>
+          <span class="tit">דף נוסחאות</span>
+        </button>
+        <button class="nav-btn" onclick="goTo('cover')">
+          <span class="lab">חזור להתחלה</span>
+          <span class="tit">סקירה</span>
+        </button>
+      </div>
+    </article>
+
+  </main>
+</div>
+
+<script>
+  function updateCountdown() {
+    const exam = new Date('2026-05-29T09:00:00');
+    const now = new Date();
+    const diff = exam - now;
+    const days = Math.floor(diff / (1000 * 60 * 60 * 24));
+    const hours = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+    const el = document.getElementById('countdown');
+    if (diff > 0) {
+      el.textContent = `${days} ימים ${hours} שעות`;
+    } else {
+      el.textContent = 'בהצלחה!';
+    }
+  }
+  updateCountdown();
+  setInterval(updateCountdown, 60000);
+
+  function goTo(ch) {
+    document.querySelectorAll('.toc a').forEach(a => a.classList.remove('active'));
+    document.querySelector(`[data-ch="${ch}"]`).classList.add('active');
+    document.querySelectorAll('article').forEach(a => a.classList.remove('active'));
+    document.querySelector(`[data-content="${ch}"]`).classList.add('active');
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
+
+  document.querySelectorAll('.toc a').forEach(link => {
+    link.addEventListener('click', (e) => {
+      e.preventDefault();
+      goTo(link.dataset.ch);
+    });
+  });
+</script>
+</body>
+</html>
