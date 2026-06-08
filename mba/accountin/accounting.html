@@ -1,0 +1,911 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>חשבונאות · פוגל · 67.codes</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Heebo:wght@300;400;500;700;900&family=Frank+Ruhl+Libre:wght@500;700;900&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --ink:#1a1410;
+  --paper:#f5f0e6;
+  --paper-2:#ebe3d3;
+  --plum:#6b2d4f;
+  --plum-dark:#451a32;
+  --plum-light:#9c4d74;
+  --gold:#b8860b;
+  --gold-light:#d9a93a;
+  --teal:#2a6b62;
+  --red:#b23a2e;
+  --green:#3a7d4f;
+  --line:#d4c9b3;
+  --shadow:rgba(69,26,50,.14);
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{
+  font-family:'Heebo',sans-serif;background:var(--paper);color:var(--ink);line-height:1.65;
+  background-image:
+    radial-gradient(circle at 15% 8%, rgba(156,77,116,.07), transparent 40%),
+    radial-gradient(circle at 85% 92%, rgba(184,134,11,.06), transparent 40%);
+  min-height:100vh;
+}
+.topbar{position:sticky;top:0;z-index:100;background:var(--plum-dark);color:var(--paper);display:flex;align-items:center;justify-content:space-between;padding:.7rem 1.4rem;box-shadow:0 2px 20px var(--shadow);border-bottom:3px solid var(--gold)}
+.brand{display:flex;align-items:center;gap:.6rem;font-weight:900;font-size:1.15rem;letter-spacing:-.5px}
+.brand .turtle{font-size:1.4rem}
+.brand small{font-weight:400;opacity:.7;font-size:.78rem;font-family:'JetBrains Mono',monospace}
+.topbar-right{display:flex;align-items:center;gap:1rem}
+.progress-mini{font-family:'JetBrains Mono',monospace;font-size:.8rem;opacity:.85}
+.topbar-links{display:flex;gap:.4rem}
+.topbar-links a{color:var(--paper);text-decoration:none;font-size:.8rem;font-weight:500;padding:.35rem .7rem;border-radius:8px;opacity:.75;transition:.15s}
+.topbar-links a:hover{opacity:1;background:rgba(255,255,255,.1)}
+
+.shell{display:flex;max-width:1280px;margin:0 auto}
+nav.side{width:240px;flex-shrink:0;position:sticky;top:57px;height:calc(100vh - 57px);overflow-y:auto;padding:1.4rem .9rem;border-left:1px solid var(--line)}
+nav.side h3{font-size:.72rem;text-transform:uppercase;letter-spacing:1.5px;color:var(--gold);margin:1.2rem .5rem .5rem;font-weight:700}
+nav.side h3:first-child{margin-top:0}
+.navlink{display:flex;align-items:center;gap:.6rem;padding:.55rem .7rem;border-radius:10px;color:var(--ink);text-decoration:none;font-weight:500;font-size:.9rem;cursor:pointer;transition:.18s;margin-bottom:.15rem}
+.navlink:hover{background:var(--paper-2)}
+.navlink.active{background:var(--plum);color:var(--paper);box-shadow:0 3px 10px var(--shadow)}
+.navlink .n{font-family:'JetBrains Mono',monospace;font-weight:700;font-size:.78rem;background:var(--paper-2);color:var(--plum-dark);width:26px;height:26px;display:grid;place-items:center;border-radius:7px;flex-shrink:0}
+.navlink.active .n{background:var(--gold);color:var(--plum-dark)}
+
+main{flex:1;padding:2rem 2.4rem 5rem;min-width:0}
+.lesson{display:none;animation:fade .4s ease}
+.lesson.active{display:block}
+@keyframes fade{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:none}}
+
+.lesson-head{margin-bottom:1.6rem;padding-bottom:1.2rem;border-bottom:2px solid var(--line)}
+.lesson-tag{display:inline-block;font-family:'JetBrains Mono',monospace;font-size:.75rem;background:var(--plum);color:var(--paper);padding:.25rem .7rem;border-radius:20px;margin-bottom:.7rem;font-weight:700;letter-spacing:.5px}
+.lesson h1{font-family:'Frank Ruhl Libre',serif;font-size:2.2rem;font-weight:900;line-height:1.2;color:var(--plum-dark)}
+.lesson .sub{font-size:1.05rem;color:#6a5d52;margin-top:.4rem}
+
+h2.block{font-family:'Frank Ruhl Libre',serif;font-size:1.5rem;font-weight:700;color:var(--plum-dark);margin:2.2rem 0 .9rem;display:flex;align-items:center;gap:.6rem}
+h2.block .ico{font-size:.85rem;background:var(--gold);color:#fff;width:30px;height:30px;display:grid;place-items:center;border-radius:9px;flex-shrink:0}
+h3.sub-block{font-size:1.15rem;font-weight:700;color:var(--plum);margin:1.4rem 0 .5rem}
+p{margin:.7rem 0}
+strong{color:var(--plum-dark);font-weight:700}
+
+.card{background:#fff;border:1px solid var(--line);border-radius:16px;padding:1.3rem 1.5rem;margin:1.1rem 0;box-shadow:0 4px 18px var(--shadow)}
+.idea{background:linear-gradient(135deg,var(--plum-dark),var(--plum));color:var(--paper);border:none}
+.idea h2.block,.idea strong{color:var(--gold-light)}
+.idea .ico{background:var(--gold)}
+.key{border-right:5px solid var(--gold);background:var(--paper-2);border-radius:8px;padding:.9rem 1.2rem;margin:1rem 0}
+.key b{color:var(--gold)}
+.trick{border-right:5px solid var(--red);background:#fae8e5;border-radius:8px;padding:.9rem 1.2rem;margin:1rem 0}
+.trick::before{content:'⚡ טריק למבחן';display:block;font-weight:900;color:var(--red);font-size:.85rem;margin-bottom:.3rem}
+
+.tbl-wrap{overflow-x:auto;margin:1.1rem 0;border-radius:12px;border:1px solid var(--line)}
+table{border-collapse:collapse;width:100%;background:#fff;font-size:.92rem}
+th,td{padding:.6rem .8rem;text-align:center;border:1px solid var(--line)}
+th{background:var(--plum-dark);color:var(--paper);font-weight:700;font-size:.85rem}
+tr:nth-child(even) td{background:var(--paper)}
+td.hl{background:var(--gold-light)!important;font-weight:700}
+td.r{text-align:right}
+.formula-cell{font-family:'JetBrains Mono',monospace;color:var(--plum);font-weight:700}
+
+/* journal entry table */
+.journal{font-family:'Heebo';width:100%;border-collapse:collapse;margin:.6rem 0;border-radius:10px;overflow:hidden;border:1px solid var(--line)}
+.journal th{background:var(--plum-dark);color:#fff;font-size:.8rem;padding:.45rem}
+.journal td{padding:.45rem .8rem;border:1px solid var(--line);font-size:.92rem}
+.journal .debit{text-align:right;background:#fff}
+.journal .credit{text-align:right;padding-right:2.5rem;color:var(--teal);background:#fafbfa}
+.journal .amt{font-family:'JetBrains Mono',monospace;text-align:center;width:90px}
+.journal .ch{color:var(--plum);font-weight:700}
+.journal .cr{color:var(--teal);font-weight:700}
+
+.fbox{font-family:'JetBrains Mono',monospace;background:var(--plum-dark);color:var(--gold-light);padding:.5rem 1rem;border-radius:8px;display:inline-block;font-weight:700;margin:.3rem .2rem;font-size:1rem}
+.fbox-row{display:flex;flex-wrap:wrap;gap:.4rem;margin:1rem 0}
+
+.calc{background:linear-gradient(160deg,#fff,var(--paper));border:2px solid var(--plum-light);border-radius:18px;padding:1.4rem 1.5rem;margin:1.4rem 0;box-shadow:0 6px 24px var(--shadow)}
+.calc-title{font-weight:900;color:var(--plum-dark);font-size:1.1rem;margin-bottom:.3rem;display:flex;align-items:center;gap:.5rem}
+.calc-title::before{content:'🧮';font-size:1.2rem}
+.calc-desc{font-size:.9rem;color:#6a5d52;margin-bottom:1rem}
+.calc-inputs{display:flex;flex-wrap:wrap;gap:1rem;margin-bottom:1rem}
+.inp-group{display:flex;flex-direction:column;gap:.25rem}
+.inp-group label{font-size:.8rem;font-weight:700;color:var(--plum)}
+.inp-group input,.inp-group select{font-family:'JetBrains Mono',monospace;font-size:1rem;padding:.5rem .7rem;border:1.5px solid var(--line);border-radius:9px;width:140px;background:#fff;color:var(--ink);text-align:center}
+.inp-group input:focus,.inp-group select:focus{outline:none;border-color:var(--plum-light)}
+.calc-out{background:var(--plum-dark);color:var(--paper);border-radius:12px;padding:1rem 1.2rem;font-size:.95rem;min-height:48px}
+.calc-out .res{font-family:'JetBrains Mono',monospace;color:var(--gold-light);font-weight:700;font-size:1.15rem}
+.calc-out .step{display:block;font-size:.85rem;opacity:.85;margin:.2rem 0;font-family:'JetBrains Mono',monospace}
+
+button.btn{font-family:'Heebo',sans-serif;font-weight:700;cursor:pointer;background:var(--plum);color:var(--paper);border:none;padding:.55rem 1.2rem;border-radius:10px;font-size:.92rem;transition:.18s}
+button.btn:hover{background:var(--plum-dark);transform:translateY(-1px)}
+button.btn.gold{background:var(--gold)}
+button.btn.gold:hover{background:var(--gold-light);color:var(--plum-dark)}
+button.btn.ghost{background:transparent;color:var(--plum);border:1.5px solid var(--plum)}
+
+.quiz{background:#fff;border:1px solid var(--line);border-radius:16px;padding:1.3rem 1.5rem;margin:1.1rem 0;box-shadow:0 4px 18px var(--shadow)}
+.quiz .q{font-weight:700;color:var(--plum-dark);margin-bottom:.8rem;font-size:1.02rem}
+.opt{display:block;width:100%;text-align:right;background:var(--paper);border:1.5px solid var(--line);border-radius:10px;padding:.6rem .9rem;margin:.4rem 0;cursor:pointer;font-size:.92rem;font-family:'Heebo',sans-serif;transition:.15s}
+.opt:hover{border-color:var(--plum-light);background:var(--paper-2)}
+.opt.correct{background:#d6ecdd;border-color:var(--green);color:var(--green);font-weight:700}
+.opt.wrong{background:#fae8e5;border-color:var(--red);color:var(--red)}
+.opt:disabled{cursor:default}
+.quiz-fb{margin-top:.7rem;font-size:.9rem;padding:.6rem .9rem;border-radius:9px;display:none}
+.quiz-fb.show{display:block}
+.quiz-fb.ok{background:#d6ecdd;color:var(--green)}
+.quiz-fb.no{background:#fae8e5;color:var(--red)}
+
+.lesson-nav{display:flex;justify-content:space-between;margin-top:3rem;padding-top:1.5rem;border-top:2px solid var(--line);gap:1rem}
+.lesson-nav button{flex:1;max-width:260px}
+.lesson-nav .spacer{flex:1}
+
+.hero{text-align:center;padding:2rem 1rem 1rem}
+.hero .turtle-big{font-size:3.5rem;margin-bottom:.5rem}
+.hero h1{font-family:'Frank Ruhl Libre',serif;font-size:2.6rem;font-weight:900;color:var(--plum-dark);line-height:1.15}
+.hero .sub{font-size:1.15rem;color:#6a5d52;max-width:620px;margin:.8rem auto 0}
+.cards-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:1rem;margin-top:2rem}
+.topic-card{background:#fff;border:1px solid var(--line);border-radius:16px;padding:1.3rem;cursor:pointer;transition:.2s;box-shadow:0 4px 18px var(--shadow);border-top:4px solid var(--plum)}
+.topic-card:hover{transform:translateY(-4px);box-shadow:0 10px 30px var(--shadow)}
+.topic-card .tc-n{font-family:'JetBrains Mono',monospace;font-size:.8rem;color:var(--gold);font-weight:700}
+.topic-card h3{font-family:'Frank Ruhl Libre',serif;font-size:1.2rem;color:var(--plum-dark);margin:.3rem 0}
+.topic-card p{font-size:.86rem;color:#6a5d52;margin:0}
+
+.exam-strip{background:linear-gradient(135deg,var(--gold),var(--gold-light));color:var(--plum-dark);border-radius:14px;padding:1rem 1.4rem;margin:1.5rem 0;display:flex;align-items:center;gap:1rem;font-weight:700}
+.exam-strip .big{font-size:1.6rem}
+
+@media(max-width:880px){
+  nav.side{display:none}
+  main{padding:1.4rem 1.1rem 4rem}
+  .lesson h1{font-size:1.7rem}
+  .hero h1{font-size:2rem}
+  .topbar-links a{font-size:.72rem;padding:.3rem .5rem}
+}
+.mobile-nav{display:none}
+@media(max-width:880px){
+  .mobile-nav{display:block;background:#fff;border:1px solid var(--line);border-radius:12px;padding:.6rem;margin-bottom:1.2rem}
+  .mobile-nav select{width:100%;padding:.6rem;font-family:'Heebo';font-size:1rem;border:1.5px solid var(--line);border-radius:9px;background:var(--paper)}
+}
+</style>
+</head>
+<body>
+
+<div class="topbar">
+  <div class="brand">
+    <span class="turtle">🐢</span>
+    <span>חשבונאות <small>פוגל · 67.codes</small></span>
+  </div>
+  <div class="topbar-right">
+    <div class="progress-mini" id="progressMini">0 / 7 פרקים</div>
+    <div class="topbar-links">
+      <a href="index.html">⌂ מרכז</a>
+    </div>
+  </div>
+</div>
+
+<div class="shell">
+  <nav class="side" id="sidenav"></nav>
+  <main id="main"></main>
+</div>
+
+<script>
+const visited=new Set();
+const NAV=[
+  {id:'home',n:'⌂',title:'דף הבית',group:'התחלה'},
+  {id:'c1',n:'1',title:'יסודות ועקרונות',group:'חשבונאות · החומר למבחן'},
+  {id:'c2',n:'2',title:'רישום כפול',group:'חשבונאות · החומר למבחן'},
+  {id:'c3',n:'3',title:'מאזן ומשוואה',group:'חשבונאות · החומר למבחן'},
+  {id:'c4',n:'4',title:'רווח והפסד',group:'חשבונאות · החומר למבחן'},
+  {id:'c5',n:'5',title:'מלאי',group:'חשבונאות · החומר למבחן'},
+  {id:'c6',n:'6',title:'פחת ורכוש קבוע',group:'חשבונאות · החומר למבחן'},
+  {id:'c7',n:'7',title:'חתכי סוף שנה',group:'חשבונאות · החומר למבחן'},
+  {id:'cheat',n:'∑',title:'דף נוסחאות',group:'כלים'},
+];
+function buildNav(){
+  const nav=document.getElementById('sidenav');
+  let html='',lastGroup='';
+  NAV.forEach(item=>{
+    if(item.group!==lastGroup){html+=`<h3>${item.group}</h3>`;lastGroup=item.group;}
+    html+=`<a class="navlink" data-id="${item.id}" onclick="go('${item.id}')"><span class="n">${item.n}</span><span>${item.title}</span></a>`;
+  });
+  nav.innerHTML=html;
+}
+function go(id){
+  document.querySelectorAll('.lesson').forEach(l=>l.classList.remove('active'));
+  const el=document.getElementById(id);
+  if(el) el.classList.add('active');
+  document.querySelectorAll('.navlink').forEach(n=>n.classList.toggle('active',n.dataset.id===id));
+  if(/^c[1-7]$/.test(id)){visited.add(id);updateProgress();}
+  window.scrollTo({top:0,behavior:'smooth'});
+  document.querySelectorAll('.mnav').forEach(s=>s.value=id);
+}
+function updateProgress(){
+  const count=[...visited].filter(v=>/^c[1-7]$/.test(v)).length;
+  document.getElementById('progressMini').textContent=count+' / 7 פרקים';
+}
+function answer(btn,correct,fbId,explain){
+  const parent=btn.closest('.quiz');
+  parent.querySelectorAll('.opt').forEach(o=>o.disabled=true);
+  const fb=document.getElementById(fbId);
+  if(correct){btn.classList.add('correct');fb.className='quiz-fb show ok';fb.innerHTML='✓ נכון! '+explain;}
+  else{btn.classList.add('wrong');parent.querySelectorAll('.opt').forEach(o=>{if(o.dataset.correct==='1')o.classList.add('correct');});fb.className='quiz-fb show no';fb.innerHTML='✗ לא מדויק. '+explain;}
+}
+const PAGES={};
+
+/* ---------- HOME ---------- */
+PAGES.home=`
+<section id="home" class="lesson active">
+  <div class="hero">
+    <div class="turtle-big">🐢🚀</div>
+    <h1>חשבונאות פיננסית</h1>
+    <p class="sub">הקורס של ד"ר פוגל — מהעקרונות ועד פקודות היומן והדוחות. תקצירים, מחשבונים וחידונים לקראת מועד ב'.</p>
+  </div>
+  <div class="exam-strip">
+    <span class="big">📅</span>
+    <span>מועד ב' · 17.6.2026. שאלה 1 (50% מהציון) היא תמיד טכנית: פקודות יומן → דוחות כספיים. שלוט בטכניקה והחצי הזה בכיס.</span>
+  </div>
+  <div class="cards-grid">
+    <div class="topic-card" onclick="go('c1')"><div class="tc-n">פרק 1</div><h3>יסודות ועקרונות</h3><p>מהות החשבונאות, 4 ההנחות ו-7 העקרונות (עלות היסטורית, הקבלה, שמרנות...).</p></div>
+    <div class="topic-card" onclick="go('c2')"><div class="tc-n">פרק 2</div><h3>רישום כפול</h3><p>חובה מול זכות, מתי כל חשבון גדל, פקודות יומן וכרטיסי T.</p></div>
+    <div class="topic-card" onclick="go('c3')"><div class="tc-n">פרק 3</div><h3>מאזן ומשוואה</h3><p>המשוואה החשבונאית, נכסים מול התחייבויות, מבנה המאזן.</p></div>
+    <div class="topic-card" onclick="go('c4')"><div class="tc-n">פרק 4</div><h3>רווח והפסד</h3><p>4 שכבות הרווח, עלות המכר, הכרה בהכנסה, בסיס צבירה מול מזומן.</p></div>
+    <div class="topic-card" onclick="go('c5')"><div class="tc-n">פרק 5</div><h3>מלאי</h3><p>FIFO, LIFO, ממוצע משוקלל ונע, וכלל עלות-או-שוק-הנמוך.</p></div>
+    <div class="topic-card" onclick="go('c6')"><div class="tc-n">פרק 6</div><h3>פחת ורכוש קבוע</h3><p>פחת קווי וסכום ספרות, ערך פנקסני, רווח/הפסד הון ממכירה.</p></div>
+    <div class="topic-card" onclick="go('c7')"><div class="tc-n">פרק 7</div><h3>חתכי סוף שנה</h3><p>הוצאות/הכנסות מראש ולקבל/לשלם — הלב של שאלת פוגל.</p></div>
+  </div>
+</section>`;
+
+/* ---------- C1: PRINCIPLES ---------- */
+PAGES.c1=`
+<section id="c1" class="lesson">
+  <div class="mobile-nav"><select class="mnav" onchange="go(this.value)"></select></div>
+  <div class="lesson-head">
+    <span class="lesson-tag">פרק 1 · חשבונאות</span>
+    <h1>יסודות ועקרונות</h1>
+    <p class="sub">השפה של העסק — והכללים שעליהם הכל בנוי.</p>
+  </div>
+
+  <div class="card idea">
+    <h2 class="block"><span class="ico">💡</span> הרעיון בגדול</h2>
+    <p>חשבונאות היא <strong>שפת העסק</strong>: מערכת לאיסוף, רישום, מדידה והצגה של מידע כספי, כדי לספק בסיס לקבלת החלטות. כל מה שנלמד נשען על <strong>4 הנחות יסוד</strong> ו-<strong>7 עקרונות</strong>. אם מבינים אותם, כל פקודת יומן הופכת להגיונית.</p>
+  </div>
+
+  <h2 class="block"><span class="ico">🔄</span> תהליך הדיווח (4 שלבים)</h2>
+  <div class="card">
+    <p><strong>1. איסוף ותיעוד</strong> — זיהוי האירועים הכלכליים ותיעודם במסמכים.</p>
+    <p><strong>2. רישום, מיון וסיכום</strong> — רישום במערכת הכפולה והפקת דוחות תקופתיים.</p>
+    <p><strong>3. הצגת דוחות כספיים</strong> — סיכום לפי כללים מקובלים.</p>
+    <p><strong>4. ביקורת והבעת דעה</strong> — רואה חשבון חיצוני בודק ומחווה דעתו.</p>
+  </div>
+
+  <h2 class="block"><span class="ico">⚖️</span> פיננסית מול ניהולית</h2>
+  <div class="tbl-wrap"><table>
+    <tr><th>נושא</th><th>פיננסית</th><th>ניהולית</th></tr>
+    <tr><td>קהל יעד</td><td>גורמים חיצוניים</td><td>הנהלה פנימית</td></tr>
+    <tr><td>כללים</td><td>כפופה לתקינה</td><td>אין חובת כללים</td></tr>
+    <tr><td>מבט</td><td>בעיקר על העבר</td><td>צופה גם לעתיד</td></tr>
+    <tr><td>דיוק</td><td>מדויקת ומבוקרת</td><td>אומדנים מותרים</td></tr>
+  </table></div>
+
+  <h2 class="block"><span class="ico">🏛️</span> 4 הנחות היסוד</h2>
+  <div class="card">
+    <p><strong>1. היישות החשבונאית</strong> — העסק נפרד מבעליו; רושמים רק את פעילות העסק עצמו.</p>
+    <p><strong>2. עסק חי (המשכיות)</strong> — הנחה שהעסק ימשיך לפעול; אחרת יש להעריך נכסים לפי שווי מימוש.</p>
+    <p><strong>3. תקופתיות</strong> — חלוקת חיי העסק לתקופות דיווח (בד"כ שנה).</p>
+    <p><strong>4. מטבע</strong> — דיווח בערכים כספיים במטבע אחיד.</p>
+  </div>
+
+  <h2 class="block"><span class="ico">📜</span> 7 העקרונות החשבונאיים</h2>
+  <div class="tbl-wrap"><table>
+    <tr><th>עיקרון</th><th>מה הוא אומר</th></tr>
+    <tr><td><strong>עלות היסטורית</strong></td><td>נכסים נרשמים לפי עלות הרכישה המקורית, לא לפי שווי שוק</td></tr>
+    <tr><td><strong>הכרה בהכנסה</strong></td><td>הכנסה מוכרת כשהעסקה הושלמה (הסחורה/השירות סופקו), לא בעת קבלת המזומן</td></tr>
+    <tr><td><strong>הקבלה</strong></td><td>יש להקביל את ההוצאות להכנסות שהן הניבו, באותה תקופה</td></tr>
+    <tr><td><strong>גילוי נאות</strong></td><td>לתת בדוחות את כל המידע המהותי הדרוש למשתמש</td></tr>
+    <tr><td><strong>שמרנות (זהירות)</strong></td><td>בתנאי אי-ודאות — מקדימים הכרה בהפסד, לא בריווח</td></tr>
+    <tr><td><strong>עקביות</strong></td><td>שימוש באותן שיטות מתקופה לתקופה, לשם השוואתיות</td></tr>
+    <tr><td><strong>מהותיות</strong></td><td>מתמקדים בפריטים משמעותיים; פריט לא מהותי לא מצריך טיפול נפרד</td></tr>
+  </table></div>
+  <div class="trick">פוגל אוהב לשאול "איזה עיקרון חל כאן?". זכור את הזוגות הקלאסיים: רשמת מלאי לפי הנמוך מבין עלות/שוק → <strong>שמרנות</strong>. רשמת נכס לפי מה ששילמת ולא לפי שוויו היום → <strong>עלות היסטורית</strong>. רשמת הוצאה באותה שנה של ההכנסה שהיא יצרה → <strong>הקבלה</strong>.</div>
+
+  <div class="quiz">
+    <div class="q">🎯 בדיקה: חברה רשמה מלאי בדוחות לפי 8,000 ₪ (עלות) למרות ששווי השוק שלו ירד ל-7,000 ₪. איזה עיקרון הנחה אותה?</div>
+    <button class="opt" data-correct="1" onclick="answer(this,true,'fb-c1','שמרנות — בתנאי אי-ודאות בוחרים בערך הנמוך יותר ומקדימים הכרה בהפסד הצפוי.')">שמרנות</button>
+    <button class="opt" onclick="answer(this,false,'fb-c1','עלות היסטורית היא הסיבה לרשום לפי עלות בכלל, אבל הבחירה בנמוך מביניהם נובעת מהשמרנות.')">עלות היסטורית</button>
+    <button class="opt" onclick="answer(this,false,'fb-c1','הקבלה עוסקת בתזמון הוצאות מול הכנסות, לא בהערכת מלאי.')">הקבלה</button>
+    <div class="quiz-fb" id="fb-c1"></div>
+  </div>
+
+  <div class="lesson-nav">
+    <div class="spacer"></div>
+    <button class="btn" onclick="go('c2')">הפרק הבא: רישום כפול ←</button>
+  </div>
+</section>`;
+
+/* ---------- C2: DOUBLE ENTRY ---------- */
+PAGES.c2=`
+<section id="c2" class="lesson">
+  <div class="mobile-nav"><select class="mnav" onchange="go(this.value)"></select></div>
+  <div class="lesson-head">
+    <span class="lesson-tag">פרק 2 · חשבונאות</span>
+    <h1>רישום כפול</h1>
+    <p class="sub">חובה מול זכות — הלב של כל פקודת יומן.</p>
+  </div>
+
+  <div class="card idea">
+    <h2 class="block"><span class="ico">💡</span> הרעיון בגדול</h2>
+    <p>כל פעולה כלכלית נרשמת ב<strong>שני צדדים</strong>: חובה (debit) מול זכות (credit), וסכום החובה תמיד שווה לסכום הזכות. זה מה ששומר על המאזן מאוזן. כל הקושי הוא לדעת <strong>איזה חשבון בחובה ואיזה בזכות</strong> — וזה נקבע לפי סוג החשבון.</p>
+  </div>
+
+  <h2 class="block"><span class="ico">🔑</span> הכלל היסודי — לזכור בעל-פה</h2>
+  <div class="tbl-wrap"><table>
+    <tr><th>סוג חשבון</th><th>גדל בצד...</th><th>קטן בצד...</th></tr>
+    <tr><td><strong>נכס / הוצאה</strong></td><td class="hl">חובה</td><td>זכות</td></tr>
+    <tr><td><strong>התחייבות / הון / הכנסה</strong></td><td class="hl">זכות</td><td>חובה</td></tr>
+  </table></div>
+  <div class="key">דרך זיכרון: <b>"נכס והוצאה — חובה כשגדל"</b>. כל השאר (התחייבות, הון, הכנסה) — הפוך, גדלים בזכות. זה כל הסוד. שאר הטבלאות בקורס נגזרות מהשורה הזו.</div>
+
+  <h2 class="block"><span class="ico">📝</span> דוגמאות לפקודות יומן</h2>
+
+  <h3 class="sub-block">קניית סחורה במזומן</h3>
+  <table class="journal">
+    <tr><th>חשבון</th><th>חובה</th><th>זכות</th></tr>
+    <tr><td class="r"><span class="ch">קניות (הוצאה)</span></td><td class="amt">1,000</td><td class="amt"></td></tr>
+    <tr><td class="r" style="padding-right:2.5rem"><span class="cr">מזומן / עו"ש</span></td><td class="amt"></td><td class="amt">1,000</td></tr>
+  </table>
+  <p style="font-size:.88rem;color:#6a5d52">קניות = הוצאה → גדלה בחובה. מזומן = נכס → קטן, לכן בזכות.</p>
+
+  <h3 class="sub-block">מכירה באשראי (בהקפה)</h3>
+  <table class="journal">
+    <tr><th>חשבון</th><th>חובה</th><th>זכות</th></tr>
+    <tr><td class="r"><span class="ch">לקוחות (נכס)</span></td><td class="amt">2,000</td><td class="amt"></td></tr>
+    <tr><td class="r" style="padding-right:2.5rem"><span class="cr">מכירות (הכנסה)</span></td><td class="amt"></td><td class="amt">2,000</td></tr>
+  </table>
+  <p style="font-size:.88rem;color:#6a5d52">לקוחות = נכס (חייבים לנו) → גדל בחובה. מכירות = הכנסה → בזכות.</p>
+
+  <h3 class="sub-block">קבלת הלוואה מהבנק</h3>
+  <table class="journal">
+    <tr><th>חשבון</th><th>חובה</th><th>זכות</th></tr>
+    <tr><td class="r"><span class="ch">עו"ש / מזומן (נכס)</span></td><td class="amt">50,000</td><td class="amt"></td></tr>
+    <tr><td class="r" style="padding-right:2.5rem"><span class="cr">הלוואה (התחייבות)</span></td><td class="amt"></td><td class="amt">50,000</td></tr>
+  </table>
+
+  <div class="trick">טעות נפוצה: לרשום מכירה בזכות של "לקוחות" במקום "מכירות". זכור — <strong>"לקוחות" זה נכס</strong>, ובמכירה הוא <strong>גדל</strong> (בחובה). ההכנסה עצמה (מכירות) היא שיושבת בזכות.</div>
+
+  <h2 class="block"><span class="ico">📊</span> שלבי הטיפול החשבונאי</h2>
+  <div class="card">
+    <p><strong>1.</strong> רישום פקודות יומן — תיעוד כל תנועה בחובה ובזכות.</p>
+    <p><strong>2.</strong> העברה לכרטיסי החשבון (ספר ראשי / כרטיס T) — ריכוז התנועות לכל חשבון.</p>
+    <p><strong>3.</strong> הפקת מאזן בוחן — בדיקה שסך החובה = סך הזכות.</p>
+    <p><strong>4.</strong> פקודות סוף תקופה והתאמות — פחת, הפרשות, חתכים.</p>
+    <p><strong>5.</strong> הפקת הדוחות הכספיים — דוח רווח והפסד ומאזן.</p>
+  </div>
+
+  <div class="calc">
+    <div class="calc-title">בודק איזון פקודת יומן</div>
+    <div class="calc-desc">הזן סכום חובה וסכום זכות — נוודא שהפקודה מאוזנת (תנאי הכרחי לכל רישום).</div>
+    <div class="calc-inputs">
+      <div class="inp-group"><label>סך חובה</label><input type="number" id="deb2" value="1000" oninput="calcBalance()"></div>
+      <div class="inp-group"><label>סך זכות</label><input type="number" id="cred2" value="1000" oninput="calcBalance()"></div>
+    </div>
+    <div class="calc-out" id="outBalance">—</div>
+  </div>
+
+  <div class="quiz">
+    <div class="q">🎯 בדיקה: שילמנו לספק 3,000 ₪ במזומן על חוב קודm. מה פקודת היומן?</div>
+    <button class="opt" data-correct="1" onclick="answer(this,true,'fb-c2','ספקים (התחייבות) קטֵנה → חובה. מזומן (נכס) קטן → זכות. החוב נסגר.')">חובה: ספקים | זכות: מזומן</button>
+    <button class="opt" onclick="answer(this,false,'fb-c2','זה רישום של קנייה בהקפה, לא של תשלום חוב קיים.')">חובה: קניות | זכות: ספקים</button>
+    <button class="opt" onclick="answer(this,false,'fb-c2','הפוך — כשמשלמים, ההתחייבות (ספקים) קטֵנה ולכן בחובה, והמזומן בזכות.')">חובה: מזומן | זכות: ספקים</button>
+    <div class="quiz-fb" id="fb-c2"></div>
+  </div>
+
+  <div class="lesson-nav">
+    <button class="btn ghost" onclick="go('c1')">→ הקודם</button>
+    <button class="btn" onclick="go('c3')">הפרק הבא: מאזן ומשוואה ←</button>
+  </div>
+</section>`;
+
+/* ---------- C3: BALANCE SHEET ---------- */
+PAGES.c3=`
+<section id="c3" class="lesson">
+  <div class="mobile-nav"><select class="mnav" onchange="go(this.value)"></select></div>
+  <div class="lesson-head">
+    <span class="lesson-tag">פרק 3 · חשבונאות</span>
+    <h1>מאזן והמשוואה החשבונאית</h1>
+    <p class="sub">תמונת מצב של העסק ברגע נתון.</p>
+  </div>
+
+  <div class="card idea">
+    <h2 class="block"><span class="ico">💡</span> הרעיון בגדול</h2>
+    <p>המאזן הוא <strong>תמונת מצב</strong> של נכסי העסק ומקורות מימונם, נכון לנקודת זמן מסוימת. הוא תמיד מאוזן לפי המשוואה החשבונאית — וזה לא במקרה: כל פעולה נרשמת בכפל, כך שהמשוואה נשמרת תמיד.</p>
+  </div>
+
+  <h2 class="block"><span class="ico">⚖️</span> המשוואה החשבונאית</h2>
+  <div class="fbox-row"><span class="fbox">נכסים = התחייבויות + הון עצמי</span></div>
+  <p>כל פעולה משפיעה על לפחות שני סעיפים, כך שהמשוואה נשארת מאוזנת תמיד.</p>
+
+  <h2 class="block"><span class="ico">📦</span> שלוש הקבוצות</h2>
+  <div class="tbl-wrap"><table>
+    <tr><th>מושג</th><th>הגדרה</th></tr>
+    <tr><td><strong>נכס (רכוש)</strong></td><td>משאב בבעלות העסק שצפוי להניב לו הטבה כלכלית בעתיד</td></tr>
+    <tr><td><strong>התחייבות</strong></td><td>מחויבות קיימת של העסק כלפי גורם חיצוני שתביא ליציאת משאבים</td></tr>
+    <tr><td><strong>הון עצמי</strong></td><td>יתרת הרכוש שנותרת לבעלים לאחר ניכוי כל ההתחייבויות</td></tr>
+  </table></div>
+
+  <h2 class="block"><span class="ico">🗂️</span> סוגי נכסים</h2>
+  <div class="tbl-wrap"><table>
+    <tr><th>סוג</th><th>פירוש</th><th>דוגמאות</th></tr>
+    <tr><td><strong>רכוש שוטף</strong></td><td>צפוי להתממש תוך שנה</td><td>מזומן, לקוחות, מלאי, ני"ע סחירים</td></tr>
+    <tr><td><strong>רכוש קבוע</strong></td><td>משמש לאורך זמן, לא למכירה</td><td>קרקע, מבנים, ציוד, כלי רכב</td></tr>
+    <tr><td><strong>רכוש אחר / לא מוחשי</strong></td><td>ללא קיום פיזי</td><td>מוניטין, פטנטים, זכויות</td></tr>
+  </table></div>
+  <div class="key"><b>כלל זמן במאזן (עיקרון 2):</b> כל מה שצפוי להתממש בשנה שלאחר תאריך המאזן נחשב <b>שוטף</b>; מה שמעבר לשנה — <b>לא שוטף</b>. זה קובע איפה הסעיף יופיע.</div>
+
+  <h2 class="block"><span class="ico">🏦</span> סוגי התחייבויות והון</h2>
+  <div class="card">
+    <p><strong>הון מניות</strong> — ההשקעה של הבעלים בחברה.</p>
+    <p><strong>עודפים</strong> — רווחים שנצברו ולא חולקו כדיבידנד.</p>
+    <p><strong>התחייבויות שוטפות</strong> — לפירעון תוך שנה (ספקים, הלוואות קצרות).</p>
+    <p><strong>התחייבויות לזמן ארוך</strong> — הלוואות ואג"ח לפירעון מעבר לשנה.</p>
+  </div>
+
+  <div class="calc">
+    <div class="calc-title">מחשבון המשוואה החשבונאית</div>
+    <div class="calc-desc">הזן שניים מהשלושה — נחשב את השלישי כך שהמשוואה תתאזן.</div>
+    <div class="calc-inputs">
+      <div class="inp-group"><label>נכסים</label><input type="number" id="assets3" value="100000" oninput="calcEquation()"></div>
+      <div class="inp-group"><label>התחייבויות</label><input type="number" id="liab3" value="40000" oninput="calcEquation()"></div>
+    </div>
+    <div class="calc-out" id="outEquation">—</div>
+  </div>
+
+  <div class="quiz">
+    <div class="q">🎯 בדיקה: לעסק נכסים של 250,000 ₪ והון עצמי של 180,000 ₪. מה סך ההתחייבויות?</div>
+    <button class="opt" data-correct="1" onclick="answer(this,true,'fb-c3','התחייבויות = נכסים − הון = 250,000 − 180,000 = 70,000 ₪.')">70,000 ₪</button>
+    <button class="opt" onclick="answer(this,false,'fb-c3','430,000 זה הסכום שלהם. המשוואה היא נכסים = התחייבויות + הון, אז מחסירים.')">430,000 ₪</button>
+    <button class="opt" onclick="answer(this,false,'fb-c3','בדוק: נכסים − הון = התחייבויות. 250,000 − 180,000 = 70,000, לא 180,000.')">180,000 ₪</button>
+    <div class="quiz-fb" id="fb-c3"></div>
+  </div>
+
+  <div class="lesson-nav">
+    <button class="btn ghost" onclick="go('c2')">→ הקודם</button>
+    <button class="btn" onclick="go('c4')">הפרק הבא: רווח והפסד ←</button>
+  </div>
+</section>`;
+
+/* ---------- C4: P&L ---------- */
+PAGES.c4=`
+<section id="c4" class="lesson">
+  <div class="mobile-nav"><select class="mnav" onchange="go(this.value)"></select></div>
+  <div class="lesson-head">
+    <span class="lesson-tag">פרק 4 · חשבונאות</span>
+    <h1>דוח רווח והפסד</h1>
+    <p class="sub">ביצועי העסק לאורך תקופה — לא ברגע נתון.</p>
+  </div>
+
+  <div class="card idea">
+    <h2 class="block"><span class="ico">💡</span> הרעיון בגדול</h2>
+    <p>בעוד המאזן הוא תמונת מצב ברגע נתון, דוח רווח והפסד מסכם את <strong>ביצועי העסק לאורך תקופה</strong>: הכנסות פחות הוצאות = רווח/הפסד נקי. הדוח בנוי בשכבות — כל שכבה מחסירה עוד סוג הוצאה.</p>
+  </div>
+
+  <h2 class="block"><span class="ico">📊</span> 4 שכבות הרווח</h2>
+  <div class="tbl-wrap"><table>
+    <tr><th>סוג רווח</th><th>איך מחושב</th></tr>
+    <tr><td><strong>רווח גולמי</strong></td><td>הכנסות ממכירות − עלות המכר</td></tr>
+    <tr><td><strong>רווח תפעולי</strong></td><td>רווח גולמי − הוצאות תפעוליות (מכירה, הנהלה וכלליות)</td></tr>
+    <tr><td><strong>רווח לפני מס</strong></td><td>רווח תפעולי ± הכנסות/הוצאות מימון ואחרות</td></tr>
+    <tr><td><strong>רווח נקי</strong></td><td>רווח לפני מס − הוצאות מס הכנסה</td></tr>
+  </table></div>
+  <div class="key">סדר השכבות חשוב — פוגל מבקש לבנות את הדוח מלמעלה למטה. כל שורה מתחילה מהתוצאה של השורה הקודמת.</div>
+
+  <h2 class="block"><span class="ico">🧮</span> עלות המכר — הנוסחה המרכזית</h2>
+  <div class="fbox-row"><span class="fbox">עלות המכר = מלאי פתיחה + קניות (נטו) − מלאי סגירה</span></div>
+  <p>זו העלות הישירה של הסחורות שנמכרו. שים לב — לא כל מה שקנינו נמכר; מה שנשאר במלאי הסגירה מופחת.</p>
+
+  <div class="calc">
+    <div class="calc-title">מחשבון עלות המכר ורווח גולמי</div>
+    <div class="calc-desc">הזן את הנתונים — נחשב עלות מכר ורווח גולמי צעד-אחר-צעד.</div>
+    <div class="calc-inputs">
+      <div class="inp-group"><label>מלאי פתיחה</label><input type="number" id="open4" value="2000" oninput="calcCOGS()"></div>
+      <div class="inp-group"><label>קניות</label><input type="number" id="buy4" value="10000" oninput="calcCOGS()"></div>
+      <div class="inp-group"><label>מלאי סגירה</label><input type="number" id="close4" value="5000" oninput="calcCOGS()"></div>
+      <div class="inp-group"><label>מכירות</label><input type="number" id="sales4" value="15000" oninput="calcCOGS()"></div>
+    </div>
+    <div class="calc-out" id="outCOGS">—</div>
+  </div>
+
+  <h2 class="block"><span class="ico">⏱️</span> בסיס צבירה מול בסיס מזומן</h2>
+  <div class="tbl-wrap"><table>
+    <tr><th>בסיס</th><th>מתי מכירים בהכנסה/הוצאה</th></tr>
+    <tr><td><strong>צבירה</strong> (המקובל)</td><td>לפי מועד התרחשות האירוע, ללא קשר לתשלום בפועל</td></tr>
+    <tr><td><strong>מזומן</strong></td><td>רק כשמתקבל או משולם מזומן בפועל</td></tr>
+  </table></div>
+  <div class="trick"><strong>רווח חשבונאי ≠ תזרים מזומנים.</strong> אפשר להרוויח על הנייר ועדיין לא לראות את הכסף (מכרת בהקפה). הדוחות עובדים על בסיס צבירה — זכור את זה כשפוגל שואל על הכרה בהכנסה.</div>
+
+  <h2 class="block"><span class="ico">📈</span> הכרה בהכנסה לפי אחוז השלמה</h2>
+  <div class="card">
+    <p><strong>0–20% השלמה:</strong> בד"כ אין הכרה בהכנסה עדיין.</p>
+    <p><strong>20–50% השלמה:</strong> כשיש ודאות גבוהה, ניתן להכיר חלקית לפי שלב ההשלמה.</p>
+    <p><strong>מעל 50%:</strong> מכירים ברווח לפי שיעור ההשלמה של העסקה.</p>
+  </div>
+
+  <div class="quiz">
+    <div class="q">🎯 בדיקה: מלאי פתיחה 3,000, קניות 12,000, מלאי סגירה 4,000. מה עלות המכר?</div>
+    <button class="opt" data-correct="1" onclick="answer(this,true,'fb-c4','3,000 + 12,000 − 4,000 = 11,000 ₪. מה שנשאר במלאי הסגירה לא נמכר ולכן מופחת.')">11,000 ₪</button>
+    <button class="opt" onclick="answer(this,false,'fb-c4','19,000 זה הסכום של הכל. צריך להחסיר את מלאי הסגירה, לא להוסיף.')">19,000 ₪</button>
+    <button class="opt" onclick="answer(this,false,'fb-c4','15,000 זה פתיחה + קניות בלי להחסיר מלאי סגירה. חסר השלב האחרון.')">15,000 ₪</button>
+    <div class="quiz-fb" id="fb-c4"></div>
+  </div>
+
+  <div class="lesson-nav">
+    <button class="btn ghost" onclick="go('c3')">→ הקודם</button>
+    <button class="btn" onclick="go('c5')">הפרק הבא: מלאי ←</button>
+  </div>
+</section>`;
+
+/* ---------- C5: INVENTORY ---------- */
+PAGES.c5=`
+<section id="c5" class="lesson">
+  <div class="mobile-nav"><select class="mnav" onchange="go(this.value)"></select></div>
+  <div class="lesson-head">
+    <span class="lesson-tag">פרק 5 · חשבונאות</span>
+    <h1>מלאי</h1>
+    <p class="sub">איך מעריכים את שווי המלאי — וזה משפיע ישירות על הרווח.</p>
+  </div>
+
+  <div class="card idea">
+    <h2 class="block"><span class="ico">💡</span> הרעיון בגדול</h2>
+    <p>המלאי הוא הסחורה שהעסק מחזיק למכירה. <strong>הערכת המלאי משפיעה ישירות על עלות המכר ועל הרווח</strong> — כי מלאי הסגירה מופחת מעלות המכר. כשהמחירים משתנים, השיטה שנבחרת (FIFO/LIFO/ממוצע) משנה את התוצאה.</p>
+  </div>
+
+  <h2 class="block"><span class="ico">📐</span> 3 שיטות ההערכה</h2>
+  <div class="tbl-wrap"><table>
+    <tr><th>שיטה</th><th>הרעיון</th><th>מה נשאר במלאי הסגירה</th></tr>
+    <tr><td><strong>FIFO</strong></td><td>נכנס ראשון, יוצא ראשון</td><td>היחידות החדשות (האחרונות שנקנו)</td></tr>
+    <tr><td><strong>LIFO</strong></td><td>נכנס אחרון, יוצא ראשון</td><td>היחידות הישנות (הראשונות שנקנו)</td></tr>
+    <tr><td><strong>ממוצע משוקלל</strong></td><td>עלות ממוצעת לכל היחידות</td><td>לפי הממוצע</td></tr>
+  </table></div>
+  <div class="key"><b>ממוצע משוקלל</b> = סך עלות הרכישות ÷ סך כמות היחידות. <b>שים לב:</b> LIFO <b>אינו מותר</b> בתקינה הישראלית/IFRS — אבל פוגל עדיין מלמד אותו לצורך השוואה והבנה.</div>
+
+  <h2 class="block"><span class="ico">⚠️</span> כלל עלות-או-שוק הנמוך</h2>
+  <p>אחרי שמחשבים את שווי המלאי לפי השיטה, משווים אותו למחיר השוק ביום המאזן, ובוחרים את <strong>הנמוך מביניהם</strong> לדיווח. זה ישיר מ<strong>עיקרון השמרנות</strong>.</p>
+  <div class="card">
+    <p style="font-family:'JetBrains Mono',monospace">דוגמה: שווי לפי FIFO = 17,625 ₪<br>מחיר שוק ביום המאזן = 17,437 ₪<br>→ מדווחים את הנמוך = 17,437 ₪</p>
+  </div>
+
+  <div class="calc">
+    <div class="calc-title">מחשבון מלאי — 3 השיטות</div>
+    <div class="calc-desc">תרחיש פשוט: מלאי פתיחה + 2 קניות, ומכירה. הזן כמויות ומחירים — נחשב שווי מלאי סגירה לפי כל שיטה.</div>
+    <div class="calc-inputs">
+      <div class="inp-group"><label>פתיחה: כמות</label><input type="number" id="q0_5" value="100" oninput="calcInv()"></div>
+      <div class="inp-group"><label>פתיחה: מחיר</label><input type="number" id="p0_5" value="10" oninput="calcInv()"></div>
+      <div class="inp-group"><label>קנייה 1: כמות</label><input type="number" id="q1_5" value="200" oninput="calcInv()"></div>
+      <div class="inp-group"><label>קנייה 1: מחיר</label><input type="number" id="p1_5" value="11" oninput="calcInv()"></div>
+      <div class="inp-group"><label>קנייה 2: כמות</label><input type="number" id="q2_5" value="100" oninput="calcInv()"></div>
+      <div class="inp-group"><label>קנייה 2: מחיר</label><input type="number" id="p2_5" value="13" oninput="calcInv()"></div>
+      <div class="inp-group"><label>נמכרו (יח')</label><input type="number" id="sold_5" value="250" oninput="calcInv()"></div>
+    </div>
+    <div class="calc-out" id="outInv">—</div>
+  </div>
+  <div class="trick">בתקופת <strong>עליית מחירים</strong>: FIFO משאיר במלאי את היחידות היקרות → מלאי סגירה גבוה → עלות מכר נמוכה → <strong>רווח גבוה יותר</strong>. LIFO הפוך. זה מועדף לשאלות "איזו שיטה תיתן רווח גבוה יותר?".</div>
+
+  <div class="quiz">
+    <div class="q">🎯 בדיקה: בתקופת עליית מחירים, איזו שיטה תציג את הרווח הגבוה ביותר?</div>
+    <button class="opt" data-correct="1" onclick="answer(this,true,'fb-c5','FIFO — היחידות הישנות (הזולות) יוצאות ראשונות לעלות המכר, אז עלות המכר נמוכה והרווח גבוה.')">FIFO</button>
+    <button class="opt" onclick="answer(this,false,'fb-c5','LIFO מוציא קודם את היקרים → עלות מכר גבוהה → רווח נמוך יותר. הפוך מהמבוקש.')">LIFO</button>
+    <button class="opt" onclick="answer(this,false,'fb-c5','הממוצע תמיד נופל בין FIFO ל-LIFO, אז הוא לא הגבוה ביותר.')">ממוצע משוקלל</button>
+    <div class="quiz-fb" id="fb-c5"></div>
+  </div>
+
+  <div class="lesson-nav">
+    <button class="btn ghost" onclick="go('c4')">→ הקודם</button>
+    <button class="btn" onclick="go('c6')">הפרק הבא: פחת ←</button>
+  </div>
+</section>`;
+
+/* ---------- C6: DEPRECIATION ---------- */
+PAGES.c6=`
+<section id="c6" class="lesson">
+  <div class="mobile-nav"><select class="mnav" onchange="go(this.value)"></select></div>
+  <div class="lesson-head">
+    <span class="lesson-tag">פרק 6 · חשבונאות</span>
+    <h1>פחת ורכוש קבוע</h1>
+    <p class="sub">איך פורסים עלות של נכס על פני שנות חייו.</p>
+  </div>
+
+  <div class="card idea">
+    <h2 class="block"><span class="ico">💡</span> הרעיון בגדול</h2>
+    <p>פחת מבטא את <strong>הפחתת ערכו של נכס קבוע לאורך תקופת השימוש בו</strong>. מתוך עיקרון ההקבלה — פורסים את עלות הנכס על פני שנות התועלת שהוא מניב, במקום לרשום את כל העלות בשנת הקנייה.</p>
+  </div>
+
+  <h2 class="block"><span class="ico">📖</span> מושגי הפחת</h2>
+  <div class="tbl-wrap"><table>
+    <tr><th>מושג</th><th>הגדרה</th></tr>
+    <tr><td><strong>ערך שייר (גרט)</strong></td><td>ערך הנכס המשוער בתום חייו השימושיים</td></tr>
+    <tr><td><strong>ערך בר-פחת</strong></td><td>עלות הנכס פחות ערך השייר — זה הסכום שמופחת</td></tr>
+    <tr><td><strong>פחת נצבר</strong></td><td>סך הפחת שנצבר מיום הרכישה; מנוכה מעלות הנכס במאזן</td></tr>
+    <tr><td><strong>ערך פנקסני (יתרת מאזן)</strong></td><td>עלות הנכס פחות הפחת הנצבר</td></tr>
+  </table></div>
+
+  <h2 class="block"><span class="ico">📐</span> פחת קווי — הנוסחה המרכזית</h2>
+  <div class="fbox-row"><span class="fbox">פחת שנתי = (עלות − ערך שייר) ÷ שנות חיים</span></div>
+  <p>פחת קבוע ושווה בכל שנה. זו השיטה הנפוצה ביותר במבחן.</p>
+
+  <div class="trick"><strong>הטריק הקלאסי של פוגל — קרקע ומבנה:</strong> כשנכס כולל קרקע ומבנה, <strong>הקרקע לא מופחתת</strong> (חייה אינסופיים). לרוב הקרקע = <strong>שליש מהעלות</strong> והמבנה = שני שליש. מפחיתים רק את חלק המבנה! טעות נפוצה היא להפחית את כל הסכום.</p></div>
+
+  <div class="calc">
+    <div class="calc-title">מחשבון פחת קווי</div>
+    <div class="calc-desc">הזן עלות, ערך שייר ושנות חיים — נחשב פחת שנתי, פחת נצבר וערך פנקסני.</div>
+    <div class="calc-inputs">
+      <div class="inp-group"><label>עלות הנכס</label><input type="number" id="cost6" value="100000" oninput="calcDep()"></div>
+      <div class="inp-group"><label>ערך שייר</label><input type="number" id="salvage6" value="10000" oninput="calcDep()"></div>
+      <div class="inp-group"><label>שנות חיים</label><input type="number" id="life6" value="10" oninput="calcDep()"></div>
+      <div class="inp-group"><label>שנים שעברו</label><input type="number" id="years6" value="3" oninput="calcDep()"></div>
+    </div>
+    <div class="calc-out" id="outDep">—</div>
+  </div>
+
+  <h2 class="block"><span class="ico">🔢</span> שיטות פחת נוספות</h2>
+  <div class="card">
+    <p><strong>סכום ספרות השנים</strong> — פחת מואץ: גבוה יותר בשנים הראשונות ופוחת עם הזמן.</p>
+    <p><strong>פחת לפי שעות פעילות / תפוקה</strong> — מבוסס על השימוש בפועל בנכס.</p>
+  </div>
+
+  <h2 class="block"><span class="ico">💰</span> מכירת רכוש קבוע — רווח/הפסד הון</h2>
+  <p>בעת מכירת נכס, משווים את תמורת המכירה ל<strong>ערך הפנקסני</strong> (עלות פחות פחת נצבר):</p>
+  <div class="tbl-wrap"><table>
+    <tr><th>אם...</th><th>התוצאה</th></tr>
+    <tr><td>תמורה > ערך פנקסני</td><td>רווח הון</td></tr>
+    <tr><td>תמורה < ערך פנקסני</td><td>הפסד הון</td></tr>
+  </table></div>
+
+  <h3 class="sub-block">פקודת יומן למכירת נכס (לדוגמה, ברווח)</h3>
+  <table class="journal">
+    <tr><th>חשבון</th><th>חובה</th><th>זכות</th></tr>
+    <tr><td class="r"><span class="ch">מזומן / עו"ש (תמורה)</span></td><td class="amt">✓</td><td class="amt"></td></tr>
+    <tr><td class="r"><span class="ch">פחת נצבר</span></td><td class="amt">✓</td><td class="amt"></td></tr>
+    <tr><td class="r" style="padding-right:2.5rem"><span class="cr">הנכס (לפי עלות מקורית)</span></td><td class="amt"></td><td class="amt">✓</td></tr>
+    <tr><td class="r" style="padding-right:2.5rem"><span class="cr">רווח הון</span></td><td class="amt"></td><td class="amt">✓</td></tr>
+  </table>
+  <div class="key">שים לב: מבטלים את הנכס לפי <b>עלותו המקורית</b> (זכות), ומבטלים את הפחת הנצבר שהצטבר עליו (חובה). ההפרש מול התמורה = רווח/הפסד הון.</div>
+
+  <div class="quiz">
+    <div class="q">🎯 בדיקה: נקנה מבנה+קרקע ב-300,000 ₪, הקרקע שליש. שנות חיים 20, ללא שייר. מה הפחת השנתי?</div>
+    <button class="opt" data-correct="1" onclick="answer(this,true,'fb-c6','רק המבנה מופחת: 2/3 × 300,000 = 200,000. חלקי 20 = 10,000 ₪ לשנה.')">10,000 ₪</button>
+    <button class="opt" onclick="answer(this,false,'fb-c6','15,000 זה אם מפחיתים את כל ה-300,000. אבל הקרקע (שליש) לא מופחתת!')">15,000 ₪</button>
+    <button class="opt" onclick="answer(this,false,'fb-c6','5,000 זה שליש מהמבנה. צריך להפחית את כל המבנה (2/3), שזה 200,000/20.')">5,000 ₪</button>
+    <div class="quiz-fb" id="fb-c6"></div>
+  </div>
+
+  <div class="lesson-nav">
+    <button class="btn ghost" onclick="go('c5')">→ הקודם</button>
+    <button class="btn" onclick="go('c7')">הפרק האחרון: חתכי סוף שנה ←</button>
+  </div>
+</section>`;
+
+/* ---------- C7: ACCRUALS ---------- */
+PAGES.c7=`
+<section id="c7" class="lesson">
+  <div class="mobile-nav"><select class="mnav" onchange="go(this.value)"></select></div>
+  <div class="lesson-head">
+    <span class="lesson-tag">פרק 7 · חשבונאות</span>
+    <h1>חתכי סוף שנה</h1>
+    <p class="sub">הלב של שאלת פוגל — התאמת תשלומים לתקופה הנכונה.</p>
+  </div>
+
+  <div class="card idea">
+    <h2 class="block"><span class="ico">💡</span> הרעיון בגדול</h2>
+    <p>מעיקרון ההקבלה — צריך להתאים בין מועד התשלום/התקבול בפועל לבין התקופה שאליה ההכנסה/הוצאה שייכת. ארבעת החתכים הם <strong>החלק שמפיל הכי הרבה אנשים</strong>, ופוגל אוהב אותם. אם תשלוט בארבעתם — שאלת סוף השנה בכיס.</p>
+  </div>
+
+  <h2 class="block"><span class="ico">🎯</span> ארבעת החתכים — הטבלה הקריטית</h2>
+  <div class="tbl-wrap"><table>
+    <tr><th>חתך</th><th>הסבר</th><th>סוג</th></tr>
+    <tr><td><strong>הוצאה מראש</strong></td><td>שולמה, אך שייכת לתקופה הבאה</td><td>נכס</td></tr>
+    <tr><td><strong>הכנסה לקבל</strong></td><td>סיפקנו שירות, אך טרם שולם לנו</td><td>נכס</td></tr>
+    <tr><td><strong>הוצאה לשלם</strong></td><td>קיבלנו שירות, אך טרם שילמנו</td><td>התחייבות</td></tr>
+    <tr><td><strong>הכנסה מראש</strong></td><td>קיבלנו כסף, אך טרם סיפקנו שירות</td><td>התחייבות</td></tr>
+  </table></div>
+  <div class="key">דרך זיכרון פשוטה: <b>"מראש = הפוך"</b>. הוצאה מראש היא דווקא <b>נכס</b> (מגיע לנו שירות), הכנסה מראש היא דווקא <b>התחייבות</b> (אנחנו חייבים שירות). ו"לקבל/לשלם" — הולך לפי השם: לקבל=נכס, לשלם=התחייבות.</div>
+
+  <h2 class="block"><span class="ico">📝</span> פקודות החתך — דוגמאות</h2>
+
+  <h3 class="sub-block">הוצאה מראש (שילמנו שכ"ד שנה מראש)</h3>
+  <table class="journal">
+    <tr><th>חשבון</th><th>חובה</th><th>זכות</th></tr>
+    <tr><td class="r"><span class="ch">הוצאות שכ"ד מראש (נכס)</span></td><td class="amt">✓</td><td class="amt"></td></tr>
+    <tr><td class="r" style="padding-right:2.5rem"><span class="cr">מזומן</span></td><td class="amt"></td><td class="amt">✓</td></tr>
+  </table>
+
+  <h3 class="sub-block">הוצאה לשלם (משכורת נובמבר-דצמבר טרם שולמה)</h3>
+  <table class="journal">
+    <tr><th>חשבון</th><th>חובה</th><th>זכות</th></tr>
+    <tr><td class="r"><span class="ch">הוצאות שכר</span></td><td class="amt">✓</td><td class="amt"></td></tr>
+    <tr><td class="r" style="padding-right:2.5rem"><span class="cr">הוצאות שכר לשלם (התחייבות)</span></td><td class="amt"></td><td class="amt">✓</td></tr>
+  </table>
+
+  <h3 class="sub-block">הכנסה לקבל (ריבית על הלוואה שנתנו, טרם התקבלה)</h3>
+  <table class="journal">
+    <tr><th>חשבון</th><th>חובה</th><th>זכות</th></tr>
+    <tr><td class="r"><span class="ch">הכנסות ריבית לקבל (נכס)</span></td><td class="amt">✓</td><td class="amt"></td></tr>
+    <tr><td class="r" style="padding-right:2.5rem"><span class="cr">הכנסות ריבית</span></td><td class="amt"></td><td class="amt">✓</td></tr>
+  </table>
+
+  <div class="calc">
+    <div class="calc-title">מחשבון חתך תקופתי</div>
+    <div class="calc-desc">שילמת/קיבלת סכום שנתי מראש. הזן את הסכום ומאיזה חודש הוא מתחיל — נחשב כמה שייך לשנה הנוכחית וכמה לבאה.</div>
+    <div class="calc-inputs">
+      <div class="inp-group"><label>סכום שנתי (₪)</label><input type="number" id="amt7" value="24000" oninput="calcAccrual()"></div>
+      <div class="inp-group"><label>חודש התחלה (1-12)</label><input type="number" id="month7" value="8" min="1" max="12" oninput="calcAccrual()"></div>
+    </div>
+    <div class="calc-out" id="outAccrual">—</div>
+  </div>
+  <div class="trick">בשאלה: "שילמנו 24,000 ₪ שכירות שנתית ב-1.8". עד סוף השנה (אוג'-דצמ') עברו <strong>5 חודשים</strong> → הוצאה שוטפת = 5/12 × 24,000 = 10,000. היתרה (7/12 = 14,000) היא <strong>הוצאה מראש</strong> (נכס במאזן). חשב חודשים בזהירות!</div>
+
+  <h2 class="block"><span class="ico">📋</span> סדר פתרון שאלת פוגל הגדולה</h2>
+  <div class="card">
+    <p><strong>1.</strong> מצא את סימני השאלה במאזן השנה הקודמת (אם יש).</p>
+    <p><strong>2.</strong> רשום פקודות יומן לכל האירועים — כל פקודה חייבת להיות מאוזנת!</p>
+    <p><strong>3.</strong> סכם בכרטיסי T יחד עם יתרות הפתיחה. <strong>אל תשכח פחנ"צ</strong> (פחת נצבר).</p>
+    <p><strong>4.</strong> הצב את היתרות בדוחות לפי שייכות הסעיפים.</p>
+    <p><strong>5.</strong> כותרות! אל תשכח כותרות לדוחות.</p>
+  </div>
+
+  <div class="quiz">
+    <div class="q">🎯 בדיקה: ב-1.9 קיבלנו 12,000 ₪ עבור מנוי שנתי שנתחיל לספק מאותו יום. בסוף השנה (31.12), כמה רשום כ"הכנסה מראש"?</div>
+    <button class="opt" data-correct="1" onclick="answer(this,true,'fb-c7','ספקנו 4 חודשים (ספט-דצמ) = 4/12 × 12,000 = 4,000 הכנסה. היתרה 8/12 = 8,000 היא הכנסה מראש (התחייבות).')">8,000 ₪</button>
+    <button class="opt" onclick="answer(this,false,'fb-c7','4,000 זה מה שכבר הוכר כהכנסה (4 חודשים). השאלה על מה שעדיין מראש = היתרה.')">4,000 ₪</button>
+    <button class="opt" onclick="answer(this,false,'fb-c7','12,000 זה הסכום כולו. אבל 4 חודשים כבר סופקו והוכרו כהכנסה, אז לא הכל מראש.')">12,000 ₪</button>
+    <div class="quiz-fb" id="fb-c7"></div>
+  </div>
+
+  <div class="lesson-nav">
+    <button class="btn ghost" onclick="go('c6')">→ הקודם</button>
+    <button class="btn gold" onclick="go('cheat')">לסיכום: דף הנוסחאות ∑</button>
+  </div>
+</section>`;
+
+/* ---------- CHEAT ---------- */
+PAGES.cheat=`
+<section id="cheat" class="lesson">
+  <div class="mobile-nav"><select class="mnav" onchange="go(this.value)"></select></div>
+  <div class="lesson-head">
+    <span class="lesson-tag">כלים</span>
+    <h1>דף נוסחאות — חשבונאות</h1>
+    <p class="sub">כל מה שצריך לשלוף במבחן, במקום אחד.</p>
+  </div>
+
+  <h2 class="block"><span class="ico">⚖️</span> משוואות יסוד</h2>
+  <div class="tbl-wrap"><table>
+    <tr><td>המשוואה החשבונאית</td><td class="formula-cell">נכסים = התחייבויות + הון עצמי</td></tr>
+    <tr><td>עלות המכר</td><td class="formula-cell">מלאי פתיחה + קניות − מלאי סגירה</td></tr>
+    <tr><td>רווח גולמי</td><td class="formula-cell">מכירות − עלות המכר</td></tr>
+    <tr><td>פחת קווי שנתי</td><td class="formula-cell">(עלות − שייר) ÷ שנות חיים</td></tr>
+    <tr><td>ערך פנקסני</td><td class="formula-cell">עלות − פחת נצבר</td></tr>
+    <tr><td>ממוצע משוקלל</td><td class="formula-cell">סך עלות ÷ סך כמות</td></tr>
+  </table></div>
+
+  <h2 class="block"><span class="ico">🔑</span> חובה / זכות</h2>
+  <div class="tbl-wrap"><table>
+    <tr><th>סוג חשבון</th><th>גדל ב...</th></tr>
+    <tr><td>נכס / הוצאה</td><td class="hl">חובה</td></tr>
+    <tr><td>התחייבות / הון / הכנסה</td><td class="hl">זכות</td></tr>
+  </table></div>
+
+  <h2 class="block"><span class="ico">🎯</span> 4 החתכים</h2>
+  <div class="tbl-wrap"><table>
+    <tr><th>חתך</th><th>סוג</th></tr>
+    <tr><td>הוצאה מראש (שילמנו, שייך לבאה)</td><td>נכס</td></tr>
+    <tr><td>הכנסה לקבל (סיפקנו, טרם קיבלנו)</td><td>נכס</td></tr>
+    <tr><td>הוצאה לשלם (קיבלנו, טרם שילמנו)</td><td>התחייבות</td></tr>
+    <tr><td>הכנסה מראש (קיבלנו, טרם סיפקנו)</td><td>התחייבות</td></tr>
+  </table></div>
+
+  <h2 class="block"><span class="ico">📜</span> 7 העקרונות (לזכור)</h2>
+  <p>עלות היסטורית · הכרה בהכנסה · הקבלה · גילוי נאות · שמרנות · עקביות · מהותיות.</p>
+
+  <div class="trick" style="margin-top:2rem">
+    <strong style="display:block;margin-bottom:.4rem">5 הטעויות שעולות נקודות אצל פוגל:</strong>
+    1. להפחית את הקרקע — היא לא מופחתת! (קרקע = בד"כ שליש מהעלות).<br>
+    2. לרשום מכירה בזכות "לקוחות" במקום "מכירות".<br>
+    3. לשכוח את הפחת הנצבר (פחנ"צ) בכרטיסי ה-T.<br>
+    4. לטעות בספירת חודשים בחתכי סוף שנה.<br>
+    5. לשכוח כותרות לדוחות (פוגל מוריד על זה!).
+  </div>
+
+  <div class="card idea" style="margin-top:2rem;text-align:center">
+    <p style="font-size:1.3rem;font-weight:900;color:var(--gold-light)">🐢🚀 בהצלחה במועד ב', מרום</p>
+    <p style="margin:.3rem 0 0">הכל מאת השם. שאלה 1 טכנית — תרגל פקודות יומן עד שזה אוטומטי.</p>
+  </div>
+
+  <div class="lesson-nav">
+    <button class="btn ghost" onclick="go('c7')">→ חזרה לחתכים</button>
+    <button class="btn" onclick="go('home')">⌂ דף הבית</button>
+  </div>
+</section>`;
+
+/* ============ ASSEMBLE & CALCULATORS ============ */
+function init(){
+  document.getElementById('main').innerHTML =
+    PAGES.home+PAGES.c1+PAGES.c2+PAGES.c3+PAGES.c4+PAGES.c5+PAGES.c6+PAGES.c7+PAGES.cheat;
+  buildNav();
+  document.querySelectorAll('.mnav').forEach(sel=>{
+    sel.innerHTML=NAV.map(i=>`<option value="${i.id}">${(i.n==='⌂'||i.n==='∑')?i.title:'פרק '+i.n+' · '+i.title}</option>`).join('');
+  });
+  go('home');
+  calcBalance();calcEquation();calcCOGS();calcInv();calcDep();calcAccrual();
+}
+function calcBalance(){
+  const d=+document.getElementById('deb2').value,c=+document.getElementById('cred2').value;
+  const out=document.getElementById('outBalance');
+  if(d===c) out.innerHTML=`<span class="res">✓ מאוזנת</span><span class="step">חובה ${d.toLocaleString()} = זכות ${c.toLocaleString()}. הפקודה תקינה.</span>`;
+  else out.innerHTML=`<span class="res">✗ לא מאוזנת</span><span class="step">הפרש של ${Math.abs(d-c).toLocaleString()} ₪. כל פקודת יומן חייבת חובה = זכות.</span>`;
+}
+function calcEquation(){
+  const a=+document.getElementById('assets3').value,l=+document.getElementById('liab3').value;
+  document.getElementById('outEquation').innerHTML=
+    `<span class="res">הון עצמי = ${(a-l).toLocaleString()} ₪</span>
+     <span class="step">נכסים ${a.toLocaleString()} − התחייבויות ${l.toLocaleString()} = הון ${(a-l).toLocaleString()}</span>`;
+}
+function calcCOGS(){
+  const o=+document.getElementById('open4').value,b=+document.getElementById('buy4').value,
+        c=+document.getElementById('close4').value,s=+document.getElementById('sales4').value;
+  const cogs=o+b-c, gross=s-cogs;
+  document.getElementById('outCOGS').innerHTML=
+    `<span class="res">עלות מכר = ${cogs.toLocaleString()} | רווח גולמי = ${gross.toLocaleString()} ₪</span>
+     <span class="step">עלות מכר: ${o.toLocaleString()} + ${b.toLocaleString()} − ${c.toLocaleString()} = ${cogs.toLocaleString()}</span>
+     <span class="step">רווח גולמי: ${s.toLocaleString()} − ${cogs.toLocaleString()} = ${gross.toLocaleString()}</span>`;
+}
+function calcInv(){
+  const q0=+document.getElementById('q0_5').value,p0=+document.getElementById('p0_5').value,
+        q1=+document.getElementById('q1_5').value,p1=+document.getElementById('p1_5').value,
+        q2=+document.getElementById('q2_5').value,p2=+document.getElementById('p2_5').value,
+        sold=+document.getElementById('sold_5').value;
+  const totalQ=q0+q1+q2, remain=totalQ-sold;
+  const out=document.getElementById('outInv');
+  if(remain<0){ out.innerHTML='<span class="res">נמכרו יותר יחידות מהמלאי</span>'; return; }
+  const totalCost=q0*p0+q1*p1+q2*p2;
+  const avg=totalCost/totalQ;
+  // FIFO: remaining = newest units (from last purchases back)
+  let r=remain, fifo=0;
+  const layersNewest=[[q2,p2],[q1,p1],[q0,p0]];
+  for(const [q,p] of layersNewest){ const take=Math.min(r,q); fifo+=take*p; r-=take; if(r<=0)break; }
+  // LIFO: remaining = oldest units (from first purchases forward)
+  r=remain; let lifo=0;
+  const layersOldest=[[q0,p0],[q1,p1],[q2,p2]];
+  for(const [q,p] of layersOldest){ const take=Math.min(r,q); lifo+=take*p; r-=take; if(r<=0)break; }
+  const wavg=remain*avg;
+  out.innerHTML=
+    `<span class="res">מלאי סגירה: ${remain} יח'</span>
+     <span class="step">FIFO (נשארו החדשים): ${fifo.toLocaleString()} ₪</span>
+     <span class="step">LIFO (נשארו הישנים): ${lifo.toLocaleString()} ₪</span>
+     <span class="step">ממוצע משוקלל (${avg.toFixed(2)} ליח'): ${wavg.toFixed(0)} ₪</span>`;
+}
+function calcDep(){
+  const cost=+document.getElementById('cost6').value,sal=+document.getElementById('salvage6').value,
+        life=+document.getElementById('life6').value,yrs=+document.getElementById('years6').value;
+  const out=document.getElementById('outDep');
+  if(life<=0){ out.innerHTML='<span class="res">שנות חיים חייב להיות חיובי</span>'; return; }
+  const annual=(cost-sal)/life;
+  const accum=Math.min(annual*yrs, cost-sal);
+  const book=cost-accum;
+  out.innerHTML=
+    `<span class="res">פחת שנתי = ${annual.toLocaleString()} ₪</span>
+     <span class="step">(${cost.toLocaleString()} − ${sal.toLocaleString()}) ÷ ${life} = ${annual.toLocaleString()}</span>
+     <span class="step">פחת נצבר אחרי ${yrs} שנים: ${accum.toLocaleString()}</span>
+     <span class="step">ערך פנקסני: ${cost.toLocaleString()} − ${accum.toLocaleString()} = ${book.toLocaleString()}</span>`;
+}
+function calcAccrual(){
+  const amt=+document.getElementById('amt7').value,m=+document.getElementById('month7').value;
+  const out=document.getElementById('outAccrual');
+  if(m<1||m>12){ out.innerHTML='<span class="res">חודש חייב להיות בין 1 ל-12</span>'; return; }
+  const monthsThis=12-m+1;
+  const perMonth=amt/12;
+  const thisYear=perMonth*monthsThis;
+  const nextYear=amt-thisYear;
+  out.innerHTML=
+    `<span class="res">השנה: ${thisYear.toLocaleString()} | מראש (לבאה): ${nextYear.toLocaleString()} ₪</span>
+     <span class="step">${monthsThis} חודשים השנה × ${perMonth.toFixed(0)} = ${thisYear.toLocaleString()}</span>
+     <span class="step">היתרה (${12-monthsThis} חודשים) = ${nextYear.toLocaleString()} → הוצאה/הכנסה מראש</span>`;
+}
+init();
+</script>
+
+
+</script>
+</body>
+</html>
