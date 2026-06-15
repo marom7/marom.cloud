@@ -1,0 +1,267 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>מיקרו-כלכלה · דף ריענון</title>
+<style>
+  :root{
+    --ink:#1a1f2e;
+    --ink-soft:#4a5168;
+    --paper:#f7f5ef;
+    --card:#ffffff;
+    --line:#e3ded2;
+    --accent:#993c1d;      /* coral/terracotta — micro identity */
+    --accent-soft:#faece7;
+    --gold:#b07c2b;
+    --gold-soft:#faeeda;
+    --blue:#185fa5;
+    --blue-soft:#e6f1fb;
+    --radius:14px;
+    --mono:"SF Mono",ui-monospace,"Cascadia Code",Menlo,Consolas,monospace;
+  }
+  *{box-sizing:border-box;}
+  body{
+    margin:0;background:var(--paper);color:var(--ink);
+    font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","Helvetica Neue",Arial,"Noto Sans Hebrew",sans-serif;
+    line-height:1.7;-webkit-font-smoothing:antialiased;
+  }
+  .wrap{max-width:820px;margin:0 auto;padding:32px 20px 80px;}
+  header.top{border-bottom:3px solid var(--ink);padding-bottom:18px;margin-bottom:8px;}
+  header.top .kicker{font-size:13px;letter-spacing:.5px;color:var(--accent);font-weight:600;text-transform:uppercase;}
+  header.top h1{font-size:30px;margin:6px 0 4px;font-weight:700;letter-spacing:-.5px;}
+  header.top p{margin:0;color:var(--ink-soft);font-size:15px;}
+
+  .anchor{background:var(--accent);color:#fff;border-radius:var(--radius);padding:18px 22px;margin:22px 0 10px;}
+  .anchor h2{margin:0 0 6px;font-size:18px;font-weight:600;color:#fff;}
+  .anchor p{margin:0;font-size:14.5px;color:#f5d9cf;}
+  .anchor code{background:rgba(255,255,255,.16);color:#fff;padding:2px 7px;border-radius:6px;font-family:var(--mono);font-size:13px;}
+
+  nav.toc{display:flex;flex-wrap:wrap;gap:8px;margin:18px 0 28px;}
+  nav.toc a{text-decoration:none;color:var(--ink);background:var(--card);border:1px solid var(--line);border-radius:999px;padding:6px 14px;font-size:13.5px;font-weight:500;transition:all .15s;}
+  nav.toc a:hover{border-color:var(--accent);color:var(--accent);}
+  nav.toc a .n{color:var(--accent);font-weight:700;margin-left:5px;}
+
+  section.topic{background:var(--card);border:1px solid var(--line);border-radius:var(--radius);padding:22px 24px;margin-bottom:18px;scroll-margin-top:16px;}
+  section.topic > h3{margin:0 0 14px;font-size:19px;font-weight:700;display:flex;align-items:baseline;gap:10px;border-bottom:1px solid var(--line);padding-bottom:10px;}
+  section.topic > h3 .num{color:#fff;background:var(--accent);width:28px;height:28px;border-radius:8px;display:inline-flex;align-items:center;justify-content:center;font-size:15px;flex-shrink:0;}
+  .sub{font-weight:600;font-size:15px;margin:16px 0 6px;color:var(--ink);}
+
+  .formula{font-family:var(--mono);background:#f3f1ea;border:1px solid var(--line);border-radius:9px;padding:11px 14px;margin:8px 0;font-size:14px;direction:ltr;text-align:left;overflow-x:auto;color:var(--ink);}
+  .formula b{color:var(--accent);font-weight:700;}
+  p.note{margin:8px 0;color:var(--ink-soft);font-size:14.5px;}
+
+  .ex{background:var(--blue-soft);border:1px solid #c9e0f5;border-radius:10px;padding:13px 16px;margin:12px 0 4px;}
+  .ex .label{font-size:12px;font-weight:700;color:var(--blue);text-transform:uppercase;letter-spacing:.5px;margin-bottom:4px;}
+  .ex .q{font-size:14px;color:var(--ink);margin-bottom:8px;}
+  .ex .calc{font-family:var(--mono);direction:ltr;text-align:left;font-size:13.5px;color:#0c447c;background:rgba(255,255,255,.6);border-radius:7px;padding:8px 11px;line-height:1.8;}
+  .ex .calc .res{color:var(--accent);font-weight:700;}
+
+  .callout{border-radius:10px;padding:11px 15px;margin:12px 0;font-size:14px;display:flex;gap:10px;align-items:flex-start;}
+  .callout .ic{font-size:17px;line-height:1.4;flex-shrink:0;}
+  .trick{background:var(--gold-soft);border:1px solid #ecd2a0;color:#6a4a12;}
+  .trick b{color:var(--gold);}
+  .warn{background:#fbece7;border:1px solid #f0c4b3;color:#7a3318;}
+  .warn b{color:#c0451f;}
+
+  table.dec{border-collapse:collapse;width:100%;margin:10px 0;font-size:13.5px;}
+  table.dec th,table.dec td{border:1px solid var(--line);padding:7px 10px;text-align:right;}
+  table.dec th{background:#f3f1ea;font-weight:600;}
+  table.dec code{font-family:var(--mono);direction:ltr;display:inline-block;}
+
+  footer.foot{margin-top:30px;padding:18px 22px;background:var(--ink);color:#fff;border-radius:var(--radius);}
+  footer.foot h3{margin:0 0 10px;font-size:16px;color:#fff;}
+  footer.foot ul{margin:0;padding-right:20px;}
+  footer.foot li{margin:5px 0;font-size:14px;color:#d4d8e2;}
+  footer.foot li b{color:#fff;}
+  .pill{display:inline-block;background:var(--accent-soft);color:var(--accent);font-size:12px;font-weight:600;padding:2px 9px;border-radius:999px;margin-right:6px;}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <header class="top">
+    <div class="kicker">יסודות הכלכלה למנהלים · מיקרו · MBA בן-גוריון</div>
+    <h1>דף ריענון — מיקרו על עמוד אחד</h1>
+    <p>החצי הראשון של הקורס. ריענון, לא לימוד מאפס — החומר כבר עבר אצלך פעם.</p>
+  </header>
+
+  <div class="anchor">
+    <h2>🔑 העוגן: שני כלים, כל המיקרו</h2>
+    <p>כמעט כל שאלת מיקרו היא או <b>עקומת תמורה</b> (מה מוותרים על מה — עלות אלטרנטיבית) או <b>שיווי משקל</b> (איפה <code>היצע = ביקוש</code>, ומה קורה כשמתערבים: מס, יבוא, גמישות). תזהה איזה מהשניים — והשאר נגזר.</p>
+  </div>
+
+  <nav class="toc">
+    <a href="#t1"><span>עקומת תמורה</span><span class="n">1</span></a>
+    <a href="#t2"><span>ביקוש + עודף צרכן</span><span class="n">2</span></a>
+    <a href="#t3"><span>עלויות יצרן</span><span class="n">3</span></a>
+    <a href="#t4"><span>סגירה ואיזון</span><span class="n">4</span></a>
+    <a href="#t5"><span>שיווי משקל</span><span class="n">5</span></a>
+    <a href="#t6"><span>מס וסובסידיה</span><span class="n">6</span></a>
+    <a href="#t7"><span>סחר ויבוא</span><span class="n">7</span></a>
+    <a href="#t8"><span>גמישות</span><span class="n">8</span></a>
+  </nav>
+
+  <!-- 1 -->
+  <section class="topic" id="t1">
+    <h3><span class="num">1</span> עקומת תמורה <span class="pill">הבסיס</span></h3>
+    <p class="note">מה המשק יכול לייצר משני מוצרים. הנקודות עליה — יעילות. מתחת — בזבוז/אבטלה. מעל — בלתי אפשרי.</p>
+
+    <div class="sub">עלות אלטרנטיבית (הויתור)</div>
+    <div class="formula"><b>שולית</b> MCx = ΔY / ΔX &nbsp;(כמה Y מוותרים על יחידת X נוספת)</div>
+    <div class="formula"><b>כוללת</b> TCx = MaxY − Y &nbsp;·&nbsp; <b>ממוצעת</b> ACx = TCx / X</div>
+
+    <div class="sub">כמה גורמי ייצור (עובדים + מכונות)</div>
+    <p class="note">בונים 2 משוואות (עובדים, מכונות), מבודדים, מציירים. <b>העקומה הנמוכה</b> = עקומת התמורה. נקודת החיתוך = ניצול מקסימלי של שניהם.</p>
+
+    <div class="ex">
+      <div class="label">דוגמה</div>
+      <div class="q">6 עובדים, כל אחד מייצר 1 פיצה או 2 נקניקיות. עוברים 1 לפיצה — מה הויתור?</div>
+      <div class="calc">פיצה +1 → 5 עובדים נותרו → 10 נקניקיות<br>ויתרנו <span class="res">2 נקניקיות לכל פיצה</span> (עקומה ליניארית)</div>
+    </div>
+
+    <div class="callout trick"><span class="ic">💡</span><div><b>שיפור טכנולוגי ב-X</b> → העקומה זזה החוצה רק בציר X. <b>גידול בעובדים</b> → זזה החוצה בשניהם. <b>שריפת מפעל/הגירה</b> → זזה פנימה.</div></div>
+  </section>
+
+  <!-- 2 -->
+  <section class="topic" id="t2">
+    <h3><span class="num">2</span> ביקוש ועודף צרכן</h3>
+    <p class="note">הצרכן קונה כל עוד הנכונות לשלם ≥ מחיר השוק.</p>
+
+    <div class="sub">עודף צרכן</div>
+    <div class="formula"><b>עודף צרכן</b> = מה שהיה מוכן לשלם − מה ששילם בפועל</div>
+    <p class="note">בפונקציה ליניארית P = a − q → זה <b>שטח המשולש</b> מעל קו המחיר ומתחת לעקומה: (בסיס × גובה) / 2.</p>
+
+    <div class="ex">
+      <div class="label">דוגמה</div>
+      <div class="q">ביקוש P = 20 − q, המחיר 2 ₪. מה עודף הצרכן?</div>
+      <div class="calc">כמות: 2 = 20 − q → q = 18<br>גובה: 20 − 2 = 18 &nbsp;·&nbsp; בסיס: 18<br>עודף = (18 × 18)/2 = <span class="res">162 ₪</span></div>
+    </div>
+
+    <div class="sub">ביקוש מצרפי</div>
+    <p class="note">סוכמים <b>כמויות</b> (אופקית!), לא מחירים. n צרכנים זהים → Q = n × q.</p>
+    <div class="callout warn"><span class="ic">⚠️</span><div>לחבר ביקושים = לבודד את q בכל משוואה, לחבר את ה-q-ים, ואז להחזיר ל-P. לא לחבר את ה-P-ים.</div></div>
+  </section>
+
+  <!-- 3 -->
+  <section class="topic" id="t3">
+    <h3><span class="num">3</span> עלויות יצרן <span class="pill">חוזר תמיד</span></h3>
+    <p class="note">מטבלת תפוקה בונים את כל העלויות. השכר משתנה → MC נגזר ממנו.</p>
+
+    <table class="dec">
+      <tr><th>מושג</th><th>נוסחה</th></tr>
+      <tr><td>תפוקה שולית</td><td><code>MP = ΔTP / ΔL</code></td></tr>
+      <tr><td>הוצאה משתנה</td><td><code>TVC = L × W</code></td></tr>
+      <tr><td>הוצאה כוללת</td><td><code>TC = TVC + FC</code></td></tr>
+      <tr><td>משתנה ממוצעת</td><td><code>AVC = TVC / TP</code></td></tr>
+      <tr><td>כוללת ממוצעת</td><td><code>AC = TC / TP</code></td></tr>
+      <tr><td>שולית</td><td><code>MC = W / MP</code></td></tr>
+    </table>
+
+    <div class="ex">
+      <div class="label">דוגמה</div>
+      <div class="q">עובד 1 → 10 יח', שכר 180. מה ה-MC וה-AVC?</div>
+      <div class="calc">MC = 180/10 = 18 &nbsp;·&nbsp; AVC = 180/10 = <span class="res">18</span></div>
+    </div>
+
+    <div class="callout trick"><span class="ic">💡</span><div><b>MC היא עקומת ההיצע של היצרן</b> (החלק שמעל min AVC). זו העקומה הכי חשובה בקורס.</div></div>
+  </section>
+
+  <!-- 4 -->
+  <section class="topic" id="t4">
+    <h3><span class="num">4</span> כלל היצרן — סגירה ואיזון</h3>
+
+    <div class="formula"><b>כלל היצרן:</b> מייצר כל עוד &nbsp; MC ≤ P</div>
+
+    <table class="dec">
+      <tr><th>מחיר</th><th>החלטה</th></tr>
+      <tr><td>מחיר סגירה (טווח קצר)</td><td>= <b>min AVC</b>. מתחת לזה → לא מייצר כלל</td></tr>
+      <tr><td>מחיר איזון (טווח ארוך)</td><td>= <b>min AC</b>. כאן הרווח = 0</td></tr>
+    </table>
+
+    <div class="ex">
+      <div class="label">דוגמה</div>
+      <div class="q">המחיר 50. ב-Q=5 הרווח חיובי, ב-Q=3 הרווח שלילי. מה עושים?</div>
+      <div class="calc">P=50 (רווח חיובי) → מייצר בשני הטווחים<br>P=35 (רווח שלילי, אך מכסה AVC) → <span class="res">מייצר רק בטווח הקצר</span></div>
+    </div>
+
+    <div class="callout trick"><span class="ic">🎯</span><div><b>חישוב רווח בטווח קצר:</b> מתעלמים מהעלות הקבועה (היא משולמת בכל מקרה). רווח = הכנסות − הוצאות משתנות.</div></div>
+  </section>
+
+  <!-- 5 -->
+  <section class="topic" id="t5">
+    <h3><span class="num">5</span> שיווי משקל בענף</h3>
+    <p class="note">הנקודה שבה <b>היצע מצרפי = ביקוש מצרפי</b>. משווים את שתי הפונקציות.</p>
+
+    <div class="formula"><b>שיווי משקל:</b> Q_ביקוש = Q_היצע &nbsp;→&nbsp; פותרים ל-P ול-Q</div>
+
+    <div class="sub">סדר הפעולות (כמו בשאלה 1 במבחן)</div>
+    <p class="note">1) ביקוש מצרפי (סכום הכמויות). 2) היצע מצרפי (סכום הכמויות). 3) משווים → P*, Q*. 4) משרטטים.</p>
+
+    <div class="callout trick"><span class="ic">💡</span><div>10 צרכנים עם <span style="font-family:var(--mono);direction:ltr;">P=300−5q</span> ו-10 יצרנים עם <span style="font-family:var(--mono);direction:ltr;">P=40q</span>: בודד q בכל אחד, כפול ב-10, השווה. זה כל הסעיף.</div></div>
+  </section>
+
+  <!-- 6 -->
+  <section class="topic" id="t6">
+    <h3><span class="num">6</span> מס וסובסידיה</h3>
+
+    <div class="sub">מס ליחידה</div>
+    <p class="note">המס מזיז את עקומת ההיצע <b>למעלה</b> בגובה המס. מפריד בין מחיר הצרכן למחיר היצרן:</p>
+    <div class="formula">P_צרכן = P_יצרן + מס</div>
+
+    <div class="sub">סובסידיה</div>
+    <p class="note">הפוך ממס — מזיזה את ההיצע <b>למטה</b>. <span style="font-family:var(--mono);direction:ltr;">P_צרכן = P_יצרן − סובסידיה</span>.</p>
+
+    <div class="callout warn"><span class="ic">⚠️</span><div><b>עודף יצרן אחרי מס</b> מחושב על מחיר <u>היצרן</u> (אחרי המס), לא מחיר השוק. טעות נפוצה.</div></div>
+  </section>
+
+  <!-- 7 -->
+  <section class="topic" id="t7">
+    <h3><span class="num">7</span> סחר בינלאומי ויבוא</h3>
+    <p class="note">משק קטן מקבל את המחיר העולמי כנתון.</p>
+
+    <div class="formula">מחיר רלוונטי לצרכן = מחיר עולמי + הובלה (ביבוא)</div>
+    <p class="note"><b>יבוא:</b> מחיר עולמי < שיווי משקל מקומי → צורכים לפי המחיר העולמי, מייבאים את ההפרש. <b>יצוא:</b> מחיר עולמי > מקומי → מייצרים יותר, מייצאים.</p>
+
+    <div class="sub">מכסת יבוא</div>
+    <p class="note">מגבילה את הכמות המיובאת. <span style="font-family:var(--mono);direction:ltr;">מכסה = כמות מבוקשת − כמות מיוצרת מקומית</span> במחיר הרלוונטי.</p>
+
+    <div class="ex">
+      <div class="label">דוגמה (כמו שאלה 1ג)</div>
+      <div class="q">כל צרכן קונה 22 יח', 10 צרכנים. כמה מייבאים?</div>
+      <div class="calc">ביקוש כולל = 22 × 10 = 220<br>מכסה = 220 − (היצע מקומי במחיר זה) = <span class="res">ההפרש</span></div>
+    </div>
+  </section>
+
+  <!-- 8 -->
+  <section class="topic" id="t8">
+    <h3><span class="num">8</span> גמישות וסוגי מוצרים</h3>
+
+    <div class="sub">גמישות הביקוש למחיר</div>
+    <div class="formula"><b>ε</b> = (Δq% / ΔP%) &nbsp;&nbsp;(בערך מוחלט)</div>
+    <table class="dec">
+      <tr><th>גמישות</th><th>משמעות</th><th>פדיון כשמחיר עולה</th></tr>
+      <tr><td><code>|ε| &gt; 1</code></td><td>גמיש</td><td>יורד</td></tr>
+      <tr><td><code>|ε| &lt; 1</code></td><td>קשיח</td><td>עולה</td></tr>
+      <tr><td><code>|ε| = 1</code></td><td>יחידתי</td><td>לא משתנה</td></tr>
+    </table>
+
+    <div class="sub">סוגי מוצרים (לפי הכנסה)</div>
+    <p class="note"><b>נורמלי:</b> הכנסה↑ → ביקוש↑. <b>נחות:</b> הכנסה↑ → ביקוש↓. <b>ניטרלי:</b> אין השפעה.</p>
+    <div class="callout trick"><span class="ic">💡</span><div><b>משלים</b> (קפה+חלב): מחיר Y↑ → ביקוש X↓. <b>תחליפי</b> (קפה/תה): מחיר Y↑ → ביקוש X↑.</div></div>
+  </section>
+
+  <footer class="foot">
+    <h3>🎯 דגשים לתרגול</h3>
+    <ul>
+      <li><b>זהה את סוג השאלה קודם:</b> עקומת תמורה? שיווי משקל? כלל יצרן? כל אחד מסלול קבוע.</li>
+      <li><b>היצע/ביקוש מצרפי:</b> תמיד סוכמים כמויות אופקית, אף פעם לא מחירים.</li>
+      <li><b>עודפים = שטחי משולשים.</b> צייר את הגרף, סמן את המשולש, (בסיס×גובה)/2.</li>
+      <li><b>מחיר סגירה = min AVC, מחיר איזון = min AC.</b> שתי המילים האלה חוזרות בכל מבחן.</li>
+      <li><b>הצג דרך פתרון</b> — נוסחה, הצבה, גרף. גם תשובה חלקית מזכה בניקוד.</li>
+    </ul>
+  </footer>
+
+</div>
+</body>
+</html>
