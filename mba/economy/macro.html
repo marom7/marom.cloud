@@ -1,0 +1,690 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>מאקרו-כלכלה · 67.codes</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Heebo:wght@300;400;500;700;900&family=Frank+Ruhl+Libre:wght@500;700;900&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --ink:#0c1620;
+  --paper:#eef2f6;
+  --paper-2:#dfe7ee;
+  --blue:#1d4e79;
+  --blue-dark:#0f2e4a;
+  --blue-light:#3d82b8;
+  --teal:#1f7a7a;
+  --copper:#c06a35;
+  --copper-light:#e0934f;
+  --red:#bc4030;
+  --green:#2a7d54;
+  --line:#c2cdd8;
+  --shadow:rgba(15,46,74,.15);
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{
+  font-family:'Heebo',sans-serif;
+  background:var(--paper);
+  color:var(--ink);
+  line-height:1.65;
+  background-image:
+    radial-gradient(circle at 15% 8%, rgba(61,130,184,.07), transparent 40%),
+    radial-gradient(circle at 85% 92%, rgba(192,106,53,.06), transparent 40%);
+  min-height:100vh;
+}
+.topbar{
+  position:sticky;top:0;z-index:100;
+  background:var(--blue-dark);color:var(--paper);
+  display:flex;align-items:center;justify-content:space-between;
+  padding:.7rem 1.4rem;box-shadow:0 2px 20px var(--shadow);
+  border-bottom:3px solid var(--copper);
+}
+.brand{display:flex;align-items:center;gap:.6rem;font-weight:900;font-size:1.15rem;letter-spacing:-.5px}
+.brand .turtle{font-size:1.4rem}
+.brand small{font-weight:400;opacity:.7;font-size:.78rem;font-family:'JetBrains Mono',monospace}
+.topbar-links{display:flex;gap:.5rem;align-items:center}
+.topbar-links a{
+  color:var(--paper);text-decoration:none;font-size:.82rem;font-weight:500;
+  padding:.35rem .7rem;border-radius:8px;opacity:.75;transition:.15s;
+}
+.topbar-links a:hover{opacity:1;background:rgba(255,255,255,.1)}
+.progress-mini{font-family:'JetBrains Mono',monospace;font-size:.8rem;opacity:.85}
+
+.shell{display:flex;max-width:1280px;margin:0 auto;gap:0}
+nav.side{
+  width:230px;flex-shrink:0;position:sticky;top:57px;height:calc(100vh - 57px);
+  overflow-y:auto;padding:1.4rem .9rem;border-left:1px solid var(--line);
+}
+nav.side h3{font-size:.72rem;text-transform:uppercase;letter-spacing:1.5px;color:var(--copper);margin:1.2rem .5rem .5rem;font-weight:700}
+nav.side h3:first-child{margin-top:0}
+.navlink{display:flex;align-items:center;gap:.6rem;padding:.55rem .7rem;border-radius:10px;color:var(--ink);text-decoration:none;font-weight:500;font-size:.92rem;cursor:pointer;transition:.18s;margin-bottom:.15rem}
+.navlink:hover{background:var(--paper-2)}
+.navlink.active{background:var(--blue);color:var(--paper);box-shadow:0 3px 10px var(--shadow)}
+.navlink .n{font-family:'JetBrains Mono',monospace;font-weight:700;font-size:.78rem;background:var(--paper-2);color:var(--blue-dark);width:26px;height:26px;display:grid;place-items:center;border-radius:7px;flex-shrink:0}
+.navlink.active .n{background:var(--copper);color:var(--blue-dark)}
+
+main{flex:1;padding:2rem 2.4rem 5rem;min-width:0}
+.lesson{display:none;animation:fade .4s ease}
+.lesson.active{display:block}
+@keyframes fade{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:none}}
+
+.lesson-head{margin-bottom:1.6rem;padding-bottom:1.2rem;border-bottom:2px solid var(--line)}
+.lesson-tag{display:inline-block;font-family:'JetBrains Mono',monospace;font-size:.75rem;background:var(--blue);color:var(--paper);padding:.25rem .7rem;border-radius:20px;margin-bottom:.7rem;font-weight:700;letter-spacing:.5px}
+.lesson h1{font-family:'Frank Ruhl Libre',serif;font-size:2.2rem;font-weight:900;line-height:1.2;color:var(--blue-dark)}
+.lesson .sub{font-size:1.05rem;color:#566776;margin-top:.4rem}
+
+h2.block{font-family:'Frank Ruhl Libre',serif;font-size:1.5rem;font-weight:700;color:var(--blue-dark);margin:2.2rem 0 .9rem;display:flex;align-items:center;gap:.6rem}
+h2.block .ico{font-size:.85rem;background:var(--copper);color:#fff;width:30px;height:30px;display:grid;place-items:center;border-radius:9px;flex-shrink:0}
+h3.sub-block{font-size:1.15rem;font-weight:700;color:var(--blue);margin:1.4rem 0 .5rem}
+p{margin:.7rem 0}
+strong{color:var(--blue-dark);font-weight:700}
+
+.card{background:#fff;border:1px solid var(--line);border-radius:16px;padding:1.3rem 1.5rem;margin:1.1rem 0;box-shadow:0 4px 18px var(--shadow)}
+.idea{background:linear-gradient(135deg,var(--blue-dark),var(--blue));color:var(--paper);border:none}
+.idea h2.block,.idea strong{color:var(--copper-light)}
+.idea .ico{background:var(--copper)}
+.key{border-right:5px solid var(--copper);background:var(--paper-2);border-radius:8px;padding:.9rem 1.2rem;margin:1rem 0}
+.key b{color:var(--copper)}
+.trick{border-right:5px solid var(--red);background:#fae9e6;border-radius:8px;padding:.9rem 1.2rem;margin:1rem 0}
+.trick::before{content:'⚡ טריק למבחן';display:block;font-weight:900;color:var(--red);font-size:.85rem;margin-bottom:.3rem}
+
+.tbl-wrap{overflow-x:auto;margin:1.1rem 0;border-radius:12px;border:1px solid var(--line)}
+table{border-collapse:collapse;width:100%;background:#fff;font-size:.92rem}
+th,td{padding:.6rem .8rem;text-align:center;border:1px solid var(--line)}
+th{background:var(--blue-dark);color:var(--paper);font-weight:700;font-size:.85rem}
+tr:nth-child(even) td{background:var(--paper)}
+td.hl{background:var(--copper-light)!important;font-weight:700}
+.formula-cell{font-family:'JetBrains Mono',monospace;color:var(--blue);font-weight:700}
+
+.fbox{font-family:'JetBrains Mono',monospace;background:var(--blue-dark);color:var(--copper-light);padding:.5rem 1rem;border-radius:8px;display:inline-block;font-weight:700;margin:.3rem .2rem;font-size:1rem}
+.fbox-row{display:flex;flex-wrap:wrap;gap:.4rem;margin:1rem 0}
+
+.calc{background:linear-gradient(160deg,#fff,var(--paper));border:2px solid var(--blue-light);border-radius:18px;padding:1.4rem 1.5rem;margin:1.4rem 0;box-shadow:0 6px 24px var(--shadow)}
+.calc-title{font-weight:900;color:var(--blue-dark);font-size:1.1rem;margin-bottom:.3rem;display:flex;align-items:center;gap:.5rem}
+.calc-title::before{content:'🧮';font-size:1.2rem}
+.calc-desc{font-size:.9rem;color:#566776;margin-bottom:1rem}
+.calc-inputs{display:flex;flex-wrap:wrap;gap:1rem;margin-bottom:1rem}
+.inp-group{display:flex;flex-direction:column;gap:.25rem}
+.inp-group label{font-size:.8rem;font-weight:700;color:var(--blue)}
+.inp-group input,.inp-group select{font-family:'JetBrains Mono',monospace;font-size:1rem;padding:.5rem .7rem;border:1.5px solid var(--line);border-radius:9px;width:130px;background:#fff;color:var(--ink);text-align:center}
+.inp-group input:focus,.inp-group select:focus{outline:none;border-color:var(--blue-light)}
+.calc-out{background:var(--blue-dark);color:var(--paper);border-radius:12px;padding:1rem 1.2rem;font-size:.95rem;min-height:48px}
+.calc-out .res{font-family:'JetBrains Mono',monospace;color:var(--copper-light);font-weight:700;font-size:1.15rem}
+.calc-out .step{display:block;font-size:.85rem;opacity:.85;margin:.2rem 0;font-family:'JetBrains Mono',monospace}
+
+button.btn{font-family:'Heebo',sans-serif;font-weight:700;cursor:pointer;background:var(--blue);color:var(--paper);border:none;padding:.55rem 1.2rem;border-radius:10px;font-size:.92rem;transition:.18s}
+button.btn:hover{background:var(--blue-dark);transform:translateY(-1px)}
+button.btn.copper{background:var(--copper)}
+button.btn.copper:hover{background:var(--copper-light);color:var(--blue-dark)}
+button.btn.ghost{background:transparent;color:var(--blue);border:1.5px solid var(--blue)}
+
+.quiz{background:#fff;border:1px solid var(--line);border-radius:16px;padding:1.3rem 1.5rem;margin:1.1rem 0;box-shadow:0 4px 18px var(--shadow)}
+.quiz .q{font-weight:700;color:var(--blue-dark);margin-bottom:.8rem;font-size:1.02rem}
+.opt{display:block;width:100%;text-align:right;background:var(--paper);border:1.5px solid var(--line);border-radius:10px;padding:.6rem .9rem;margin:.4rem 0;cursor:pointer;font-size:.92rem;font-family:'Heebo',sans-serif;transition:.15s}
+.opt:hover{border-color:var(--blue-light);background:var(--paper-2)}
+.opt.correct{background:#d3ebdd;border-color:var(--green);color:var(--green);font-weight:700}
+.opt.wrong{background:#fae9e6;border-color:var(--red);color:var(--red)}
+.opt:disabled{cursor:default}
+.quiz-fb{margin-top:.7rem;font-size:.9rem;padding:.6rem .9rem;border-radius:9px;display:none}
+.quiz-fb.show{display:block}
+.quiz-fb.ok{background:#d3ebdd;color:var(--green)}
+.quiz-fb.no{background:#fae9e6;color:var(--red)}
+
+.chart-wrap{background:#fff;border:1px solid var(--line);border-radius:14px;padding:1rem;margin:1.1rem 0;text-align:center}
+.chart-wrap svg{max-width:100%;height:auto}
+.chart-cap{font-size:.85rem;color:#566776;margin-top:.5rem}
+
+.lesson-nav{display:flex;justify-content:space-between;margin-top:3rem;padding-top:1.5rem;border-top:2px solid var(--line);gap:1rem}
+.lesson-nav button{flex:1;max-width:260px}
+.lesson-nav .spacer{flex:1}
+
+.hero{text-align:center;padding:2rem 1rem 1rem}
+.hero .turtle-big{font-size:3.5rem;margin-bottom:.5rem}
+.hero h1{font-family:'Frank Ruhl Libre',serif;font-size:2.6rem;font-weight:900;color:var(--blue-dark);line-height:1.15}
+.hero .sub{font-size:1.15rem;color:#566776;max-width:600px;margin:.8rem auto 0}
+.cards-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:1rem;margin-top:2rem}
+.topic-card{background:#fff;border:1px solid var(--line);border-radius:16px;padding:1.3rem;cursor:pointer;transition:.2s;box-shadow:0 4px 18px var(--shadow);border-top:4px solid var(--blue)}
+.topic-card:hover{transform:translateY(-4px);box-shadow:0 10px 30px var(--shadow)}
+.topic-card .tc-n{font-family:'JetBrains Mono',monospace;font-size:.8rem;color:var(--copper);font-weight:700}
+.topic-card h3{font-family:'Frank Ruhl Libre',serif;font-size:1.25rem;color:var(--blue-dark);margin:.3rem 0}
+.topic-card p{font-size:.88rem;color:#566776;margin:0}
+
+.exam-strip{background:linear-gradient(135deg,var(--copper),var(--copper-light));color:var(--blue-dark);border-radius:14px;padding:1rem 1.4rem;margin:1.5rem 0;display:flex;align-items:center;gap:1rem;font-weight:700}
+.exam-strip .big{font-size:1.6rem}
+
+.flow{display:flex;flex-wrap:wrap;align-items:center;justify-content:center;gap:.4rem;margin:1.2rem 0}
+.flow .node{background:var(--blue);color:#fff;padding:.5rem .9rem;border-radius:10px;font-weight:700;font-size:.9rem}
+.flow .node.alt{background:var(--teal)}
+.flow .arr{color:var(--copper);font-weight:900;font-size:1.2rem}
+
+@media(max-width:880px){
+  nav.side{display:none}
+  main{padding:1.4rem 1.1rem 4rem}
+  .lesson h1{font-size:1.7rem}
+  .hero h1{font-size:2rem}
+  .topbar-links a{font-size:.75rem;padding:.3rem .5rem}
+}
+.mobile-nav{display:none}
+@media(max-width:880px){
+  .mobile-nav{display:block;background:#fff;border:1px solid var(--line);border-radius:12px;padding:.6rem;margin-bottom:1.2rem}
+  .mobile-nav select{width:100%;padding:.6rem;font-family:'Heebo';font-size:1rem;border:1.5px solid var(--line);border-radius:9px;background:var(--paper)}
+}
+</style>
+</head>
+<body>
+
+<div class="topbar">
+  <div class="brand">
+    <span class="turtle">🐢</span>
+    <span>מאקרו-כלכלה <small>67.codes</small></span>
+  </div>
+  <div class="topbar-links">
+    <a href="index.html">⌂ מרכז הלימוד</a>
+    <a href="micro.html">מיקרו →</a>
+  </div>
+</div>
+
+<div class="shell">
+  <nav class="side" id="sidenav"></nav>
+  <main id="main"></main>
+</div>
+
+<script>
+const visited=new Set();
+const NAV=[
+  {id:'home',n:'⌂',title:'דף הבית',group:'התחלה'},
+  {id:'m1',n:'1',title:'הביקוש המצרפי',group:'מאקרו · החומר למבחן'},
+  {id:'m2',n:'2',title:'שיווי משקל ומכפיל',group:'מאקרו · החומר למבחן'},
+  {id:'m3',n:'3',title:'משק פתוח',group:'מאקרו · החומר למבחן'},
+  {id:'ineq',n:'4',title:'אי-שוויון בהכנסות',group:'מאקרו · החומר למבחן'},
+  {id:'cheat',n:'∑',title:'דף נוסחאות',group:'כלים'},
+];
+function buildNav(){
+  const nav=document.getElementById('sidenav');
+  let html='',lastGroup='';
+  NAV.forEach(item=>{
+    if(item.group!==lastGroup){html+=`<h3>${item.group}</h3>`;lastGroup=item.group;}
+    html+=`<a class="navlink" data-id="${item.id}" onclick="go('${item.id}')"><span class="n">${item.n}</span><span>${item.title}</span></a>`;
+  });
+  nav.innerHTML=html;
+}
+function go(id){
+  document.querySelectorAll('.lesson').forEach(l=>l.classList.remove('active'));
+  const el=document.getElementById(id);
+  if(el) el.classList.add('active');
+  document.querySelectorAll('.navlink').forEach(n=>n.classList.toggle('active',n.dataset.id===id));
+  window.scrollTo({top:0,behavior:'smooth'});
+  document.querySelectorAll('.mnav').forEach(s=>s.value=id);
+}
+function answer(btn,correct,fbId,explain){
+  const parent=btn.closest('.quiz');
+  parent.querySelectorAll('.opt').forEach(o=>o.disabled=true);
+  const fb=document.getElementById(fbId);
+  if(correct){btn.classList.add('correct');fb.className='quiz-fb show ok';fb.innerHTML='✓ נכון! '+explain;}
+  else{btn.classList.add('wrong');parent.querySelectorAll('.opt').forEach(o=>{if(o.dataset.correct==='1')o.classList.add('correct');});fb.className='quiz-fb show no';fb.innerHTML='✗ לא מדויק. '+explain;}
+}
+const PAGES={};
+
+/* ---------- HOME ---------- */
+PAGES.home=`
+<section id="home" class="lesson active">
+  <div class="hero">
+    <div class="turtle-big">🐢🚀</div>
+    <h1>מאקרו-כלכלה</h1>
+    <p class="sub">המשק כולו — ביקוש מצרפי, שיווי משקל, מכפיל, מדיניות ומשק פתוח. לחץ על נושא כדי להתחיל.</p>
+  </div>
+  <div class="exam-strip">
+    <span class="big">📅</span>
+    <span>מועד מיוחד בכלכלה — 21.6.2026. המאקרו הוא החצי השני של המבחן. כאן הכל בנוי על נוסחה אחת: AD = C + I + G (+ יצוא נטו במשק פתוח).</span>
+  </div>
+  <div class="cards-grid">
+    <div class="topic-card" onclick="go('m1')">
+      <div class="tc-n">שיעור 1</div><h3>הביקוש המצרפי</h3>
+      <p>פונקציית הצריכה, MPC, השקעה, הרכבת AD = C + I + G ומציאת רכיביו.</p>
+    </div>
+    <div class="topic-card" onclick="go('m2')">
+      <div class="tc-n">שיעור 2</div><h3>שיווי משקל ומכפיל</h3>
+      <p>תוצר שיווי משקל, דוח מקורות/שימושים, פערים, המכפיל הקיינסיאני ומדיניות.</p>
+    </div>
+    <div class="topic-card" onclick="go('m3')">
+      <div class="tc-n">שיעור 3</div><h3>משק פתוח</h3>
+      <p>יצוא, יבוא, תנועות הון, שער חליפין, שיווי משקל כפול והתערבות הבנק המרכזי.</p>
+    </div>
+    <div class="topic-card" onclick="go('ineq')">
+      <div class="tc-n">שיעור 4</div><h3>אי-שוויון בהכנסות</h3>
+      <p>עקומת לורנץ, מדד ג'יני, מס פרוגרסיבי/רגרסיבי/יחסי והשפעתם.</p>
+    </div>
+  </div>
+</section>`;
+
+/* ---------- M1 ---------- */
+PAGES.m1=`
+<section id="m1" class="lesson">
+  <div class="mobile-nav"><select class="mnav" onchange="go(this.value)"></select></div>
+  <div class="lesson-head">
+    <span class="lesson-tag">שיעור 1 · מאקרו</span>
+    <h1>הביקוש המצרפי</h1>
+    <p class="sub">מה מניע את הביקוש בכל המשק יחד.</p>
+  </div>
+
+  <div class="card idea">
+    <h2 class="block"><span class="ico">💡</span> הרעיון בגדול</h2>
+    <p>במאקרו לא מסתכלים על מוצר בודד אלא על <strong>כל המשק יחד</strong>. הביקוש המצרפי (AD) הוא סכום הביקושים מכל הגורמים: צריכה פרטית, השקעה וצריכה ציבורית. כל השיעור בונה את הנוסחה <strong>AD = C + I + G</strong> ומלמד למצוא כל רכיב.</p>
+  </div>
+
+  <h2 class="block"><span class="ico">🧩</span> שלושת רכיבי הביקוש</h2>
+  <div class="tbl-wrap"><table>
+    <tr><th>רכיב</th><th>מה זה</th><th>תלוי ב...</th></tr>
+    <tr><td><strong>C</strong> — צריכה פרטית</td><td>מה שמשקי בית קונים</td><td>הכנסה פנויה (Yd)</td></tr>
+    <tr><td><strong>I</strong> — השקעה</td><td>השקעות עסקים</td><td>שער הריבית (r)</td></tr>
+    <tr><td><strong>G</strong> — צריכה ציבורית</td><td>הוצאות הממשלה</td><td>נתון (קבוע)</td></tr>
+  </table></div>
+
+  <h2 class="block"><span class="ico">🛒</span> פונקציית הצריכה</h2>
+  <div class="fbox-row"><span class="fbox">C = C₀ + MPC · Yd</span></div>
+  <p>כאשר <strong>C₀</strong> = צריכה אוטונומית (גם בלי הכנסה), ו-<strong>MPC</strong> = הנטייה השולית לצרוך (כמה מכל שקל נוסף הולך לצריכה).</p>
+  <div class="key"><b>הכנסה פנויה Yd = Y − T.</b> אם אין מסים (T=0), אז Yd = Y. שים לב לזה תמיד — זו טעות נפוצה.</div>
+  <div class="key">אם יש כמה משקי בית, מחברים אותם: סוכמים את הצריכות האוטונומיות, וה-MPC המשותף נשאר. למשל C₁=100+0.8Yd עד C₅ → ביחד C = 1000 + 0.8Yd.</div>
+
+  <h2 class="block"><span class="ico">📈</span> השקעה תלויה בריבית</h2>
+  <p>ההשקעה יורדת ככל שהריבית עולה (יקר יותר ללוות):</p>
+  <div class="fbox-row"><span class="fbox">I = 200 − 1000r</span></div>
+  <p>דוגמה עם r=10% (כלומר 0.10): I = 200 − 1000×0.10 = <strong>100</strong>. שים לב — הריבית נכנסת כשבר עשרוני, לא כאחוז.</p>
+
+  <h2 class="block"><span class="ico">🔧</span> הרכבת הביקוש המצרפי</h2>
+  <p>דוגמה מלאה מהשיעור: C = 100+0.8Y, G = 400, I = 200−1000r, r=10%, אין מסים.</p>
+  <div class="card">
+    <p style="font-family:'JetBrains Mono',monospace">I = 200 − 1000×0.10 = 100<br>AD = (100 + 0.8Y) + 100 + 400<br>AD = 600 + 0.8Y</p>
+  </div>
+  <div class="key">התוצאה תמיד בצורה <b>AD = [חלק אוטונומי קבוע] + [MPC]·Y</b>. החלק הקבוע מורכב מ-C₀, מ-I (אחרי הצבת הריבית) ומ-G. ה-Y נשאר עם המקדם של ה-MPC.</div>
+
+  <div class="calc">
+    <div class="calc-title">מחשבון הרכבת ביקוש מצרפי</div>
+    <div class="calc-desc">הזן את הרכיבים וקבל את פונקציית ה-AD. (השקעה: I = I₀ − d·r)</div>
+    <div class="calc-inputs">
+      <div class="inp-group"><label>C₀ (צריכה אוטו')</label><input type="number" id="c0_1" value="100" oninput="calcAD()"></div>
+      <div class="inp-group"><label>MPC</label><input type="number" id="mpc_1" value="0.8" step="0.05" oninput="calcAD()"></div>
+      <div class="inp-group"><label>I₀</label><input type="number" id="i0_1" value="200" oninput="calcAD()"></div>
+      <div class="inp-group"><label>d (רגישות לריבית)</label><input type="number" id="d_1" value="1000" oninput="calcAD()"></div>
+      <div class="inp-group"><label>r (כשבר, 0.1=10%)</label><input type="number" id="r_1" value="0.1" step="0.01" oninput="calcAD()"></div>
+      <div class="inp-group"><label>G</label><input type="number" id="g_1" value="400" oninput="calcAD()"></div>
+    </div>
+    <div class="calc-out" id="outAD">—</div>
+  </div>
+
+  <div class="quiz">
+    <div class="q">🎯 בדיקה: C=200+0.75Yd, ריבית r=10%, השקעה I=300−1000r, G=150, אין מסים. מה החלק האוטונומי של ה-AD?</div>
+    <button class="opt" data-correct="1" onclick="answer(this,true,'fb-m1','I=300−100=200. אוטונומי = 200(C₀)+200(I)+150(G) = 550. ו-AD=550+0.75Y.')">550</button>
+    <button class="opt" onclick="answer(this,false,'fb-m1','שכחת להציב את הריבית ב-I. I=300−1000×0.1=200, לא 300.')">650</button>
+    <button class="opt" onclick="answer(this,false,'fb-m1','זה רק C₀+G. צריך להוסיף גם את I אחרי הצבת הריבית (=200).')">350</button>
+    <div class="quiz-fb" id="fb-m1"></div>
+  </div>
+
+  <div class="lesson-nav">
+    <div class="spacer"></div>
+    <button class="btn" onclick="go('m2')">השיעור הבא: שיווי משקל ומכפיל ←</button>
+  </div>
+</section>`;
+
+/* ---------- M2 ---------- */
+PAGES.m2=`
+<section id="m2" class="lesson">
+  <div class="mobile-nav"><select class="mnav" onchange="go(this.value)"></select></div>
+  <div class="lesson-head">
+    <span class="lesson-tag">שיעור 2 · מאקרו</span>
+    <h1>שיווי משקל ומכפיל</h1>
+    <p class="sub">איפה המשק מתייצב, ואיך שינוי קטן יוצר גל גדול.</p>
+  </div>
+
+  <div class="card idea">
+    <h2 class="block"><span class="ico">💡</span> הרעיון בגדול</h2>
+    <p>המשק בשיווי משקל כש<strong>התוצר שמיוצר שווה לביקוש המצרפי</strong> (Y = AD). אם יש פער מתוצר תעסוקה מלאה, הממשלה מתערבת. הכלי המרכזי: <strong>המכפיל הקיינסיאני</strong> — כל שקל שהממשלה מזריקה מגדיל את התוצר ביותר משקל אחד, בגלל תגובת שרשרת.</p>
+  </div>
+
+  <h2 class="block"><span class="ico">🎯</span> תוצר שיווי משקל</h2>
+  <div class="fbox-row"><span class="fbox">Y = AD</span></div>
+  <p>דוגמה: AD = 500 + 0.75Y. פותרים:</p>
+  <div class="card">
+    <p style="font-family:'JetBrains Mono',monospace">Y = 500 + 0.75Y<br>Y − 0.75Y = 500<br>0.25Y = 500<br>Y* = 2000</p>
+  </div>
+
+  <div class="calc">
+    <div class="calc-title">מחשבון תוצר שיווי משקל</div>
+    <div class="calc-desc">AD = A + c·Y (כאשר A=חלק אוטונומי, c=MPC). מחשב את Y* ואת המכפיל.</div>
+    <div class="calc-inputs">
+      <div class="inp-group"><label>A (אוטונומי)</label><input type="number" id="a_2" value="500" oninput="calcEqY()"></div>
+      <div class="inp-group"><label>c (MPC)</label><input type="number" id="c_2" value="0.75" step="0.05" oninput="calcEqY()"></div>
+    </div>
+    <div class="calc-out" id="outEqY">—</div>
+  </div>
+
+  <h2 class="block"><span class="ico">📋</span> דוח מקורות ושימושים</h2>
+  <p>דרך לוודא שבשיווי משקל סך המקורות (התוצר) = סך השימושים (C+I+G). אם Y*=2000 עם C=1800, I=30, G=170:</p>
+  <div class="tbl-wrap"><table>
+    <tr><th>מקורות</th><th>סכום</th><th>שימושים</th><th>סכום</th></tr>
+    <tr><td>תוצר Y</td><td>2000</td><td>צריכה C</td><td>1800</td></tr>
+    <tr><td></td><td></td><td>השקעה I</td><td>30</td></tr>
+    <tr><td></td><td></td><td>צריכה ציבורית G</td><td>170</td></tr>
+    <tr><td><strong>סך הכל</strong></td><td class="hl">2000</td><td><strong>סך הכל</strong></td><td class="hl">2000</td></tr>
+  </table></div>
+  <div class="key">אם שני הצדדים שווים — המשק בשיווי משקל. זו דרך מצוינת לבדוק את עצמך בסוף תרגיל.</div>
+
+  <h2 class="block"><span class="ico">⚖️</span> פערים מתעסוקה מלאה</h2>
+  <p><strong>תוצר תעסוקה מלאה (Yf)</strong> = התוצר המקסימלי האפשרי, ללא אבטלה. משווים אליו את שיווי המשקל:</p>
+  <div class="tbl-wrap"><table>
+    <tr><th>מצב</th><th>פירוש</th></tr>
+    <tr><td>Y* = Yf</td><td>אופטימלי — המנוע פועל במלוא הכוח</td></tr>
+    <tr><td>Y* < Yf</td><td><strong>פער דפלציוני</strong> — יש אבטלה, מפסידים תוצר</td></tr>
+    <tr><td>Y* > Yf</td><td><strong>פער אינפלציוני</strong> — לחצים לעליית מחירים</td></tr>
+  </table></div>
+
+  <h2 class="block"><span class="ico">🔗</span> המכפיל הקיינסיאני</h2>
+  <p>למה הגדלת G ב-10 מגדילה את התוצר ב-25? כי כל שקל שהממשלה מוציאה הופך להכנסה של מישהו, שמוציא חלק ממנה, וכך הלאה — <strong>תגובת שרשרת</strong>.</p>
+  <div class="fbox-row"><span class="fbox">K = 1 / (1 − MPC)</span><span class="fbox">ΔY = K × ΔA</span></div>
+  <p>עם MPC=0.6: K = 1/(1−0.6) = 1/0.4 = <strong>2.5</strong>. אז הגדלת G ב-10 → ΔY = 2.5×10 = 25.</p>
+
+  <div class="calc">
+    <div class="calc-title">מחשבון המכפיל וסגירת פער</div>
+    <div class="calc-desc">הזן MPC ואת גודל הפער שצריך לסגור — תקבל את המכפיל ואת השינוי הנדרש ב-G.</div>
+    <div class="calc-inputs">
+      <div class="inp-group"><label>MPC</label><input type="number" id="mpc_2" value="0.6" step="0.05" oninput="calcMult()"></div>
+      <div class="inp-group"><label>פער לסגור (ΔY)</label><input type="number" id="gap_2" value="100" oninput="calcMult()"></div>
+    </div>
+    <div class="calc-out" id="outMult">—</div>
+  </div>
+
+  <h2 class="block"><span class="ico">🏛️</span> מדיניות לסגירת פער דפלציוני</h2>
+  <div class="tbl-wrap"><table>
+    <tr><th>סוג מדיניות</th><th>כלי</th><th>פועלת דרך</th></tr>
+    <tr><td><strong>פיסקלית</strong></td><td>הגדלת G, הגדלת השקעה ציבורית, או הפחתת מסים T</td><td>תקציב הממשלה</td></tr>
+    <tr><td><strong>מוניטרית</strong></td><td>הפחתת שער הריבית r</td><td>הבנק המרכזי</td></tr>
+  </table></div>
+  <div class="trick"><strong>מכפיל המסים שונה ממכפיל ההוצאה!</strong> הגדלת G ישירה (מכפיל מלא K). אבל הפחתת מסים פועלת רק דרך הצריכה — מכפיל המסים = <strong>−MPC/(1−MPC)</strong>, קטן יותר בערכו המוחלט. לכן צריך הפחתת מס גדולה יותר מהגדלת G כדי לסגור אותו פער.</div>
+
+  <div class="quiz">
+    <div class="q">🎯 בדיקה: MPC=0.8. מהו המכפיל הקיינסיאני?</div>
+    <button class="opt" onclick="answer(this,false,'fb-m2','זה 1/0.8. המכפיל הוא 1/(1−MPC) = 1/(1−0.8) = 1/0.2.')">1.25</button>
+    <button class="opt" data-correct="1" onclick="answer(this,true,'fb-m2','K = 1/(1−0.8) = 1/0.2 = 5. ככל ש-MPC גבוה יותר, המכפיל גדול יותר.')">5</button>
+    <button class="opt" onclick="answer(this,false,'fb-m2','המכפיל הוא 1/(1−MPC), לא 1/MPC. כאן: 1/0.2 = 5.')">8</button>
+    <div class="quiz-fb" id="fb-m2"></div>
+  </div>
+
+  <div class="lesson-nav">
+    <button class="btn ghost" onclick="go('m1')">→ הקודם</button>
+    <button class="btn" onclick="go('m3')">השיעור הבא: משק פתוח ←</button>
+  </div>
+</section>`;
+
+/* ---------- M3 ---------- */
+PAGES.m3=`
+<section id="m3" class="lesson">
+  <div class="mobile-nav"><select class="mnav" onchange="go(this.value)"></select></div>
+  <div class="lesson-head">
+    <span class="lesson-tag">שיעור 3 · מאקרו</span>
+    <h1>משק פתוח</h1>
+    <p class="sub">כשמוסיפים סחר עם העולם, מט"ח ובנק מרכזי.</p>
+  </div>
+
+  <div class="card idea">
+    <h2 class="block"><span class="ico">💡</span> הרעיון בגדול</h2>
+    <p>עכשיו המשק סוחר עם העולם. מוסיפים <strong>יצוא (X)</strong> ומחסירים <strong>יבוא (IM)</strong>. יש עכשיו <strong>שני שיווי משקל</strong>: בשוק המוצרים ובשוק המט"ח. הבנק המרכזי יכול להתערב כדי לשמור על שער חליפין מסוים.</p>
+  </div>
+
+  <h2 class="block"><span class="ico">🌍</span> שתי המשוואות המרכזיות</h2>
+  <div class="card">
+    <p><strong>שיווי משקל בשוק המוצרים:</strong></p>
+    <div class="fbox-row"><span class="fbox">C + G + I = Y + IM − X</span></div>
+    <p>או בסידור אחר: <span class="fbox">Y = C + I + G + X − IM</span></p>
+    <p style="margin-top:1rem"><strong>שיווי משקל בשוק המט"ח:</strong></p>
+    <div class="fbox-row"><span class="fbox">CF + TR + X = IM</span></div>
+    <p>כאשר CF = תנועות הון, TR = העברות חד-צדדיות.</p>
+  </div>
+
+  <h2 class="block"><span class="ico">📦</span> הרכיבים החדשים</h2>
+  <div class="tbl-wrap"><table>
+    <tr><th>רכיב</th><th>מה זה</th><th>צורה טיפוסית</th></tr>
+    <tr><td><strong>X</strong> — יצוא</td><td>מה שהעולם קונה מאיתנו</td><td class="formula-cell">X = 181 + 211E</td></tr>
+    <tr><td><strong>IM</strong> — יבוא</td><td>מה שאנחנו קונים מבחוץ</td><td class="formula-cell">IM = 0.3Y − 311E</td></tr>
+    <tr><td><strong>CF</strong> — תנועות הון</td><td>זרימת כסף להשקעות</td><td class="formula-cell">CF = 5000(r − rw)</td></tr>
+    <tr><td><strong>rw</strong></td><td>שער ריבית עולמי</td><td class="formula-cell">נתון</td></tr>
+  </table></div>
+  <div class="key"><b>E או e/p</b> = שער החליפין. יבוא תלוי גם בתוצר (Y) — ככל שמייצרים יותר, צורכים יותר יבוא. תנועות ההון תלויות בהפרש בין הריבית המקומית לעולמית: אם r>rw, הון זורם פנימה.</div>
+
+  <h2 class="block"><span class="ico">🧮</span> סדר הפתרון</h2>
+  <div class="flow">
+    <span class="node">1. מצא Y* משוק המוצרים</span>
+    <span class="arr">←</span>
+    <span class="node">2. הצב ב-CF, X, IM</span>
+    <span class="arr">←</span>
+    <span class="node alt">3. מצא שער חליפין E משוק המט"ח</span>
+  </div>
+  <p>קודם פותרים את שוק המוצרים (כמו במשק סגור, רק עם X−IM), מוצאים את התוצר. אחר כך מציבים בשוק המט"ח ומוצאים את שער החליפין שמאזן אותו.</p>
+
+  <h2 class="block"><span class="ico">🏦</span> התערבות הבנק המרכזי</h2>
+  <p>כשהבנק המרכזי רוצה שער חליפין לא יחרוג מרף מסוים, הוא <strong>קונה או מוכר מט"ח</strong>. למשל, אם הוא רוצה ששער החליפין יהיה לפחות 2 ₪ לדולר — וברגע שהוא יורד מתחת, הבנק קונה דולרים בשוק כדי להעלות את הביקוש לדולר ולתמוך בשער.</p>
+  <div class="trick">בשאלות "הבנק המרכזי רוכש X דולרים" — הרכישה מזריקה ביקוש למט"ח ומשנה את שיווי המשקל בשוק המט"ח. בודקים איך זה משפיע על שתי המשוואות. שמירה על תקציב מאוזן פירושה G = T.</div>
+
+  <h2 class="block"><span class="ico">🎯</span> יעדי מדיניות (שילוב כלים)</h2>
+  <p>שאלות טיפוסיות מבקשות להשיג כמה יעדים בו-זמנית, למשל:</p>
+  <div class="card">
+    <p>• הגדלת ההשקעות ברמה מסוימת</p>
+    <p>• תוצר תעסוקה מלאה (ויציבות מחירים)</p>
+    <p>• שמירה על תקציב מאוזן (G = T)</p>
+    <p>הפתרון: משלבים מדיניות פיסקלית (G, T) ומוניטרית (r) כדי לפגוע בכל היעדים יחד. כל יעד נותן משוואה, ופותרים את המערכת.</p>
+  </div>
+
+  <div class="calc">
+    <div class="calc-title">מחשבון משק פתוח — תוצר שיווי משקל</div>
+    <div class="calc-desc">משק פתוח בלי מט"ח משתנה: Y = C₀ + c·(Y−T) + I + G + X − (m·Y). מחשב את Y*.</div>
+    <div class="calc-inputs">
+      <div class="inp-group"><label>C₀</label><input type="number" id="c0_3" value="400" oninput="calcOpen()"></div>
+      <div class="inp-group"><label>MPC (c)</label><input type="number" id="c_3" value="0.75" step="0.05" oninput="calcOpen()"></div>
+      <div class="inp-group"><label>T (מסים)</label><input type="number" id="t_3" value="1000" oninput="calcOpen()"></div>
+      <div class="inp-group"><label>I</label><input type="number" id="i_3" value="700" oninput="calcOpen()"></div>
+      <div class="inp-group"><label>G</label><input type="number" id="g_3" value="1000" oninput="calcOpen()"></div>
+      <div class="inp-group"><label>X (יצוא)</label><input type="number" id="x_3" value="400" oninput="calcOpen()"></div>
+      <div class="inp-group"><label>m (נטיית יבוא)</label><input type="number" id="m_3" value="0.3" step="0.05" oninput="calcOpen()"></div>
+    </div>
+    <div class="calc-out" id="outOpen">—</div>
+  </div>
+
+  <div class="quiz">
+    <div class="q">🎯 בדיקה: באיזה תנאי הון זורם <em>אל</em> המשק (CF חיובי)?</div>
+    <button class="opt" data-correct="1" onclick="answer(this,true,'fb-m3','CF=k(r−rw). כשהריבית המקומית גבוהה מהעולמית, משתלם להשקיע כאן, וההון נכנס.')">כשהריבית המקומית r גבוהה מהעולמית rw</button>
+    <button class="opt" onclick="answer(this,false,'fb-m3','להפך — אם r נמוכה מ-rw, משקיעים מעדיפים את חו"ל וההון יוצא.')">כשהריבית המקומית נמוכה מהעולמית</button>
+    <button class="opt" onclick="answer(this,false,'fb-m3','תנועות ההון תלויות בהפרש הריביות (r−rw), לא ישירות בתוצר.')">כשהתוצר Y גבוה</button>
+    <div class="quiz-fb" id="fb-m3"></div>
+  </div>
+
+  <div class="lesson-nav">
+    <button class="btn ghost" onclick="go('m2')">→ הקודם</button>
+    <button class="btn" onclick="go('ineq')">השיעור הבא: אי-שוויון ←</button>
+  </div>
+</section>`;
+
+/* ---------- INEQUALITY ---------- */
+PAGES.ineq=`
+<section id="ineq" class="lesson">
+  <div class="mobile-nav"><select class="mnav" onchange="go(this.value)"></select></div>
+  <div class="lesson-head">
+    <span class="lesson-tag">שיעור 4 · מאקרו</span>
+    <h1>אי-שוויון בהכנסות</h1>
+    <p class="sub">איך מודדים פערים — ואיך מסים משפיעים עליהם.</p>
+  </div>
+
+  <div class="card idea">
+    <h2 class="block"><span class="ico">💡</span> הרעיון בגדול</h2>
+    <p>מודדים אי-שוויון בחלוקת ההכנסות בעזרת <strong>עקומת לורנץ</strong> ו<strong>מדד ג'יני</strong>. ככל שהחלוקה שוויונית יותר → העקומה קרובה לקו האלכסון → ג'יני קרוב ל-0. סוג המס (פרוגרסיבי/רגרסיבי/יחסי) קובע אם הפער גדל או קטן.</p>
+  </div>
+
+  <h2 class="block"><span class="ico">📉</span> עקומת לורנץ</h2>
+  <p>מסדרים את המשפחות מהעני לעשיר, ומציירים: על ציר ה-X — אחוז מצטבר מהאוכלוסייה, על ציר ה-Y — אחוז מצטבר מההכנסה.</p>
+  <div class="chart-wrap">
+    <svg viewBox="0 0 320 300" xmlns="http://www.w3.org/2000/svg">
+      <line x1="45" y1="250" x2="290" y2="250" stroke="#0f2e4a" stroke-width="2"/>
+      <line x1="45" y1="250" x2="45" y2="20" stroke="#0f2e4a" stroke-width="2"/>
+      <!-- equality diagonal -->
+      <line x1="45" y1="250" x2="280" y2="25" stroke="#2a7d54" stroke-width="2.5" stroke-dasharray="5"/>
+      <!-- lorenz curve (bowed) -->
+      <path d="M45 250 Q 180 230 280 25" fill="none" stroke="#c06a35" stroke-width="3"/>
+      <text x="150" y="120" font-size="11" fill="#2a7d54" font-weight="700" transform="rotate(-32 150 120)">קו שוויון מלא</text>
+      <text x="200" y="200" font-size="11" fill="#c06a35" font-weight="700">עקומת לורנץ</text>
+      <text x="165" y="285" text-anchor="middle" font-size="11" fill="#0f2e4a" font-weight="700">% מצטבר מהאוכלוסייה</text>
+      <text x="18" y="135" text-anchor="middle" font-size="11" fill="#0f2e4a" font-weight="700" transform="rotate(-90 18 135)">% מצטבר מההכנסה</text>
+    </svg>
+    <div class="chart-cap">ככל שהעקומה רחוקה יותר מהאלכסון → אי-שוויון גדול יותר.</div>
+  </div>
+
+  <h2 class="block"><span class="ico">📐</span> מדד ג'יני</h2>
+  <div class="fbox-row"><span class="fbox">ג'יני = השטח בין האלכסון לעקומה / שטח המשולש כולו</span></div>
+  <div class="tbl-wrap"><table>
+    <tr><th>ערך ג'יני</th><th>משמעות</th></tr>
+    <tr><td><strong>0</strong></td><td>שוויון מלא — כולם מרוויחים אותו דבר (העקומה על האלכסון)</td></tr>
+    <tr><td><strong>1</strong></td><td>אי-שוויון מוחלט — אחד מרוויח הכל</td></tr>
+  </table></div>
+  <div class="key">ככל שמתרחקים מהאלכסון, המדד גדל וקרוב יותר ל-1 = החלוקה פחות שוויונית.</div>
+
+  <h2 class="block"><span class="ico">💰</span> שלושת סוגי המס</h2>
+  <div class="tbl-wrap"><table>
+    <tr><th>סוג מס</th><th>שיעור המס...</th><th>השפעה על אי-שוויון</th></tr>
+    <tr><td><strong>פרוגרסיבי</strong></td><td>עולה עם ההכנסה (מדרגות מס)</td><td>מקטין אי-שוויון ✓</td></tr>
+    <tr><td><strong>יחסי (פרופורציונלי)</strong></td><td>קבוע באחוזים לכולם</td><td>לא משנה את האי-שוויון</td></tr>
+    <tr><td><strong>רגרסיבי</strong></td><td>יורד עם ההכנסה (אגרה קבועה)</td><td>מגדיל אי-שוויון ✗</td></tr>
+  </table></div>
+  <div class="trick"><strong>מס יחסי לא משנה את ג'יני!</strong> אם כולם משלמים אותו אחוז, החלקים היחסיים נשארים זהים — העקומה והמדד לא זזים. רק מס פרוגרסיבי (מדרגות) באמת מקטין את הפער. אגרה קבועה לכל אדם היא דווקא רגרסיבית — פוגעת יותר בעניים.</div>
+
+  <h2 class="block"><span class="ico">🔄</span> ברוטו מול נטו</h2>
+  <p>מודדים אי-שוויון <strong>ברוטו</strong> (לפני מסים והעברות) ו<strong>נטו</strong> (אחרי). ההפרש ביניהם מראה כמה מדיניות הממשלה הצליחה לצמצם את הפער.</p>
+
+  <div class="quiz">
+    <div class="q">🎯 בדיקה: הממשלה מטילה מס יחסי של 20% על כל ההכנסות. מה קורה למדד ג'יני?</div>
+    <button class="opt" onclick="answer(this,false,'fb-ineq','מס יחסי לא משנה את היחסים בין הקבוצות, אז ג'יני לא יורד.')">יורד (פחות אי-שוויון)</button>
+    <button class="opt" data-correct="1" onclick="answer(this,true,'fb-ineq','בדיוק! כשכולם משלמים אותו אחוז, החלקים היחסיים נשמרים — ג'יני לא משתנה.')">לא משתנה</button>
+    <button class="opt" onclick="answer(this,false,'fb-ineq','מס יחסי שומר על היחסים. מס רגרסיבי (אגרה קבועה) הוא זה שמגדיל.')">עולה (יותר אי-שוויון)</button>
+    <div class="quiz-fb" id="fb-ineq"></div>
+  </div>
+
+  <div class="lesson-nav">
+    <button class="btn ghost" onclick="go('m3')">→ הקודם</button>
+    <button class="btn copper" onclick="go('cheat')">לסיכום: דף הנוסחאות ∑</button>
+  </div>
+</section>`;
+
+/* ---------- CHEAT ---------- */
+PAGES.cheat=`
+<section id="cheat" class="lesson">
+  <div class="mobile-nav"><select class="mnav" onchange="go(this.value)"></select></div>
+  <div class="lesson-head">
+    <span class="lesson-tag">כלים</span>
+    <h1>דף נוסחאות — מאקרו</h1>
+    <p class="sub">כל מה שצריך לשלוף במבחן, במקום אחד.</p>
+  </div>
+
+  <h2 class="block"><span class="ico">🛒</span> ביקוש מצרפי וצריכה</h2>
+  <div class="tbl-wrap"><table>
+    <tr><td>ביקוש מצרפי (סגור)</td><td class="formula-cell">AD = C + I + G</td></tr>
+    <tr><td>פונקציית צריכה</td><td class="formula-cell">C = C₀ + MPC·Yd</td></tr>
+    <tr><td>הכנסה פנויה</td><td class="formula-cell">Yd = Y − T</td></tr>
+    <tr><td>שיווי משקל</td><td class="formula-cell">Y = AD</td></tr>
+  </table></div>
+
+  <h2 class="block"><span class="ico">🔗</span> מכפילים</h2>
+  <div class="tbl-wrap"><table>
+    <tr><td>מכפיל הוצאה</td><td class="formula-cell">K = 1 / (1 − MPC)</td></tr>
+    <tr><td>שינוי בתוצר</td><td class="formula-cell">ΔY = K × ΔA</td></tr>
+    <tr><td>מכפיל מסים</td><td class="formula-cell">−MPC / (1 − MPC)</td></tr>
+  </table></div>
+
+  <h2 class="block"><span class="ico">🌍</span> משק פתוח</h2>
+  <div class="tbl-wrap"><table>
+    <tr><td>שוק המוצרים</td><td class="formula-cell">Y = C + I + G + X − IM</td></tr>
+    <tr><td>שוק המט"ח</td><td class="formula-cell">CF + TR + X = IM</td></tr>
+    <tr><td>תנועות הון</td><td class="formula-cell">CF = k(r − rw)</td></tr>
+    <tr><td>תקציב מאוזן</td><td class="formula-cell">G = T</td></tr>
+  </table></div>
+
+  <h2 class="block"><span class="ico">📐</span> אי-שוויון</h2>
+  <div class="tbl-wrap"><table>
+    <tr><td>מדד ג'יני</td><td class="formula-cell">שטח בין אלכסון לעקומה / שטח המשולש</td></tr>
+    <tr><td>ג'יני = 0</td><td>שוויון מלא</td></tr>
+    <tr><td>ג'יני = 1</td><td>אי-שוויון מוחלט</td></tr>
+  </table></div>
+
+  <div class="trick" style="margin-top:2rem">
+    <strong style="display:block;margin-bottom:.4rem">5 הטעויות שעולות נקודות:</strong>
+    1. לשכוח להציב את הריבית כשבר (0.1 ולא 10) בנוסחת ההשקעה.<br>
+    2. לשכוח ש-Yd = Y − T (להשתמש ב-Y במקום Yd כשיש מסים).<br>
+    3. להשתמש במכפיל ההוצאה במקום במכפיל המסים בשאלות מס.<br>
+    4. לחשוב שמס יחסי משנה את ג'יני — הוא לא.<br>
+    5. במשק פתוח — לשכוח להחסיר את היבוא (IM תלוי ב-Y!).
+  </div>
+
+  <div class="card idea" style="margin-top:2rem;text-align:center">
+    <p style="font-size:1.3rem;font-weight:900;color:var(--copper-light)">🐢🚀 בהצלחה במבחן, מרום</p>
+    <p style="margin:.3rem 0 0">הכל מאת השם. AD = C + I + G — תמיד מתחילים משם.</p>
+  </div>
+
+  <div class="lesson-nav">
+    <button class="btn ghost" onclick="go('ineq')">→ חזרה לאי-שוויון</button>
+    <button class="btn" onclick="go('home')">⌂ דף הבית</button>
+  </div>
+</section>`;
+
+/* ============ ASSEMBLE & CALCULATORS ============ */
+function init(){
+  document.getElementById('main').innerHTML =
+    PAGES.home+PAGES.m1+PAGES.m2+PAGES.m3+PAGES.ineq+PAGES.cheat;
+  buildNav();
+  document.querySelectorAll('.mnav').forEach(sel=>{
+    sel.innerHTML=NAV.map(i=>`<option value="${i.id}">${(i.n==='⌂'||i.n==='∑')?i.title:'שיעור '+i.n+' · '+i.title}</option>`).join('');
+  });
+  go('home');
+  calcAD();calcEqY();calcMult();calcOpen();
+}
+function calcAD(){
+  const c0=+document.getElementById('c0_1').value,mpc=+document.getElementById('mpc_1').value,
+        i0=+document.getElementById('i0_1').value,d=+document.getElementById('d_1').value,
+        r=+document.getElementById('r_1').value,g=+document.getElementById('g_1').value;
+  const I=i0-d*r, A=c0+I+g;
+  document.getElementById('outAD').innerHTML=
+    `<span class="res">AD = ${A.toFixed(0)} + ${mpc}Y</span>
+     <span class="step">השקעה: I = ${i0} − ${d}×${r} = ${I.toFixed(0)}</span>
+     <span class="step">אוטונומי: ${c0}(C₀) + ${I.toFixed(0)}(I) + ${g}(G) = ${A.toFixed(0)}</span>`;
+}
+function calcEqY(){
+  const A=+document.getElementById('a_2').value,c=+document.getElementById('c_2').value;
+  const Y=A/(1-c), K=1/(1-c);
+  document.getElementById('outEqY').innerHTML=
+    `<span class="res">Y* = ${Y.toFixed(1)}</span>
+     <span class="step">Y = ${A} + ${c}Y → ${(1-c).toFixed(2)}Y = ${A} → Y* = ${Y.toFixed(1)}</span>
+     <span class="step">המכפיל כאן: K = 1/(1−${c}) = ${K.toFixed(2)}</span>`;
+}
+function calcMult(){
+  const mpc=+document.getElementById('mpc_2').value,gap=+document.getElementById('gap_2').value;
+  const K=1/(1-mpc), dG=gap/K;
+  document.getElementById('outMult').innerHTML=
+    `<span class="res">K = ${K.toFixed(2)} | נדרש ΔG = ${dG.toFixed(1)}</span>
+     <span class="step">מכפיל: K = 1/(1−${mpc}) = ${K.toFixed(2)}</span>
+     <span class="step">לסגירת פער ${gap}: ΔG = ${gap}/${K.toFixed(2)} = ${dG.toFixed(1)}</span>`;
+}
+function calcOpen(){
+  const c0=+document.getElementById('c0_3').value,c=+document.getElementById('c_3').value,
+        t=+document.getElementById('t_3').value,i=+document.getElementById('i_3').value,
+        g=+document.getElementById('g_3').value,x=+document.getElementById('x_3').value,
+        m=+document.getElementById('m_3').value;
+  // Y = c0 + c(Y-T) + I + G + X - mY  ->  Y(1-c+m) = c0 - cT + I + G + X
+  const A=c0-c*t+i+g+x, denom=1-c+m, Y=A/denom;
+  document.getElementById('outOpen').innerHTML=
+    `<span class="res">Y* = ${Y.toFixed(1)}</span>
+     <span class="step">אוטונומי נטו: ${c0} − ${c}×${t} + ${i} + ${g} + ${x} = ${A.toFixed(0)}</span>
+     <span class="step">Y(1−${c}+${m}) = ${A.toFixed(0)} → Y* = ${A.toFixed(0)}/${denom.toFixed(2)} = ${Y.toFixed(1)}</span>`;
+}
+init();
+</script>
+
+</script>
+</body>
+</html>

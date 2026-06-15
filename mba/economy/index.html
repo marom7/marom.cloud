@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>מרכז הלימוד לכלכלה · 67.codes</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Heebo:wght@300;400;500;700;900&family=Frank+Ruhl+Libre:wght@500;700;900&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --ink:#10171c;
+  --paper:#f1ede3;
+  --green:#1f6f54;--green-dark:#114635;--green-light:#3fa882;
+  --blue:#1d4e79;--blue-dark:#0f2e4a;--blue-light:#3d82b8;
+  --gold:#c98a1f;--gold-light:#e8b94a;
+  --copper:#c06a35;--copper-light:#e0934f;
+  --line:#cfc6b2;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+body{
+  font-family:'Heebo',sans-serif;color:var(--ink);min-height:100vh;
+  background:
+    radial-gradient(circle at 20% 15%, rgba(63,168,130,.10), transparent 45%),
+    radial-gradient(circle at 80% 85%, rgba(61,130,184,.10), transparent 45%),
+    var(--paper);
+  display:flex;flex-direction:column;align-items:center;
+  padding:2.5rem 1.2rem 4rem;
+}
+.exam-countdown{
+  font-family:'JetBrains Mono',monospace;font-size:.8rem;font-weight:700;
+  background:linear-gradient(135deg,var(--gold),var(--copper));color:#fff;
+  padding:.4rem 1.1rem;border-radius:30px;margin-bottom:1.6rem;letter-spacing:.5px;
+  box-shadow:0 4px 16px rgba(201,138,31,.3);
+}
+header{text-align:center;max-width:680px;margin-bottom:.5rem}
+.turtle{font-size:4rem;line-height:1;margin-bottom:.6rem}
+h1{
+  font-family:'Frank Ruhl Libre',serif;font-size:3rem;font-weight:900;line-height:1.1;
+  background:linear-gradient(120deg,var(--green-dark),var(--blue-dark));
+  -webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;
+}
+.tagline{font-size:1.2rem;color:#5a6055;margin-top:.7rem}
+.brand-line{
+  font-family:'JetBrains Mono',monospace;font-size:.85rem;color:var(--gold);
+  margin-top:.5rem;font-weight:700;letter-spacing:1px;
+}
+
+.cards{
+  display:grid;grid-template-columns:1fr 1fr;gap:1.6rem;
+  max-width:880px;width:100%;margin-top:2.8rem;
+}
+.subject{
+  position:relative;border-radius:24px;padding:2rem 1.8rem 1.8rem;
+  text-decoration:none;color:#fff;overflow:hidden;cursor:pointer;
+  transition:transform .25s,box-shadow .25s;display:flex;flex-direction:column;min-height:340px;
+}
+.subject:hover{transform:translateY(-6px)}
+.subject.micro{
+  background:linear-gradient(150deg,var(--green-dark),var(--green));
+  box-shadow:0 12px 36px rgba(17,70,53,.35);
+}
+.subject.micro:hover{box-shadow:0 20px 50px rgba(17,70,53,.45)}
+.subject.macro{
+  background:linear-gradient(150deg,var(--blue-dark),var(--blue));
+  box-shadow:0 12px 36px rgba(15,46,74,.35);
+}
+.subject.macro:hover{box-shadow:0 20px 50px rgba(15,46,74,.45)}
+.subject .deco{
+  position:absolute;top:-30px;left:-30px;font-size:9rem;opacity:.08;font-weight:900;
+  font-family:'Frank Ruhl Libre',serif;pointer-events:none;
+}
+.subject .badge{
+  font-family:'JetBrains Mono',monospace;font-size:.75rem;font-weight:700;
+  background:rgba(255,255,255,.18);padding:.3rem .8rem;border-radius:20px;
+  align-self:flex-start;margin-bottom:1rem;letter-spacing:.5px;
+}
+.subject.micro .badge{border:1px solid var(--gold-light)}
+.subject.macro .badge{border:1px solid var(--copper-light)}
+.subject h2{font-family:'Frank Ruhl Libre',serif;font-size:2rem;font-weight:900;margin-bottom:.5rem}
+.subject .desc{font-size:.98rem;opacity:.9;line-height:1.55;margin-bottom:1.3rem}
+.subject ul{list-style:none;margin-bottom:1.4rem}
+.subject li{font-size:.88rem;opacity:.85;padding:.22rem 0;display:flex;align-items:center;gap:.5rem}
+.subject li::before{content:'◆';font-size:.6rem}
+.subject.micro li::before{color:var(--gold-light)}
+.subject.macro li::before{color:var(--copper-light)}
+.subject .enter{
+  margin-top:auto;align-self:flex-start;
+  background:#fff;font-weight:700;font-size:.95rem;padding:.6rem 1.4rem;border-radius:12px;
+  display:inline-flex;align-items:center;gap:.5rem;transition:gap .2s;
+}
+.subject.micro .enter{color:var(--green-dark)}
+.subject.macro .enter{color:var(--blue-dark)}
+.subject:hover .enter{gap:.9rem}
+
+.footer-note{
+  margin-top:3rem;text-align:center;font-size:.92rem;color:#6a7066;max-width:540px;line-height:1.6;
+}
+.footer-note .verse{font-weight:700;color:var(--green-dark);font-family:'Frank Ruhl Libre',serif;font-size:1.05rem}
+
+@media(max-width:760px){
+  .cards{grid-template-columns:1fr}
+  h1{font-size:2.2rem}
+  .turtle{font-size:3rem}
+  .subject{min-height:auto}
+}
+</style>
+</head>
+<body>
+
+<div class="exam-countdown" id="countdown">📅 מועד מיוחד · 21.6.2026</div>
+
+<header>
+  <div class="turtle">🐢🚀</div>
+  <h1>מרכז הלימוד לכלכלה</h1>
+  <p class="tagline">שני הנושאים, מקום אחד. תקצירים, מחשבונים אינטראקטיביים וחידונים — לקראת תרגול המבחנים.</p>
+  <p class="brand-line">67.codes · בינה</p>
+</header>
+
+<div class="cards">
+  <a href="micro.html" class="subject micro">
+    <span class="deco">μ</span>
+    <span class="badge">6 שיעורים</span>
+    <h2>מיקרו-כלכלה</h2>
+    <p class="desc">השוק הבודד — איך נקבעים מחירים וכמויות, ומה קורה כשהממשלה מתערבת.</p>
+    <ul>
+      <li>היצע, ביקוש ושיווי משקל</li>
+      <li>עלויות היצרן ומחיר סגירה</li>
+      <li>מס קנייה, סובסידיה ונטל המס</li>
+      <li>מונופול ואפליית מחירים</li>
+    </ul>
+    <span class="enter">כניסה לנושא ←</span>
+  </a>
+
+  <a href="macro.html" class="subject macro">
+    <span class="deco">Σ</span>
+    <span class="badge">4 שיעורים</span>
+    <h2>מאקרו-כלכלה</h2>
+    <p class="desc">המשק כולו — מה מניע את הביקוש הלאומי, ואיך מדיניות משפיעה על התוצר.</p>
+    <ul>
+      <li>ביקוש מצרפי: AD = C + I + G</li>
+      <li>שיווי משקל והמכפיל הקיינסיאני</li>
+      <li>משק פתוח, מט"ח ובנק מרכזי</li>
+      <li>אי-שוויון, לורנץ וג'יני</li>
+    </ul>
+    <span class="enter">כניסה לנושא ←</span>
+  </a>
+</div>
+
+<p class="footer-note">
+  <span class="verse">"הכל מאת השם"</span><br>
+  כל אתר עומד בפני עצמו — אפשר לעבור ביניהם דרך התפריט העליון. תרגל את המחשבונים עד שהיד עובדת לבד. בהצלחה, מרום. 🐢🚀
+</p>
+
+<script>
+// Live countdown to the special exam (21.6.2026)
+(function(){
+  const exam=new Date('2026-06-21T09:00:00');
+  const el=document.getElementById('countdown');
+  function tick(){
+    const now=new Date();
+    const days=Math.ceil((exam-now)/(1000*60*60*24));
+    if(days>1) el.textContent='📅 מועד מיוחד בכלכלה · עוד '+days+' ימים (21.6.2026)';
+    else if(days===1) el.textContent='📅 מועד מיוחד בכלכלה · מחר! (21.6.2026)';
+    else if(days===0) el.textContent='📅 מועד מיוחד בכלכלה · היום! בהצלחה 🐢🚀';
+    else el.textContent='📚 מרכז הלימוד לכלכלה';
+  }
+  tick();
+})();
+</script>
+</body>
+</html>
