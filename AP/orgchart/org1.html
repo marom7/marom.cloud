@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+  <meta charset="UTF-8" />
+  <title>תרשים מבנה ארגוני – חטיבת משאבים</title>
+  <style>
+    body {
+      font-family: system-ui, -apple-system, "Segoe UI", sans-serif;
+      background: #f5f5f5;
+      margin: 0;
+      padding: 20px;
+    }
+
+    h1 {
+      text-align: center;
+      margin-bottom: 30px;
+    }
+
+    .org-chart {
+      display: flex;
+      justify-content: center;
+      overflow-x: auto;
+      padding: 10px;
+    }
+
+    .org-node {
+      display: inline-block;
+      padding: 8px 14px;
+      margin: 0 auto;
+      background: #ffffff;
+      border-radius: 6px;
+      border: 1px solid #d0d0d0;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.08);
+      font-size: 14px;
+      white-space: nowrap;
+    }
+
+    .org-node .title {
+      font-weight: 600;
+      color: #333;
+    }
+
+    .org-node .unit {
+      font-size: 12px;
+      color: #666;
+    }
+
+    /* עץ היררכי */
+    .tree ul {
+      padding-top: 20px;
+      position: relative;
+      padding-inline-start: 0;
+      text-align: center;
+    }
+
+    .tree li {
+      display: inline-block;
+      vertical-align: top;
+      list-style-type: none;
+      text-align: center;
+      position: relative;
+      padding: 20px 10px 0 10px;
+    }
+
+    /* קווים אנכיים */
+    .tree li::before,
+    .tree li::after {
+      content: '';
+      position: absolute;
+      top: 0;
+      border-top: 1px solid #ccc;
+      width: 50%;
+      height: 20px;
+    }
+
+    .tree li::before {
+      right: 50%;
+    }
+
+    .tree li::after {
+      left: 50%;
+    }
+
+    /* אין קו שמאלה/ימינה אם אין אחים */
+    .tree li:only-child::before,
+    .tree li:only-child::after {
+      display: none;
+    }
+
+    .tree li:only-child {
+      padding-top: 0;
+    }
+
+    /* קו ימני */
+    .tree li:first-child::before {
+      border: 0 none;
+    }
+
+    /* קו שמאלי */
+    .tree li:last-child::after {
+      border: 0 none;
+    }
+
+    /* קו אנכי מהורה לילד */
+    .tree ul::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      right: 50%;
+      border-right: 1px solid #ccc;
+      width: 0;
+      height: 20px;
+    }
+
+    /* ריחוף */
+    .org-node:hover {
+      background: #e9f3ff;
+      border-color: #6b9cff;
+    }
+  </style>
+</head>
+<body>
+  <h1>תרשים מבנה ארגוני – חטיבת משאבים</h1>
+
+  <div class="org-chart">
+    <div id="tree-root" class="tree"></div>
+  </div>
+
+  <script>
+    // דוגמה לנתונים שנגזרו מהקובץ (ניתן להרחיב לכל השורות)
+    // שים לב: כאן אנחנו משתמשים בתפקידים וביחידות מתוך הקובץ,
+    // למשל: "חטיבת משאבים", "** סמנכ\"ל/ית הון אנושי", "מחלקת מש\"א", "מדור משאבים לוגיסטיים" וכו'.
+    const positions = [
+      {
+        id: 1,
+        title: 'סמנכ"ל/ית הון אנושי',
+        unit: 'חטיבת משאבים',
+        managerTitle: 'מנכ"ל חברת הנמל' // מהשורה: "** מנכ"ל חברת הנמל"
+      },
+      {
+        id: 2,
+        title: 'חטיבת משאבים',
+        unit: 'חטיבת משאבים',
+        managerTitle: 'סמנכ"ל/ית הון אנושי'
+      },
+      {
+        id: 3,
+        title: 'ראש/ת אגף טכנולוגיות',
+        unit: 'מחלקת מיחשוב ומערכות מידע',
+        managerTitle: 'סמנכ"ל/ית הון אנושי'
+      },
+      {
+        id: 4,
+        title: 'רמ"ח משאבי אנוש ומינהל',
+        unit: 'מחלקת מש"א',
+        managerTitle: 'סמנכ"ל/ית הון אנושי'
+      },
+      {
+        id: 5,
+        title: 'רמ"ד משאבים לוגיסטיים',
+        unit: 'מדור משאבים לוגיסטיים',
+        managerTitle: 'רמ"ח משאבי אנוש ומינהל'
+      },
+      {
+        id: 6,
+        title: 'רכז משאבים לוגיסטיים',
+        unit: 'מדור שירותי מנהלה והיסעים',
+        managerTitle: 'רמ"ד משאבים לוגיסטיים'
+      },
+      {
+        id: 7,
+        title: 'נהג',
+        unit: 'מדור שירותי מנהלה והיסעים',
+        managerTitle: 'רמ"ד משאבים לוגיסטיים'
+      },
+      {
+        id: 8,
+        title: 'מנהל/ת פרויקטים במערכות מידע',
+        unit: 'מדור פרויקטים במערכות מידע',
+        managerTitle: 'מנהל תחום פרויקטים -מיחשוב'
+      },
+      {
+        id: 9,
+        title: 'מנהל תחום פרויקטים -מיחשוב',
+        unit: 'פרוייקטים מיחשוב',
+        managerTitle: 'ראש/ת אגף טכנולוגיות'
+      }
+    ];
+
+    // בניית מפת מנהלים -> כפיפים
+    function buildHierarchy(data) {
+      const byTitle = new Map();
+      data.forEach(p => byTitle.set(p.title, { ...p, children: [] }));
+
+      let rootNodes = [];
+
+      byTitle.forEach(node => {
+        if (!node.managerTitle || !byTitle.has(node.managerTitle)) {
+          rootNodes.push(node);
+        } else {
+          byTitle.get(node.managerTitle).children.push(node);
+        }
+      });
+
+      return rootNodes;
+    }
+
+    function createNodeElement(node) {
+      const li = document.createElement('li');
+
+      const box = document.createElement('div');
+      box.className = 'org-node';
+
+      const title = document.createElement('div');
+      title.className = 'title';
+      title.textContent = node.title;
+
+      const unit = document.createElement('div');
+      unit.className = 'unit';
+      unit.textContent = node.unit;
+
+      box.appendChild(title);
+      box.appendChild(unit);
+      li.appendChild(box);
+
+      if (node.children && node.children.length > 0) {
+        const ul = document.createElement('ul');
+        node.children.forEach(child => {
+          ul.appendChild(createNodeElement(child));
+        });
+        li.appendChild(ul);
+      }
+
+      return li;
+    }
+
+    function renderTree(rootElementId, data) {
+      const container = document.getElementById(rootElementId);
+      container.innerHTML = '';
+
+      const roots = buildHierarchy(data);
+      const ul = document.createElement('ul');
+
+      roots.forEach(root => {
+        ul.appendChild(createNodeElement(root));
+      });
+
+      container.appendChild(ul);
+    }
+
+    // רינדור העץ
+    renderTree('tree-root', positions);
+  </script>
+</body>
+</html>
