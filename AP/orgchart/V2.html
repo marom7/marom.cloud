@@ -1,0 +1,993 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>מבנה ארגוני · חטיבת משאבים · נמל אשדוד</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Rubik:wght@400;500;600;700&family=Assistant:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root{
+  --canvas:#e9eff5;
+  --canvas-2:#eef3f7;
+  --surface:#ffffff;
+  --ink:#0e2438;
+  --ink-soft:#5b7186;
+  --ink-faint:#90a2b4;
+  --accent:#0b7ea4;
+  --accent-deep:#075b76;
+  --accent-wash:#e3f1f6;
+  --amber:#b96409;
+  --amber-wash:#fbeede;
+  --line:#c7d5e2;
+  --shadow-sm:0 1px 2px rgba(14,36,56,.06), 0 1px 3px rgba(14,36,56,.05);
+  --shadow-md:0 6px 16px rgba(14,36,56,.10), 0 2px 5px rgba(14,36,56,.07);
+  --r:13px;
+  --dept-default:#5b7186;
+}
+*{box-sizing:border-box}
+html,body{margin:0;padding:0}
+body{
+  font-family:'Assistant',system-ui,Arial,sans-serif;
+  background:
+    radial-gradient(1200px 480px at 100% -8%, #f4f8fb 0%, rgba(244,248,251,0) 60%),
+    linear-gradient(180deg,var(--canvas-2) 0%, var(--canvas) 100%);
+  background-attachment:fixed;
+  color:var(--ink);
+  -webkit-font-smoothing:antialiased;
+  line-height:1.45;
+  min-height:100vh;
+}
+
+/* ---------- command bar ---------- */
+.bar{
+  position:sticky;top:0;z-index:40;
+  backdrop-filter:saturate(140%) blur(8px);
+  background:rgba(255,255,255,.82);
+  border-bottom:1px solid var(--line);
+  box-shadow:0 1px 0 rgba(255,255,255,.6) inset, 0 6px 18px -12px rgba(14,36,56,.25);
+}
+.bar-in{max-width:1080px;margin:0 auto;padding:12px 22px 9px}
+.bar-top{display:flex;align-items:center;gap:16px;flex-wrap:wrap}
+.brand{display:flex;align-items:center;gap:12px;margin-inline-end:auto}
+.glyph{width:38px;height:38px;flex:none;color:var(--accent);
+  filter:drop-shadow(0 2px 3px rgba(11,126,164,.25))}
+.brand h1{font-family:'Rubik';font-weight:700;font-size:19px;letter-spacing:-.2px;margin:0;line-height:1.1}
+.brand .sub{font-size:12.5px;color:var(--ink-soft);font-weight:500;margin-top:2px}
+.brand .sub b{color:var(--accent-deep);font-weight:600}
+
+.controls{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+.search{position:relative;display:flex;align-items:center}
+.search svg{position:absolute;inset-inline-start:11px;width:16px;height:16px;color:var(--ink-faint);pointer-events:none}
+.search input{
+  font-family:'Assistant';font-size:14px;color:var(--ink);
+  border:1px solid var(--line);background:var(--surface);
+  border-radius:10px;padding:9px 12px 9px 34px;width:208px;
+  transition:border-color .15s, box-shadow .15s, width .2s;
+}
+.search input::placeholder{color:var(--ink-faint)}
+.search input:focus{outline:none;border-color:var(--accent);box-shadow:0 0 0 3px var(--accent-wash);width:236px}
+.btn{
+  font-family:'Assistant';font-weight:600;font-size:13.5px;color:var(--ink);
+  border:1px solid var(--line);background:var(--surface);
+  border-radius:10px;padding:9px 13px;cursor:pointer;white-space:nowrap;
+  display:inline-flex;align-items:center;gap:7px;
+  transition:background .15s,border-color .15s,color .15s,transform .05s,box-shadow .15s;
+}
+.btn svg{width:15px;height:15px;color:var(--ink-soft);transition:color .15s}
+.btn:hover{border-color:var(--accent);color:var(--accent-deep);box-shadow:0 0 0 3px var(--accent-wash)}
+.btn:hover svg{color:var(--accent)}
+.btn:active{transform:translateY(1px)}
+.btn.primary{background:var(--accent);border-color:var(--accent);color:#fff}
+.btn.primary svg{color:#fff}
+.btn.primary:hover{background:var(--accent-deep);border-color:var(--accent-deep);box-shadow:0 0 0 3px var(--accent-wash)}
+
+/* view segmented toggle */
+.seg{display:inline-flex;background:var(--canvas-2);border:1px solid var(--line);border-radius:11px;padding:3px;gap:2px}
+.seg-btn{font-family:'Assistant';font-weight:600;font-size:13px;color:var(--ink-soft);
+  border:1px solid transparent;background:transparent;border-radius:8px;padding:7px 11px;cursor:pointer;
+  display:inline-flex;align-items:center;gap:6px;white-space:nowrap;transition:background .15s,color .15s,border-color .15s,box-shadow .15s}
+.seg-btn svg{width:15px;height:15px}
+.seg-btn:hover{color:var(--accent-deep)}
+.seg-btn.active{background:var(--surface);color:var(--accent-deep);border-color:var(--line);box-shadow:var(--shadow-sm)}
+
+/* ---------- stats strip ---------- */
+.strip{display:flex;align-items:center;gap:7px;flex-wrap:wrap;margin-top:9px}
+.stat{
+  display:flex;align-items:baseline;gap:6px;
+  background:var(--surface);border:1px solid var(--line);
+  border-radius:9px;padding:5px 10px;box-shadow:var(--shadow-sm);
+}
+.stat .n{font-family:'JetBrains Mono';font-weight:500;font-size:15.5px;color:var(--accent-deep);line-height:1}
+.stat .l{font-size:11.5px;color:var(--ink-soft);font-weight:500}
+.legend{display:flex;align-items:center;gap:12px;flex-wrap:wrap;margin-inline-start:auto;padding-inline-start:6px}
+.lg{display:flex;align-items:center;gap:6px;font-size:12px;color:var(--ink-soft);font-weight:500;cursor:default}
+.lg .dot{width:10px;height:10px;border-radius:3px;flex:none}
+.lg .c{font-family:'JetBrains Mono';font-size:11px;color:var(--ink-faint)}
+
+/* ---------- search result note ---------- */
+.note{max-width:1080px;margin:0 auto;padding:0 22px}
+.note .inner{
+  margin-top:12px;font-size:13px;color:var(--accent-deep);font-weight:600;
+  background:var(--accent-wash);border:1px solid #bfe0ea;border-radius:9px;
+  padding:7px 12px;display:none;align-items:center;gap:8px;
+}
+.note .inner.show{display:flex}
+.note .inner.empty{color:var(--amber);background:var(--amber-wash);border-color:#ecd3ad}
+
+/* ---------- hint ---------- */
+.hint{max-width:1080px;margin:12px auto 0;padding:0 22px;
+  font-size:13.5px;color:var(--ink-soft)}
+.hint b{color:var(--ink)}
+
+/* ---------- tree ---------- */
+.wrap{max-width:1080px;margin:0 auto;padding:14px 22px 80px}
+.tree{margin-top:8px}
+.node{position:relative}
+
+/* boxes */
+.box{
+  position:relative;
+  display:flex;align-items:center;gap:12px;
+  background:var(--surface);
+  border:1px solid var(--line);
+  border-inline-start:4px solid var(--dc,var(--dept-default));
+  border-radius:var(--r);
+  padding:11px 14px 11px 13px;
+  margin:6px 0;
+  box-shadow:var(--shadow-sm);
+  transition:box-shadow .16s, transform .08s, border-color .16s, background .16s;
+}
+.node.has-kids > .box{cursor:pointer}
+.node.has-kids > .box:hover{box-shadow:var(--shadow-md);transform:translateY(-1px)}
+.node.has-kids > .box:focus-visible{outline:none;box-shadow:0 0 0 3px var(--accent-wash), var(--shadow-md)}
+
+.chev{flex:none;width:22px;height:22px;border-radius:7px;display:grid;place-items:center;
+  background:var(--accent-wash);color:var(--accent-deep);transition:transform .26s ease, background .15s}
+.chev svg{width:14px;height:14px}
+.node.open > .box .chev{transform:rotate(90deg)}
+.node.has-kids > .box:hover .chev{background:#d2eaf1}
+.spacer{flex:none;width:22px;height:1px}
+
+.body{flex:1;min-width:0}
+.role{font-family:'Assistant';font-weight:600;font-size:15px;color:var(--ink);
+  line-height:1.25;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.meta-line{display:flex;align-items:center;gap:8px;margin-top:3px;flex-wrap:wrap}
+.pill{font-size:11.5px;font-weight:600;padding:1.5px 8px;border-radius:999px;
+  color:var(--dc,var(--dept-default));background:color-mix(in srgb, var(--dc,var(--dept-default)) 12%, white);
+  border:1px solid color-mix(in srgb, var(--dc,var(--dept-default)) 26%, white);white-space:nowrap}
+.unit{font-size:12.5px;color:var(--ink-soft);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+
+.side{flex:none;display:flex;flex-direction:column;align-items:flex-end;gap:5px}
+.emp{font-family:'JetBrains Mono';font-size:12px;font-weight:500;color:var(--ink-soft);
+  background:var(--canvas-2);border:1px solid var(--line);border-radius:7px;padding:2px 7px;letter-spacing:.3px}
+.count{font-size:11.5px;font-weight:600;color:var(--amber);
+  background:var(--amber-wash);border:1px solid #ecd3ad;border-radius:999px;padding:2px 9px;white-space:nowrap;
+  display:flex;align-items:center;gap:5px}
+.count svg{width:11px;height:11px;opacity:.85}
+
+/* flagship root (CEO) */
+.node.root{margin-bottom:4px}
+.node.root > .box{
+  border-inline-start-width:4px;
+  border-color:#bfe0ea;
+  border-inline-start-color:var(--accent);
+  background:linear-gradient(180deg,#ffffff 0%, var(--accent-wash) 220%);
+  box-shadow:var(--shadow-md);
+  padding-block:13px;
+}
+.node.root > .box .role{font-family:'Rubik';font-weight:700;font-size:16.5px;color:var(--accent-deep)}
+.node.root .chev{background:var(--accent);color:#fff}
+.node.root .crown{font-size:11.5px;font-weight:600;color:var(--accent-deep);
+  background:#fff;border:1px solid #bfe0ea;border-radius:999px;padding:2px 9px}
+
+/* children container + animation */
+.kids-wrap{display:grid;grid-template-rows:0fr;transition:grid-template-rows .28s ease}
+.node.open > .kids-wrap{grid-template-rows:1fr}
+.kids-wrap > .kids{overflow:hidden;min-height:0;opacity:0;transition:opacity .22s ease .02s}
+.node.open > .kids-wrap > .kids{opacity:1}
+
+/* connectors (RTL): per-child elbows = continuous rail, no fill artifacts */
+.kids{position:relative}
+.kids > .node{padding-inline-start:30px}
+.kids > .node::before{content:"";position:absolute;inset-inline-start:14px;top:0;width:2px;height:100%;background:var(--line)}
+.kids > .node:last-child::before{height:27px}
+.kids > .node::after{content:"";position:absolute;inset-inline-start:14px;top:26px;width:16px;height:2px;background:var(--line)}
+
+/* search states */
+.tree.searching .node:not(.match) > .box{opacity:.32;filter:saturate(.6)}
+.tree.searching .node.match > .box{opacity:1}
+.node.hit > .box{
+  border-color:var(--accent);
+  box-shadow:0 0 0 3px var(--accent-wash), var(--shadow-md);
+  animation:pulse .9s ease 1;
+}
+@keyframes pulse{0%{box-shadow:0 0 0 0 rgba(11,126,164,.35), var(--shadow-md)}
+  100%{box-shadow:0 0 0 3px var(--accent-wash), var(--shadow-md)}}
+
+mark{background:#ffe9a8;color:inherit;border-radius:3px;padding:0 1px}
+
+/* footer */
+.foot{max-width:1080px;margin:0 auto;padding:6px 22px 40px;color:var(--ink-faint);
+  font-size:12.5px;display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+.foot .dotsep{opacity:.5}
+.foot a{color:var(--accent-deep);text-decoration:none;font-weight:600}
+.foot a:hover{text-decoration:underline}
+
+/* drop overlay */
+.drop{position:fixed;inset:0;z-index:90;display:none;place-items:center;
+  background:rgba(11,126,164,.10);backdrop-filter:blur(3px)}
+.drop.show{display:grid}
+.drop .card{background:#fff;border:2px dashed var(--accent);border-radius:18px;
+  padding:34px 46px;text-align:center;box-shadow:var(--shadow-md);color:var(--accent-deep);
+  font-family:'Rubik';font-weight:600;font-size:18px}
+.drop .card span{display:block;font-family:'Assistant';font-weight:500;font-size:13.5px;color:var(--ink-soft);margin-top:6px}
+
+/* toast */
+.toast{position:fixed;bottom:22px;inset-inline-start:50%;transform:translate(50%,140%);
+  background:var(--ink);color:#fff;font-size:13.5px;font-weight:600;
+  padding:11px 18px;border-radius:11px;box-shadow:var(--shadow-md);z-index:95;
+  transition:transform .3s cubic-bezier(.2,.8,.2,1);max-width:88vw}
+.toast.show{transform:translate(50%,0)}
+.toast.warn{background:var(--amber)}
+
+@media (max-width:640px){
+  .bar-in,.wrap,.note,.hint,.foot{padding-inline:14px}
+  .brand h1{font-size:17px}
+  .search input{width:150px}
+  .search input:focus{width:170px}
+  .controls{width:100%;justify-content:flex-start}
+  .box{flex-wrap:wrap;gap:8px 10px}
+  .side{flex-direction:row;width:100%;justify-content:space-between;order:3;margin-top:2px}
+  .role{white-space:normal}
+  .kids > .node{padding-inline-start:20px}
+  .kids > .node::before{inset-inline-start:9px}
+  .kids > .node::after{inset-inline-start:9px;width:11px}
+  .oc-box{width:168px;padding:10px 10px 10px}
+  .oc-children > .oc-node{padding-inline:7px}
+  .chartwrap{padding-inline:4px}
+}
+
+@media (prefers-reduced-motion:reduce){
+  *{transition:none!important;animation:none!important}
+}
+
+/* ---------- org chart (top-down) view ---------- */
+body[data-view="chart"] #tree{display:none}
+body[data-view="nested"] #chartbox{display:none}
+/* chart view fills the full page width & height */
+body[data-view="chart"] .bar-in{max-width:none;padding-inline:16px}
+body[data-view="chart"] .note{max-width:none;padding-inline:16px}
+body[data-view="chart"] .hint{max-width:none;padding-inline:16px;margin:8px auto 0}
+body[data-view="chart"] .wrap{max-width:none;padding:6px 16px 8px}
+body[data-view="chart"] .foot{max-width:none;padding:4px 16px 18px}
+body[data-view="chart"] .chartbox{margin-top:6px}
+
+.chartbox{position:relative;margin-top:8px}
+.chartwrap{overflow:auto;direction:ltr;padding:18px 6px 24px;
+  border:1px solid var(--line);border-radius:16px;
+  background:
+    radial-gradient(900px 320px at 50% -12%, #f4f9fc 0%, rgba(244,249,252,0) 62%),
+    linear-gradient(180deg,#fbfdfe 0%, #f2f7fb 100%);
+  box-shadow:inset 0 1px 0 #fff, var(--shadow-sm);
+  scroll-behavior:smooth}
+.orgchart{direction:rtl;display:inline-flex;min-width:100%;justify-content:center;padding:6px 24px;
+  transform-origin:top center}
+
+/* floating zoom control (pinned to canvas corner) */
+.oc-zoom{position:absolute;inset-block-end:14px;inset-inline-start:14px;z-index:6;
+  display:flex;align-items:center;gap:2px;background:rgba(255,255,255,.92);
+  border:1px solid var(--line);border-radius:11px;padding:3px;
+  box-shadow:var(--shadow-md);backdrop-filter:saturate(140%) blur(6px)}
+.oc-zoom button{font-family:'Assistant';font-weight:600;color:var(--ink);
+  border:1px solid transparent;background:transparent;border-radius:8px;cursor:pointer;
+  height:30px;min-width:30px;padding:0 6px;display:grid;place-items:center;
+  transition:background .15s,color .15s}
+.oc-zoom button:hover{background:var(--accent-wash);color:var(--accent-deep)}
+.oc-zoom button:active{transform:translateY(1px)}
+.oc-zoom svg{width:16px;height:16px}
+.oc-zoom .zlbl{font-family:'JetBrains Mono';font-size:12px;font-weight:500;color:var(--ink-soft);
+  min-width:48px;padding:0 4px;letter-spacing:.2px}
+.oc-zoom .zlbl:hover{color:var(--accent-deep)}
+.oc-zsep{width:1px;height:18px;background:var(--line);margin:0 3px;flex:none}
+
+.oc-node{position:relative;display:flex;flex-direction:column;align-items:center}
+.oc-children{display:flex;justify-content:center;position:relative;padding-top:26px}
+.oc-node:not(.oc-open) > .oc-children{display:none}
+
+/* downward line: parent box -> bus (centered, direction-agnostic) */
+.oc-children::before{content:"";position:absolute;top:0;left:50%;width:2px;height:26px;
+  background:var(--line);transform:translateX(-50%)}
+/* each child: spacing + vertical drop + horizontal bus segment */
+.oc-children > .oc-node{padding:26px 12px 0}
+.oc-children > .oc-node::after{content:"";position:absolute;top:0;left:50%;width:2px;height:26px;
+  background:var(--line);transform:translateX(-50%)}
+.oc-children > .oc-node::before{content:"";position:absolute;top:0;
+  inset-inline-start:0;inset-inline-end:0;height:2px;background:var(--line)}
+.oc-children > .oc-node:first-child::before{inset-inline-start:50%}
+.oc-children > .oc-node:last-child::before{inset-inline-end:50%}
+.oc-node.oc-open > .oc-children{animation:ocIn .22s ease}
+@keyframes ocIn{from{opacity:0;transform:translateY(-5px)}to{opacity:1;transform:none}}
+
+/* the box (slightly rounded) */
+.oc-box{position:relative;width:202px;background:var(--surface);
+  border:1px solid var(--line);border-top:4px solid var(--dc,var(--dept-default));
+  border-radius:13px;padding:12px 12px 11px;box-shadow:var(--shadow-sm);text-align:center;
+  transition:box-shadow .16s, transform .08s, border-color .16s;cursor:default}
+.oc-node.has > .oc-box{cursor:pointer}
+.oc-node.has > .oc-box:hover{box-shadow:var(--shadow-md);transform:translateY(-1px)}
+.oc-box:focus-visible{outline:none;box-shadow:0 0 0 3px var(--accent-wash),var(--shadow-md)}
+.oc-role{font-family:'Assistant';font-weight:600;font-size:13.5px;color:var(--ink);line-height:1.3}
+.oc-sub{font-size:11.5px;color:var(--ink-soft);margin-top:4px;line-height:1.28}
+.oc-tags{display:flex;justify-content:center;align-items:center;gap:6px;flex-wrap:wrap;margin-top:9px}
+.oc-emp{font-family:'JetBrains Mono';font-size:11px;font-weight:500;color:var(--ink-soft);
+  background:var(--canvas-2);border:1px solid var(--line);border-radius:6px;padding:1px 6px;letter-spacing:.3px}
+.oc-count{font-size:11px;font-weight:600;color:var(--amber);background:var(--amber-wash);
+  border:1px solid #ecd3ad;border-radius:999px;padding:1px 8px;display:inline-flex;align-items:center;gap:4px}
+.oc-count svg{width:10px;height:10px;opacity:.85}
+/* expand toggle pinned to box bottom */
+.oc-toggle{position:absolute;bottom:-11px;left:50%;transform:translateX(-50%);
+  width:22px;height:22px;border-radius:50%;border:1px solid var(--line);background:var(--surface);
+  color:var(--accent-deep);display:grid;place-items:center;cursor:pointer;padding:0;z-index:3;
+  box-shadow:var(--shadow-sm);transition:background .15s,color .15s,border-color .15s}
+.oc-toggle svg{width:13px;height:13px;transition:transform .26s ease}
+.oc-node.oc-open > .oc-box .oc-toggle svg{transform:rotate(180deg)}
+.oc-toggle:hover{background:var(--accent);color:#fff;border-color:var(--accent)}
+
+/* root (CEO) box */
+.oc-node.oc-root > .oc-box{border-color:#bfe0ea;border-top-color:var(--accent);
+  background:linear-gradient(180deg,#fff 0%, var(--accent-wash) 240%);box-shadow:var(--shadow-md)}
+.oc-node.oc-root .oc-role{font-family:'Rubik';font-weight:700;color:var(--accent-deep);font-size:14.5px}
+.oc-crown{display:inline-block;font-size:10.5px;font-weight:600;color:var(--accent-deep);
+  background:#fff;border:1px solid #bfe0ea;border-radius:999px;padding:1px 8px;margin-top:6px}
+
+/* search states (chart) */
+.orgchart.searching .oc-box:not(.ocmatch){opacity:.3;filter:saturate(.55)}
+.oc-box.ochit{border-color:var(--accent);box-shadow:0 0 0 3px var(--accent-wash),var(--shadow-md);
+  animation:pulse .9s ease 1}
+
+/* ---------- print ---------- */
+@media print{
+  body{background:#fff}
+  .bar,.hint,.note,.drop,.toast,.foot .nophoto{display:none!important}
+  .bar{position:static}
+  .wrap{padding:0;max-width:none}
+  .kids-wrap{grid-template-rows:1fr!important}
+  .kids-wrap > .kids{opacity:1!important;overflow:visible!important}
+  .box{box-shadow:none!important;transform:none!important;break-inside:avoid}
+  .node{break-inside:avoid}
+  .foot{padding:8px 0}
+  .seg{display:none!important}
+  .oc-toggle{display:none!important}
+  .oc-zoom{display:none!important}
+  .chartbox{height:auto!important;margin:0!important}
+  .chartwrap{height:auto!important;overflow:visible!important;border:none!important;box-shadow:none!important;background:#fff!important;padding:0!important}
+  .orgchart{display:flex!important;padding:0!important}
+  .oc-box{box-shadow:none!important;break-inside:avoid}
+  @page{margin:12mm}
+}
+</style>
+</head>
+<body data-view="nested">
+
+<header class="bar">
+  <div class="bar-in">
+    <div class="bar-top">
+      <div class="brand">
+        <svg class="glyph" viewBox="0 0 48 48" fill="none" aria-hidden="true">
+          <circle cx="24" cy="9" r="5.5" fill="currentColor"/>
+          <rect x="6" y="30" width="13" height="11" rx="2.5" fill="currentColor" opacity=".75"/>
+          <rect x="29" y="30" width="13" height="11" rx="2.5" fill="currentColor" opacity=".75"/>
+          <path d="M24 14.5V22M24 22H12.5V29.5M24 22h11.5V29.5" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+        <div>
+          <h1>מבנה ארגוני</h1>
+          <div class="sub">חטיבת משאבים · <b>נמל אשדוד</b></div>
+        </div>
+      </div>
+      <div class="controls">
+        <div class="seg" role="tablist" aria-label="מצב תצוגה">
+          <button class="seg-btn active" id="vNested" role="tab" aria-selected="true" title="מבנה מקונן — רשימה נפתחת">
+            <svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M8 6h12M8 12h12M8 18h12M4 6h.01M4 12h.01M4 18h.01" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>מקונן</button>
+          <button class="seg-btn" id="vChart" role="tab" aria-selected="false" title="תרשים ארגוני — עץ מלמעלה למטה">
+            <svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><rect x="9" y="3" width="6" height="5" rx="1.3" stroke="currentColor" stroke-width="2"/><rect x="3" y="16" width="6" height="5" rx="1.3" stroke="currentColor" stroke-width="2"/><rect x="15" y="16" width="6" height="5" rx="1.3" stroke="currentColor" stroke-width="2"/><path d="M12 8v3.5M6 16v-2.5h12V16" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>תרשים</button>
+        </div>
+        <div class="search">
+          <svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><circle cx="11" cy="11" r="7" stroke="currentColor" stroke-width="2"/><path d="m20 20-3.2-3.2" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+          <input id="q" type="search" placeholder="חיפוש תפקיד, מס׳ או יחידה…" autocomplete="off" aria-label="חיפוש בעץ הארגוני">
+        </div>
+        <button class="btn" id="expand"><svg viewBox="0 0 24 24" fill="none"><path d="M12 5v14M5 12h14" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>הרחב הכל</button>
+        <button class="btn" id="collapse"><svg viewBox="0 0 24 24" fill="none"><path d="M5 12h14" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>כווץ הכל</button>
+        <button class="btn" id="load"><svg viewBox="0 0 24 24" fill="none"><path d="M12 16V4m0 0L8 8m4-4 4 4M4 17v2a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-2" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>טען קובץ</button>
+        <button class="btn primary" id="print"><svg viewBox="0 0 24 24" fill="none"><path d="M6 9V3h12v6M6 18H4a2 2 0 0 1-2-2v-4a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v4a2 2 0 0 1-2 2h-2M6 14h12v7H6z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>הדפסה</button>
+        <input id="file" type="file" accept=".xlsx,.xlsm,.xls" hidden>
+      </div>
+    </div>
+    <div class="strip" id="strip"></div>
+  </div>
+</header>
+
+<div class="note"><div class="inner" id="note"></div></div>
+
+<p class="hint" id="hint"></p>
+
+<main class="wrap">
+  <div class="tree" id="tree"></div>
+  <div class="chartbox" id="chartbox">
+    <div class="chartwrap" id="chartwrap"><div class="orgchart" id="orgchart"></div></div>
+    <div class="oc-zoom" role="group" aria-label="זום">
+      <button id="zoomOut" title="הקטן (Ctrl+גלגלת / מקש −)" aria-label="הקטן"><svg viewBox="0 0 24 24" fill="none"><path d="M5 12h14" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/></svg></button>
+      <button class="zlbl" id="zoomReset" title="איפוס ל-100%">100%</button>
+      <button id="zoomIn" title="הגדל (Ctrl+גלגלת / מקש +)" aria-label="הגדל"><svg viewBox="0 0 24 24" fill="none"><path d="M12 5v14M5 12h14" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/></svg></button>
+      <span class="oc-zsep" aria-hidden="true"></span>
+      <button id="zoomFit" title="התאם לאזור התצוגה" aria-label="התאם לתצוגה"><svg viewBox="0 0 24 24" fill="none"><path d="M4 9V5a1 1 0 0 1 1-1h4M20 9V5a1 1 0 0 0-1-1h-4M4 15v4a1 1 0 0 0 1 1h4M20 15v4a1 1 0 0 1-1 1h-4" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
+    </div>
+  </div>
+</main>
+
+<footer class="foot">
+  <span>מקור: קובץ תקן מצבה (.xlsx)</span><span class="dotsep">·</span>
+  <span>נטען ומנותח בדפדפן — ללא שרת</span><span class="dotsep">·</span>
+  <span class="nophoto">נבנה ב־<a href="https://marom.cloud" target="_blank" rel="noopener">marom.cloud</a> 🐢🚀</span>
+</footer>
+
+<div class="drop" id="drop"><div class="card">שחררו כאן קובץ Excel<span>במבנה: חטיבה · מחלקה · יחידה · שם משרה · שם פרטי · כפיפות ישירה</span></div></div>
+<div class="toast" id="toast"></div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/package/dist/xlsx.full.min.js" defer></script>
+<script>
+const DATA = [{"div":"חטיבת משאבים","dept":"מחלקת מיחשוב","deptNew":"","unit":"פרוייקטים מיחשוב","unitNew":"מדור פרויקטים במערכות מידע","title":"מנהל/ת פרויקטים במערכות מידע","emp":"1","boss":"** מנהל תחום פרויקטים -מיחשוב"},{"div":"חטיבת משאבים","dept":"מחלקת מיחשוב","deptNew":"","unit":"פרוייקטים מיחשוב","unitNew":"מדור פרויקטים במערכות מידע","title":"מיישמ/ת מערכות מידע","emp":"2","boss":"** מנהל תחום פרויקטים -מיחשוב"},{"div":"חטיבת משאבים","dept":"מחלקת מיחשוב","deptNew":"","unit":"פרוייקטים מיחשוב","unitNew":"מדור פרויקטים במערכות מידע","title":"מומחה יישום /מפתח בסביבת COGNOS","emp":"3","boss":"** מנהל תחום פרויקטים -מיחשוב"},{"div":"חטיבת משאבים","dept":"מחלקת מיחשוב","deptNew":"","unit":"מחלקת מיחשוב ומערכות מידע","unitNew":"","title":"מזכיר/ת רמ\"ח מחשוב","emp":"4","boss":"ראש/ת אגף טכנולוגיות"},{"div":"חטיבת משאבים","dept":"מחלקת מש\"א","deptNew":"","unit":"מדור משאבים לוגיסטיים","unitNew":"מדור שירותי מנהלה והיסעים","title":"רכז משאבים לוגיסטיים","emp":"5","boss":"** רמ\"ד משאבים לוגיסטיים"},{"div":"חטיבת משאבים","dept":"יחידת תו\"ם","deptNew":"","unit":"נוכחות ושכר עידוד","unitNew":"","title":"רכז/ת בכיר לנוכחות ושכר עידוד","emp":"6","boss":"** ע' ראש יח' תו\"ם לנוכחות ושכ\"ע"},{"div":"חטיבת משאבים","dept":"מחלקת מש\"א","deptNew":"","unit":"מדור משאבים לוגיסטיים","unitNew":"מדור שירותי מנהלה והיסעים","title":"פקידת מדור משאבים לוגיסטיים","emp":"7","boss":"** רמ\"ד משאבים לוגיסטיים"},{"div":"חטיבת משאבים","dept":"מחלקת מש\"א","deptNew":"","unit":"מדור משאבים לוגיסטיים","unitNew":"מדור שירותי מנהלה והיסעים","title":"נהג","emp":"8","boss":"** רמ\"ד משאבים לוגיסטיים"},{"div":"חטיבת משאבים","dept":"מחלקת מיחשוב","deptNew":"","unit":"תשתיות","unitNew":"לברר","title":"מנהל/ת טכנולוגי/ת בתחום אבטחת מידע וסייבר","emp":"9","boss":"** מנהל.ת תשתיות מחשוב וסייבר"},{"div":"חטיבת משאבים","dept":"מחלקת מיחשוב","deptNew":"","unit":"תכנות","unitNew":"מדור תוכנה","title":"תוכניתן","emp":"10","boss":"** אחראי צוות תוכניתנים"},{"div":"חטיבת משאבים","dept":"לשכת חטיבת משאבים","deptNew":"","unit":"בטיחות בתעבורה","unitNew":"","title":"רכז/ת בטיחות בתעבורה","emp":"11","boss":"** קצין בטיחות בתעבורה"},{"div":"חטיבת משאבים","dept":"לשכת חטיבת משאבים","deptNew":"","unit":"בטיחות בתעבורה","unitNew":"","title":"** קצין בטיחות בתעבורה","emp":"12","boss":"** סמנכ\"ל/ית הון אנושי"},{"div":"חטיבת משאבים","dept":"יחידת תו\"ם","deptNew":"","unit":"נוכחות ושכר עידוד","unitNew":"","title":"חשב נוכחות ושכר עידוד","emp":"13","boss":"** ע' ראש יח' תו\"ם לנוכחות ושכ\"ע"},{"div":"חטיבת משאבים","dept":"מחלקת מש\"א","deptNew":"","unit":"מדור הדרכה","unitNew":"","title":"** רמ\"ד הדרכה","emp":"14","boss":"** רמ\"ח משאבי אנוש ומינהל"},{"div":"חטיבת משאבים","dept":"יחידת תו\"ם","deptNew":"","unit":"ארגון ושיטות","unitNew":"מדור או\"ש וניהול פרויקטים","title":"מנהל/ת פרויקטים או\"ש","emp":"15","boss":"** ע' ראש יחידה תכנון ובקרת משאבים"},{"div":"חטיבת משאבים","dept":"יחידת תו\"ם","deptNew":"","unit":"נוכחות ושכר עידוד","unitNew":"","title":"חשב נוכחות ושכר עידוד","emp":"16","boss":"** ע' ראש יח' תו\"ם לנוכחות ושכ\"ע"},{"div":"חטיבת משאבים","dept":"מחלקת מש\"א","deptNew":"","unit":"מחלקת מנהל ומשאבי אנוש","unitNew":"","title":"רכזת גיוס ומיון","emp":"17","boss":"** רמ\"ח משאבי אנוש ומינהל"},{"div":"חטיבת משאבים","dept":"מחלקת מש\"א","deptNew":"","unit":"מדור שכר","unitNew":"","title":"מנהל/ת מדור שכר","emp":"18","boss":"** רמ\"ד פרט ושכר"},{"div":"חטיבת משאבים","dept":"מחלקת מיחשוב","deptNew":"","unit":"תכנות","unitNew":"מדור תוכנה","title":"תוכניתן בכיר","emp":"19","boss":"** אחראי צוות תוכניתנים"},{"div":"חטיבת משאבים","dept":"יחידת תו\"ם","deptNew":"","unit":"יחידת תכנון ובקרת משאבים","unitNew":"","title":"רכז/ת בקרה ושכ\"ע","emp":"20","boss":"** ראש יחידת תכנון ובקרת משאבים"},{"div":"חטיבת משאבים","dept":"יחידת תו\"ם","deptNew":"","unit":"ארגון ושיטות","unitNew":"מדור או\"ש וניהול פרויקטים","title":"מנהל BI ותחום אנליזה","emp":"21","boss":"** ע' ראש יחידה תכנון ובקרת משאבים"},{"div":"חטיבת משאבים","dept":"מחלקת מש\"א","deptNew":"","unit":"מדור משאבים לוגיסטיים","unitNew":"מדור שירותי מנהלה והיסעים","title":"נהג","emp":"22","boss":"** רמ\"ד משאבים לוגיסטיים"},{"div":"חטיבת משאבים","dept":"מחלקת מיחשוב","deptNew":"","unit":"פרוייקטים מיחשוב","unitNew":"מדור פרויקטים במערכות מידע","title":"מיישמ/ת מערכות מידע","emp":"23","boss":"** מנהל תחום פרויקטים -מיחשוב"},{"div":"חטיבת משאבים","dept":"מחלקת מש\"א","deptNew":"","unit":"מחלקת מנהל ומשאבי אנוש","unitNew":"","title":"** רמ\"ח משאבי אנוש ומינהל","emp":"24","boss":"** סמנכ\"ל/ית הון אנושי"},{"div":"חטיבת משאבים","dept":"מחלקת מיחשוב","deptNew":"","unit":"תכנות","unitNew":"מדור תוכנה","title":"תוכניתן","emp":"25","boss":"** אחראי צוות תוכניתנים"},{"div":"חטיבת משאבים","dept":"מחלקת מיחשוב","deptNew":"","unit":"פרוייקטים מיחשוב","unitNew":"מדור פרויקטים במערכות מידע","title":"** מנהל תחום פרויקטים -מיחשוב","emp":"26","boss":"ראש/ת אגף טכנולוגיות"},{"div":"חטיבת משאבים","dept":"מחלקת מש\"א","deptNew":"","unit":"מחלקת מנהל ומשאבי אנוש","unitNew":"","title":"פקידת גיוס ואירכוב (ע' רכזת גיוס)","emp":"27","boss":"רכזת גיוס ומיון"},{"div":"חטיבת משאבים","dept":"מחלקת מיחשוב","deptNew":"","unit":"פרוייקטים מיחשוב","unitNew":"","title":"מנתח/ת מערכות מידע","emp":"28","boss":"** מנהל תחום פרויקטים -מיחשוב"},{"div":"חטיבת משאבים","dept":"לשכת חטיבת משאבים","deptNew":"","unit":"בטיחות בתעבורה","unitNew":"","title":"מזכירת קצין בטיחות בתעבורה","emp":"29","boss":"** קצין בטיחות בתעבורה"},{"div":"חטיבת משאבים","dept":"מחלקת מיחשוב","deptNew":"","unit":"תקשורת ובקרה","unitNew":"לברר","title":"מהנדס תקשורת ובקרה","emp":"30","boss":"** רמ\"ד תקשורת ובקרה"},{"div":"חטיבת משאבים","dept":"מחלקת מש\"א","deptNew":"","unit":"מחלקת מנהל ומשאבי אנוש","unitNew":"","title":"מזכיר/ה העובדת הסוציאלית","emp":"31","boss":"עובדת סוציאלית, אחראית רווחה וגמלאים"},{"div":"חטיבת משאבים","dept":"מחלקת מש\"א","deptNew":"","unit":"מדור משאבים לוגיסטיים","unitNew":"מדור שירותי מנהלה והיסעים","title":"נהג","emp":"32","boss":"** רמ\"ד משאבים לוגיסטיים"},{"div":"חטיבת משאבים","dept":"מחלקת מש\"א","deptNew":"","unit":"מדור משאבים לוגיסטיים","unitNew":"מדור שירותי מנהלה והיסעים","title":"נהג","emp":"33","boss":"** רמ\"ד משאבים לוגיסטיים"},{"div":"חטיבת משאבים","dept":"מחלקת מיחשוב","deptNew":"","unit":"תשתיות","unitNew":"לברר","title":"מנהל רשת","emp":"34","boss":"** מנהל.ת תשתיות מחשוב וסייבר"},{"div":"חטיבת משאבים","dept":"מחלקת מש\"א","deptNew":"","unit":"מדור הדרכה","unitNew":"","title":"פקידת רמד הדרכה","emp":"35","boss":"** רמ\"ד הדרכה"},{"div":"חטיבת משאבים","dept":"מחלקת מש\"א","deptNew":"","unit":"מדור פרט ושכר","unitNew":"","title":"מתאם/ת משאבי אנוש","emp":"36","boss":"רכז משאבי אנוש"},{"div":"חטיבת משאבים","dept":"מחלקת מש\"א","deptNew":"","unit":"מדור שכר","unitNew":"","title":"חשב שכר","emp":"37","boss":"מנהל/ת מדור שכר"},{"div":"חטיבת משאבים","dept":"מחלקת מיחשוב","deptNew":"","unit":"תקשורת ובקרה","unitNew":"לברר","title":"טכנאי מחשוב ותקשורת","emp":"38","boss":"** רמ\"ד תקשורת ובקרה"},{"div":"חטיבת משאבים","dept":"מחלקת מש\"א","deptNew":"","unit":"מדור פרט ושכר","unitNew":"","title":"** רמ\"ד פרט ושכר","emp":"39","boss":"** רמ\"ח משאבי אנוש ומינהל"},{"div":"חטיבת משאבים","dept":"מחלקת מש\"א","deptNew":"","unit":"מדור משאבים לוגיסטיים","unitNew":"מדור שירותי מנהלה והיסעים","title":"ע' רמ\"ד משאבים לוגיסטיים","emp":"40","boss":"** רמ\"ד משאבים לוגיסטיים"},{"div":"חטיבת משאבים","dept":"יחידת תו\"ם","deptNew":"","unit":"נוכחות ושכר עידוד","unitNew":"","title":"חשב נוכחות ושכר עידוד","emp":"41","boss":"** ע' ראש יח' תו\"ם לנוכחות ושכ\"ע"},{"div":"חטיבת משאבים","dept":"יחידת תו\"ם","deptNew":"","unit":"ארגון ושיטות","unitNew":"מדור או\"ש וניהול פרויקטים","title":"מנהל/ת פרויקטים או\"ש","emp":"42","boss":"** ע' ראש יחידה תכנון ובקרת משאבים"},{"div":"חטיבת משאבים","dept":"יחידת תו\"ם","deptNew":"","unit":"יחידת תכנון ובקרת משאבים","unitNew":"","title":"אחראי נהלים","emp":"43","boss":"** ראש יחידת תכנון ובקרת משאבים"},{"div":"חטיבת משאבים","dept":"יחידת תו\"ם","deptNew":"","unit":"יחידת תכנון ובקרת משאבים","unitNew":"","title":"** ראש יחידת תכנון ובקרת משאבים","emp":"44","boss":"** סמנכ\"ל/ית הון אנושי"},{"div":"חטיבת משאבים","dept":"מחלקת מיחשוב","deptNew":"","unit":"תכנות","unitNew":"מדור תוכנה","title":"תוכניתן בכיר","emp":"45","boss":"** אחראי צוות תוכניתנים"},{"div":"חטיבת משאבים","dept":"יחידת תו\"ם","deptNew":"","unit":"יחידת תכנון ובקרת משאבים","unitNew":"","title":"מנהל/ת פרויקטים","emp":"46","boss":"** ראש יחידת תכנון ובקרת משאבים"},{"div":"חטיבת משאבים","dept":"מחלקת מש\"א","deptNew":"","unit":"מדור פרט ושכר","unitNew":"","title":"פקידת משאבי אנוש","emp":"47","boss":"** רמ\"ד פרט ושכר"},{"div":"חטיבת משאבים","dept":"מחלקת מיחשוב","deptNew":"","unit":"פרוייקטים מיחשוב","unitNew":"מדור פרויקטים במערכות מידע","title":"מנהל/ת פרויקטים במערכות מידע","emp":"48","boss":"** מנהל תחום פרויקטים -מיחשוב"},{"div":"חטיבת משאבים","dept":"מחלקת מיחשוב","deptNew":"","unit":"תכנות","unitNew":"מדור תוכנה","title":"** אחראי צוות תוכניתנים","emp":"49","boss":"ראש/ת אגף טכנולוגיות"},{"div":"חטיבת משאבים","dept":"מחלקת מיחשוב","deptNew":"","unit":"תשתיות","unitNew":"לברר","title":"מנהל רשת","emp":"50","boss":"** מנהל.ת תשתיות מחשוב וסייבר"},{"div":"חטיבת משאבים","dept":"מחלקת מש\"א","deptNew":"","unit":"מחלקת מנהל ומשאבי אנוש","unitNew":"","title":"מזכירת רמ\"ח משאבי אנוש","emp":"51","boss":"** רמ\"ח משאבי אנוש ומינהל"},{"div":"חטיבת משאבים","dept":"יחידת תו\"ם","deptNew":"","unit":"ארגון ושיטות","unitNew":"מדור או\"ש וניהול פרויקטים","title":"מנהל/ת פרויקטים או\"ש","emp":"52","boss":"** ע' ראש יחידה תכנון ובקרת משאבים"},{"div":"חטיבת משאבים","dept":"מחלקת מיחשוב","deptNew":"","unit":"תכנות","unitNew":"מדור תוכנה","title":"תוכניתן בכיר -  מערכות NET","emp":"53","boss":"** אחראי צוות תוכניתנים"},{"div":"חטיבת משאבים","dept":"מחלקת מש\"א","deptNew":"","unit":"מדור שכר","unitNew":"","title":"כלכלן/ית מדור שכר","emp":"54","boss":"מנהל/ת מדור שכר"},{"div":"חטיבת משאבים","dept":"מחלקת מש\"א","deptNew":"","unit":"מדור פרט ושכר","unitNew":"","title":"רכז משאבי אנוש","emp":"55","boss":"** רמ\"ד פרט ושכר"},{"div":"חטיבת משאבים","dept":"מחלקת מיחשוב","deptNew":"","unit":"תקשורת ובקרה","unitNew":"לברר","title":"טכנאי תקשורת","emp":"56","boss":"** רמ\"ד תקשורת ובקרה"},{"div":"חטיבת משאבים","dept":"מחלקת מיחשוב","deptNew":"","unit":"פעולות מיחשוב","unitNew":"מדור שירות ותפעול מיחשוב","title":"בקר/מפעיל מחשוב","emp":"57","boss":"** אחראי לפעולות המיחשוב"},{"div":"חטיבת משאבים","dept":"מחלקת מש\"א","deptNew":"","unit":"מדור משאבים לוגיסטיים","unitNew":"מדור שירותי מנהלה והיסעים","title":"מחסנאי","emp":"58","boss":"** רמ\"ד משאבים לוגיסטיים"},{"div":"חטיבת משאבים","dept":"מחלקת מיחשוב","deptNew":"","unit":"תשתיות","unitNew":"לברר","title":"מנהל רשת","emp":"59","boss":"** מנהל.ת תשתיות מחשוב וסייבר"},{"div":"חטיבת משאבים","dept":"יחידת תו\"ם","deptNew":"","unit":"נוכחות ושכר עידוד","unitNew":"","title":"** ע' ראש יח' תו\"ם לנוכחות ושכ\"ע","emp":"60","boss":"** ראש יחידת תכנון ובקרת משאבים"},{"div":"חטיבת משאבים","dept":"מחלקת מש\"א","deptNew":"","unit":"מדור שכר","unitNew":"","title":"כלכלן/ית מדור שכר","emp":"61","boss":"מנהל/ת מדור שכר"},{"div":"חטיבת משאבים","dept":"מחלקת מש\"א","deptNew":"","unit":"מדור הדרכה","unitNew":"","title":"מדריך ראשי","emp":"62","boss":"** רמ\"ד הדרכה"},{"div":"חטיבת משאבים","dept":"יחידת תו\"ם","deptNew":"","unit":"ארגון ושיטות","unitNew":"מדור או\"ש וניהול פרויקטים","title":"מנהל/ת פרויקטים","emp":"63","boss":"** ע' ראש יחידה תכנון ובקרת משאבים"},{"div":"חטיבת משאבים","dept":"מחלקת מש\"א","deptNew":"","unit":"מדור הדרכה","unitNew":"","title":"רכזת הדרכה","emp":"64","boss":"** רמ\"ד הדרכה"},{"div":"חטיבת משאבים","dept":"מחלקת מש\"א","deptNew":"","unit":"מחלקת מנהל ומשאבי אנוש","unitNew":"","title":"עובדת סוציאלית, אחראית רווחה וגמלאים","emp":"65","boss":"** רמ\"ח משאבי אנוש ומינהל"},{"div":"חטיבת משאבים","dept":"מחלקת מש\"א","deptNew":"","unit":"מדור הדרכה","unitNew":"","title":"מתאמת קורסים תפעוליים","emp":"66","boss":"** רמ\"ד הדרכה"},{"div":"חטיבת משאבים","dept":"מחלקת מש\"א","deptNew":"","unit":"מדור הדרכה","unitNew":"","title":"מדריך/ה ראשי/ת לסימולטור","emp":"67","boss":"** רמ\"ד הדרכה"},{"div":"חטיבת משאבים","dept":"מחלקת מש\"א","deptNew":"","unit":"מדור שכר","unitNew":"","title":"חשב שכר","emp":"68","boss":"מנהל/ת מדור שכר"},{"div":"חטיבת משאבים","dept":"יחידת תו\"ם","deptNew":"","unit":"ארגון ושיטות","unitNew":"מדור או\"ש וניהול פרויקטים","title":"** ע' ראש יחידה תכנון ובקרת משאבים","emp":"69","boss":"** ראש יחידת תכנון ובקרת משאבים"},{"div":"חטיבת משאבים","dept":"מחלקת מש\"א","deptNew":"","unit":"מדור משאבים לוגיסטיים","unitNew":"מדור שירותי מנהלה והיסעים","title":"רכז נהגים","emp":"70","boss":"** רמ\"ד משאבים לוגיסטיים"},{"div":"חטיבת משאבים","dept":"לשכת חטיבת משאבים","deptNew":"","unit":"חטיבת משאבים","unitNew":"","title":"פקיד/ה סריקה וארכוב מסמכים ואדמינסטרציה","emp":"71","boss":"** סמנכ\"ל/ית הון אנושי"},{"div":"חטיבת משאבים","dept":"מחלקת מש\"א","deptNew":"","unit":"מדור שכר","unitNew":"","title":"כלכלן/ית מדור שכר","emp":"72","boss":"מנהל/ת מדור שכר"},{"div":"חטיבת משאבים","dept":"לשכת חטיבת משאבים","deptNew":"","unit":"חטיבת משאבים","unitNew":"","title":"מנהל/ת בקרה ומעקב במטה חטיבת משאבים","emp":"73","boss":"** סמנכ\"ל/ית הון אנושי"},{"div":"חטיבת משאבים","dept":"מחלקת מיחשוב","deptNew":"","unit":"פרוייקטים מיחשוב","unitNew":"מדור פרויקטים במערכות מידע","title":"מנהל/ת פרויקטים במערכות מידע","emp":"74","boss":"** מנהל תחום פרויקטים -מיחשוב"},{"div":"חטיבת משאבים","dept":"מחלקת מיחשוב","deptNew":"","unit":"תשתיות","unitNew":"לברר","title":"** מנהל.ת תשתיות מחשוב וסייבר","emp":"75","boss":"ראש/ת אגף טכנולוגיות"},{"div":"חטיבת משאבים","dept":"מחלקת מש\"א","deptNew":"","unit":"מדור משאבים לוגיסטיים","unitNew":"מדור שירותי מנהלה והיסעים","title":"** רמ\"ד משאבים לוגיסטיים","emp":"76","boss":"** רמ\"ח משאבי אנוש ומינהל"},{"div":"חטיבת משאבים","dept":"לשכת חטיבת משאבים","deptNew":"","unit":"חטיבת משאבים","unitNew":"","title":"מזכירת סמנכ\"ל משאבי אנוש","emp":"77","boss":"** סמנכ\"ל/ית הון אנושי"},{"div":"חטיבת משאבים","dept":"מחלקת מיחשוב","deptNew":"","unit":"מחלקת מיחשוב ומערכות מידע","unitNew":"","title":"אחראי/ת התקשרויות ומעקבים מחלקתי","emp":"78","boss":"ראש/ת אגף טכנולוגיות"},{"div":"חטיבת משאבים","dept":"מחלקת מש\"א","deptNew":"","unit":"מדור שכר","unitNew":"","title":"כלכלן/ית בכיר/ה","emp":"79","boss":"מנהל/ת מדור שכר"},{"div":"חטיבת משאבים","dept":"יחידת תו\"ם","deptNew":"","unit":"נוכחות ושכר עידוד","unitNew":"","title":"רכז שכר עידוד ונוכחות תפעול","emp":"80","boss":"** ע' ראש יח' תו\"ם לנוכחות ושכ\"ע"},{"div":"חטיבת משאבים","dept":"מחלקת מיחשוב","deptNew":"","unit":"מחלקת מיחשוב ומערכות מידע","unitNew":"","title":"ראש/ת אגף טכנולוגיות","emp":"81","boss":"** סמנכ\"ל/ית הון אנושי"},{"div":"חטיבת משאבים","dept":"לשכת חטיבת משאבים","deptNew":"","unit":"חטיבת משאבים","unitNew":"","title":"** סמנכ\"ל/ית הון אנושי","emp":"82","boss":"** מנכ\"ל חברת הנמל"},{"div":"חטיבת משאבים","dept":"לשכת חטיבת משאבים","deptNew":"","unit":"חטיבת משאבים","unitNew":"","title":"ממונה פיתוח ארגוני","emp":"83","boss":"** סמנכ\"ל/ית הון אנושי"},{"div":"חטיבת משאבים","dept":"מחלקת מש\"א","deptNew":"","unit":"מדור משאבים לוגיסטיים","unitNew":"מדור שירותי מנהלה והיסעים","title":"עובד משאבים לוגיסטיים","emp":"84","boss":"** רמ\"ד משאבים לוגיסטיים"},{"div":"חטיבת משאבים","dept":"מחלקת מיחשוב","deptNew":"","unit":"פעולות מיחשוב","unitNew":"מדור שירות ותפעול מיחשוב","title":"** אחראי לפעולות המיחשוב","emp":"85","boss":"ראש/ת אגף טכנולוגיות"},{"div":"חטיבת משאבים","dept":"מחלקת מיחשוב","deptNew":"","unit":"תקשורת ובקרה","unitNew":"לברר","title":"** רמ\"ד תקשורת ובקרה","emp":"86","boss":"ראש/ת אגף טכנולוגיות"}];
+
+const DEPT_COLORS = {
+  'מחלקת מיחשוב':'#2f6f8f',
+  'מחלקת מש"א':'#5f8a5a',
+  'יחידת תו"ם':'#9a6a3c',
+  'לשכת חטיבת משאבים':'#7a6597',
+};
+const FALLBACK = ['#2f6f8f','#5f8a5a','#9a6a3c','#7a6597','#9a4f5e','#4f6f9a','#6a8f4e','#8f6a4e'];
+
+const clean = t => (t||'').replace(/\*\*/g,'').replace(/\s+/g,' ').trim();
+const norm  = t => (t==null?'':String(t)).trim();
+
+/* ---- build forest from flat records ---- */
+function buildForest(records){
+  const byTitle = new Map();          // title -> node (managers are unique)
+  const nodes = records.map(r=>{
+    const n = {...r, title:norm(r.title), boss:norm(r.boss), emp:norm(r.emp),
+               dept:norm(r.dept), unit:norm(r.unit), children:[]};
+    if(n.title && !byTitle.has(n.title)) byTitle.set(n.title, n);
+    return n;
+  });
+  const titleSet = new Set([...byTitle.keys()]);
+  const virtual = new Map();          // virtual boss string -> node
+  const forest = [];
+  for(const n of nodes){
+    const b = n.boss;
+    if(b && titleSet.has(b)){
+      byTitle.get(b).children.push(n);
+    } else if(b){                     // boss exists but has no record -> virtual root (e.g. CEO)
+      if(!virtual.has(b)){
+        const v = {title:b, virtual:true, dept:'', unit:'', emp:'', children:[]};
+        virtual.set(b, v); forest.push(v);
+      }
+      virtual.get(b).children.push(n);
+    } else {                          // no boss -> top of forest
+      forest.push(n);
+    }
+  }
+  // measure
+  const measure = (n, depth, seen)=>{
+    n.depth = depth;
+    let total = 0, maxd = depth;
+    const kids = [...n.children].sort((a,b)=>
+      (b.children.length>0)-(a.children.length>0) || clean(a.title).localeCompare(clean(b.title),'he'));
+    n.children = kids;
+    for(const k of kids){
+      if(seen.has(k)) continue;
+      const r = measure(k, depth+1, new Set(seen).add(k));
+      total += 1 + r.total; maxd = Math.max(maxd, r.maxd);
+    }
+    n.direct = kids.length; n.total = total;
+    return {total, maxd};
+  };
+  let levels = 0;
+  for(const root of forest){
+    const r = measure(root, root.virtual?0:1, new Set([root]));
+    levels = Math.max(levels, r.maxd);
+  }
+  return {forest, levels, count:records.length};
+}
+
+/* ---- render ---- */
+const ICON_TEAM = '<svg viewBox="0 0 24 24" fill="none"><path d="M16 19v-1a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v1M9 11a3 3 0 1 0 0-6 3 3 0 0 0 0 6Zm13 8v-1a4 4 0 0 0-3-3.87M16 5.13A4 4 0 0 1 16 13" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>';
+const ICON_CHEV = '<svg viewBox="0 0 24 24" fill="none"><path d="m9 6 6 6-6 6" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg>';
+
+function deptColor(d, map){ return map.get(d) || DEPT_COLORS[d] || 'var(--dept-default)'; }
+
+function nodeEl(n, deptMap){
+  const el = document.createElement('div');
+  el.className = 'node' + (n.virtual?' root':'') + (n.children.length?' has-kids':'');
+  el.dataset.title = clean(n.title);
+  el.dataset.emp = n.emp || '';
+  el.dataset.unit = n.unit || '';
+  el.dataset.dept = n.dept || '';
+
+  const dc = n.virtual ? 'var(--accent)' : deptColor(n.dept, deptMap);
+  const box = document.createElement('div');
+  box.className = 'box';
+  box.style.setProperty('--dc', dc);
+
+  const ctrl = n.children.length
+    ? `<div class="chev" aria-hidden="true">${ICON_CHEV}</div>`
+    : `<div class="spacer"></div>`;
+
+  let side = '';
+  if(n.virtual){
+    side = `<span class="crown">ראש הארגון</span>`;
+  } else {
+    side = (n.emp?`<span class="emp">#${n.emp}</span>`:'');
+    if(n.children.length){
+      const txt = n.total>n.direct ? `${n.direct} ישירים · ${n.total} בכפיפות` : `${n.direct} בצוות`;
+      side += `<span class="count">${ICON_TEAM}<span>${txt}</span></span>`;
+    }
+  }
+
+  let meta = '';
+  if(!n.virtual){
+    const bits = [];
+    if(n.dept) bits.push(`<span class="pill">${n.dept}</span>`);
+    if(n.unit && n.unit!=='לברר') bits.push(`<span class="unit">${n.unit}</span>`);
+    if(bits.length) meta = `<div class="meta-line">${bits.join('')}</div>`;
+  }
+
+  box.innerHTML = `${ctrl}<div class="body"><div class="role">${clean(n.title)}</div>${meta}</div><div class="side">${side}</div>`;
+  el.appendChild(box);
+
+  if(n.children.length){
+    box.setAttribute('role','button');
+    box.setAttribute('tabindex','0');
+    box.setAttribute('aria-expanded','false');
+    const wrap = document.createElement('div'); wrap.className='kids-wrap';
+    const kids = document.createElement('div'); kids.className='kids';
+    n.children.forEach(c=>kids.appendChild(nodeEl(c, deptMap)));
+    wrap.appendChild(kids); el.appendChild(wrap);
+  }
+  return el;
+}
+
+function buildDeptMap(records){
+  const map = new Map();
+  const seen = [];
+  records.forEach(r=>{ const d=norm(r.dept); if(d && !seen.includes(d)) seen.push(d); });
+  seen.forEach((d,i)=> map.set(d, DEPT_COLORS[d] || FALLBACK[i%FALLBACK.length]));
+  return map;
+}
+
+let CURRENT = null;
+
+function render(records){
+  const {forest, levels, count} = buildForest(records);
+  const deptMap = buildDeptMap(records);
+  CURRENT = {forest, levels, count, deptMap, records};
+
+  const tree = document.getElementById('tree');
+  tree.innerHTML = '';
+  forest.forEach(r=>tree.appendChild(nodeEl(r, deptMap)));
+
+  // initial open: depth <= 1
+  tree.querySelectorAll('.node.has-kids').forEach(el=>{
+    const t = el.dataset.title;
+  });
+  openByDepth(1);
+
+  // stats
+  const managers = countManagers(forest);
+  const largest = largestTeam(forest);
+  const strip = document.getElementById('strip');
+  strip.innerHTML = `
+    <div class="stat"><span class="n">${count}</span><span class="l">תקנים</span></div>
+    <div class="stat"><span class="n">${managers}</span><span class="l">בעלי תפקיד ניהולי</span></div>
+    <div class="stat"><span class="n">${levels}</span><span class="l">דרגי היררכיה</span></div>
+    <div class="stat" title="${largest.role}"><span class="n">${largest.n}</span><span class="l">בצוות הגדול ביותר</span></div>
+    <div class="legend">${[...deptMap.entries()].map(([d,c])=>{
+        const cnt = records.filter(r=>norm(r.dept)===d).length;
+        return `<span class="lg"><span class="dot" style="background:${c}"></span>${d}<span class="c">${cnt}</span></span>`;
+      }).join('')}</div>`;
+
+  applyHint();
+  if(currentView()==='chart'){ renderChart(); if(q.value.trim()) ocSearch(); }
+}
+
+function countManagers(forest){
+  let c=0; const walk=n=>{ if(!n.virtual && n.children.length) c++; n.children.forEach(walk); };
+  forest.forEach(walk); return c;
+}
+function largestTeam(forest){
+  let best={n:0,role:''}; const walk=n=>{ if(!n.virtual && n.direct>best.n) best={n:n.direct,role:clean(n.title)}; n.children.forEach(walk); };
+  forest.forEach(walk); return best;
+}
+
+/* ---- expand / collapse ---- */
+function setOpen(el, open){
+  el.classList.toggle('open', open);
+  const box = el.querySelector(':scope > .box');
+  if(box && box.hasAttribute('role')) box.setAttribute('aria-expanded', open?'true':'false');
+}
+function openAll(v){ document.querySelectorAll('.tree .node.has-kids').forEach(el=>setOpen(el,v)); }
+function openByDepth(maxDepth){
+  const walk=(el,d)=>{
+    if(el.classList.contains('has-kids')) setOpen(el, d<=maxDepth);
+    el.querySelectorAll(':scope > .kids-wrap > .kids > .node').forEach(c=>walk(c,d+1));
+  };
+  document.querySelectorAll('.tree > .node').forEach(el=>walk(el, el.classList.contains('root')?0:1));
+}
+
+/* click / keyboard toggle */
+document.getElementById('tree').addEventListener('click', e=>{
+  const box = e.target.closest('.box');
+  if(!box) return;
+  const node = box.parentElement;
+  if(!node.classList.contains('has-kids')) return;
+  setOpen(node, !node.classList.contains('open'));
+});
+document.getElementById('tree').addEventListener('keydown', e=>{
+  if(e.key!=='Enter' && e.key!==' ') return;
+  const box = e.target.closest('.box');
+  if(!box || !box.hasAttribute('role')) return;
+  e.preventDefault();
+  const node = box.parentElement;
+  setOpen(node, !node.classList.contains('open'));
+});
+
+document.getElementById('expand').onclick = ()=> currentView()==='chart' ? ocOpenAll(true) : openAll(true);
+document.getElementById('collapse').onclick = ()=>{
+  if(currentView()==='chart'){ ocOpenAll(false); }
+  else { openAll(false); document.querySelectorAll('.tree > .node.root').forEach(el=>setOpen(el,true)); }
+};
+
+/* ---- search ---- */
+const q = document.getElementById('q');
+const note = document.getElementById('note');
+let searchT;
+q.addEventListener('input', ()=>{ clearTimeout(searchT); searchT=setTimeout(()=> currentView()==='chart'?ocSearch():runSearch(), 120); });
+
+function clearMarks(){
+  document.querySelectorAll('.tree mark').forEach(m=>{
+    const t=document.createTextNode(m.textContent); m.replaceWith(t);
+  });
+}
+function runSearch(){
+  const tree=document.getElementById('tree');
+  const term=q.value.trim().toLowerCase();
+  document.querySelectorAll('.node.hit').forEach(n=>n.classList.remove('hit'));
+  clearMarks();
+  if(!term){
+    tree.classList.remove('searching');
+    document.querySelectorAll('.node.match').forEach(n=>n.classList.remove('match'));
+    note.classList.remove('show'); openByDepth(1); return;
+  }
+  tree.classList.add('searching');
+  document.querySelectorAll('.node.match').forEach(n=>n.classList.remove('match'));
+  let hits=0; let first=null;
+  document.querySelectorAll('.tree .node').forEach(el=>{
+    if(el.classList.contains('root')) return;
+    const hay=[el.dataset.title, el.dataset.emp, el.dataset.unit, el.dataset.dept].join(' ').toLowerCase();
+    if(hay.includes(term)){
+      hits++; el.classList.add('match','hit'); if(!first) first=el;
+      // open ancestors
+      let p=el.parentElement;
+      while(p && !p.classList.contains('tree')){
+        if(p.classList.contains('node')){ p.classList.add('match'); if(p.classList.contains('has-kids')) setOpen(p,true); }
+        p=p.parentElement;
+      }
+      // highlight in role
+      const role=el.querySelector(':scope > .box .role');
+      if(role){ const re=new RegExp('('+term.replace(/[.*+?^${}()|[\]\\]/g,'\\$&')+')','ig');
+        role.innerHTML=role.textContent.replace(re,'<mark>$1</mark>'); }
+    }
+  });
+  // also keep matched managers' boxes fully visible
+  document.querySelectorAll('.node.match.has-kids').forEach(el=>setOpen(el,true));
+  note.className='inner'+(hits?' show':' show empty');
+  note.textContent = hits ? `${hits} תוצאות תואמות — האב נפתחו אוטומטית` : 'אין תוצאות תואמות לחיפוש';
+  if(first && first.scrollIntoView) first.scrollIntoView({behavior:'smooth', block:'center'});
+}
+
+/* ---- toast ---- */
+let toastT;
+function toast(msg, warn){
+  const t=document.getElementById('toast');
+  t.textContent=msg; t.className='toast show'+(warn?' warn':'');
+  clearTimeout(toastT); toastT=setTimeout(()=>t.className='toast'+(warn?' warn':''),3200);
+}
+
+/* ---- print ---- */
+document.getElementById('print').onclick = ()=>{
+  if(currentView()==='chart') printChart(); else printNested();
+};
+
+/* ---- file load (lazy SheetJS) ---- */
+function findHeader(rows){
+  for(let i=0;i<Math.min(rows.length,15);i++){
+    const r=(rows[i]||[]).map(c=>norm(c));
+    if(r.includes('שם משרה') && (r.includes('כפיפות ישירה')||r.includes('כפיפות'))) return i;
+  }
+  return -1;
+}
+function rowsToRecords(rows){
+  const h=findHeader(rows);
+  if(h<0) throw new Error('no-header');
+  const head=(rows[h]||[]).map(c=>norm(c));
+  const idx=name=>head.findIndex(x=>x===name);
+  const col={div:idx('חטיבה'),dept:idx('מחלקה'),deptNew:idx('שם מחלקה חדש'),
+             unit:idx('שם יחידה'),unitNew:idx('שם יחידה חדש'),
+             title:idx('שם משרה'),emp:idx('שם פרטי'),boss:idx('כפיפות ישירה')};
+  if(col.boss<0) col.boss=idx('כפיפות');
+  const get=(r,i)=> i>=0 ? norm(r[i]) : '';
+  const recs=[];
+  for(let i=h+1;i<rows.length;i++){
+    const r=rows[i]||[];
+    const title=get(r,col.title), boss=get(r,col.boss), emp=get(r,col.emp);
+    if(!title && !boss && !emp) continue;
+    recs.push({div:get(r,col.div),dept:get(r,col.dept),deptNew:get(r,col.deptNew),
+               unit:get(r,col.unit),unitNew:get(r,col.unitNew),title,emp,boss});
+  }
+  if(!recs.length) throw new Error('empty');
+  return recs;
+}
+function ensureXLSX(){
+  return new Promise((res,rej)=>{
+    if(window.XLSX) return res(window.XLSX);
+    let tries=0;
+    const t=setInterval(()=>{ if(window.XLSX){clearInterval(t);res(window.XLSX);} else if(++tries>60){clearInterval(t);rej();} },100);
+  });
+}
+async function handleFile(file){
+  if(!file) return;
+  let XLSX;
+  try{ XLSX=await ensureXLSX(); }
+  catch{ toast('לא ניתן לטעון את מנוע קריאת ה-Excel (אין חיבור). הנתונים המוטמעים מוצגים.', true); return; }
+  try{
+    const buf=await file.arrayBuffer();
+    const wb=XLSX.read(buf,{type:'array'});
+    const ws=wb.Sheets[wb.SheetNames[0]];
+    const rows=XLSX.utils.sheet_to_json(ws,{header:1,defval:''});
+    const recs=rowsToRecords(rows);
+    q.value=''; runSearch();
+    render(recs);
+    toast(`נטענו ${recs.length} תקנים מהקובץ ”${file.name}”`);
+  }catch(err){
+    const m = err && err.message;
+    toast(m==='no-header' ? 'לא נמצאה שורת כותרת עם ”שם משרה” ו”כפיפות ישירה”.'
+        : m==='empty'     ? 'לא נמצאו רשומות בקובץ.'
+        : 'שגיאה בקריאת הקובץ — ודאו שזהו קובץ Excel תקין במבנה הצפוי.', true);
+  }
+}
+document.getElementById('load').onclick = ()=>document.getElementById('file').click();
+document.getElementById('file').addEventListener('change', e=>handleFile(e.target.files[0]));
+
+/* drag & drop */
+const drop=document.getElementById('drop'); let dragN=0;
+window.addEventListener('dragenter', e=>{ if(e.dataTransfer && [...e.dataTransfer.types].includes('Files')){ dragN++; drop.classList.add('show'); }});
+window.addEventListener('dragover', e=>{ if(drop.classList.contains('show')) e.preventDefault(); });
+window.addEventListener('dragleave', ()=>{ if(--dragN<=0){dragN=0; drop.classList.remove('show');} });
+window.addEventListener('drop', e=>{ if(drop.classList.contains('show')){ e.preventDefault(); dragN=0; drop.classList.remove('show');
+  const f=e.dataTransfer.files && e.dataTransfer.files[0]; if(f) handleFile(f); }});
+
+/* ===== org chart (top-down) view ===== */
+const ICON_CHEV_D = '<svg viewBox="0 0 24 24" fill="none"><path d="m6 9 6 6 6-6" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/></svg>';
+const HINT_NESTED = 'עץ ארגוני אינטראקטיבי. לחצו על <b>קובייה ניהולית</b> כדי לפתוח את הצוות שתחתיה — וכן הלאה עד אחרון בעלי התפקידים. כל קובייה ניתנת להרחבה ולכיווץ.';
+const HINT_CHART  = 'תרשים ארגוני מלמעלה למטה. לחצו על כפתור החץ בתחתית הקובייה (או על הקובייה) כדי לפתוח את הכפופים לה — הקו מתפצל ┴ אל כל בן. ניתן להרחיב או לכווץ כל ענף בנפרד.';
+function applyHint(){ const h=document.getElementById('hint'); if(h) h.innerHTML = currentView()==='chart'?HINT_CHART:HINT_NESTED; }
+
+function ocNodeEl(n, deptMap){
+  const node = document.createElement('div');
+  const has = n.children.length>0;
+  node.className = 'oc-node' + (n.virtual?' oc-root':'') + (has?' has':'');
+  node.dataset.depth = (n.depth==null?1:n.depth);
+  node.dataset.title = clean(n.title);
+  node.dataset.emp = n.emp||''; node.dataset.unit = n.unit||''; node.dataset.dept = n.dept||'';
+
+  const dc = n.virtual ? 'var(--accent)' : deptColor(n.dept, deptMap);
+  const box = document.createElement('div');
+  box.className='oc-box'; box.style.setProperty('--dc', dc);
+
+  let inner = `<div class="oc-role">${clean(n.title)}</div>`;
+  if(n.virtual){
+    inner += `<span class="oc-crown">ראש הארגון</span>`;
+  } else {
+    const sub = [n.dept, (n.unit && n.unit!=='לברר')?n.unit:''].filter(Boolean).join(' · ');
+    if(sub) inner += `<div class="oc-sub">${sub}</div>`;
+    const tags=[];
+    if(n.emp) tags.push(`<span class="oc-emp">#${n.emp}</span>`);
+    if(has){ const txt = n.total>n.direct ? `${n.direct} · ${n.total}` : `${n.direct}`;
+      tags.push(`<span class="oc-count">${ICON_TEAM}<span>${txt}</span></span>`); }
+    if(tags.length) inner += `<div class="oc-tags">${tags.join('')}</div>`;
+  }
+  if(has) inner += `<button class="oc-toggle" aria-label="פתיחה או סגירה" tabindex="-1">${ICON_CHEV_D}</button>`;
+  box.innerHTML = inner;
+  if(has){ box.setAttribute('role','button'); box.setAttribute('tabindex','0'); box.setAttribute('aria-expanded','false'); }
+  node.appendChild(box);
+
+  if(has){
+    const kids=document.createElement('div'); kids.className='oc-children';
+    n.children.forEach(c=>kids.appendChild(ocNodeEl(c, deptMap)));
+    node.appendChild(kids);
+  }
+  return node;
+}
+function renderChart(){
+  if(!CURRENT) return;
+  const host=document.getElementById('orgchart');
+  host.innerHTML='';
+  CURRENT.forest.forEach(r=>host.appendChild(ocNodeEl(r, CURRENT.deptMap)));
+  ocOpenByDepth(1);
+  setZoom(1);
+  fitCanvas();
+  requestAnimationFrame(centerChart);
+}
+function ocSetOpen(node, open){
+  node.classList.toggle('oc-open', open);
+  const box=node.querySelector(':scope > .oc-box');
+  if(box && box.hasAttribute('role')) box.setAttribute('aria-expanded', open?'true':'false');
+}
+function ocOpenAll(v){
+  document.querySelectorAll('#orgchart .oc-node.has').forEach(n=>ocSetOpen(n,v));
+  if(!v) document.querySelectorAll('#orgchart > .oc-node').forEach(n=>ocSetOpen(n,true)); // keep roots open
+  requestAnimationFrame(centerChart);
+}
+function ocOpenByDepth(maxD){
+  document.querySelectorAll('#orgchart .oc-node.has').forEach(n=>ocSetOpen(n, (+n.dataset.depth) <= maxD));
+}
+function centerChart(){
+  const w=document.getElementById('chartwrap'), c=document.getElementById('orgchart');
+  if(w && c && w.clientWidth) w.scrollLeft = Math.max(0,(c.scrollWidth - w.clientWidth)/2);
+}
+
+/* ---- zoom & canvas sizing ---- */
+const cwrap=document.getElementById('chartwrap');
+const ochart=document.getElementById('orgchart');
+let ZOOM=1; const ZMIN=0.4, ZMAX=1.8, ZSTEP=0.1;
+function updateZoomLabel(){ const l=document.getElementById('zoomReset'); if(l) l.textContent=Math.round(ZOOM*100)+'%'; }
+function setZoom(z, anchorX){
+  z=Math.min(ZMAX, Math.max(ZMIN, Math.round(z*100)/100));
+  if(anchorX==null) anchorX=cwrap.clientWidth/2;
+  const before=cwrap.scrollLeft+anchorX;
+  const ratio= ZOOM ? z/ZOOM : 1;
+  ZOOM=z; ochart.style.zoom=z;
+  cwrap.scrollLeft=Math.max(0, before*ratio - anchorX);
+  updateZoomLabel();
+}
+function fitCanvas(){
+  if(currentView()!=='chart') return;
+  const top=cwrap.getBoundingClientRect().top;
+  const foot=document.querySelector('.foot');
+  const footH= foot ? foot.offsetHeight : 0;
+  cwrap.style.height=Math.max(320, window.innerHeight - top - footH - 14)+'px';
+}
+function zoomFit(){
+  ZOOM=1; ochart.style.zoom=1;                 // measure at natural size
+  const W=ochart.scrollWidth, H=ochart.scrollHeight;
+  const cw=cwrap.clientWidth-28, ch=cwrap.clientHeight-28;
+  let s=Math.min(cw/W, ch/H, ZMAX); if(!isFinite(s)||s<=0) s=1;
+  ZOOM=1; setZoom(s); cwrap.scrollTop=0; requestAnimationFrame(centerChart);
+}
+document.getElementById('zoomIn').onclick=()=>setZoom(ZOOM+ZSTEP);
+document.getElementById('zoomOut').onclick=()=>setZoom(ZOOM-ZSTEP);
+document.getElementById('zoomReset').onclick=()=>{ setZoom(1); requestAnimationFrame(centerChart); };
+document.getElementById('zoomFit').onclick=zoomFit;
+cwrap.addEventListener('wheel', e=>{
+  if(!(e.ctrlKey||e.metaKey)) return;          // Ctrl/⌘ + wheel (or trackpad pinch) = zoom
+  e.preventDefault();
+  const r=cwrap.getBoundingClientRect();
+  setZoom(ZOOM*(e.deltaY<0?1.12:0.89), e.clientX-r.left);
+}, {passive:false});
+document.addEventListener('keydown', e=>{
+  if(currentView()!=='chart' || e.target===q) return;
+  if(e.key==='+'||e.key==='='){ e.preventDefault(); setZoom(ZOOM+ZSTEP); }
+  else if(e.key==='-'||e.key==='_'){ e.preventDefault(); setZoom(ZOOM-ZSTEP); }
+  else if(e.key==='0'){ e.preventDefault(); setZoom(1); requestAnimationFrame(centerChart); }
+});
+
+/* ---- print helpers ---- */
+function setPageStyle(css){
+  let el=document.getElementById('pagestyle');
+  if(!el){ el=document.createElement('style'); el.id='pagestyle'; document.head.appendChild(el); }
+  el.textContent=css;
+}
+function printNested(){
+  openAll(true);
+  document.querySelectorAll('.tree > .node.root').forEach(el=>setOpen(el,true));
+  setPageStyle('@page{size:A4 portrait;margin:14mm}');
+  setTimeout(()=>window.print(),200);
+}
+function printChart(){
+  ocOpenAll(true);
+  const prev=ZOOM;
+  ochart.style.zoom=1;                          // measure natural size
+  const W=ochart.scrollWidth, H=ochart.scrollHeight;
+  const PW=1040, PH=690;                         // ~A4 landscape @96dpi minus ~12mm margins
+  let s=Math.min(PW/W, PH/H, 1); if(!isFinite(s)||s<=0) s=1;
+  setPageStyle('@page{size:A4 landscape;margin:12mm}');
+  ochart.style.zoom=s;                           // shrink layout so it fits one page
+  let done=false; const restore=()=>{ if(done)return; done=true; ochart.style.zoom=prev; };
+  window.addEventListener('afterprint', restore, {once:true});
+  setTimeout(restore, 3000);
+  setTimeout(()=>window.print(),120);
+}
+
+/* click / keyboard toggle (chart) */
+document.getElementById('orgchart').addEventListener('click', e=>{
+  const node = e.target.closest('.oc-node');
+  if(!node || !node.classList.contains('has')) return;
+  if(e.target.closest('.oc-toggle') || e.target.closest('.oc-box')===node.querySelector(':scope > .oc-box')){
+    ocSetOpen(node, !node.classList.contains('oc-open'));
+  }
+});
+document.getElementById('orgchart').addEventListener('keydown', e=>{
+  if(e.key!=='Enter' && e.key!==' ') return;
+  const box=e.target.closest('.oc-box'); if(!box || !box.hasAttribute('role')) return;
+  e.preventDefault(); const node=box.parentElement;
+  ocSetOpen(node, !node.classList.contains('oc-open'));
+});
+
+/* search (chart) */
+function ocClear(){
+  document.querySelectorAll('#orgchart .oc-box.ocmatch,#orgchart .oc-box.ochit').forEach(b=>b.classList.remove('ocmatch','ochit'));
+  document.querySelectorAll('#orgchart mark').forEach(m=>m.replaceWith(document.createTextNode(m.textContent)));
+}
+function ocSearch(){
+  const oc=document.getElementById('orgchart');
+  const term=q.value.trim().toLowerCase();
+  ocClear();
+  if(!term){ oc.classList.remove('searching'); note.classList.remove('show'); ocOpenByDepth(1); requestAnimationFrame(centerChart); return; }
+  oc.classList.add('searching');
+  let hits=0, first=null;
+  oc.querySelectorAll('.oc-node').forEach(node=>{
+    if(node.classList.contains('oc-root')) return;
+    const hay=[node.dataset.title,node.dataset.emp,node.dataset.unit,node.dataset.dept].join(' ').toLowerCase();
+    if(!hay.includes(term)) return;
+    hits++;
+    const box=node.querySelector(':scope > .oc-box');
+    box.classList.add('ocmatch','ochit'); if(!first) first=node;
+    let p=node.parentElement;
+    while(p && p.id!=='orgchart'){
+      if(p.classList && p.classList.contains('oc-node')){
+        const pb=p.querySelector(':scope > .oc-box'); if(pb) pb.classList.add('ocmatch');
+        if(p.classList.contains('has')) ocSetOpen(p,true);
+      }
+      p=p.parentElement;
+    }
+    const role=box.querySelector('.oc-role');
+    if(role){ const re=new RegExp('('+term.replace(/[.*+?^${}()|[\]\\]/g,'\\$&')+')','ig');
+      role.innerHTML=role.textContent.replace(re,'<mark>$1</mark>'); }
+  });
+  note.className='inner'+(hits?' show':' show empty');
+  note.textContent = hits ? `${hits} תוצאות תואמות — ההורים נפתחו אוטומטית` : 'אין תוצאות תואמות לחיפוש';
+  requestAnimationFrame(centerChart);
+  if(first && first.scrollIntoView) first.scrollIntoView({behavior:'smooth', block:'center', inline:'center'});
+}
+
+/* ===== view switching ===== */
+function currentView(){ return document.body.dataset.view || 'nested'; }
+function setView(v){
+  if(currentView()===v) return;
+  document.body.dataset.view=v;
+  document.getElementById('vNested').classList.toggle('active', v==='nested');
+  document.getElementById('vChart').classList.toggle('active', v==='chart');
+  document.getElementById('vNested').setAttribute('aria-selected', v==='nested'?'true':'false');
+  document.getElementById('vChart').setAttribute('aria-selected', v==='chart'?'true':'false');
+  applyHint();
+  if(v==='chart'){ renderChart(); if(q.value.trim()) ocSearch(); }
+  else { runSearch(); }   // normalize nested search state (handles empty + term)
+}
+document.getElementById('vNested').onclick=()=>setView('nested');
+document.getElementById('vChart').onclick=()=>setView('chart');
+window.addEventListener('resize', ()=>{ if(currentView()==='chart'){ fitCanvas(); centerChart(); } });
+
+/* boot */
+render(DATA);
+</script>
+</body>
+</html>
