@@ -1,0 +1,647 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>מבנה ארגוני - גרירה חופשית</title>
+<link href="https://fonts.googleapis.com/css2?family=Heebo:wght@300;400;500;600;700;800&family=Rubik:wght@400;500;600;700&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+<style>
+:root{--bg:#f5f7fa;--line:#94a3b8;--box-shadow:0 2px 8px rgba(0,0,0,.08);--mgr-shadow:0 4px 15px rgba(30,58,95,.25);--text-primary:#f0f0f5;--title:#1e293b;--sub:#64748b;--accent:#2563eb}
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:'Heebo',sans-serif;background:var(--bg);color:var(--title);overflow:hidden;height:100vh;width:100vw}
+
+.topbar{position:fixed;top:0;left:0;right:0;z-index:100;background:#fff;border-bottom:1px solid #e2e8f0;padding:8px 16px;display:flex;align-items:center;gap:10px;box-shadow:0 1px 4px rgba(0,0,0,.06);flex-wrap:wrap}
+.topbar h1{font-family:'Rubik',sans-serif;font-size:.95rem;font-weight:700;white-space:nowrap}
+.topbar .sep{width:1px;height:22px;background:#e2e8f0}
+.topbar .stats{font-size:.72rem;color:var(--sub)}
+.topbar .stats span{font-weight:600;color:var(--accent)}
+.topbar input[type=text]{flex:1;min-width:160px;max-width:260px;padding:6px 12px;border:1px solid #e2e8f0;border-radius:8px;font-family:'Heebo',sans-serif;font-size:.8rem;outline:none;direction:rtl}
+.topbar input:focus{border-color:var(--accent);box-shadow:0 0 0 3px rgba(37,99,235,.1)}
+.btn{padding:5px 11px;border-radius:6px;border:1px solid #e2e8f0;background:#fff;color:var(--sub);font-family:'Heebo',sans-serif;font-size:.73rem;cursor:pointer;transition:all .2s;white-space:nowrap}
+.btn:hover{background:#f1f5f9;border-color:#94a3b8;color:var(--title)}
+.btn.active{background:var(--accent);color:#fff;border-color:var(--accent)}
+.btn.warn:hover{background:#fef2f2;border-color:#fca5a5;color:#dc2626}
+.zoom-controls{display:flex;align-items:center;gap:4px}
+.zoom-controls .btn{width:28px;height:28px;padding:0;display:flex;align-items:center;justify-content:center;font-size:1rem;border-radius:50%}
+.zoom-label{font-size:.7rem;color:var(--sub);min-width:34px;text-align:center}
+.search-count{font-size:.7rem;color:var(--accent);white-space:nowrap}
+.save-status{font-size:.68rem;color:#059669;white-space:nowrap;opacity:0;transition:opacity .3s}
+.save-status.show{opacity:1}
+
+/* Upload overlay */
+.upload-overlay{position:fixed;inset:0;z-index:200;background:rgba(255,255,255,.97);display:flex;align-items:center;justify-content:center;backdrop-filter:blur(5px)}
+.upload-overlay.hidden{display:none}
+.upload-box{text-align:center;padding:60px 80px;border:3px dashed #cbd5e1;border-radius:24px;cursor:pointer;transition:all .3s;background:#fafbfc}
+.upload-box:hover{border-color:var(--accent);background:#f0f4ff;transform:translateY(-4px);box-shadow:0 20px 60px rgba(37,99,235,.1)}
+.upload-box.dragover{border-color:var(--accent);background:#e8f0fe;transform:scale(1.02)}
+.upload-box .icon{font-size:4rem;margin-bottom:16px}
+.upload-box h2{font-size:1.3rem;margin-bottom:6px}
+.upload-box p{font-size:.85rem;color:var(--sub)}
+.upload-box input{display:none}
+
+/* Canvas */
+.canvas-wrap{position:fixed;top:46px;left:0;right:0;bottom:0;overflow:auto;cursor:grab;background:var(--bg);background-image:radial-gradient(circle,#dde2ea 1px,transparent 1px);background-size:24px 24px}
+.canvas-wrap.panning{cursor:grabbing}
+.canvas-sizer{position:relative;margin:0 auto}
+.canvas{position:absolute;top:0;left:0;transform-origin:top left;transition:transform .08s ease-out}
+#linksSvg{position:absolute;top:0;left:0;pointer-events:none;overflow:visible}
+#linksSvg path{fill:none;stroke:var(--line);stroke-width:2}
+
+/* Node */
+.node{position:absolute;border-radius:8px;text-align:center;cursor:grab;transition:box-shadow .2s,border-color .2s;user-select:none;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:9px 18px;line-height:1.3;background:#fff;border:1.5px solid #cbd5e1;box-shadow:var(--box-shadow);box-sizing:border-box}
+.node:active{cursor:grabbing}
+.node.dragging{z-index:50;box-shadow:0 12px 30px rgba(0,0,0,.25);opacity:.92}
+.node .role-txt{font-size:.78rem;font-weight:500}
+.node .count{display:block;font-size:.62rem;opacity:.75;margin-top:2px}
+
+.node.root{background:linear-gradient(135deg,#0f172a,#1e3a5f);color:#fff;border:2px solid #0f172a;box-shadow:0 6px 25px rgba(15,23,42,.3)}
+.node.root .role-txt{font-size:.92rem;font-weight:700}
+.node.dept-head{background:linear-gradient(135deg,#1e40af,#3b82f6);color:#fff;border:2px solid #1e40af;box-shadow:0 4px 20px rgba(30,64,175,.25)}
+.node.dept-head .role-txt{font-size:.82rem;font-weight:600}
+.node.unit-head{background:linear-gradient(135deg,#065f46,#059669);color:#fff;border:2px solid #065f46;box-shadow:0 4px 15px rgba(6,95,70,.2)}
+.node.unit-head .role-txt{font-size:.78rem;font-weight:600}
+.node.leaf{background:#f0f4ff;border:1.5px solid #bfdbfe;color:#1e40af}
+.node.leaf .role-txt{font-size:.72rem;font-weight:500}
+
+.node:hover{box-shadow:0 6px 18px rgba(37,99,235,.18)}
+.node.highlight{outline:3px solid #f59e0b;outline-offset:3px;z-index:40}
+
+/* Balloon */
+.balloon-overlay{position:fixed;inset:0;background:rgba(0,0,0,.4);backdrop-filter:blur(4px);z-index:300;display:none;align-items:center;justify-content:center}
+.balloon-overlay.active{display:flex}
+.balloon{background:#fff;border-radius:16px;min-width:330px;max-width:400px;box-shadow:0 25px 80px rgba(0,0,0,.2);animation:pop .35s cubic-bezier(.175,.885,.32,1.275);overflow:hidden}
+@keyframes pop{0%{opacity:0;transform:scale(.7) translateY(30px)}100%{opacity:1;transform:scale(1) translateY(0)}}
+.balloon-head{padding:22px 22px 14px;text-align:center;position:relative}
+.balloon-head.mgr{background:linear-gradient(135deg,#1e3a5f,#2d5a8e)}
+.balloon-head.emp{background:linear-gradient(135deg,#f8fafc,#e2e8f0)}
+.balloon-avatar{width:58px;height:58px;border-radius:50%;margin:0 auto 10px;display:flex;align-items:center;justify-content:center;font-size:1.7rem;background:rgba(255,255,255,.15);border:2px solid rgba(255,255,255,.3)}
+.balloon-head.emp .balloon-avatar{background:rgba(37,99,235,.08);border-color:rgba(37,99,235,.2)}
+.balloon-bname{font-family:'Rubik',sans-serif;font-size:1.25rem;font-weight:700}
+.balloon-head.mgr .balloon-bname{color:#fff}
+.balloon-head.emp .balloon-bname{color:var(--title)}
+.balloon-btag{display:inline-block;font-size:.65rem;font-weight:600;padding:2px 10px;border-radius:12px;margin-top:4px}
+.balloon-head.mgr .balloon-btag{background:rgba(255,255,255,.15);color:rgba(255,255,255,.9)}
+.balloon-head.emp .balloon-btag{background:rgba(37,99,235,.08);color:var(--accent)}
+.balloon-body{padding:16px 22px 22px}
+.balloon-row{display:flex;align-items:center;gap:10px;padding:9px 12px;background:#f8fafc;border-radius:10px;margin-bottom:8px;border:1px solid #f1f5f9}
+.balloon-row:last-child{margin-bottom:0}
+.balloon-row-icon{font-size:1rem;width:26px;text-align:center}
+.balloon-row-label{font-size:.6rem;color:var(--sub);letter-spacing:.3px}
+.balloon-row-value{font-size:.82rem;color:var(--title);font-weight:500}
+.balloon-close{position:absolute;top:10px;left:10px;width:28px;height:28px;border-radius:50%;background:rgba(255,255,255,.15);border:none;color:rgba(255,255,255,.7);font-size:.9rem;cursor:pointer;transition:all .2s}
+.balloon-head.emp .balloon-close{background:rgba(0,0,0,.05);color:var(--sub)}
+.balloon-close:hover{background:rgba(255,0,0,.15);color:#ef4444;transform:rotate(90deg)}
+
+/* Modal */
+.modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,.4);backdrop-filter:blur(4px);z-index:400;display:none;align-items:center;justify-content:center}
+.modal-overlay.active{display:flex}
+.modal{background:#fff;border-radius:16px;min-width:330px;max-width:410px;box-shadow:0 25px 80px rgba(0,0,0,.2);animation:pop .35s cubic-bezier(.175,.885,.32,1.275);overflow:hidden}
+.modal-head{display:flex;align-items:center;justify-content:space-between;padding:16px 20px;background:linear-gradient(135deg,#1e3a5f,#2d5a8e);color:#fff}
+.modal-head h3{font-size:.95rem;font-weight:700}
+.modal-close{width:26px;height:26px;border-radius:50%;background:rgba(255,255,255,.15);border:none;color:#fff;font-size:.85rem;cursor:pointer;transition:all .2s}
+.modal-close:hover{background:rgba(255,0,0,.2);transform:rotate(90deg)}
+.modal-body{padding:16px 20px 20px}
+.modal-hint{font-size:.8rem;color:var(--sub);margin-bottom:12px}
+.field-toggle{display:flex;align-items:center;gap:10px;padding:9px 13px;background:#f8fafc;border:1px solid #e2e8f0;border-radius:10px;cursor:pointer;transition:all .2s;margin-bottom:7px}
+.field-toggle:hover{background:#f0f4ff;border-color:#bfdbfe}
+.field-toggle input{width:17px;height:17px;accent-color:var(--accent);cursor:pointer}
+.field-toggle .ft-icon{font-size:1.05rem;width:24px;text-align:center}
+.field-toggle .ft-label{font-size:.84rem;font-weight:500}
+
+.loading-screen{position:fixed;top:46px;inset:46px 0 0 0;z-index:150;background:var(--bg);display:flex;align-items:center;justify-content:center;flex-direction:column;gap:14px}
+.loading-screen.hidden{display:none}
+.spinner{width:38px;height:38px;border:4px solid #e2e8f0;border-top-color:var(--accent);border-radius:50%;animation:spin .8s linear infinite}
+@keyframes spin{to{transform:rotate(360deg)}}
+
+@media print{
+  @page{size:A3 landscape;margin:5mm}
+  .topbar,.balloon-overlay,.modal-overlay,.loading-screen,.upload-overlay{display:none!important}
+  .canvas-wrap{position:static!important;overflow:visible!important;background:#fff!important;background-image:none!important;top:0!important}
+  body{background:#fff!important;overflow:visible!important;height:auto!important}
+  .node{-webkit-print-color-adjust:exact;print-color-adjust:exact;box-shadow:none!important}
+  #linksSvg path{-webkit-print-color-adjust:exact;print-color-adjust:exact}
+}
+</style>
+</head>
+<body>
+
+<div class="topbar">
+  <h1>🏛️ מבנה ארגוני</h1>
+  <div class="sep"></div>
+  <div class="stats"><span id="sEmp">-</span> עובדים | <span id="sDept">-</span> מחלקות | <span id="sUnit">-</span> יחידות</div>
+  <div class="sep"></div>
+  <input type="text" id="searchInput" placeholder="🔍 חיפוש תפקיד / שם..." oninput="handleSearch(this.value)">
+  <span class="search-count" id="searchCount"></span>
+  <div class="sep"></div>
+  <div class="zoom-controls">
+    <button class="btn" onclick="zoomOut()">−</button>
+    <span class="zoom-label" id="zoomLabel">100%</span>
+    <button class="btn" onclick="zoomIn()">+</button>
+    <button class="btn" onclick="zoomFit()" title="התאם למסך">⊡</button>
+  </div>
+  <div class="sep"></div>
+  <button class="btn" onclick="openFieldsModal()">⚙️ שדות</button>
+  <button class="btn" onclick="printChart()">🖨️ הדפסה</button>
+  <button class="btn" onclick="autoLayout()" title="סידור אוטומטי מחדש">🔄 סדר מחדש</button>
+  <button class="btn" onclick="exportJSON()">⬇️ ייצוא</button>
+  <button class="btn" onclick="document.getElementById('jsonInput').click()">⬆️ ייבוא</button>
+  <button class="btn" onclick="document.getElementById('fileInput').click()">📂 אקסל</button>
+  <span class="save-status" id="saveStatus">✓ נשמר</span>
+  <input type="file" id="fileInput" accept=".xlsx,.xls" style="display:none" onchange="handleFile(this.files[0])">
+  <input type="file" id="jsonInput" accept=".json" style="display:none" onchange="importJSON(this.files[0])">
+</div>
+
+<div class="upload-overlay" id="uploadOverlay">
+  <div class="upload-box" id="uploadBox" onclick="document.getElementById('fileInput').click()">
+    <div class="icon">📊</div>
+    <h2>טען קובץ אקסל</h2>
+    <p>גרור לכאן או לחץ לבחירה · xlsx / xls</p>
+  </div>
+</div>
+
+<div class="loading-screen hidden" id="loadingScreen"><div class="spinner"></div><p>טוען...</p></div>
+
+<!-- Balloon -->
+<div class="balloon-overlay" id="balloonOverlay" onclick="closeBalloon(event)">
+  <div class="balloon" onclick="event.stopPropagation()">
+    <div class="balloon-head" id="bHead">
+      <button class="balloon-close" onclick="closeBalloon()">✕</button>
+      <div class="balloon-avatar" id="bAvatar">👤</div>
+      <div class="balloon-bname" id="bName"></div>
+      <div class="balloon-btag" id="bTag"></div>
+    </div>
+    <div class="balloon-body" id="balloonBody"></div>
+  </div>
+</div>
+
+<!-- Fields modal -->
+<div class="modal-overlay" id="fieldsModal" onclick="closeFieldsModal(event)">
+  <div class="modal" onclick="event.stopPropagation()">
+    <div class="modal-head"><h3>⚙️ בחירת שדות לכרטיס</h3><button class="modal-close" onclick="closeFieldsModal()">✕</button></div>
+    <div class="modal-body">
+      <p class="modal-hint">בחר אילו שדות יוצגו בכרטיס העובד:</p>
+      <div id="fieldToggles"></div>
+    </div>
+  </div>
+</div>
+
+<div class="canvas-wrap" id="canvasWrap">
+  <div class="canvas-sizer" id="canvasSizer">
+    <div class="canvas" id="canvas">
+      <svg id="linksSvg"></svg>
+    </div>
+  </div>
+</div>
+
+<script src="employees.js"></script>
+<script>
+// ===== CONFIG =====
+const STORAGE_KEY='orgchart_layout_v1';
+const NODE_W={root:230,'dept-head':190,'unit-head':180,leaf:150};
+const NODE_H=46;
+const H_GAP=30, V_GAP=90;
+
+function getName(role){return(typeof EMPLOYEES!=='undefined'&&EMPLOYEES[role])?EMPLOYEES[role]:role}
+
+// ===== STATE =====
+let nodes=[];            // {id, role, dept, unit, reportsTo, isMgr, count, level, cls, x, y, w}
+let nodeById={};
+let childrenOf={};
+let zoom=1;
+const canvasEl=document.getElementById('canvas');
+const wrapEl=document.getElementById('canvasWrap');
+const svg=document.getElementById('linksSvg');
+
+// ===== ZOOM =====
+const sizerEl=document.getElementById('canvasSizer');
+function applyZoom(){
+  canvasEl.style.transform=`scale(${zoom})`;
+  document.getElementById('zoomLabel').textContent=Math.round(zoom*100)+'%';
+  const b=contentBounds();
+  sizerEl.style.width=((b.w+100)*zoom)+'px';
+  sizerEl.style.height=((b.h+100)*zoom)+'px';
+}
+function zoomIn(){zoom=Math.min(zoom+.15,3);applyZoom()}
+function zoomOut(){zoom=Math.max(zoom-.15,.2);applyZoom()}
+function zoomFit(){
+  if(!nodes.length)return;
+  const b=contentBounds();
+  const ww=wrapEl.clientWidth,wh=wrapEl.clientHeight;
+  zoom=Math.min(ww/(b.w+80),wh/(b.h+80),1.2);
+  zoom=Math.max(zoom,0.25);
+  applyZoom();
+  // Center the chart in the viewport
+  setTimeout(()=>{
+    const scaledW=(b.w+100)*zoom;
+    const scaledH=(b.h+100)*zoom;
+    wrapEl.scrollLeft=Math.max(0,(scaledW-ww)/2);
+    wrapEl.scrollTop=Math.max(0,(scaledH-wh)/2);
+  },80);
+}
+function contentBounds(){
+  let maxX=0,maxY=0;
+  nodes.forEach(n=>{maxX=Math.max(maxX,n.x+n.w);maxY=Math.max(maxY,n.y+NODE_H)});
+  return {w:maxX,h:maxY};
+}
+function resizeCanvas(){
+  const b=contentBounds();
+  canvasEl.style.width=(b.w+100)+'px';
+  canvasEl.style.height=(b.h+100)+'px';
+  svg.setAttribute('width',b.w+100);
+  svg.setAttribute('height',b.h+100);
+  if(typeof sizerEl!=='undefined'&&sizerEl){
+    sizerEl.style.width=((b.w+100)*zoom)+'px';
+    sizerEl.style.height=((b.h+100)*zoom)+'px';
+  }
+}
+
+wrapEl.addEventListener('wheel',e=>{
+  e.preventDefault();
+  if(!nodes.length)return;
+  const step=0.05;
+  const oldZoom=zoom;
+  const delta=e.deltaY<0?step:-step;
+  let newZoom=Math.min(Math.max(zoom+delta,0.2),3);
+  newZoom=Math.round(newZoom*100)/100;
+  if(newZoom===oldZoom)return;
+
+  // keep the point under the cursor fixed
+  const rect=wrapEl.getBoundingClientRect();
+  const cx=e.clientX-rect.left;
+  const cy=e.clientY-rect.top;
+  const contentX=(wrapEl.scrollLeft+cx)/oldZoom;
+  const contentY=(wrapEl.scrollTop+cy)/oldZoom;
+
+  zoom=newZoom;
+  applyZoom();
+
+  wrapEl.scrollLeft=contentX*newZoom-cx;
+  wrapEl.scrollTop=contentY*newZoom-cy;
+},{passive:false});
+
+// ===== PAN =====
+let isPanning=false,panStart={x:0,y:0},scrollStart={x:0,y:0};
+wrapEl.addEventListener('mousedown',e=>{
+  if(e.target.closest('.node'))return;
+  isPanning=true;panStart={x:e.clientX,y:e.clientY};scrollStart={x:wrapEl.scrollLeft,y:wrapEl.scrollTop};
+  wrapEl.classList.add('panning');
+});
+window.addEventListener('mousemove',e=>{if(!isPanning)return;wrapEl.scrollLeft=scrollStart.x-(e.clientX-panStart.x);wrapEl.scrollTop=scrollStart.y-(e.clientY-panStart.y)});
+window.addEventListener('mouseup',()=>{isPanning=false;wrapEl.classList.remove('panning')});
+
+// ===== UPLOAD =====
+const ub=document.getElementById('uploadBox');
+ub.addEventListener('dragover',e=>{e.preventDefault();ub.classList.add('dragover')});
+ub.addEventListener('dragleave',()=>ub.classList.remove('dragover'));
+ub.addEventListener('drop',e=>{e.preventDefault();ub.classList.remove('dragover');if(e.dataTransfer.files.length)handleFile(e.dataTransfer.files[0])});
+
+function handleFile(file){
+  if(!file)return;
+  const reader=new FileReader();
+  reader.onload=function(e){
+    const wb=XLSX.read(e.target.result,{type:'array',cellDates:false});
+    const ws=wb.Sheets[wb.SheetNames[0]];
+    const rows=XLSX.utils.sheet_to_json(ws,{header:1,defval:''});
+    buildFromRows(rows);
+    document.getElementById('uploadOverlay').classList.add('hidden');
+    autoLayout(); // fresh layout on new file
+  };
+  reader.readAsArrayBuffer(file);
+}
+
+// ===== PARSE =====
+function buildFromRows(rows){
+  const raw=[];
+  for(let i=1;i<rows.length;i++){
+    const r=rows[i];
+    if(!r||r.length<6)continue;
+    const hativa=(r[0]||'').toString().trim();
+    const dept=(r[1]||'').toString().trim();
+    const unitOld=(r[3]||'').toString().trim();
+    const unitNew=(r[4]||'').toString().trim();
+    let role=(r[5]||'').toString().trim();
+    const empId=(r[6]||'').toString().trim();
+    const reportsTo=((r[7]||'').toString().trim()).replace(/\*\*/g,'').trim();
+    if(!role||dept==='מחלקה'||hativa==='חטיבה')continue;
+    const isMgr=role.startsWith('**');
+    role=role.replace(/\*\*/g,'').trim();
+    const unit=unitNew||unitOld;
+    raw.push({role,dept,unit,reportsTo,isMgr,empId});
+  }
+  // dedup
+  const grouped={};
+  raw.forEach(e=>{const k=e.role+'|||'+e.reportsTo;if(!grouped[k]){grouped[k]={...e,count:1}}else grouped[k].count++});
+  const list=Object.values(grouped);
+
+  const roleSet=new Set(list.map(n=>n.role));
+  childrenOf={};
+  list.forEach(n=>{const p=n.reportsTo;if(p&&roleSet.has(p)){(childrenOf[p]=childrenOf[p]||[]).push(n)}});
+  let roots=list.filter(n=>!n.reportsTo||!roleSet.has(n.reportsTo));
+  function countDesc(role,v=new Set()){if(v.has(role))return 0;v.add(role);return(childrenOf[role]||[]).reduce((s,c)=>s+c.count+countDesc(c.role,v),0)}
+  if(roots.length>1){roots.sort((a,b)=>countDesc(b.role)-countDesc(a.role));}
+  const mainRoot=roots[0];
+  if(roots.length>1){
+    roots.slice(1).forEach(r=>{(childrenOf[mainRoot.role]=childrenOf[mainRoot.role]||[]).push(r)});
+  }
+
+  // Assign levels + build node objects
+  nodes=[];nodeById={};
+  let idc=0;
+  function walk(n,level,visited){
+    if(visited.has(n.role))return null;
+    visited.add(n.role);
+    const ch=childrenOf[n.role]||[];
+    const hasCh=ch.length>0;
+    const cls=level===0?'root':level===1?'dept-head':(hasCh||n.isMgr)?'unit-head':'leaf';
+    // side-staff: leaf personal/admin staff (secretary, clerk, assistant) → branch horizontally
+    const isSide=!hasCh&&!n.isMgr&&/מזכיר|פקיד|עוזר|מתאמ|ע'|ע׳/.test(n.role);
+    const id='n'+(idc++);
+    const obj={id,role:n.role,dept:n.dept,unit:n.unit,reportsTo:n.reportsTo,isMgr:n.isMgr||hasCh,count:n.count,level,cls,side:isSide,w:NODE_W[cls]||150,x:0,y:0,childIds:[]};
+    nodeById[id]=obj;nodes.push(obj);
+    ch.forEach(c=>{const cobj=walk(c,level+1,visited);if(cobj)obj.childIds.push(cobj.id)});
+    return obj;
+  }
+  walk(mainRoot,0,new Set());
+
+  // stats
+  const depts=new Set(raw.map(e=>e.dept)), units=new Set(raw.map(e=>e.unit));
+  let totalEmp=0;raw.forEach(()=>totalEmp++);
+  document.getElementById('sEmp').textContent=raw.length;
+  document.getElementById('sDept').textContent=depts.size;
+  document.getElementById('sUnit').textContent=units.size;
+}
+
+// ===== AUTO LAYOUT (tidy tree) =====
+function autoLayout(){
+  if(!nodes.length)return;
+  const root=nodes.find(n=>n.level===0);
+  if(!root)return;
+  let cursorX=0;
+  const STAFF_V=12;   // vertical gap between stacked staff
+  const STAFF_TOP=34; // gap from manager bottom to first staff
+  const SIDE_OFF=38;  // horizontal offset of staff from the descending line
+
+  function place(node,yPos){
+    node.y=yPos;
+    const kids=node.childIds.map(id=>nodeById[id]);
+    const staff=kids.filter(k=>k.side);
+    const branches=kids.filter(k=>!k.side);
+
+    const staffBlockH=staff.length?STAFF_TOP+staff.length*(NODE_H+STAFF_V):0;
+    const branchY=yPos+NODE_H+staffBlockH+V_GAP;
+
+    if(branches.length===0){
+      node.x=cursorX;
+      cursorX+=node.w+H_GAP;
+    }else{
+      branches.forEach(b=>place(b,branchY));
+      const first=branches[0],last=branches[branches.length-1];
+      node.x=(first.x+first.w/2+last.x+last.w/2)/2-node.w/2;
+    }
+
+    // place side-staff beside the descending line
+    const lineX=node.x+node.w/2;
+    staff.forEach((s,i)=>{
+      s.y=yPos+NODE_H+STAFF_TOP+i*(NODE_H+STAFF_V);
+      s.x=lineX+SIDE_OFF;
+    });
+  }
+  place(root,20);
+  let minX=Infinity;nodes.forEach(n=>minX=Math.min(minX,n.x));
+  if(isFinite(minX)&&minX!==20)nodes.forEach(n=>n.x-=minX-20);
+  renderAll();
+  saveLayout();
+  setTimeout(zoomFit,60);
+}
+
+// ===== RENDER =====
+let visibleFields={role:true,name:true,reportsTo:true,dept:true,unit:true};
+
+function renderAll(){
+  // remove old node DOMs
+  canvasEl.querySelectorAll('.node').forEach(el=>el.remove());
+  nodes.forEach(n=>{
+    const el=document.createElement('div');
+    el.className='node '+n.cls;
+    el.id=n.id;
+    el.style.left=n.x+'px';
+    el.style.top=n.y+'px';
+    el.style.width=n.w+'px';
+    const cnt=n.count>1?` (${n.count})`:'';
+    let extra='';
+    if(n.cls==='dept-head'&&n.dept)extra=`<span class="count">${esc(n.dept)}</span>`;
+    else if(n.cls==='unit-head'&&n.unit)extra=`<span class="count">${esc(n.unit)}</span>`;
+    el.innerHTML=`<div class="role-txt">${esc(n.role)}${cnt}</div>${extra}`;
+    el.dataset.search=(n.role+' '+n.dept+' '+n.unit+' '+getName(n.role)).toLowerCase();
+    el.addEventListener('mousedown',e=>startDrag(e,n));
+    el.addEventListener('click',e=>{if(!didDrag)showBalloon(n)});
+    canvasEl.appendChild(el);
+  });
+  resizeCanvas();
+  drawLinks();
+}
+
+function drawLinks(){
+  let d='';
+  nodes.forEach(n=>{
+    const kids=n.childIds.map(id=>nodeById[id]);
+    const staff=kids.filter(k=>k.side);
+    const branches=kids.filter(k=>!k.side);
+    const px=n.x+n.w/2, py=n.y+NODE_H;
+
+    // branches — elbow connector (down, across, down)
+    branches.forEach(c=>{
+      const cx=c.x+c.w/2, cy=c.y;
+      const midY=py+(cy-py)/2;
+      d+=`M${px},${py} L${px},${midY} L${cx},${midY} L${cx},${cy} `;
+    });
+
+    // side-staff — horizontal connector off the descending line
+    if(staff.length){
+      let lowest=py;
+      staff.forEach(s=>{
+        const sy=s.y+NODE_H/2;
+        const sCenterX=s.x+s.w/2;
+        const edgeX=sCenterX>px?s.x:s.x+s.w; // connect to nearer edge
+        d+=`M${px},${sy} L${edgeX},${sy} `;
+        lowest=Math.max(lowest,sy);
+      });
+      // vertical descending line through the staff
+      d+=`M${px},${py} L${px},${lowest} `;
+    }
+  });
+  svg.innerHTML=`<path d="${d}"/>`;
+}
+
+function esc(s){return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;')}
+
+// ===== DRAG =====
+let didDrag=false, dragNode=null, dragStart={x:0,y:0}, nodeStart={x:0,y:0};
+function startDrag(e,n){
+  e.preventDefault();e.stopPropagation();
+  dragNode=n;didDrag=false;
+  dragStart={x:e.clientX,y:e.clientY};
+  nodeStart={x:n.x,y:n.y};
+  document.getElementById(n.id).classList.add('dragging');
+}
+window.addEventListener('mousemove',e=>{
+  if(!dragNode)return;
+  const dx=(e.clientX-dragStart.x)/zoom;
+  const dy=(e.clientY-dragStart.y)/zoom;
+  if(Math.abs(dx)>3||Math.abs(dy)>3)didDrag=true;
+  dragNode.x=Math.max(0,nodeStart.x+dx);
+  dragNode.y=Math.max(0,nodeStart.y+dy);
+  const el=document.getElementById(dragNode.id);
+  el.style.left=dragNode.x+'px';
+  el.style.top=dragNode.y+'px';
+  drawLinks();
+});
+window.addEventListener('mouseup',()=>{
+  if(dragNode){
+    document.getElementById(dragNode.id).classList.remove('dragging');
+    resizeCanvas();
+    if(didDrag)saveLayout();
+    dragNode=null;
+  }
+});
+
+// ===== SAVE / LOAD =====
+function saveLayout(){
+  try{
+    const data={nodes:nodes.map(n=>({id:n.id,role:n.role,dept:n.dept,unit:n.unit,reportsTo:n.reportsTo,isMgr:n.isMgr,count:n.count,level:n.level,cls:n.cls,side:n.side,w:n.w,x:Math.round(n.x),y:Math.round(n.y),childIds:n.childIds})),
+      stats:{emp:document.getElementById('sEmp').textContent,dept:document.getElementById('sDept').textContent,unit:document.getElementById('sUnit').textContent}};
+    localStorage.setItem(STORAGE_KEY,JSON.stringify(data));
+    flashSaved();
+  }catch(e){console.warn('save failed',e)}
+}
+function loadLayout(){
+  try{
+    const raw=localStorage.getItem(STORAGE_KEY);
+    if(!raw)return false;
+    const data=JSON.parse(raw);
+    applyData(data);
+    return true;
+  }catch(e){return false}
+}
+function applyData(data){
+  nodes=data.nodes;nodeById={};childrenOf={};
+  nodes.forEach(n=>{nodeById[n.id]=n});
+  if(data.stats){document.getElementById('sEmp').textContent=data.stats.emp;document.getElementById('sDept').textContent=data.stats.dept;document.getElementById('sUnit').textContent=data.stats.unit}
+  renderAll();
+  document.getElementById('uploadOverlay').classList.add('hidden');
+  setTimeout(zoomFit,60);
+}
+let saveTimer;
+function flashSaved(){
+  const s=document.getElementById('saveStatus');
+  s.classList.add('show');
+  clearTimeout(saveTimer);
+  saveTimer=setTimeout(()=>s.classList.remove('show'),1500);
+}
+
+// ===== EXPORT / IMPORT JSON =====
+function exportJSON(){
+  const data={nodes:nodes.map(n=>({id:n.id,role:n.role,dept:n.dept,unit:n.unit,reportsTo:n.reportsTo,isMgr:n.isMgr,count:n.count,level:n.level,cls:n.cls,side:n.side,w:n.w,x:Math.round(n.x),y:Math.round(n.y),childIds:n.childIds})),
+    stats:{emp:document.getElementById('sEmp').textContent,dept:document.getElementById('sDept').textContent,unit:document.getElementById('sUnit').textContent}};
+  const blob=new Blob([JSON.stringify(data,null,2)],{type:'application/json'});
+  const a=document.createElement('a');
+  a.href=URL.createObjectURL(blob);
+  a.download='orgchart_layout.json';
+  a.click();
+}
+function importJSON(file){
+  if(!file)return;
+  const reader=new FileReader();
+  reader.onload=e=>{
+    try{const data=JSON.parse(e.target.result);applyData(data);saveLayout();}
+    catch(err){alert('קובץ JSON לא תקין')}
+  };
+  reader.readAsText(file);
+}
+
+// ===== BALLOON =====
+const FIELD_DEFS=[
+  {key:'role',icon:'💼',label:'תפקיד'},
+  {key:'name',icon:'👤',label:'שם עובד'},
+  {key:'reportsTo',icon:'👆',label:'כפיפות ישירה'},
+  {key:'dept',icon:'🏢',label:'מחלקה'},
+  {key:'unit',icon:'📍',label:'יחידה'}
+];
+let curBalloon={};
+function showBalloon(n){
+  const name=getName(n.role);
+  curBalloon={role:n.role,name,dept:n.dept,unit:n.unit,reportsTo:n.reportsTo,isMgr:n.isMgr};
+  document.getElementById('bName').textContent=name;
+  const head=document.getElementById('bHead'),av=document.getElementById('bAvatar'),tag=document.getElementById('bTag');
+  if(n.isMgr){head.className='balloon-head mgr';av.textContent='⭐';tag.textContent='👑 דרג ניהולי'}
+  else{head.className='balloon-head emp';av.textContent='👤';tag.textContent='עובד/ת'}
+  renderBalloonBody();
+  document.getElementById('balloonOverlay').classList.add('active');
+}
+function renderBalloonBody(){
+  const d=curBalloon;
+  const vals={role:d.role,name:d.name,reportsTo:d.reportsTo||'—',dept:d.dept,unit:d.unit};
+  let h='';
+  FIELD_DEFS.forEach(f=>{
+    if(f.key==='name')return;
+    if(visibleFields[f.key])h+=`<div class="balloon-row"><span class="balloon-row-icon">${f.icon}</span><div><div class="balloon-row-label">${f.label}</div><div class="balloon-row-value">${esc(vals[f.key]||'—')}</div></div></div>`;
+  });
+  document.getElementById('balloonBody').innerHTML=h;
+}
+function closeBalloon(e){if(e&&e.target!==document.getElementById('balloonOverlay'))return;document.getElementById('balloonOverlay').classList.remove('active')}
+
+// ===== FIELDS MODAL =====
+function openFieldsModal(){
+  const c=document.getElementById('fieldToggles');c.innerHTML='';
+  FIELD_DEFS.forEach(f=>{
+    const lbl=document.createElement('label');lbl.className='field-toggle';
+    lbl.innerHTML=`<input type="checkbox" ${visibleFields[f.key]?'checked':''} onchange="toggleField('${f.key}',this.checked)"><span class="ft-icon">${f.icon}</span><span class="ft-label">${f.label}</span>`;
+    c.appendChild(lbl);
+  });
+  document.getElementById('fieldsModal').classList.add('active');
+}
+function closeFieldsModal(e){if(e&&e.target!==document.getElementById('fieldsModal'))return;document.getElementById('fieldsModal').classList.remove('active')}
+function toggleField(k,v){visibleFields[k]=v;if(document.getElementById('balloonOverlay').classList.contains('active'))renderBalloonBody()}
+
+// ===== PRINT =====
+function printChart(){
+  const b=contentBounds();
+  const savedZoom=zoom, savedT=canvasEl.style.transform;
+  const pageW=410*96/25.4, pageH=287*96/25.4;
+  let ps=Math.min(pageW/(b.w+40),pageH/(b.h+40),2.5);
+  canvasEl.style.transform='none';
+  canvasEl.style.zoom=ps;
+  setTimeout(()=>{window.print();setTimeout(()=>{canvasEl.style.zoom='';canvasEl.style.transform=savedT;zoom=savedZoom;applyZoom()},300)},250);
+}
+
+// ===== SEARCH =====
+let sTimer;
+function handleSearch(q){
+  clearTimeout(sTimer);
+  document.querySelectorAll('.node.highlight').forEach(el=>el.classList.remove('highlight'));
+  document.getElementById('searchCount').textContent='';
+  if(!q)return;
+  sTimer=setTimeout(()=>{
+    const ql=q.toLowerCase();
+    const matches=nodes.filter(n=>(document.getElementById(n.id)?.dataset.search||'').includes(ql));
+    matches.forEach(n=>document.getElementById(n.id).classList.add('highlight'));
+    document.getElementById('searchCount').textContent=matches.length?`${matches.length} תוצאות`:'אין';
+    if(matches.length){
+      const n=matches[0];
+      wrapEl.scrollTo({left:n.x*zoom-wrapEl.clientWidth/2,top:n.y*zoom-wrapEl.clientHeight/2,behavior:'smooth'});
+    }
+  },250);
+}
+
+document.addEventListener('keydown',e=>{if(e.key==='Escape'){const o=document.getElementById('balloonOverlay');if(o.classList.contains('active'))o.classList.remove('active');else{document.getElementById('searchInput').value='';handleSearch('')}}});
+
+// ===== INIT =====
+window.addEventListener('DOMContentLoaded',()=>{
+  if(!loadLayout()){
+    // no saved layout — wait for file upload
+  }
+});
+</script>
+</body>
+</html>
