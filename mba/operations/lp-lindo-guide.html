@@ -1,0 +1,644 @@
+<!DOCTYPE html>
+<html dir="rtl" lang="he">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>נושא 1 · תכנון ליניארי + Lindo — ניהול התפעול</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Secular+One&family=Heebo:wght@300;400;600;800&family=IBM+Plex+Mono:wght@400;600&display=swap" rel="stylesheet">
+<style>
+:root{
+  --paper:#F1F3EF;      /* נייר בחינה */
+  --ink:#17233B;        /* דיו */
+  --ink-soft:#4A5670;
+  --term:#0C1424;       /* מסך טרמינל */
+  --term-txt:#B9C6DC;
+  --phosphor:#3ECF8E;   /* ירוק זרחן */
+  --marker:#FFE066;     /* מרקר צהוב */
+  --marker-deep:#F5C518;
+  --line:#D8DCD4;
+  --card:#FFFFFF;
+  --danger:#C9484C;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth}
+@media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}}
+body{
+  font-family:'Heebo',system-ui,sans-serif;
+  background:var(--paper);
+  color:var(--ink);
+  font-size:17px;
+  line-height:1.75;
+}
+main{max-width:860px;margin:0 auto;padding:0 20px 80px}
+
+/* ---------- כותרת בסגנון טופס בחינה ---------- */
+.hero{max-width:860px;margin:36px auto 0;padding:0 20px}
+.exam-box{
+  border:2.5px solid var(--ink);
+  background:var(--card);
+  box-shadow:6px 6px 0 var(--ink);
+}
+.exam-box .stamp{
+  display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px;
+  border-bottom:2.5px solid var(--ink);
+  padding:10px 18px;
+  font-size:.82rem;font-weight:600;color:var(--ink-soft);
+  letter-spacing:.03em;
+}
+.exam-box .stamp b{color:var(--ink)}
+.exam-box h1{
+  font-family:'Secular One',sans-serif;
+  font-size:clamp(1.7rem,5vw,2.7rem);
+  line-height:1.2;
+  padding:24px 18px 6px;
+}
+.exam-box h1 .en{font-family:'IBM Plex Mono',monospace;font-size:.55em;color:var(--phosphor);background:var(--term);padding:2px 10px;border-radius:4px;vertical-align:middle;white-space:nowrap}
+.exam-box .sub{padding:0 18px 20px;color:var(--ink-soft);max-width:60ch}
+.meta-row{display:flex;flex-wrap:wrap;border-top:2.5px solid var(--ink)}
+.meta-row div{
+  flex:1;min-width:150px;padding:10px 18px;font-size:.85rem;
+  border-inline-start:2.5px solid var(--ink);
+}
+.meta-row div:first-child{border-inline-start:none}
+.meta-row span{display:block;font-size:.7rem;color:var(--ink-soft);font-weight:600}
+.meta-row b{font-size:1rem}
+
+/* ---------- ניווט ---------- */
+nav{
+  position:sticky;top:0;z-index:50;
+  background:rgba(241,243,239,.92);backdrop-filter:blur(6px);
+  border-bottom:1px solid var(--line);
+  margin-top:28px;
+}
+nav ul{max-width:860px;margin:0 auto;padding:0 20px;display:flex;gap:4px;list-style:none;overflow-x:auto}
+nav a{
+  display:block;padding:11px 12px;font-size:.83rem;font-weight:600;
+  color:var(--ink-soft);text-decoration:none;white-space:nowrap;
+  border-bottom:3px solid transparent;
+}
+nav a:hover{color:var(--ink);border-bottom-color:var(--marker-deep)}
+
+/* ---------- מקטעים ---------- */
+section{margin-top:64px}
+.eyebrow{
+  display:inline-block;font-size:.72rem;font-weight:800;letter-spacing:.12em;
+  color:var(--ink);background:var(--marker);padding:3px 12px;margin-bottom:10px;
+  border:1.5px solid var(--ink);
+}
+h2{font-family:'Secular One',sans-serif;font-size:clamp(1.4rem,3.6vw,1.9rem);line-height:1.25;margin-bottom:14px}
+h3{font-size:1.08rem;font-weight:800;margin:26px 0 8px}
+p{margin-bottom:12px;max-width:72ch}
+.lead{font-size:1.05rem;color:var(--ink-soft)}
+strong{font-weight:800}
+mark{background:var(--marker);padding:0 4px}
+ul.plain{padding-inline-start:22px;margin-bottom:12px}
+ul.plain li{margin-bottom:6px}
+
+/* ---------- קופסאות ---------- */
+.card{background:var(--card);border:1.5px solid var(--line);border-radius:10px;padding:20px 22px;margin:16px 0}
+.rule-box{
+  background:var(--card);border:2px solid var(--ink);border-radius:10px;
+  padding:20px 22px;margin:20px 0;
+  box-shadow:4px 4px 0 var(--marker-deep);
+}
+.rule-box h3{margin-top:0}
+.rule-box ol{padding-inline-start:24px}
+.rule-box li{margin-bottom:10px}
+.formula{
+  font-family:'IBM Plex Mono',monospace;direction:ltr;text-align:left;
+  background:#E9ECE6;border-radius:8px;padding:12px 16px;margin:10px 0;
+  font-size:.92rem;overflow-x:auto;white-space:pre;
+}
+.note-warn{border-inline-start:5px solid var(--danger);background:#FBEFEF;border-radius:6px;padding:12px 16px;margin:14px 0;font-size:.95rem}
+.note-tip{border-inline-start:5px solid var(--phosphor);background:#EAF7F0;border-radius:6px;padding:12px 16px;margin:14px 0;font-size:.95rem}
+
+/* ---------- כרטיסי מונחים ---------- */
+.terms{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin:20px 0}
+@media(max-width:640px){.terms{grid-template-columns:1fr}}
+.term{background:var(--card);border:1.5px solid var(--line);border-radius:10px;padding:16px 18px}
+.term .tname{font-family:'IBM Plex Mono',monospace;font-weight:600;font-size:.85rem;direction:ltr;display:inline-block;background:var(--term);color:var(--phosphor);padding:2px 10px;border-radius:4px;margin-bottom:8px}
+.term .analogy{font-weight:800;margin-bottom:4px}
+.term p{font-size:.93rem;margin:0;color:var(--ink-soft)}
+
+/* ---------- בלוק Lindo אינטראקטיבי ---------- */
+.term-wrap{margin:22px 0}
+.term-head{
+  display:flex;align-items:center;gap:10px;
+  background:#1A2438;border-radius:12px 12px 0 0;padding:10px 16px;
+}
+.term-head .dot{width:11px;height:11px;border-radius:50%}
+.term-head .dot:nth-child(1){background:#E8564F}.term-head .dot:nth-child(2){background:#F5C518}.term-head .dot:nth-child(3){background:#3ECF8E}
+.term-head span{font-family:'IBM Plex Mono',monospace;font-size:.78rem;color:#8DA0BF;margin-inline-start:auto}
+pre.lindo{
+  direction:ltr;text-align:left;
+  background:var(--term);color:var(--term-txt);
+  font-family:'IBM Plex Mono',monospace;font-size:.83rem;line-height:1.65;
+  padding:18px 20px;border-radius:0 0 12px 12px;
+  overflow-x:auto;
+}
+pre.lindo .cm{color:#5B6B8C}
+pre.lindo .ln{display:block;cursor:pointer;border-left:3px solid transparent;padding-left:10px;margin-left:-13px;border-radius:3px}
+pre.lindo .ln:hover{background:#18233C}
+pre.lindo .ln.active{background:#243352;border-left-color:var(--marker-deep);color:#fff}
+pre.lindo .v{color:var(--phosphor)}
+pre.lindo .k{color:#F0A868}
+.hint{font-size:.85rem;color:var(--ink-soft);margin:8px 2px 0;display:flex;align-items:center;gap:6px}
+#note{
+  background:var(--marker);border:1.5px solid var(--ink);border-radius:10px;
+  padding:16px 20px;margin-top:12px;min-height:88px;
+  box-shadow:3px 3px 0 rgba(23,35,59,.25);
+}
+#note b{display:block;font-size:1rem;margin-bottom:4px}
+#note p{margin:0;font-size:.95rem}
+
+/* ---------- תבניות (אקורדיון) ---------- */
+details.pat{background:var(--card);border:1.5px solid var(--line);border-radius:10px;margin:12px 0;overflow:hidden}
+details.pat summary{
+  cursor:pointer;list-style:none;padding:16px 20px;
+  display:flex;align-items:center;gap:14px;font-weight:800;font-size:1.02rem;
+}
+details.pat summary::-webkit-details-marker{display:none}
+details.pat summary .num{
+  font-family:'IBM Plex Mono',monospace;background:var(--term);color:var(--phosphor);
+  min-width:34px;height:34px;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:.95rem;
+}
+details.pat summary .arrow{margin-inline-start:auto;transition:transform .2s;color:var(--ink-soft)}
+details.pat[open] summary .arrow{transform:rotate(90deg)}
+details.pat[open] summary{border-bottom:1.5px solid var(--line);background:#FAFBF8}
+.pat-body{padding:18px 20px}
+.pat-body h4{font-size:.85rem;font-weight:800;letter-spacing:.06em;color:var(--ink-soft);margin:14px 0 6px}
+.pat-body h4:first-child{margin-top:0}
+.pat-body .ex{background:#F5F7F2;border:1px dashed #B9C2AE;border-radius:8px;padding:14px 16px;font-size:.95rem;margin-top:6px}
+.pat-body .ex .src{font-size:.75rem;font-weight:800;color:var(--ink-soft);display:block;margin-bottom:6px}
+
+/* ---------- שלבים ---------- */
+ol.steps{list-style:none;counter-reset:s;margin:18px 0}
+ol.steps li{
+  counter-increment:s;position:relative;padding:0 54px 22px 0;
+}
+ol.steps li::before{
+  content:counter(s);
+  position:absolute;right:0;top:0;
+  width:36px;height:36px;border-radius:50%;
+  background:var(--ink);color:var(--marker);
+  font-family:'Secular One',sans-serif;font-size:1.05rem;
+  display:flex;align-items:center;justify-content:center;
+}
+ol.steps li::after{
+  content:'';position:absolute;right:17px;top:40px;bottom:2px;width:2px;background:var(--line);
+}
+ol.steps li:last-child::after{display:none}
+ol.steps li b.st{display:block;margin-bottom:2px}
+
+/* ---------- טבלה ---------- */
+table{border-collapse:collapse;width:100%;margin:14px 0;background:var(--card);font-size:.95rem}
+th,td{border:1.5px solid var(--ink);padding:8px 12px;text-align:center}
+th{background:var(--ink);color:#fff;font-weight:600}
+tr.win td{background:var(--marker);font-weight:800}
+
+/* ---------- SVG ---------- */
+.svg-wrap{background:var(--card);border:1.5px solid var(--line);border-radius:10px;padding:16px;margin:16px 0;direction:ltr}
+.svg-wrap svg{width:100%;height:auto;display:block}
+
+/* ---------- בוחן ---------- */
+details.quiz{background:var(--card);border:1.5px solid var(--line);border-radius:10px;margin:10px 0}
+details.quiz summary{cursor:pointer;list-style:none;padding:14px 18px;font-weight:600}
+details.quiz summary::-webkit-details-marker{display:none}
+details.quiz summary::before{content:'❓';margin-inline-end:10px}
+details.quiz .ans{padding:0 18px 16px;border-top:1px dashed var(--line);margin-top:0;padding-top:12px;font-size:.95rem}
+details.quiz .ans::before{content:'✅ ';font-size:.9rem}
+
+/* ---------- צ'קליסט ---------- */
+ul.check{list-style:none;margin:14px 0}
+ul.check li{padding:9px 34px 9px 0;position:relative;border-bottom:1px dashed var(--line)}
+ul.check li::before{
+  content:'';position:absolute;right:0;top:14px;width:17px;height:17px;
+  border:2px solid var(--ink);border-radius:4px;background:var(--card);
+}
+
+footer{
+  max-width:860px;margin:70px auto 0;padding:24px 20px 40px;
+  border-top:2px solid var(--ink);
+  display:flex;justify-content:space-between;flex-wrap:wrap;gap:8px;
+  font-size:.85rem;color:var(--ink-soft);
+}
+@media print{
+  nav,.hint{display:none}
+  body{background:#fff}
+  .exam-box{box-shadow:none}
+}
+</style>
+</head>
+<body>
+
+<!-- ============ HERO: טופס בחינה ============ -->
+<div class="hero">
+  <div class="exam-box">
+    <div class="stamp">
+      <span>אוניברסיטת בן־גוריון בנגב · תכניות מנהלים</span>
+      <span>מרצה: <b>ד״ר משה צופי</b></span>
+    </div>
+    <h1>נושא 1 · תכנון ליניארי <span class="en">+ LINDO</span></h1>
+    <p class="sub">איך לקרוא פלט מחשב של Lindo כמו מפה — ולקחת 25–30 נקודות בלי להריץ שום דבר. מבוסס על מועדי תשע״ו, תשפ״ב ותשפ״ג.</p>
+    <div class="meta-row">
+      <div><span>תכנית לימוד</span><b>יום 1 מתוך 3</b></div>
+      <div><span>שווי במבחן</span><b>25–30 נק׳</b></div>
+      <div><span>חומר עזר</span><b>מותר 🎉</b></div>
+      <div><span>עיקרון</span><b>KISS 🐢🚀</b></div>
+    </div>
+  </div>
+</div>
+
+<nav>
+  <ul>
+    <li><a href="#idea">הרעיון</a></li>
+    <li><a href="#nisuah">ניסוח</a></li>
+    <li><a href="#lindo">מילון Lindo</a></li>
+    <li><a href="#patterns">5 תבניות</a></li>
+    <li><a href="#full">הדוגמה המלאה</a></li>
+    <li><a href="#graph">השיטה הגרפית</a></li>
+    <li><a href="#quiz">בוחן עצמי</a></li>
+    <li><a href="#check">צ׳קליסט</a></li>
+  </ul>
+</nav>
+
+<main>
+
+<!-- ============ 1. הרעיון ============ -->
+<section id="idea">
+  <span class="eyebrow">שלב 1 · דקה אחת</span>
+  <h2>הרעיון ב-30 שניות</h2>
+  <p class="lead">בעיה ליניארית = <strong>למקסם רווח תחת מגבלות</strong>. יש לך מוצרים, לכל אחד רווח, ויש משאבים מוגבלים (כסף, נפח, שעות). המחשב מוצא את השילוב הכי רווחי.</p>
+  <div class="note-tip">
+    <strong>הסוד של המבחן:</strong> אתה <u>לא מריץ</u> Lindo. הפלט כבר מודפס בשאלון. כל העבודה שלך היא <strong>לקרוא נכון את הפלט</strong> ולענות על "מה יקרה אם...". זו קריאת מפה, לא תכנות.
+  </div>
+</section>
+
+<!-- ============ 2. ניסוח ============ -->
+<section id="nisuah">
+  <span class="eyebrow">שלב 2 · ניסוח</span>
+  <h2>ניסוח בעיה = 3 חלקים, תמיד</h2>
+
+  <h3>① משתני החלטה — מה אני מחליט?</h3>
+  <p>תמיד "כמה מכל דבר": x₁ = כמה תחפושות, x₂ = כמה דגלי ישראל... (המבחן בדרך כלל כבר מגדיר אותם בשבילך).</p>
+
+  <h3>② פונקציית מטרה — מה ממקסמים?</h3>
+  <p>סכום של (רווח ליחידה × כמות). והנה <mark>המלכודת הכי נפוצה</mark>:</p>
+  <div class="note-warn">
+    <strong>רווח נטו!</strong> המקדם הוא <strong>מחיר מכירה − עלות</strong>, לא מחיר המכירה.<br>
+    תשפ״ג: תחפושת נמכרת ב-70 ועולה 50 → המקדם הוא <strong>20</strong>:
+  </div>
+  <div class="formula">Max Z = (70−50)x₁ + (15−10)x₂ + (20−15)x₃ + (16,000−10,000)x₄
+      =    20x₁   +    5x₂   +    5x₃   +      6,000x₄</div>
+
+  <h3>③ אילוצים — מה מגביל אותי?</h3>
+  <ul class="plain">
+    <li><strong>משאב:</strong> תקציב, נפח, שעות — למשל 50x₁+10x₂+15x₃+10,000x₄ ≤ 60,000</li>
+    <li><strong>שוק/מלאי:</strong> x₄ ≤ 5 (יש רק 5 שעוני רולקס)</li>
+    <li><strong>שוויון (=):</strong> לפעמים חייבים <em>בדיוק</em> — בהתפלה (תשפ״ב): x₁+x₂+x₃ <strong>=</strong> 20</li>
+    <li><strong>תמיד בסוף:</strong> x ≥ 0, ולרוב גם שלמים (Integers)</li>
+  </ul>
+</section>
+
+<!-- ============ 3. מילון Lindo ============ -->
+<section id="lindo">
+  <span class="eyebrow">שלב 3 · הלב של הנושא</span>
+  <h2>לקרוא Lindo — 6 מונחים וגמרנו</h2>
+  <p class="lead">כל פלט Lindo בעולם מורכב מאותם 6 דברים. הבן אותם פעם אחת — וכל מבחן ייראה אותו דבר.</p>
+
+  <div class="terms">
+    <div class="term">
+      <span class="tname">OBJECTIVE FUNCTION VALUE</span>
+      <div class="analogy">💰 השורה התחתונה</div>
+      <p>הרווח הכולל של הפתרון האופטימלי. זו התשובה ל"מהו הרווח?".</p>
+    </div>
+    <div class="term">
+      <span class="tname">VALUE</span>
+      <div class="analogy">📦 ההרכב הפותח</div>
+      <p>כמה מכל משתנה בפתרון. VALUE=0 → המוצר הזה בכלל לא נרכש.</p>
+    </div>
+    <div class="term">
+      <span class="tname">REDUCED COST</span>
+      <div class="analogy">🪑 שחקן ספסל</div>
+      <p>רלוונטי <strong>רק</strong> למשתנה שקיבל 0. אומר בכמה הרווח ליחידה שלו צריך להשתפר כדי שיהיה שווה להכניס אותו למגרש.</p>
+    </div>
+    <div class="term">
+      <span class="tname">SLACK / SURPLUS</span>
+      <div class="analogy">🍽️ מה נשאר בצלחת</div>
+      <p>כמה מהמשאב לא נוצל. SLACK=0 → המשאב נגמר → <strong>אילוץ קוֹשֵׁר</strong>.</p>
+    </div>
+    <div class="term">
+      <span class="tname">DUAL PRICE</span>
+      <div class="analogy">🏷️ מחיר צל</div>
+      <p>כמה שווה לך <strong>עוד יחידה אחת</strong> מהמשאב. עוד מ״ק במכולה = עוד 5,333 ₪ רווח. משאב שנשאר ממנו (SLACK&gt;0) → מחיר צל 0.</p>
+    </div>
+    <div class="term">
+      <span class="tname">RANGES</span>
+      <div class="analogy">🛡️ תעודת אחריות</div>
+      <p>הטווח שבו "חוקי המשחק" (הבסיס) לא משתנים. בתוך הטווח — מותר להשתמש במחיר הצל. מחוצה לו — צריך לפתור מחדש.</p>
+    </div>
+  </div>
+
+  <div class="rule-box">
+    <h3>🔑 4 כללי הזהב (לשנן!)</h3>
+    <ol>
+      <li><strong>VALUE &gt; 0 ⟺ REDUCED COST = 0</strong> — מי שמשחק, לא יושב על הספסל.</li>
+      <li><strong>SLACK &gt; 0 ⟺ DUAL PRICE = 0</strong> — משאב שלא נגמר לא שווה כלום בשוליים.</li>
+      <li><strong>ROW 2 בפלט = אילוץ (1) בניסוח!</strong> Lindo סופר את פונקציית המטרה כשורה 1. תמיד להוריד 1.</li>
+      <li><strong>מחיר צל תקף רק בתוך טווח ה-RHS.</strong> חרגת מהטווח? אסור להשתמש בו.</li>
+    </ol>
+  </div>
+
+  <h3>עכשיו תרגול חי — הפלט האמיתי ממבחן תשע״ו (אלי קומבינה והמכולה)</h3>
+  <p>הבעיה: 4 מוצרים (מסכים, מקררים, מצלמות, מחשבים), תקציב 840,000 ₪, מכולה של 60 מ״ק, ומלאי של 20 מסכים בלבד.</p>
+
+  <div class="term-wrap">
+    <div class="term-head"><div class="dot"></div><div class="dot"></div><div class="dot"></div><span>LINDO OUTPUT</span></div>
+    <pre class="lindo"><span class="cm">        OBJECTIVE FUNCTION VALUE</span>
+<span class="ln" data-k="z">        1)      <span class="v">712000.000</span></span>
+
+<span class="cm"> VARIABLE        VALUE          REDUCED COST</span>
+<span class="ln" data-k="x1">   X1        <span class="v">20.000000</span>          0.000000</span>
+<span class="ln" data-k="x2">   X2         0.000000      <span class="k">11916.666</span></span>
+<span class="ln" data-k="x3">   X3       <span class="v">175.000000</span>          0.000000</span>
+<span class="ln" data-k="x4">   X4        <span class="v">60.000000</span>          0.000000</span>
+
+<span class="cm">   ROW   SLACK OR SURPLUS     DUAL PRICES</span>
+<span class="ln" data-k="r2">    2)       0.000000         <span class="k">0.433333</span></span>
+<span class="ln" data-k="r3">    3)       0.000000      <span class="k">5333.333</span></span>
+<span class="ln" data-k="r4">    4)       0.000000      <span class="k">1400.000</span></span>
+
+<span class="cm"> RANGES IN WHICH THE BASIS IS UNCHANGED:</span>
+<span class="cm">               OBJ COEFFICIENT RANGES</span>
+<span class="cm"> VARIABLE   CURRENT COEF   ALLOW. INCREASE   ALLOW. DECREASE</span>
+<span class="ln" data-k="ox1">   X1        4500.000       INFINITY          1400.000</span>
+<span class="ln" data-k="ox2">   X2        2500.000       11916.666         INFINITY</span>
+<span class="ln" data-k="ox3">   X3        2800.000       1600.000          1040.000</span>
+<span class="ln" data-k="ox4">   X4        2200.000        466.666           752.631</span>
+
+<span class="cm">               RIGHTHAND SIDE RANGES</span>
+<span class="cm">   ROW      CURRENT RHS   ALLOW. INCREASE   ALLOW. DECREASE</span>
+<span class="ln" data-k="rr2">    2      840000.000     180000.000        420000.000</span>
+<span class="ln" data-k="rr3">    3          60.000         <span class="v">52.500</span>             9.000</span>
+<span class="ln" data-k="rr4">    4          20.000         20.000            20.000</span></pre>
+    <div class="hint">👆 <strong>לחץ על כל שורה</strong> בפלט וקבל הסבר במרקר למטה. עבור על כולן — זה כל הסיפור.</div>
+    <div id="note"><b>🖍️ ההסבר יופיע כאן</b><p>התחל מהשורה הראשונה (712000) ורד למטה שורה-שורה.</p></div>
+  </div>
+</section>
+
+<!-- ============ 4. חמש תבניות ============ -->
+<section id="patterns">
+  <span class="eyebrow">שלב 4 · 90% מהנקודות</span>
+  <h2>5 תבניות השאלה שחוזרות בכל מועד</h2>
+  <p class="lead">צופי ממחזר. אותן 5 שאלות, מספרים אחרים. זהה את התבנית → הפעל את המתכון.</p>
+
+  <details class="pat" open>
+    <summary><span class="num">1</span> "הסבר את הפתרון המתקבל" <span class="arrow">◀</span></summary>
+    <div class="pat-body">
+      <h4>🔎 איך מזהים</h4>
+      <p>סעיף א׳ בכל מבחן, 3–4%. "כמה מכל סוג? מהו הרווח?"</p>
+      <h4>🧭 המתכון</h4>
+      <p>מעתיקים את עמודת <strong>VALUE</strong> ואת <strong>OBJECTIVE FUNCTION VALUE</strong>. נקודות מתנה — לא לחפור.</p>
+      <div class="ex"><span class="src">📄 תשע״ו סעיף א׳</span>
+      אלי יביא 20 מסכים, 0 מקררים, 175 מצלמות ו-60 מחשבים. הרווח: 712,000 ₪. זהו.</div>
+    </div>
+  </details>
+
+  <details class="pat">
+    <summary><span class="num">2</span> נוסף אילוץ חדש <span class="arrow">◀</span></summary>
+    <div class="pat-body">
+      <h4>🔎 איך מזהים</h4>
+      <p>"מתברר כי המכולה מוגבלת ל-2.5 טון" / "לפחות 80% חייבים להיות מי ים" — מגבלה שלא הייתה בניסוח.</p>
+      <h4>🧭 המתכון</h4>
+      <p><strong>מציבים את הפתרון הקיים באילוץ החדש.</strong> עומד בו? הפתרון נשאר אופטימלי — סיימת בשתי שורות. לא עומד? הבסיס ישתנה והרווח יקטן (או יישאר).</p>
+      <div class="ex"><span class="src">📄 תשע״ו סעיף ב׳ — מגבלת משקל 2,500 ק״ג</span>
+      <div class="formula">50·20 + 150·0 + 4·175 + 5·60 = 2,000 ≤ 2,500 ✓</div>
+      הפתרון עומד באילוץ → נשאר אופטימלי, הרווח לא משתנה. סוף.</div>
+    </div>
+  </details>
+
+  <details class="pat">
+    <summary><span class="num">3</span> שינוי מחיר / עלות (מקדם מטרה) <span class="arrow">◀</span></summary>
+    <div class="pat-body">
+      <h4>🔎 איך מזהים</h4>
+      <p>"מה צריך להיות מחיר X כדי ש..." / "העלות עלתה ל-Y, האם הפתרון משתנה?"</p>
+      <h4>🧭 המתכון</h4>
+      <ul class="plain">
+        <li>משתנה <strong>שבפתרון</strong>: משווים את השינוי ל-ALLOWABLE INCREASE/DECREASE שלו. בתוך הטווח → כלום לא משתנה (רק Z מתעדכן).</li>
+        <li>משתנה <strong>שמחוץ לפתרון</strong> (VALUE=0): ה-<strong>REDUCED COST</strong> הוא בדיוק כמה הרווח שלו צריך לעלות כדי להיכנס.</li>
+      </ul>
+      <div class="ex"><span class="src">📄 תשפ״ג סעיף ג׳ — תחפושת השפחה</span>
+      X₁=0 עם REDUCED COST=5. הרווח הנוכחי 20 → צריך רווח של 25 → מחיר מכירה <strong>75 ₪ לפחות</strong> (עלות 50).</div>
+      <div class="ex"><span class="src">📄 תשפ״ב סעיף ב׳ — מי הבשור</span>
+      רווח X₃ כרגע 2, ‏ALLOWABLE DECREASE=1 → כשהרווח יורד מתחת ל-1, כלומר <strong>עלות מעל 3 ₪</strong>, המקור ייצא מהפתרון.</div>
+    </div>
+  </details>
+
+  <details class="pat">
+    <summary><span class="num">4</span> עוד / פחות משאב (שינוי RHS) — הכי שווה נקודות <span class="arrow">◀</span></summary>
+    <div class="pat-body">
+      <h4>🔎 איך מזהים</h4>
+      <p>"מכולה גדולה יותר" / "המתקן יעבוד רק 700 שעות" / "הלוואה של 5,000 ₪" — צד ימין של אילוץ משתנה.</p>
+      <h4>🧭 המתכון (4 צעדים)</h4>
+      <ol class="steps" style="margin-top:8px">
+        <li><b class="st">חשב את השינוי</b> Δ = חדש − ישן</li>
+        <li><b class="st">בדוק שהוא בתוך טווח ה-RHS</b> (‏ALLOWABLE INCREASE/DECREASE). בפנים? ממשיכים. בחוץ? מחיר הצל לא תקף.</li>
+        <li><b class="st">ΔZ = מחיר צל × Δ</b> — זו הפגיעה או התוספת לרווח.</li>
+        <li><b class="st">אם צריך כמויות חדשות:</b> פותרים מערכת משוואות של האילוצים הקושרים (דוגמה מלאה בהמשך ⬇).</li>
+      </ol>
+      <div class="ex"><span class="src">📄 תשפ״ב סעיף ד׳ — 700 שעות במקום 720</span>
+      Δ=−20, בדיוק בקצה הטווח (DECREASE=20) → מותר. ‏ΔZ = −20 × 0.1 = <strong>−2</strong>. הרווח: 32 → 30 (מיליוני ₪).</div>
+      <div class="ex"><span class="src">📄 תשפ״ג סעיף ד׳ — הלוואה 5,000 ₪ בריבית 20%</span>
+      מחיר הצל של התקציב 0.5 → תוספת רווח 5,000×0.5 = 2,500. הריבית עולה 1,000. ‏2,500 − 1,000 = <strong>+1,500 → כדאי לקחת!</strong></div>
+    </div>
+  </details>
+
+  <details class="pat">
+    <summary><span class="num">5</span> "ויתרנו על חלק מהמוצרים" → פתרון גרפי <span class="arrow">◀</span></summary>
+    <div class="pat-body">
+      <h4>🔎 איך מזהים</h4>
+      <p>"אלי מוותר על המקררים והמצלמות" / "רק שני מקורות מים" + המילים "נסח מחדש... פתור בשיטה הגרפית".</p>
+      <h4>🧭 המתכון</h4>
+      <p>נשארים 2 משתנים → כותבים בעיה חדשה וקטנה → משרטטים. המתכון המלא בסעיף "השיטה הגרפית" למטה ⬇.</p>
+      <div class="ex"><span class="src">📄 מופיע בכל שלושת המועדים</span> תשע״ו ד׳ (מסכים+מחשבים), תשפ״ב ה׳ (מי ים+זיקים), תשפ״ג ה׳ (דגלים).</div>
+    </div>
+  </details>
+</section>
+
+<!-- ============ 5. הדוגמה המלאה ============ -->
+<section id="full">
+  <span class="eyebrow">שלב 5 · הדוגמה שמחברת הכל</span>
+  <h2>מכולה של 84 מ״ק — תשע״ו סעיף ג׳, צעד-צעד</h2>
+  <p class="lead">השאלה: מציעים לאלי לשדרג מ-60 ל-84 מ״ק. האם כדאי? כמה ירוויח? כמה יקנה מכל מוצר?</p>
+
+  <ol class="steps">
+    <li>
+      <b class="st">השינוי</b>
+      Δ = 84 − 60 = <strong>+24 מ״ק</strong>. הנפח הוא אילוץ (2) → <mark>שורה 3 בפלט</mark>.
+    </li>
+    <li>
+      <b class="st">בדיקת טווח</b>
+      ‏RHS RANGES של שורה 3: ‏ALLOWABLE INCREASE = 52.5. ‏24 &lt; 52.5 → <strong>בתוך הטווח, הבסיס נשמר</strong>, מחיר הצל תקף.
+    </li>
+    <li>
+      <b class="st">תוספת הרווח</b>
+      מחיר הצל של הנפח = 5,333.333.
+      <div class="formula">ΔZ = 24 × 5,333.333 = 128,000
+Z חדש = 712,000 + 128,000 = 840,000 ₪</div>
+      → <strong>כן, כדאי לשדרג.</strong>
+    </li>
+    <li>
+      <b class="st">מי בפתרון?</b>
+      הבסיס נשמר → אותם משתנים: x₁, x₃, x₄ (המקרר x₂ נשאר 0). אבל <em>הכמויות</em> משתנות — יש יותר מקום!
+    </li>
+    <li>
+      <b class="st">כמויות חדשות — מערכת משוואות</b>
+      3 אילוצים קושרים ↔ 3 נעלמים. יודעים ש-x₁=20 (אילוץ המלאי קושר), מציבים בשני האחרים:
+      <div class="formula">תקציב:  1000·20 + 4000x₃ + 2000x₄ = 840,000  →  4000x₃ + 2000x₄ = 820,000
+נפח:    0.5·20 + 0.2x₃ + 0.25x₄ = 84        →  0.2x₃ + 0.25x₄ = 74   | ×8000
+                                                1600x₃ + 2000x₄ = 592,000
+חיסור:  2400x₃ = 228,000  →  x₃ = 95
+        2000x₄ = 820,000 − 4000·95 = 440,000  →  x₄ = 220</div>
+      <strong>תשובה:</strong> 20 מסכים, 95 מצלמות, 220 מחשבים. בדיקה: 4500·20+2800·95+2200·220 = 840,000 ✓
+    </li>
+  </ol>
+  <div class="note-tip"><strong>למה הסעיף הזה זהב:</strong> הוא מתרגל בבת אחת מחיר צל, טווחי RHS, ופתרון משוואות. מי ששולט בו — שולט בתבנית 4 כולה.</div>
+</section>
+
+<!-- ============ 6. גרפי ============ -->
+<section id="graph">
+  <span class="eyebrow">שלב 6 · 2 משתנים</span>
+  <h2>השיטה הגרפית — מתכון + הדוגמה מתשע״ו</h2>
+  <p>אלי מוותר על מקררים ומצלמות. נשארו x₁ (מסכים) ו-x₄ (מחשבים):</p>
+  <div class="formula">Max Z = 4500x₁ + 2200x₄
+s.t. (1) 1000x₁ + 2000x₄ ≤ 840,000   [תקציב]
+     (2) 0.5x₁  + 0.25x₄ ≤ 60        [נפח]
+     (3) x₁ ≤ 20                     [מלאי]</div>
+
+  <h3>המתכון</h3>
+  <ol class="steps">
+    <li><b class="st">כל אילוץ = קו.</b> מוצאים חיתוך עם הצירים: מציבים 0 במשתנה אחד. למשל אילוץ (2): ‏x₁=0→x₄=240; ‏x₄=0→x₁=120.</li>
+    <li><b class="st">מסמנים את התחום האפשרי</b> — האזור שמקיים את כל האילוצים יחד (בדרך כלל מצולע קטן ליד הראשית).</li>
+    <li><b class="st">מוצאים את נקודות הפינה</b> של המצולע. הפתרון האופטימלי <strong>תמיד</strong> בפינה.</li>
+    <li><b class="st">מציבים כל פינה ב-Z</b> ובוחרים את הגדולה. זהו.</li>
+  </ol>
+
+  <div class="svg-wrap">
+    <svg viewBox="0 0 520 400" role="img" aria-label="פתרון גרפי">
+      <!-- axes -->
+      <line x1="46" y1="364" x2="510" y2="364" stroke="#17233B" stroke-width="2"/>
+      <line x1="46" y1="364" x2="46" y2="12" stroke="#17233B" stroke-width="2"/>
+      <text x="500" y="384" font-size="12" fill="#17233B">x₁</text>
+      <text x="20" y="20" font-size="12" fill="#17233B">x₄</text>
+      <!-- ticks -->
+      <text x="42" y="380" font-size="10" fill="#4A5670">0</text>
+      <text x="105" y="380" font-size="10" fill="#4A5670">20</text>
+      <text x="430" y="380" font-size="10" fill="#4A5670">120</text>
+      <text x="18" y="118" font-size="10" fill="#4A5670">200</text>
+      <text x="18" y="69" font-size="10" fill="#4A5670">240</text>
+      <!-- feasible region -->
+      <polygon points="46,364 111.4,364 111.4,115.4 46,65.7" fill="#3ECF8E" fill-opacity="0.18" stroke="#0E8F5F" stroke-width="2"/>
+      <!-- constraint x1=20 -->
+      <line x1="111.4" y1="364" x2="111.4" y2="16" stroke="#17233B" stroke-width="1.6"/>
+      <text x="116" y="30" font-size="11" fill="#17233B">x₁ ≤ 20</text>
+      <!-- constraint 0.5x1+0.25x4=60 -->
+      <line x1="46" y1="65.7" x2="438.5" y2="364" stroke="#C9484C" stroke-width="1.6"/>
+      <text x="250" y="230" font-size="11" fill="#C9484C" transform="rotate(37 250 230)">0.5x₁ + 0.25x₄ ≤ 60</text>
+      <!-- budget note -->
+      <line x1="150" y1="14" x2="510" y2="14" stroke="#8DA0BF" stroke-width="1.4" stroke-dasharray="6 5"/>
+      <text x="200" y="32" font-size="10.5" fill="#5B6B8C">אילוץ התקציב (1) גבוה הרבה מעל — לא קושר</text>
+      <!-- points -->
+      <circle cx="46" cy="364" r="4.5" fill="#17233B"/><text x="52" y="356" font-size="11" font-weight="700" fill="#17233B">A(0,0)</text>
+      <circle cx="111.4" cy="364" r="4.5" fill="#17233B"/><text x="118" y="352" font-size="11" font-weight="700" fill="#17233B">B(20,0)</text>
+      <circle cx="111.4" cy="115.4" r="7" fill="#F5C518" stroke="#17233B" stroke-width="2"/><text x="122" y="112" font-size="12" font-weight="800" fill="#17233B">C(20,200) ★</text>
+      <circle cx="46" cy="65.7" r="4.5" fill="#17233B"/><text x="54" y="60" font-size="11" font-weight="700" fill="#17233B">D(0,240)</text>
+    </svg>
+  </div>
+
+  <table>
+    <tr><th>נקודה</th><th>x₁</th><th>x₄</th><th>Z = 4500x₁ + 2200x₄</th></tr>
+    <tr><td>A</td><td>0</td><td>0</td><td>0</td></tr>
+    <tr><td>B</td><td>20</td><td>0</td><td>90,000</td></tr>
+    <tr class="win"><td>C ★</td><td>20</td><td>200</td><td>530,000</td></tr>
+    <tr><td>D</td><td>0</td><td>240</td><td>528,000</td></tr>
+  </table>
+  <p><strong>מסקנה:</strong> 20 מסכים ו-200 מחשבים, רווח 530,000 ₪. שים לב כמה C ו-D קרובות (530 מול 528) — <mark>לכן חובה לבדוק את כל הפינות</mark>, לא לנחש לפי העין.</p>
+</section>
+
+<!-- ============ 7. בוחן ============ -->
+<section id="quiz">
+  <span class="eyebrow">שלב 7 · בדוק את עצמך</span>
+  <h2>בוחן עצמי — 4 שאלות של דקה</h2>
+
+  <details class="quiz">
+    <summary>לאילוץ מסוים SLACK = 3. מה מחיר הצל שלו?</summary>
+    <div class="ans">אפס. נשאר עודף מהמשאב — עוד יחידה ממנו לא שווה כלום (כלל זהב 2).</div>
+  </details>
+  <details class="quiz">
+    <summary>‏X₂: ‏VALUE=0, ‏REDUCED COST=11,916. מציעים להעלות את רווח המקרר ב-10,000. ייכנס לפתרון?</summary>
+    <div class="ans">לא. צריך שיפור של לפחות 11,916 ברווח ליחידה. ‏10,000 לא מספיק — המקרר נשאר על הספסל.</div>
+  </details>
+  <details class="quiz">
+    <summary>מחיר צל של שעות = 0.1, ‏ALLOWABLE INCREASE = 30. מציעים 50 שעות נוספות. מה אפשר לומר?</summary>
+    <div class="ans">רק על 30 הראשונות מובטח 0.1 לכל שעה (+3 לרווח). מעבר ל-30 הבסיס משתנה — מחיר הצל כבר לא תקף וצריך לפתור מחדש.</div>
+  </details>
+  <details class="quiz">
+    <summary>מתקדם: באילוץ שוויון (=20) התקבל מחיר צל −3 (תשפ״ב). מה זה אומר?</summary>
+    <div class="ans">כל יחידת דרישה נוספת <em>מקטינה</em> את הרווח ב-3 — כי היא מכריחה לייצר עוד מ״ק במקור היקר (מי ים). מחיר צל שלילי = "המגבלה הזו כבר כואבת לי".</div>
+  </details>
+</section>
+
+<!-- ============ 8. צ'קליסט ============ -->
+<section id="check">
+  <span class="eyebrow">שלב 8 · לפני המבחן</span>
+  <h2>צ׳קליסט טעויות — לעבור עליו ליד הפלט</h2>
+  <ul class="check">
+    <li><strong>רווח נטו:</strong> מקדם המטרה = מחיר − עלות (לא רק מחיר)</li>
+    <li><strong>מספור:</strong> ROW 2 בפלט = אילוץ (1) בניסוח</li>
+    <li>מחיר צל — רק בתוך טווח ה-RHS, ורק לאילוץ קושר (SLACK=0)</li>
+    <li>‏REDUCED COST — רק למשתנה עם VALUE=0</li>
+    <li>בגרפי: לחשב Z לכל <em>כל</em> נקודות הפינה (זוכר את 530 מול 528?)</li>
+    <li>"הסעיפים אינם תלויים זה בזה" — כל סעיף חוזר לפלט המקורי!</li>
+    <li>אם נדרשים שלמים והפתרון לא שלם — לציין זאת בתשובה</li>
+  </ul>
+  <div class="note-tip"><strong>סגירת יום 1:</strong> פתור עכשיו את שאלה 1 מתשפ״ג מההתחלה ועד הסוף עם שעון — 45 דקות. אם עברת, אתה מוכן לנושא 2 (השמה + רשתות). 🐢🚀</div>
+</section>
+
+</main>
+
+<footer>
+  <span>ניהול התפעול · ד״ר משה צופי · יום 1/3</span>
+  <span>KISS — Keep It Short &amp; Simple · בהצלחה מרום 🐢🚀</span>
+</footer>
+
+<script>
+const EXP = {
+  z:  ['💰 הרווח האופטימלי', 'זו התשובה לשאלה "מהו הרווח החודשי/הכולל": 712,000 ₪. Lindo קורא לזה שורה 1 — ולכן האילוצים מתחילים משורה 2.'],
+  x1: ['📦 X1 = מסכי LED: 20', 'המשתנה בפתרון (VALUE>0), ולכן REDUCED COST = 0. שים לב: 20 זה בדיוק המלאי המקסימלי — האילוץ x₁≤20 "נמתח עד הסוף".'],
+  x2: ['🪑 X2 = מקררים: 0 — שחקן ספסל', 'המקרר לא נרכש בכלל. REDUCED COST = 11,916 אומר: הרווח על מקרר (2,500) צריך לגדול בעוד 11,916 ₪ כדי שיהיה שווה להכניס אותו. כלומר — רחוק מאוד מלהיות כדאי.'],
+  x3: ['📦 X3 = מצלמות: 175', 'בפתרון, ולכן REDUCED COST = 0 (כלל זהב 1).'],
+  x4: ['📦 X4 = מחשבים ניידים: 60', 'בפתרון. ביחד: 20 מסכים + 175 מצלמות + 60 מחשבים = הפתרון האופטימלי.'],
+  r2: ['🏷️ שורה 2 = אילוץ (1): התקציב', 'SLACK = 0 → כל 840,000 ה-₪ נוצלו, האילוץ קושר. מחיר צל 0.433: כל שקל נוסף לתקציב יוסיף 0.433 ₪ לרווח. (זכור: שורה 2 בפלט = אילוץ 1!)'],
+  r3: ['⭐ שורה 3 = אילוץ (2): נפח המכולה', 'SLACK = 0 → המכולה מלאה עד הסוף. מחיר צל 5,333.33: כל מ״ק נוסף שווה 5,333 ₪ רווח. זה הכוכב של סעיף ג׳ (שדרוג ל-84 מ״ק).'],
+  r4: ['🏷️ שורה 4 = אילוץ (3): מלאי המסכים', 'x₁ ≤ 20 קושר (השתמשנו בכל ה-20). מחיר צל 1,400: כל מסך נוסף שיהיה במלאי יוסיף 1,400 ₪ לרווח.'],
+  ox1:['🛡️ טווח מחיר של X1', 'INCREASE = INFINITY: המסך כבר במקסימום המלאי — גם אם ירוויח יותר, אי אפשר לקנות יותר. DECREASE = 1,400: אם הרווח יירד ביותר מ-1,400 — המסך יפסיק להשתלם והבסיס ישתנה.'],
+  ox2:['🛡️ טווח מחיר של X2 — שים לב!', 'ALLOWABLE INCREASE = 11,916.666 = בדיוק ה-REDUCED COST. זה לא מקרה: זו בדיוק העלייה ברווח שתכניס את המקרר לפתרון.'],
+  ox3:['🛡️ טווח מחיר של X3', 'רווח המצלמה (2,800) יכול לנוע בין 1,760 ל-4,400 בלי שהרכב הפתרון ישתנה. בתוך הטווח — רק Z מתעדכן.'],
+  ox4:['🛡️ טווח מחיר של X4', 'רווח המחשב (2,200) יכול לעלות עד 466 או לרדת עד 752 — ובעצם ההרכב נשאר. מעבר לזה: לפתור מחדש.'],
+  rr2:['🛡️ טווח התקציב', 'מחיר הצל (0.433) תקף כל עוד התקציב בין 420,000 ל-1,020,000. תוספת של 180,000 ומעלה? הבסיס משתנה.'],
+  rr3:['⭐ טווח הנפח — המפתח לסעיף ג׳', 'הנפח (60) יכול לגדול עד 52.5+ (כלומר עד 112.5 מ״ק) ובכל הטווח כל מ״ק שווה 5,333 ₪. שדרוג ל-84 = תוספת 24 → בתוך הטווח → מותר להשתמש במחיר הצל!'],
+  rr4:['🛡️ טווח מלאי המסכים', 'מ-0 עד 40 מסכים במלאי — כל מסך שווה 1,400 ₪ בשוליים.']
+};
+const note = document.getElementById('note');
+document.querySelectorAll('pre.lindo .ln').forEach(el => {
+  el.addEventListener('click', () => {
+    document.querySelectorAll('pre.lindo .ln').forEach(o => o.classList.remove('active'));
+    el.classList.add('active');
+    const [t, d] = EXP[el.dataset.k];
+    note.innerHTML = '<b>🖍️ ' + t + '</b><p>' + d + '</p>';
+  });
+});
+</script>
+</body>
+</html>
