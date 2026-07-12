@@ -1,0 +1,438 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>manhigut67 · מנהיגות בארגונים — מדריך הקרב</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Frank+Ruhl+Libre:wght@400;500;700;900&family=Heebo:wght@300;400;500;700;900&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --paper:#f7f3e8; --paper-2:#efe9d8; --ink:#1b1712; --ink-2:#4a4238;
+  --lead:#1f3a5f;  /* מנהיג — אינדיגו */
+  --lead-soft:#e7ecf4;
+  --mgr:#7a4a12;   /* מנהל — ברונזה */
+  --mgr-soft:#f3ead9;
+  --wine:#742020; --forest:#2a5230; --gold:#8a6d1f;
+  --line:#d8cfba;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth;scroll-padding-top:84px}
+body{font-family:'Heebo',sans-serif;background:var(--paper);color:var(--ink);line-height:1.75;font-size:17px}
+h1,h2,h3{font-family:'Frank Ruhl Libre',serif}
+.mono{font-family:'JetBrains Mono',monospace}
+#progress{position:fixed;top:0;right:0;height:3px;background:var(--gold);width:0;z-index:99}
+header.topbar{position:sticky;top:0;background:rgba(247,243,232,.96);backdrop-filter:blur(6px);border-bottom:1px solid var(--line);z-index:90}
+.tb-in{max-width:1060px;margin:0 auto;padding:10px 18px;display:flex;align-items:center;gap:14px;flex-wrap:wrap}
+.brand{font-family:'JetBrains Mono',monospace;font-weight:700;font-size:1.05rem}
+.brand b{color:var(--lead)}
+#count{margin-inline-start:auto;font-size:.85rem;color:var(--ink-2)}
+#count b{color:var(--wine);font-family:'JetBrains Mono',monospace}
+nav.chips{max-width:1060px;margin:0 auto;padding:0 14px 10px;display:flex;gap:6px;overflow-x:auto;-webkit-overflow-scrolling:touch}
+nav.chips a{flex:0 0 auto;font-size:.82rem;padding:5px 12px;border:1px solid var(--line);border-radius:999px;text-decoration:none;color:var(--ink-2);background:#fffdf6;white-space:nowrap}
+nav.chips a.active{background:var(--lead);color:#fff;border-color:var(--lead)}
+main{max-width:1060px;margin:0 auto;padding:0 18px 80px}
+.hero{padding:46px 0 26px;border-bottom:3px double var(--line)}
+.hero h1{font-size:clamp(2rem,6vw,3.2rem);font-weight:900}
+.hero h1 span{color:var(--lead)}
+.hero .sub{color:var(--ink-2);margin-top:8px;max-width:62ch}
+.meta{display:flex;gap:10px;flex-wrap:wrap;margin-top:16px}
+.meta .m{font-size:.82rem;background:#fffdf6;border:1px solid var(--line);border-radius:8px;padding:5px 12px}
+.meta .m b{color:var(--lead)}
+.sec{padding:42px 0 8px;border-bottom:1px solid var(--line)}
+.sec-head{display:flex;align-items:baseline;gap:14px;margin-bottom:18px;flex-wrap:wrap}
+.sec-head .no{font-family:'JetBrains Mono',monospace;color:var(--gold);font-weight:700}
+.sec-head h2{font-size:clamp(1.4rem,4vw,2rem)}
+h3.sub-t{font-size:1.15rem;margin:26px 0 10px;color:var(--lead)}
+p.lead-p{max-width:70ch;margin-bottom:12px}
+.twrap{overflow-x:auto;margin:14px 0}
+table{border-collapse:collapse;width:100%;min-width:520px;background:#fffdf6;font-size:.92rem}
+th{background:var(--ink);color:var(--paper);padding:8px 10px;text-align:right;font-weight:500}
+td{border:1px solid var(--line);padding:7px 10px;vertical-align:top}
+tr:nth-child(even) td{background:var(--paper-2)}
+.num{font-family:'JetBrains Mono',monospace;white-space:nowrap}
+.badge-l,.badge-m{display:inline-block;font-size:.78rem;font-weight:700;border-radius:6px;padding:1px 9px;margin-inline-start:4px}
+.badge-l{background:var(--lead-soft);color:var(--lead);border:1px solid var(--lead)}
+.badge-m{background:var(--mgr-soft);color:var(--mgr);border:1px solid var(--mgr)}
+.callout{border:1px solid var(--line);border-inline-start:5px solid var(--gold);background:#fffdf6;border-radius:8px;padding:14px 16px;margin:16px 0;font-size:.95rem}
+.callout .ttl{display:block;font-weight:700;margin-bottom:4px}
+.callout.trap{border-inline-start-color:var(--wine)}
+.callout.trap .ttl{color:var(--wine)}
+.callout.win{border-inline-start-color:var(--forest)}
+.callout.win .ttl{color:var(--forest)}
+.grid2{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:14px;margin:14px 0}
+.gcard{background:#fffdf6;border:1px solid var(--line);border-radius:10px;padding:14px 16px;font-size:.93rem}
+.gcard h4{font-family:'Frank Ruhl Libre',serif;margin-bottom:6px;font-size:1.02rem}
+.gcard.l{border-top:4px solid var(--lead)}
+.gcard.m{border-top:4px solid var(--mgr)}
+.gcard .who{font-size:.78rem;color:var(--ink-2);font-family:'JetBrains Mono',monospace}
+details.worked{background:#fffdf6;border:1px solid var(--line);border-radius:10px;margin:12px 0;overflow:hidden}
+details.worked summary{cursor:pointer;padding:12px 16px;font-weight:700;background:var(--paper-2);list-style:none;display:flex;gap:8px;align-items:center}
+details.worked summary::before{content:"▸";color:var(--gold);transition:transform .2s}
+details.worked[open] summary::before{transform:rotate(90deg)}
+details.worked .body{padding:14px 18px;font-size:.94rem}
+.q{font-weight:700}
+.ans{color:var(--forest);font-weight:700}
+.why{color:var(--ink-2);font-size:.9rem;margin-top:2px}
+.tl{display:flex;flex-direction:column;gap:0;margin:18px 0;border-inline-start:3px solid var(--line);padding-inline-start:18px}
+.tl .era{position:relative;padding:10px 0 14px}
+.tl .era::before{content:"";position:absolute;inset-inline-start:-27px;top:18px;width:13px;height:13px;border-radius:50%;background:var(--gold);border:3px solid var(--paper)}
+.tl .era h4{font-size:1.05rem}
+.tl .era .yr{font-family:'JetBrains Mono',monospace;font-size:.78rem;color:var(--ink-2)}
+.tl .era p{font-size:.92rem;color:var(--ink-2);max-width:65ch}
+.pill{display:inline-block;background:var(--paper-2);border:1px solid var(--line);border-radius:999px;font-size:.8rem;padding:2px 10px;margin:2px}
+.sheet-box{background:#fffdf6;border:2px solid var(--ink);border-radius:12px;padding:20px 22px;margin:14px 0;font-size:.9rem}
+.sheet-box h3{margin:14px 0 4px;font-size:1rem;border-bottom:1px solid var(--line)}
+.sheet-box .mini{font-size:.86rem}
+.btn{font-family:'Heebo',sans-serif;background:var(--lead);color:#fff;border:0;border-radius:8px;padding:8px 18px;font-size:.9rem;cursor:pointer}
+footer{border-top:3px double var(--line);margin-top:40px;padding:26px 18px;text-align:center;color:var(--ink-2);font-size:.85rem}
+body.sheet-only main>*:not(#sheet){display:none}
+body.sheet-only header.topbar,body.sheet-only footer,body.sheet-only #progress{display:none}
+@media print{
+  header.topbar,#progress,.btn,nav.chips{display:none!important}
+  body{background:#fff;font-size:12px}
+  .sec{page-break-inside:avoid}
+}
+</style>
+</head>
+<body>
+<div id="progress"></div>
+<header class="topbar">
+  <div class="tb-in">
+    <div class="brand">manhigut<b>67</b> 🐢🚀</div>
+    <div id="count">ימים למבחן: <b id="days">–</b></div>
+  </div>
+  <nav class="chips" id="nav">
+    <a href="#map">המפה</a>
+    <a href="#base">מנהיג⇄מנהל</a>
+    <a href="#traits">תכונות</a>
+    <a href="#behav">התנהגות</a>
+    <a href="#cont">תלות</a>
+    <a href="#niche">ורום־יטון · גריין</a>
+    <a href="#power">כוח</a>
+    <a href="#charis">כריזמטית→מעצבת</a>
+    <a href="#papers">מאמרים</a>
+    <a href="#partb">חלק ב׳</a>
+    <a href="#sheet">דף שינון</a>
+    <a href="#plan">סדר קרב</a>
+  </nav>
+</header>
+<main>
+
+<div class="hero">
+  <h1>מנהיגות בארגונים <span>· מדריך 67</span></h1>
+  <p class="sub">ד"ר איריס כהן־קנר · BGU · קורס 687-2-5991 · מבחן = 100% מהציון · מועד ב׳: יום שני 20.7.2026 · נבנה מהסילבוס תשפ"ו, מאגר 90 האמריקאיות, 31 היגדי נכון/לא־נכון מנומקים, מאמרי 2026 ומבחן 2015 של אותה מרצה.</p>
+  <div class="meta">
+    <div class="m">חלק א׳: <b>15 אמריקאיות × 4 = 60</b></div>
+    <div class="m">חלק ב׳: <b>8 נכון/לא־נכון + נימוק × 5 = 40</b></div>
+    <div class="m">משך: <b>שעתיים</b> · חסוי · בעט בלבד</div>
+    <div class="m">דגש תשפ"ו: <b>מנהיגות במשבר ואי־ודאות</b></div>
+  </div>
+</div>
+
+<!-- ================= המפה ================= -->
+<section class="sec" id="map">
+  <div class="sec-head"><span class="no">§ 00</span><h2>מפת המבחן — איך מנצחים אותו</h2></div>
+  <p class="lead-p">זה מבחן שינון ממוקד, לא מבחן טכניקה. כל שאלה נשענת או על <b>ציר התיאוריות</b> (מי אמר מה, מה ההבדל בין גישה לגישה) או על <b>מאמר ספציפי</b>. לכן המדריך בנוי כמו המבחן: קודם הציר, אחר כך המאמרים, ובסוף אימון על חלק ב׳.</p>
+  <div class="twrap"><table>
+    <thead><tr><th>חלק</th><th>מבנה</th><th>נקודות</th><th>המפתח</th></tr></thead>
+    <tbody>
+      <tr><td>חלק א׳</td><td>15 אמריקאיות, סימון <b>בדף התשובות בלבד</b></td><td class="num">60</td><td>דיוק ב"מי אמר מה" + קריאת כל 4 האפשרויות. סימון בגוף השאלון לא נבדק!</td></tr>
+      <tr><td>חלק ב׳</td><td>8 היגדים: נכון/לא־נכון + נימוק בשורות המוגדרות</td><td class="num">40</td><td>רק נימוק מלא = 5 נק׳. קביעה נכונה בלי נימוק ≈ 0. אין לחרוג מהשורות.</td></tr>
+    </tbody>
+  </table></div>
+  <div class="callout win"><span class="ttl">✓ החשבון הפשוט</span>
+  כל אמריקאית = 4 נק׳ = שקולה כמעט להיגד שלם. 11 מתוך 15 בחלק א׳ (כמו הנבחן מ־2015 שקיבל 96) + 7 היגדים מנומקים היטב = ציון בשמיים. המטרה: אפס טעויות ב"מי אמר מה".</div>
+  <div class="callout trap"><span class="ttl">✗ שלוש דרכים לאבד נקודות בחינם</span>
+  <b>1.</b> לסמן תשובות בגוף השאלון ולשכוח להעביר לדף התשובות. <b>2.</b> לנמק היגד נכון־עובדתית אבל בלי ההגדרה וההבחנה — "חריגה מהשורות תוביל להורדת ניקוד" וגם נימוק חלקי. <b>3.</b> לבלבל בין תיאוריות שכנות: פידלר↔האוס, כריזמטית↔מעצבת, C1↔C2. בדיוק שם המרצה מניחה מוקשים.</div>
+</section>
+
+<!-- ================= מנהיג מול מנהל + ציר ================= -->
+<section class="sec" id="base">
+  <div class="sec-head"><span class="no">§ 01</span><h2>מנהיג ⇄ מנהל — הצבע של כל המדריך</h2></div>
+  <p class="lead-p">הדואליות הזאת רצה דרך כל הקורס, אז היא מקודדת בצבע לכל אורך המדריך: <span class="badge-l">מנהיג</span> באינדיגו, <span class="badge-m">מנהל</span> בברונזה. כשתראה צבע — תדע לאיזה צד של המפה אתה שייך.</p>
+  <div class="grid2">
+    <div class="gcard l"><h4>מנהיג <span class="badge-l">Leader</span></h4>
+    כוח <b>מלמטה</b> (מהמונהגים), מינוי <b>לא פורמלי</b> · סחיפה, חזון, כריזמה, אסטרטגיה, טווח ארוך · מתרכז ב"מה" · נמדד ב<b>אפקטיביות</b> = מבחן התוצאה: השגת יעדים + שביעות רצון עובדים · המבחן האמיתי: <b>מנהיגות נעדרת</b> — מה קורה כשהוא לא בחדר.</div>
+    <div class="gcard m"><h4>מנהל <span class="badge-m">Manager</span></h4>
+    כוח <b>מלמעלה</b> (מינוי), מינוי <b>פורמלי</b> · הנעה בעלות/תועלת, מטרות, תוכנית עבודה, טקטיקה, טווח קצר · מתרכז ב"איך" · נמדד ב<b>יעילות</b> = מבחן הדרך: מיצוי משאבים במינימום עלות.</div>
+  </div>
+  <div class="callout"><span class="ttl">משפטים שחוזרים במבחנים</span>
+  מנהל חייב להיות מנהיג, מנהיג לא חייב להיות מנהל · ניהול נרכש; לגבי מנהיגות — מחלוקת (היום: גם מולדת וגם נרכשת) · <b>החוק הפיטרי:</b> אדם מקודם עד שנתקע בתפקיד שבו הוא פחות טוב — כי בדרגים גבוהים המנהיגות חשובה מהידע המקצועי · השפעה היום נתפסת <b>דו־כיוונית</b>, לא רק מלמעלה למטה.</div>
+
+  <h3 class="sub-t">ציר התיאוריות — השלד של 60% מהאמריקאיות</h3>
+  <div class="tl">
+    <div class="era"><h4>האדם הדגול → גישת התכונות</h4><span class="yr">עד תחילת המאה ה־20 → שנות ה־30-40</span><p>מנהיגות מולדת, אוסף תכונות. סטוג'דיל מפרק את זה בשני מחקרים. חוזרת בשנות ה־70 (AT&T) וב־90 (דחף, מוטיבציה פנימית).</p></div>
+    <div class="era"><h4>גישת ההתנהגות</h4><span class="yr">שנות ה־50</span><p>אוהיו ומישיגן: מתחשבת מול יוזמת, LBDQ, האידיאל 9,9. אדיג'ס (PAEI) ומינצברג (10 תפקידים) — ענפים מודרניים.</p></div>
+    <div class="era"><h4>תיאוריות תלות (מצב)</h4><span class="yr">שנות ה־60-70</span><p>פידלר (LPC, ראשון!) והאוס (נתיב היעדים). מנהיגות אפקטיבית = התאמה בין המנהיג למצב.</p></div>
+    <div class="era"><h4>תיאוריות נישה</h4><span class="yr">שנות ה־70-80</span><p>ורום־יטון (קבלת החלטות A/C/G) וגריין (אחד־על־אחד, IN/OUT). מנהיגות מורכבת מדי — נתמקד בפינה אחת.</p></div>
+    <div class="era"><h4>כריזמטית → מעצבת + מתגמלת</h4><span class="yr">שנות ה־80-90 → המאה ה־21</span><p>כריזמטית (האוס): המפגש הראשון של תכונות+התנהגות+מצב. בס בונה עליה את המעצבת; הולנדר את המתגמלת. המרשם של המאה ה־21: מעצבת + עסקית/מתגמלת.</p></div>
+  </div>
+  <details class="worked"><summary>דריל מהיר — מי אמר מה (חובה לדעת בעל־פה)</summary><div class="body">
+    <p><span class="q">LPC?</span> <span class="ans">פידלר</span> · <span class="q">נתיב היעדים?</span> <span class="ans">האוס</span> (נשען על ציפיות של ורום + הצבת יעדים של לוק) · <span class="q">A1-G?</span> <span class="ans">ורום־יטון</span> · <span class="q">IN/OUT?</span> <span class="ans">גריין</span> · <span class="q">LBDQ?</span> <span class="ans">אוהיו+מישיגן</span> · <span class="q">PAEI?</span> <span class="ans">אדיג'ס</span> · <span class="q">10 תפקידים?</span> <span class="ans">מינצברג</span> · <span class="q">5+1 בסיסי כוח?</span> <span class="ans">פרנץ' ורייבן</span> · <span class="q">4I ומעצבת?</span> <span class="ans">בס</span> · <span class="q">חליפין חברתי?</span> <span class="ans">הולנדר</span> · <span class="q">נוסחת השינוי?</span> <span class="ans">ביר</span> · <span class="q">הפשרה→שינוי→הקפאה?</span> <span class="ans">קורט לוין</span></p>
+  </div></details>
+</section>
+
+<!-- ================= תכונות ================= -->
+<section class="sec" id="traits">
+  <div class="sec-head"><span class="no">§ 02</span><h2>גישת התכונות</h2></div>
+  <div class="grid2">
+    <div class="gcard"><h4>האדם הדגול <span class="who">עד המאה ה־20</span></h4>3 הנחות: תכונות מפתח · יציבות לאורך זמן · לכל המנהיגים יש את <b>כל</b> התכונות. מנהיגות = מולדת בלבד.</div>
+    <div class="gcard"><h4>סטוג'דיל <span class="who">2 מחקרים</span></h4>1: חיפש מכנה משותף בתכונות מנהיגים — <b>לא מצא</b>. אין תמיכה למולדת; תלות בסיטואציה. 2: בסיס למנהיגות אפקטיבית — לא מצא, <b>מלבד קורלציה עם אינטליגנציה</b>.</div>
+    <div class="gcard"><h4>שנות ה־90 <span class="who">פטריק ולוק</span></h4>מתאם חיובי עם: <b>דחף</b> (הישגיות, אנרגיה, נחישות ויוזמה — פנימיים, בלתי תלויים בסביבה), מוטיבציה פנימית, ערכים/אידיאולוגיה. ~30% מהצלחת מנהיג מיוחסת לאישיות.</div>
+    <div class="gcard"><h4>מרכזי הערכה <span class="who">AT&T</span></h4>הארגון הראשון שהחזיר את גישת התכונות — איתור עתודה ניהולית. היום בודקים <b>גם מבחני אישיות וגם מבחני מצב</b> (סימולציות, דינמיקה קבוצתית) — תשובה "א׳ ו־ב׳ נכונות".</div>
+  </div>
+  <div class="callout"><span class="ttl">יכולות לפי דרג (קץ/Katz — שאלה 4 במבחן 2015)</span>
+  לדרג ניהולי <b>בכיר</b> החשובות ביותר הן <b>יכולות תפיסתיות</b> (ראייה מערכתית). יכולות <b>אנושיות</b> חשובות באותה מידה בכל הדרגים; טכניות — יורדות עם העלייה בדרג. הנבחן מ־2015 סימן "אנושיות" ואיבד 4 נק׳ — אל תחזור על זה.</div>
+  <div class="callout win"><span class="ttl">✓ גישת התכונות היום</span>
+  מנהיגות = גם מולדת וגם נרכשת, הדגש על המנהיג. שני מקומות שבהם הגישה חיה: מרכזי הערכה, וסט תכונות+התנהגויות למנהל (כולל יצירתיות). EQ (תוך־עצמי + בין־אישי) מנבא הצלחה טוב מ־IQ — המאמר של קראוס.</div>
+  <details class="worked"><summary>המאמר החדש שמחובר לפרק: 12 התכונות של CCL (2025, חובה בסילבוס)</summary><div class="body">
+    <p>מודעות עצמית · כבוד (אקטיבי, DEI) · <b>חמלה = הקשבה + פעולה</b> — הקשבה בלי Action אינה חמלה ומפחיתה אמון (מלכודת מושלמת לנכון/לא־נכון!) · חזון · תקשורת · גמישות למידה ("לדעת מה לעשות כשלא יודעים מה לעשות") · שיתוף פעולה · השפעה (≠ מניפולציה) · יושרה (בסיס האמון) · אומץ · הכרת תודה (מפחיתה שחיקה) · חוסן.</p>
+    <p class="why">ממצא הליבה: הדגש משתנה לפי דרג — אינדיבידואלים: מודעות עצמית, תקשורת, השפעה, גמישות למידה · דרג ביניים: חוסן וחשיבה מערכתית · C-Suite: הובלת תרבות, חדשנות, הלימה אסטרטגית. ובעידן AI — דווקא המיומנויות הרכות (אמון, פגיעוּת, חיבור אנושי) קריטיות מתמיד.</p>
+  </div></details>
+</section>
+
+<!-- ================= התנהגות ================= -->
+<section class="sec" id="behav">
+  <div class="sec-head"><span class="no">§ 03</span><h2>גישת ההתנהגות</h2></div>
+  <p class="lead-p">אכזבה מהתכונות ← מעבר להתנהגויות: <b>נרכשות</b>, נמדדות בתצפיות, שאלונים ויומנים. עדיין דגש על המנהיג (לא הפנימו את ביקורת הסיטואציה).</p>
+  <div class="grid2">
+    <div class="gcard"><h4>אוהיו + מישיגן <span class="who">שנות ה־50 · LBDQ</span></h4>שני צירים <b>נפרדים, לא דיכוטומיים</b>: התנהגות <b>מתחשבת</b> (חברתית) והתנהגות <b>יוזמת</b> (משימתית). אדם יכול להיות גבוה בשניהם — לכן ניהול הצוות האופטימלי מאופיין ב<b>גבוה במתחשב וגבוה ביוזם (9,9)</b>. הגישה לא הוכחה מחקרית, אבל נותנת כלים לשיפור הציון החלש.</div>
+    <div class="gcard"><h4>אדיג'ס <span class="who">PAEI · חוקר ישראלי</span></h4><b>P</b> ביצועיסט (מה? טווח קצר) · <b>A</b> מנהלן (איך? הדרך) · <b>E</b> יזם (למה? מחוץ לקופסה, טווח ארוך) · <b>I</b> מתכלל (עם מי? אווירה). <b>מיקרו/מנהל: להגיע לאיזונים</b>, לא לקיצוניות — מחזקים התנהגות חלשה או מגבים בקולגה. <b>מאקרו/ארגון: "אף תשובה אינה נכונה"</b> במבחן 2015 — הארגון לא "מאוזן" דרך אדם אחד אלא דרך צוות משלים.</div>
+    <div class="gcard"><h4>מינצברג <span class="who">10 תפקידי המנהל</span></h4>3 קטגוריות: <b>בינאישיים</b> (ייצוג, מנהיגות, איש קשר) · <b>מידע</b> (בקר, מפיץ, דובר) · <b>החלטה</b> (יזם, בלת"ם, משאבים, מו"מ). <b>מודיעין עסקי ← תפקידי המידע.</b> קיבל תמיכה מחקרית. יומני מנהלים: <b>הקצאת זמן משקפת את תפיסתו וסגנונו</b> של המנהיג — נכון.</div>
+  </div>
+  <div class="callout trap"><span class="ttl">✗ מלכודת LBDQ ↔ LPC (היגד 3 במאגר שלך)</span>
+  ב־LBDQ אפשר להיות גם וגם (שני צירים). ב־<b>LPC של פידלר — או משימתי או חברתי</b>, לא שניהם. היגד שמקביל ביניהם = לא נכון, וזה נימוק של 5 נקודות מלאות.</div>
+</section>
+
+<!-- ================= תלות ================= -->
+<section class="sec" id="cont">
+  <div class="sec-head"><span class="no">§ 04</span><h2>תיאוריות תלות — פידלר והאוס</h2></div>
+  <p class="lead-p">העיקרון: מנהיגות אפקטיבית תלויה ב<b>התאמה בין המנהיג למצב</b>. שתי תיאוריות, ושתיהן מוקש אחת לשנייה — רוב שאלות ההטעיה מחליפות ביניהן.</p>
+  <div class="grid2">
+    <div class="gcard"><h4>פידלר <span class="who">אבי תיאוריות התלות · הראשון שמתייחס למונהגים</span></h4>
+    <b>המנהיג:</b> שאלון LPC — <b>ממלא המנהיג</b>, מתאר את העמית שהכי <b>קשה</b> לו לעבוד איתו. ציון גבוה = חברתי (רואה טוב גם בקשה), נמוך = משימתי. או/או!<br>
+    <b>המצב</b> — 3 משתנים לפי סדר חשיבות: 1. יחסי מנהיג־מונהגים · 2. מובנות המטלה · 3. עמדת כוח.<br>
+    <b>ההתאמה:</b> מצבים קיצוניים (הכל למעלה או הכל למטה) → <b>משימתי</b>. מצבי ביניים → <b>חברתי</b>.<br>
+    <b>אין התאמה?</b> <span style="color:var(--wine);font-weight:700">משנים את המצב, לא את המנהיג</span> — והחץ הראשון לשינוי: מובנות המטלה.<br>
+    ב־95׳ חזר לתכונות: אינטליגנציה תלוית־מצב — יעילה כשהמנהיג סמכותי ויחסיו עם כפיפיו <b>לא מתוחים</b>; קריטית בארגונים של אי־ודאות.</div>
+    <div class="gcard"><h4>האוס — נתיב היעדים <span class="who">מוטיבציה + שביעות רצון</span></h4>
+    נשען על שתי תיאוריות: <b>הציפיות של ורום</b> — M = f(E·I·V): ציפייה להשיג × יעד כאמצעי לגמול × ערך הגמול. אם אחד = 0, אין מוטיבציה. ו<b>הצבת היעדים של לוק</b> — ספציפי, כמותי, בר השגה, משוב, משאבים, זמן, מלהיב...<br>
+    <b>4 סגנונות:</b> ישיר · תומך · שיתופי · הישגי. מטלה משעממת → <b>תומך</b>. מנהיגות ישירה → <b>הפחתת אי־ודאות</b>.<br>
+    <b>אין התאמה?</b> <span style="color:var(--forest);font-weight:700">המנהיג מתאים את עצמו למצב</span> — הפוך מפידלר!<br>
+    3M וששת ממדי המנהיג: מתווה נתיב, <b>מעלה את הרף</b>, ממריץ, מחדש בתושייה (מסיר מכשולים), חי את ערכי החברה, מביא תוצאות.</div>
+  </div>
+  <div class="callout trap"><span class="ttl">✗ טבלת הבלבול פידלר ↔ האוס</span>
+  מודד: LPC ↔ לא מודד, מזהה מצב · המנהיג: קבוע (משנים מצב) ↔ גמיש (משנה התנהגות) · מוקד: אפקטיביות ↔ מוטיבציה ושביעות רצון · "על המנהיג להתנהג בעקביות לאורך כל הדרך" בנתיב היעדים = <b>לא</b> מהדרישות (שאלה 26 במאגר) — הוא דווקא מתאים את עצמו.</div>
+</section>
+
+<!-- ================= נישה ================= -->
+<section class="sec" id="niche">
+  <div class="sec-head"><span class="no">§ 05</span><h2>תיאוריות נישה — ורום־יטון וגריין</h2></div>
+  <div class="grid2">
+    <div class="gcard"><h4>ורום־יטון — קבלת החלטות <span class="who">קיבלה תמיכה מחקרית</span></h4>
+    <b>A1</b> מחליט לבד במידע שלו · <b>A2</b> אוסף מידע מהעובדים ומחליט לבד · <b>C1</b> מתייעץ עם כל כפיף <b>בנפרד</b> ומחליט · <b>C2</b> מתייעץ עם הכפיפים <b>כקבוצה</b> ומחליט · <b>G</b> הקבוצה מחליטה.<br>
+    <b>שיטת דלפי = C1 + C2</b> (במייל, בעילום שם) — לא A2!<br>
+    ההבדל בין הסגנונות: מידת שיתוף העובדים, הזמן, ואיכות ההחלטה — "כל התשובות".<br>
+    כללי אצבע: יישום ההחלטה תלוי בקבלת הכפיפים → לא A1 · איכות חשובה ולמנהיג אין מידע → לא A1 · איכות חשובה והכפיפים לא מזוהים עם יעדי הארגון → לא G · ההמלצה הכללית: כמה שיותר <b>שיתופית/קבוצתית</b>.<br>
+    התרשים תקף להחלטה ראשונית בלבד; דרך נכונה ≠ הבטחת תוצאה, זו הסתברות.</div>
+    <div class="gcard"><h4>גריין — אחד על אחד <span class="who">LMX · הפוקוס: מערכת היחסים עם כל כפיף</span></h4>
+    <b>קבוצת פנים (IN):</b> יחסים בלתי־פורמליים, אמון, תקשורת דו־כיוונית, משימות חשובות, ייפוי כוח, תמיכה · <b>קבוצת חוץ (OUT):</b> יחסים פורמליים, עבודה שגרתית, המנהיג משתמש שם יותר ב<b>כוח סמכות</b>, תחלופה גבוהה יותר.<br>
+    הקיטלוג כמעט קבוע (דיסוננס קוגניטיבי). נוצר מדמיון ואירועים מכוננים — או מדעות קדומות ואגו.<br>
+    <b>ההרחבה:</b> מכניסה את היחסים של <b>המנהל עם המנהל שלו</b>. האידיאל: אני IN אצל המנהל והוא IN אצל שלו. אם המנהל שלי OUT אצל הבוס — הקידום שלי בסכנה.</div>
+  </div>
+  <div class="callout trap"><span class="ttl">✗ שתי מלכודות גריין קבועות</span>
+  <b>1.</b> "העובד בקבוצת הפנים <u>תמיד</u> יקודם הכי מהר" — לא נכון! תלוי גם איפה המנהל שלו נמצא אצל הבוס. כל "תמיד" בהיגד = נורה אדומה. <b>2.</b> "ההרחבה עוסקת ביחסי המנהל עם עמיתיו" — לא נכון, עם <b>המנהיג שלו</b> (למעלה, לא לצדדים).</div>
+</section>
+
+<!-- ================= כוח ================= -->
+<section class="sec" id="power">
+  <div class="sec-head"><span class="no">§ 06</span><h2>כוח והשפעה — פרנץ' ורייבן</h2></div>
+  <div class="twrap"><table>
+    <thead><tr><th>בסיס</th><th>מהות</th><th>שייך ל…</th></tr></thead>
+    <tbody>
+      <tr><td><b>לגיטימי/חוקי</b></td><td>נובע מהתפקיד ומהסמכות שמעליו בהיררכיה</td><td rowspan="3"><b>כוח עמדה</b> — נשאר בארגון כשהמנהל עוזב <span class="badge-m">מנהל</span></td></tr>
+      <tr><td><b>תגמול</b></td><td>היכולת להעניק בונוס, קידום, שבחים</td></tr>
+      <tr><td><b>כפייה/ענישה</b></td><td>נזיפה, קנס, פיטורין — ציות קצר טווח, פוגע במוטיבציה</td></tr>
+      <tr><td><b>מומחיות</b></td><td>ידע וניסיון נתפסים (חדר מיון → מחפשים מומחיות!)</td><td rowspan="2"><b>כוח אישי</b> — הולך עם האדם לכל מקום <span class="badge-l">מנהיג</span></td></tr>
+      <tr><td><b>הזדהות/זיקה</b></td><td>הערצה ורצון להידמות — קשור לכריזמה</td></tr>
+      <tr><td><b>מידע</b> (נוסף בשנות ה־60)</td><td>נגישות לנתונים</td><td>הבסיס השישי — לא "הזדמנויות ואקולוגי"!</td></tr>
+    </tbody>
+  </table></div>
+  <div class="callout win"><span class="ttl">✓ הכללים שחוזרים</span>
+  כשמנהלים אנשים מתחילים <b>בכוח האישי</b> ורק אם לא עובד — עמדה · מומחיות וכריזמה = דוגמאות ל<b>כוח אישי</b> · כוח עמדה מתבסס על <b>מקום המנהיג בהיררכיה</b> · 11 בסיסי הכוח שנלמדו בכיתה: ניתנים ליישום <b>גם מלמעלה למטה וגם מלמטה למעלה</b> (א+ב, שאלה 13 במבחן 2015) · קובאץ' 2020: בארגונים שטוחים ורשתיים הכוח הפורמלי נחלש — מומחיות + זיקה מייצרים מחויבות פנימית וביצועים לאורך זמן.</div>
+</section>
+
+<!-- ================= כריזמטית → מעצבת ================= -->
+<section class="sec" id="charis">
+  <div class="sec-head"><span class="no">§ 07</span><h2>כריזמטית → מעצבת → מתגמלת</h2></div>
+  <div class="grid2">
+    <div class="gcard"><h4>כריזמטית <span class="who">האוס · מתת אל</span></h4>
+    <b>המפגש הראשון של תכונות + התנהגות</b> (+מצב): מצב = משבר · התנהגות = 9,9 · תכונות = ביטחון, אינטליגנציה רגשית, יצירתיות.<br>
+    מתעוררת <b>רק בזמן משבר</b> · פועלת על <b>אמוציות</b>, לא רציונל · <b>סובייקטיבית</b> — תלויה בעיקר ב<b>תפיסת הכפיפים את מנהיגם</b> · הליכה עיוורת ("באש ובמים") · אוריינטציה ל<b>שינוי</b> · מציעה <b>חזון לעתיד טוב יותר</b> (לא תגמולים!) · חזון = <b>הצהרת כוונות כללית</b>, לא מסמך מטרות · יעילה בהיררכיה <b>שטוחה</b>.</div>
+    <div class="gcard"><h4>הצד האפל <span class="who">"מנהיגות כריזמטית והיפוכה" + אילת</span></h4>
+    הדבר הראשון שהולך לאיבוד: <b>עובדות המצב</b> · הבעיה המרכזית: <b>התנערות מאחריות בתבוסה</b> · חסרונות: חשיבה קבוצתית, פועלים לפני שחושבים, אגוצנטריות (חוסר גמישות — לא ברשימה!) · מנהיג כריזמטי <b>נעדר</b> משפיע דרך <b>תופעת החשיבה הקבוצתית</b> · אילת: כריזמה <b>אישית</b> לא־מוסרית (כוח לרווח עצמי, דפוס התקשרות נמנע/חרד) מול <b>חברתית</b> מוסרית (כוח לשירות אחרים, דפוס בטוח) → המסקנה: <b>לבחון בביקורתיות מועמדים להנהגה</b>.</div>
+    <div class="gcard"><h4>מעצבת <span class="who">בס · "המנהיגות של המאה ה־21"</span></h4>
+    <b>מבוססת על הכריזמטית</b> ונבדלת ממנה ב: רציונליות, <b>מניעת</b> משבר (פרואקטיבית, לא תגובה!), התחשבות ביחיד.<br>
+    <b>4I:</b> כריזמה (Idealized) · השראה (Inspirational) · הפרט כמוקד (Individualized) · אתגר אינטלקטואלי (Intellectual).<br>
+    פועלת על <b>המוטיבציה</b> של הכפיפים · <b>מפתחת, מעצימה ומקנה ביטחון עצמי</b> (בניגוד לכריזמטי) · נוסחת ביר: <b>Ch = f(D×M×P) > C</b> — אי־שביעות רצון × מודל ניהולי × תהליך (לוין: הפשרה→שינוי→הקפאה), והכל מול עלות. אחד מהם 0 → אין שינוי.<br>
+    <b>שינוי מקדים</b> = עקרון ליבה: מקדים תרופה למכה ו"מבטל" את ה־D של ביר · בנקודת השפל של עקומת הלמידה — שם המעצבת קריטית.</div>
+    <div class="gcard"><h4>מתגמלת/עסקית <span class="who">הולנדר · חליפין חברתי</span></h4>
+    יחסי מנהיג־מונהגים מבוססי גמול, עלות/תועלת · חייבת לכלול <b>השפעה דו־כיוונית</b> · מעודדת התנהגות <b>משימתית</b> · חשובה למעצבת בשלב <b>ההפשרה</b> · המרשם הרווח למאה ה־21: <b>מעצבת + עסקית</b>, כשהמעצבת נשענת ברובה על הכריזמטית.</div>
+  </div>
+  <div class="callout trap"><span class="ttl">✗ צמד המלכודות הגדול של המבחן</span>
+  "המעצבת האפקטיבית צומחת מתוך משבר" — <b>לא נכון</b>: זו הכריזמטית; המעצבת מונעת משבר · "תכונות והתנהגות נפגשות לראשונה במעצבת" — <b>לא נכון</b>: בכריזמטית · "מעצבת נשענת על קבלת החלטות פסיבית" — לא נכון: רציונלית ופרואקטיבית · סגנון המאה ה־21 הנתפס כאפקטיבי ביותר = <b>מעצבת</b>.</div>
+  <div class="callout"><span class="ttl">חיבור לדגש תשפ"ו — מנהיגות במשבר</span>
+  הסילבוס של השנה שם את המשבר במרכז ("איך מתרוממים מהטרגדיה הגדולה בתולדות המדינה"). הציפייה: לחבר כריזמטית (משבר, סחיפה) ↔ מעצבת (שינוי מקדים, חוסן) ↔ מאמר לונדמרק (שינוי → בהירות תפקיד → שב־והנח) ↔ אותנטיות וחזון. אם תהיה שאלה פתוחה "מה מצופה ממנהיג בשעת משבר" — זה השלד.</div>
+</section>
+
+<!-- ================= מאמרים ================= -->
+<section class="sec" id="papers">
+  <div class="sec-head"><span class="no">§ 08</span><h2>המאמרים — שורה תחתונה לכל אחד</h2></div>
+  <h3 class="sub-t">רשימת 2026 (מהסילבוס — 9 חובה + 2 רשות)</h3>
+  <div class="grid2">
+    <div class="gcard"><h4>CCL — 12 Essential Qualities <span class="who">תכונות · 2025</span></h4>12 תכונות נלמדות בכל דרג. <b>חמלה = הקשבה + פעולה.</b> הדגש משתנה לפי דרג ניהול. AI מגביר את חשיבות הרכות.</div>
+    <div class="gcard"><h4>Asbari — Transformational Suitable? <span class="who">מעצבת · 2020</span></h4>המעצבת הקלאסית לא מספיקה ל־IR4. המודל הבא: <b>מנהיגות הומניסטית</b> — רדאר ארגוני + מצפן מוסרי + אקלים אמון וכבוד (True Shift).</div>
+    <div class="gcard"><h4>Lundmark — Change→Laissez-faire <span class="who">משבר ושינוי · 2025</span></h4>מנגנון שרשרת: שינוי מורכב/פתאומי ↓ <b>בהירות תפקיד המנהל</b> ↑ מנהיגות <b>"שב והנח"</b>. בהירות התפקיד = <b>משתנה מתווך</b>. מסקנה: בזמן שינוי — להשקיע בהגדרות תפקיד למנהלים עצמם.</div>
+    <div class="gcard"><h4>Kovach — French & Raven Review <span class="who">כוח · 2020</span></h4>עמדה (נשאר בארגון) מול אישי (הולך עם האדם). כפייה = ציות קצר + התנגדות; מומחיות+זיקה = מחויבות וביצועים. בעולם רשתי — הפורמלי נחלש.</div>
+    <div class="gcard"><h4>דנה פרג — ניהול מקדם משמעות <span class="who">ניהול יעיל · עברית</span></h4>3 רכיבי משמעות: <b>כיווניות</b> ("לשם מה") · <b>חשיבות/אימפקט</b> ("מעשיי משנים למישהו") · <b>משמוע</b> (רגעי הארה). המנהל = <b>מתווך של משמעות</b>, לא רק מפקח. בלושטיין: עבודה = תועלות + מסגרת פסיכולוגית־חברתית.</div>
+    <div class="gcard"><h4>Gilli — Digital Skills or Analog Virtues <span class="who">ניהול יעיל · 2024</span></h4>הקורונה = זרז דיגיטליזציה. התשובה: אינטגרציה — לנווט דיגיטלית, אבל <b>המעלות האנלוגיות הישנות</b> (אמפתיה, אמון, יושרה) הן שקובעות. המנהיג = עוגן אנושי.</div>
+    <div class="gcard"><h4>Celestin & Sujantha — Transformational & Innovation <span class="who">תרבות · 2024</span></h4>Mixed methods, 120 חברות: מנהיגים מעצבים → <b>70%</b> הצלחה בחדשנות; עסקאיים → <b>50%</b>. מעצבת = כלי תחרותי, לא מושג "נחמד".</div>
+    <div class="gcard"><h4>Boccoli — Remote + Digital Comm Skills <span class="who">עתיד · 2024</span></h4>410 יועצים, Fully remote. מעצבת עדיין מייצרת מחוברות מרחוק, אבל <b>מיומנויות התקשורת הדיגיטלית של המנהל = ממתן מכריע</b>: גבוהות → האפקט מתעצם; חלשות → נחלש דרמטית.</div>
+    <div class="gcard"><h4>Van Quaquebeke — AI Takes Over <span class="who">עתיד · 2023</span></h4>קריאת השכמה: קונצנזוס חדש — AI יכול (ואולי צריך) לבצע תפקידי ניהול. אלגוריתם עקבי ואובייקטיבי עונה לעיתים <b>טוב יותר על צרכים פסיכולוגיים</b>. לאדם נותר: אתיקה, חזון ערכי, בחירות מודעות.</div>
+    <div class="gcard"><h4>רשות: Bwalya — Leadership Styles <span class="who">2023</span></h4>אפקטיביות = השפעה + השראה + הנעה של ה־Followers. סמכות בלי מוטיבציה לא שורדת.</div>
+    <div class="gcard"><h4>רשות: Ghaleb — Org Culture & Success <span class="who">2024</span></h4>תרבות = נכס אסטרטגי מדיד: זהות ומחויבות, פחות קונפליקטים, מצפן במשבר. המנהיגים מגדירים ומשמרים אותה.</div>
+  </div>
+  <h3 class="sub-t">הקלאסיקה מהמאגר ומהמבחנים — משפט אחד לזכור</h3>
+  <div class="twrap"><table>
+    <thead><tr><th>מאמר</th><th>המשפט ששווה 4-5 נקודות</th></tr></thead>
+    <tbody>
+      <tr><td>"דבר חזון"</td><td>חברות מונעות־חזון מתפקדות ביעילות רבה יותר; כדי להעביר את המסר המנהיגים חייבים להיות <b>אמינים</b>.</td></tr>
+      <tr><td>"ללכת שבי אחריך" (פאר, בר־קול, גרכט)</td><td>הביצועים הטובים ביותר: צוות <b>פרואקטיבי</b> עם מנהיג <b>מופנם</b>.</td></tr>
+      <tr><td>"הקונפליקט הגובר" (יחזקאלי, על פורד)</td><td>בעבר ניתן היה להיות <b>יעילים ולא אפקטיביים</b>; כיום חייבים גם וגם.</td></tr>
+      <tr><td>"אני ואתה נשנה" (גפן וציוני)</td><td>חסם התרבות: כיום מעודדת <b>תחרותיות</b> — מקשה על שיתופי פעולה אפקטיביים.</td></tr>
+      <tr><td>"סיעור מוחות של ממש" (הרשקוביץ) + בלומנטל</td><td>3 התנגדויות ללמידה משותפת: <b>התנגדות לשינוי, פגיעה בסמכויות, הפרת שתיקות מוסכמות</b>. בעידן כאוס — ניהול הופך לשיתוף; למידה קבוצתית נטולת היררכיה.</td></tr>
+      <tr><td>"כריזמה ואתיקה" (אילת)</td><td>עלינו לבחון <b>בביקורתיות</b> מועמדים להנהגה.</td></tr>
+      <tr><td>"מעשים שמניעים אנשים"</td><td><b>הקצאת זמן</b> ביומן המנהל משקפת תפיסה וסגנון.</td></tr>
+      <tr><td>"לנהל, להבין, להצליח" (טריגר)</td><td>מודל <b>RULES</b>: Result → Understanding → Leading → Emotion → ובחזרה ל־Result ("הושגה התוצאה?").</td></tr>
+      <tr><td>מינצברג — מודיעין עסקי</td><td>ההמלצה למודיעין עסקי נמצאת ב<b>תפקידים הקשורים לניתוח מידע</b>.</td></tr>
+      <tr><td>תקרת הזכוכית (בן־חורין / Would Women Lead Differently)</td><td>נוצרת מ<b>סטריאוטיפים מיידיים</b>; ההבדלים בפועל בין מנהיגות למנהיגים — <b>מעטים</b>; ניגוד תפקידים = סיבה למיעוט נשים בניהול.</td></tr>
+      <tr><td>גולדפיין — מנהל אינטראקטיבי</td><td>מוסדי (היררכיה) → אינטראקטיבי (כוח מהקבוצה ואליה) — משיג תוצאות טובות יותר.</td></tr>
+      <tr><td>קראוס — הגורם האנושי</td><td><b>EQ מנבא הצלחה טוב מ־IQ</b>; גברים סמכותיים יותר, נשים תקשורתיות ומשתפות.</td></tr>
+    </tbody>
+  </table></div>
+</section>
+
+<!-- ================= חלק ב ================= -->
+<section class="sec" id="partb">
+  <div class="sec-head"><span class="no">§ 09</span><h2>חלק ב׳ — נכון/לא נכון שמקבל 5/5</h2></div>
+  <div class="callout win"><span class="ttl">✓ תבנית הנימוק המנצח (3 משפטים, בתוך השורות)</span>
+  <b>1. הקביעה + תיקון:</b> "לא נכון — X שייך ל־Y ולא ל־Z." <b>2. ההגדרה הנכונה:</b> משפט תיאוריה מדויק עם שם החוקר. <b>3. ההבחנה/הדוגמה:</b> מה ההבדל מהמושג שאיתו ניסו לבלבל. בלי סיפורים — המרצה מורידה על חריגה מהשורות.</div>
+  <details class="worked"><summary>דריל 1 · "אדיג'ס מחלק את התנהגות המנהל ל־3 קטגוריות"</summary><div class="body">
+    <p><span class="ans">לא נכון.</span> אדיג'ס מחלק ל<b>ארבעה</b> טיפוסים — PAEI: ביצועיסט (מה, טווח קצר), מנהלן (איך, הדרך), יזם (למה, טווח ארוך), מתכלל (עם מי, אווירה). מי שחילק ל־3 קטגוריות הוא <b>מינצברג</b> — 10 תפקידי המנהל בקטגוריות בינאישי, מידע והחלטה.</p>
+  </div></details>
+  <details class="worked"><summary>דריל 2 · "כמו ב־LBDQ, גם ב־LPC אדם יכול להיות גם משימתי וגם חברתי"</summary><div class="body">
+    <p><span class="ans">לא נכון.</span> LBDQ (אוהיו+מישיגן) מודד שני צירים נפרדים — יוזם ומתחשב — ולכן אפשר להיות גבוה בשניהם (9,9). LPC של פידלר מסווג את המנהיג <b>או</b> כמשימתי <b>או</b> כחברתי, לא שניהם יחד.</p>
+  </div></details>
+  <details class="worked"><summary>דריל 3 · "אבי אבות תיאוריות התלות הינו האוס"</summary><div class="body">
+    <p><span class="ans">לא נכון.</span> אבי התיאוריה הוא <b>פידלר</b> — הראשון שטען שמנהיגות אפקטיבית תלויה בהתאמה בין המנהיג למצב (LPC + שלושת משתני המצב). האוס פיתח את <b>נתיב היעדים</b>, שמתמקדת במוטיבציה ונשענת על הציפיות של ורום והצבת היעדים של לוק.</p>
+  </div></details>
+  <details class="worked"><summary>דריל 4 · "שיטת דלפי מכילה בתוכה את A2 ו־C2"</summary><div class="body">
+    <p><span class="ans">לא נכון.</span> דלפי בנויה על <b>C1 + C2</b>: המנהל שולח את הדילמה לכל עובד בנפרד בעילום שם (C1), מפיץ את הפתרונות לכולם (C2) ואז מתדיין או מחליט. היא אינה תואמת את A2, שבה המנהל רק אוסף מידע ומחליט לבד.</p>
+  </div></details>
+  <details class="worked"><summary>דריל 5 · "המנהיגות המעצבת האפקטיבית ביותר צומחת ופועלת מתוך משבר"</summary><div class="body">
+    <p><span class="ans">לא נכון.</span> זו ה<b>כריזמטית</b> — מתעוררת רק בזמן משבר ופועלת על האמוציות. המעצבת (בס) רציונלית ופרואקטיבית: עקרון "השינוי המקדים" נועד <b>למנוע</b> את המשבר מראש (מבטל את ה־D בנוסחת ביר), והיא מבוססת על 4I.</p>
+  </div></details>
+  <details class="worked"><summary>דריל 6 · "מרכיב D בנוסחת ביר = דיפולט, ו־M = עלות כספית"</summary><div class="body">
+    <p><span class="ans">לא נכון.</span> בנוסחה Ch = f(D×M×P) > C: <b>D</b> = אי־שביעות רצון מהמצב הקיים, <b>M</b> = המודל הניהולי, <b>P</b> = התהליך (לוין: הפשרה→שינוי→הקפאה), ו<b>C</b> = העלות. אם אחד המרכיבים שווה אפס — לא מכניסים שינוי.</p>
+  </div></details>
+  <details class="worked"><summary>דריל 7 · "פרנץ' ורייבן הציעו 5 סוגי כוח, ובשנות ה־90 נוספו כוח הזדמנויות ואקולוגי"</summary><div class="body">
+    <p><span class="ans">לא נכון.</span> לפרנץ' ורייבן <b>6</b> בסיסי כוח: עמדה (לגיטימי, תגמול, כפייה) ואישי (מומחיות, הזדהות), ובשנות ה־60 רייבן הוסיף את <b>כוח המידע</b>. הכלל: מתחילים בכוח האישי ורק אז עוברים לעמדה.</p>
+  </div></details>
+  <details class="worked"><summary>דריל 8 · "בארגונים גדולים ובירוקרטיים לא תתפתח תרבות ארגונית חזקה"</summary><div class="body">
+    <p><span class="ans">לא נכון.</span> דווקא ענקיות כמו גוגל ו־IBM הן דוגמאות לתרבות חזקה. המפתח הוא <b>עקביות</b> בערכים, מודעות והזדהות של כלל העובדים — וככל שהתרבות חזקה יותר, הארגון אפקטיבי יותר. בתרבות חזקה פער אובייקטיבי לא קיים; פער סובייקטיבי ייתכן כל עוד אין סתירה.</p>
+  </div></details>
+  <details class="worked"><summary>דריל 9 · "המחקר מראה שתמיד העובד בקבוצת הפנים יקודם הכי מהר"</summary><div class="body">
+    <p><span class="ans">לא נכון.</span> לפי ההרחבה של גריין הקידום תלוי גם במיקום <b>המנהל אצל המנהל שלו</b>: אם המנהל שלי ב־OUT אצל הבוס, הבכיר לא יתעניין בקידומי גם אם אני ב־IN. המילה "תמיד" היא הדגל האדום.</p>
+  </div></details>
+  <details class="worked"><summary>דריל 10 · "בעידן של כאוס, מורכבות העידן הנוכחי מחייבת חזרה לשליטה ובקרה ניהולית" (2015)</summary><div class="body">
+    <p><span class="ans">לא נכון.</span> בלומנטל טוען הפוך: המערכות הפכו לא־ליניאריות ובלתי ניתנות לחיזוי, ולכן מנהל אפקטיבי <b>מוותר על שליטה אבסולוטית ועובר לשיתוף</b> — למידה קבוצתית נטולת היררכיה שממצה את היכולות המשותפות. ההתנגדויות הצפויות: לשינוי, פגיעה בסמכות, הפרת שתיקות מוסכמות.</p>
+  </div></details>
+  <details class="worked"><summary>דריל 11 · "לפי גריין, העובד שיקודם — תמיד? + מבנה תשובה מלא מ־2015 (5/5)</summary><div class="body">
+    <p class="why">כך נראתה תשובת 5/5 אמיתית במבחן 2015 (היגד 3, על ההרחבה של גריין): קביעה ("לא נכון") → "ההרחבה של גריין אומרת שחשוב מיקום המנהל שלי אצל המנהל שלו" → הסבר המנגנון (IN אצל הבוס = קידום, משאבים, קבלת רעיונות; OUT = העובד ייתקע) → שורת סיכום. שלושה־ארבעה משפטים, אפס קישוטים.</p>
+  </div></details>
+</section>
+
+<!-- ================= דף שינון ================= -->
+<section class="sec" id="sheet">
+  <div class="sec-head"><span class="no">§ 10</span><h2>דף שינון 67</h2>
+  <button class="btn" onclick="printSheet()">🖨 הדפס דף זה בלבד</button></div>
+  <div class="sheet-box">
+    <h3>מי אמר מה</h3>
+    <p class="mini">פידלר=LPC, תלות, משנים את המצב, 3 משתני מצב (יחס→מובנות→עמדה), 95׳: אינטליגנציה תלוית־מצב · האוס=נתיב היעדים (ורום ציפיות M=f(E·I·V) + לוק יעדים), 4 סגנונות, מתאים את עצמו, וגם: כריזמטית · ורום־יטון=A1/A2/C1/C2/G, דלפי=C1+C2 · גריין=אחד־על־אחד IN/OUT + הרחבה למעלה · אוהיו/מישיגן=LBDQ מתחשב/יוזם, 9,9 · אדיג'ס=PAEI, איזונים · מינצברג=10 תפקידים ב־3 קטגוריות, יומנים · פרנץ'+רייבן=5+1 כוחות · בס=מעצבת, 4I · הולנדר=מתגמלת, חליפין, דו־כיוונית · ביר=Ch=f(D×M×P)>C · לוין=הפשרה→שינוי→הקפאה · סטוג'דיל=אין תכונות משותפות (חוץ מאינטליגנציה) · AT&T=מרכזי הערכה, תכונות</p>
+    <h3>ניגודים של שנייה אחת</h3>
+    <p class="mini">פידלר: מצבים קיצוניים=משימתי, ביניים=חברתי, אין התאמה=שנה את המצב ↔ האוס: שנה את עצמך · כריזמטית: משבר, אמוציה, סובייקטיבית ↔ מעצבת: מניעה, רציונל, 4I, מפתחת ביטחון · LBDQ: גם וגם ↔ LPC: או/או · כוח עמדה: נשאר בארגון ↔ כוח אישי: הולך עם האדם · מנהיג: אפקטיביות, מה, מלמטה ↔ מנהל: יעילות, איך, מלמעלה · יעילות=דרך ↔ אפקטיביות=תוצאה (יעדים+שביעות רצון)</p>
+    <h3>מספרים ועוגנים</h3>
+    <p class="mini">70% מול 50% (Celestin, חדשנות) · 410 יועצים (Boccoli) · 120 חברות (Celestin) · 30% מהצלחה=אישיות · 12 תכונות CCL, חמלה=הקשבה+פעולה · 4I · PAEI · 6 בסיסי כוח · 10 תפקידי מינצברג / 3 קטגוריות · 9,9 · 3 רכיבי משמעות: כיווניות, אימפקט, משמוע (פרג) · Lundmark: שינוי→בהירות תפקיד (מתווך)→שב־והנח · Asbari: רדאר+מצפן מוסרי · חדר מיון=מומחיות · דור Z ואי־ודאות=הדגש של תשפ"ו</p>
+    <h3>דגלים אדומים בהיגדים</h3>
+    <p class="mini">"תמיד" / "בשום אופן" / "רק" = כמעט תמיד לא נכון · החלפת שם חוקר (האוס↔פידלר, בס↔האוס) · החלפת מספר (3↔4 קטגוריות, 5↔6 כוחות) · החלפת כיוון (מעצבת↔כריזמטית ביחס למשבר) · "עקביות לאורך כל הדרך" בנתיב היעדים=לא · השוואת C1 (בנפרד) ↔ C2 (כקבוצה)</p>
+  </div>
+</section>
+
+<!-- ================= סדר קרב ================= -->
+<section class="sec" id="plan">
+  <div class="sec-head"><span class="no">§ 11</span><h2>סדר קרב — 8 ימים + 120 דקות</h2></div>
+  <h3 class="sub-t">עד המבחן (12–19.7) — בלי לשמוט את חשבונאות</h3>
+  <div class="twrap"><table>
+    <thead><tr><th>ימים</th><th>מנהיגות (מוקד)</th><th>חשבונאות (תחזוקה, שעה ביום)</th></tr></thead>
+    <tbody>
+      <tr><td class="num">א׳-ב׳ 12-13.7</td><td>§01-§03: הציר, תכונות, התנהגות + הדרילים</td><td>פקודות יומן — צוקר 2023</td></tr>
+      <tr><td class="num">ג׳-ד׳ 14-15.7</td><td>§04-§06: פידלר/האוס, ורום־יטון/גריין, כוח</td><td>פקודות יומן — חוסם 2022</td></tr>
+      <tr><td class="num">ה׳-ו׳ 16-17.7</td><td>§07-§08: כריזמטית→מעצבת + כל המאמרים</td><td>רוה"ס ומאזן</td></tr>
+      <tr><td class="num">ש׳ 18.7</td><td>סימולציה: 90 האמריקאיות בשעה + 8 היגדים בכתב יד</td><td>—</td></tr>
+      <tr><td class="num">א׳ 19.7</td><td>דף השינון בלבד. בלי חומר חדש. שינה.</td><td>—</td></tr>
+    </tbody>
+  </table></div>
+  <h3 class="sub-t">ביום המבחן — 120 דקות</h3>
+  <div class="twrap"><table>
+    <thead><tr><th>שלב</th><th>זמן</th><th>מה עושים</th></tr></thead>
+    <tbody>
+      <tr><td>חלק א׳ סבב 1</td><td class="num">0–35</td><td>15 האמריקאיות. בטוח — מסמן בדף התשובות. מתלבט — מסמן בשוליים וממשיך.</td></tr>
+      <tr><td>חלק ב׳</td><td class="num">35–90</td><td>8 היגדים × ~7 דק׳: קביעה → הגדרה עם שם חוקר → הבחנה. בתוך השורות.</td></tr>
+      <tr><td>חלק א׳ סבב 2</td><td class="num">90–110</td><td>חוזר להתלבטויות. פוסל שתי אפשרויות, בוחר מהנותרות. אין ריק בדף התשובות!</td></tr>
+      <tr><td>בדיקה</td><td class="num">110–120</td><td>דף התשובות מלא? כל היגד עם קביעה מפורשת "נכון/לא נכון"? שם חוקר בכל נימוק?</td></tr>
+    </tbody>
+  </table></div>
+  <div class="callout win"><span class="ttl">✓ שלושת חוקי ה־67 למנהיגות</span>
+  <b>1.</b> כל נימוק פותח בקביעה ומכיל שם חוקר — נימוק בלי שם = חצי נימוק. <b>2.</b> ראית "תמיד"? חפש את היוצא מן הכלל לפני שאתה מסמן "נכון". <b>3.</b> נתקעת באמריקאית? הצבע (אינדיגו/ברונזה) שואל: זה צד המנהיג או צד המנהל? חצי מהמסיחים נופלים שם.</div>
+</section>
+
+</main>
+
+<footer>
+  <div>manhigut67 · מסדרת מדריכי 67 · נבנה מהסילבוס תשפ"ו, מאגר 90+31, מאמרי 2026 ומבחן 2015 · ד"ר איריס כהן־קנר · BGU</div>
+  <div class="mono no-print">🐢🚀 · הכל מאת השם · marom.cloud</div>
+</footer>
+
+<script>
+const links=[...document.querySelectorAll('#nav a')];
+const secs=links.map(a=>document.querySelector(a.getAttribute('href')));
+const onScroll=()=>{
+  const y=scrollY+90;let cur=0;
+  secs.forEach((s,i)=>{if(s&&s.offsetTop<=y)cur=i});
+  links.forEach((a,i)=>a.classList.toggle('active',i===cur));
+  const h=document.documentElement;
+  document.getElementById('progress').style.width=(scrollY/(h.scrollHeight-h.clientHeight)*100)+'%';
+};
+addEventListener('scroll',onScroll,{passive:true});onScroll();
+const exam=new Date(2026,6,20);
+const today=new Date();today.setHours(0,0,0,0);
+document.getElementById('days').textContent=Math.max(0,Math.round((exam-today)/864e5));
+function printSheet(){
+  document.body.classList.add('sheet-only');
+  window.print();
+  setTimeout(()=>document.body.classList.remove('sheet-only'),300);
+}
+</script>
+</body>
+</html>
