@@ -1,0 +1,1906 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>מאגר 120 · מנהיגות בארגונים · מדריכי 67</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Frank+Ruhl+Libre:wght@500;700;900&family=Heebo:wght@400;500;600;700&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --paper:#f6f2e9;
+  --paper-2:#ede6d6;
+  --card:#fbf8f1;
+  --ink:#211f1a;
+  --ink-2:#6f6754;
+  --line:#d9d0bb;
+  --accent:#0e7264;
+  --gold:#b98a2f;
+  --gold-bg:#f4e7c6;
+  --ok:#1c7a4d;
+  --ok-ink:#14512f;
+  --ok-bg:#e4f2e9;
+  --bad:#b23a2e;
+  --bad-ink:#7c261c;
+  --bad-bg:#f7e5e1;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{
+  font-family:'Heebo',sans-serif;
+  background:
+    radial-gradient(1200px 500px at 50% -100px, #fdfaf3 0%, transparent 70%),
+    var(--paper);
+  color:var(--ink);
+  font-size:16.5px;
+  line-height:1.65;
+}
+.wrap{max-width:840px;margin:0 auto;padding:0 18px 90px}
+.mono{font-family:'JetBrains Mono',monospace}
+
+/* ---------- hero ---------- */
+.hero{padding:42px 0 26px}
+.kicker{font:700 12px 'JetBrains Mono',monospace;letter-spacing:.18em;color:var(--accent);margin-bottom:10px}
+h1{font:900 clamp(28px,5.4vw,40px)/1.2 'Frank Ruhl Libre',serif;margin-bottom:8px}
+.subtitle{font:500 16px Heebo;color:var(--ink-2);margin-bottom:16px}
+.meta{display:flex;flex-wrap:wrap;gap:8px}
+.meta span{
+  font:400 12px 'JetBrains Mono',monospace;
+  border:1px solid var(--line);border-radius:999px;
+  background:var(--card);padding:5px 12px;color:var(--ink-2);white-space:nowrap;
+}
+.meta span.vs{border-color:var(--gold);background:var(--gold-bg);color:#7a5a14;font-weight:700}
+
+/* ---------- sticky nav ---------- */
+.sticky{
+  position:sticky;top:0;z-index:60;
+  background:rgba(246,242,233,.93);
+  backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);
+  border-bottom:1px solid var(--line);
+  margin:0 -18px;
+}
+.sticky-in{display:flex;align-items:center;gap:8px;overflow-x:auto;padding:10px 18px;scrollbar-width:none}
+.sticky-in::-webkit-scrollbar{display:none}
+.chip{
+  font:500 13px Heebo;color:var(--ink-2);text-decoration:none;
+  border:1px solid var(--line);border-radius:999px;background:var(--card);
+  padding:6px 14px;white-space:nowrap;transition:.15s;cursor:pointer;
+}
+.chip:hover{border-color:var(--accent);color:var(--accent)}
+button.chip{font-family:Heebo}
+.stats{margin-inline-start:auto;display:flex;gap:12px;align-items:center;font:700 12px 'JetBrains Mono',monospace;color:var(--ink-2);white-space:nowrap}
+.stats b{color:var(--accent);font-weight:700}
+.progress{height:3px;background:var(--paper-2)}
+.progress i{display:block;height:100%;width:0;background:var(--accent);transition:width .35s ease}
+
+/* ---------- sections ---------- */
+section{margin-top:44px}
+h2{font:700 26px 'Frank Ruhl Libre',serif;display:flex;align-items:baseline;gap:12px;flex-wrap:wrap}
+h2 .pts{font:700 12px 'JetBrains Mono',monospace;color:var(--paper);background:var(--ink);border-radius:8px;padding:3px 10px}
+.sec-note{font:400 14px Heebo;color:var(--ink-2);margin-top:6px}
+
+.card{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:20px 22px;margin-top:16px}
+.card ul{padding-inline-start:20px;margin-top:8px}
+.card li{margin-bottom:6px;font-size:15px}
+.card li::marker{color:var(--accent)}
+
+/* ---------- topic filters ---------- */
+.filters{display:flex;flex-wrap:wrap;gap:8px;margin-top:14px}
+.fchip{
+  font:500 12.5px Heebo;color:var(--ink-2);cursor:pointer;
+  border:1px solid var(--line);border-radius:999px;background:var(--card);
+  padding:5px 13px;transition:.15s;white-space:nowrap;
+}
+.fchip:hover{border-color:var(--accent);color:var(--accent)}
+.fchip.active{background:var(--ink);color:var(--paper);border-color:var(--ink)}
+.fchip .cnt{font:700 11px 'JetBrains Mono',monospace;opacity:.75;margin-inline-start:4px}
+
+/* ---------- question ---------- */
+.q,.tf{
+  background:var(--card);border:1px solid var(--line);border-radius:16px;
+  padding:20px 22px;margin-top:18px;box-shadow:0 1px 0 rgba(0,0,0,.03);
+  transition:border-color .25s;
+}
+.q.hide{display:none}
+.q.q-ok,.tf.q-ok{border-color:#b9d6c4}
+.q.q-bad,.tf.q-bad{border-color:#e4b7ae}
+.q-head{display:flex;gap:14px;align-items:flex-start;margin-bottom:14px}
+.q-num{
+  font:700 13px 'JetBrains Mono',monospace;flex:none;
+  background:var(--ink);color:var(--paper);border-radius:9px;
+  min-width:32px;height:32px;display:flex;align-items:center;justify-content:center;
+}
+.q-text{font:500 16.5px/1.6 Heebo}
+.q-text .src{color:var(--ink-2);font-weight:400}
+.topic{
+  display:inline-block;margin-inline-start:8px;vertical-align:2px;white-space:nowrap;
+  font:500 11px Heebo;color:var(--ink-2);background:var(--paper);
+  border:1px solid var(--line);border-radius:999px;padding:2px 10px;
+}
+.badge-trap{
+  display:inline-block;margin-inline-start:8px;vertical-align:2px;
+  font:600 11px Heebo;color:#7a5a14;background:var(--gold-bg);
+  border:1px solid #e0ca92;border-radius:999px;padding:2px 10px;white-space:nowrap;
+}
+
+.opts{display:grid;gap:8px}
+.opt{
+  display:block;width:100%;text-align:start;cursor:pointer;
+  font:400 15.5px/1.55 Heebo;color:var(--ink);
+  background:var(--paper);border:1px solid var(--line);border-radius:12px;
+  padding:11px 14px;transition:all .15s;
+}
+.opt .letter{font:700 13px 'JetBrains Mono',monospace;color:var(--ink-2);margin-inline-end:9px}
+.q:not(.locked) .opt:hover{border-color:var(--accent);transform:translateY(-1px)}
+.locked .opt{cursor:default}
+.opt.is-correct{background:var(--ok-bg);border-color:var(--ok);color:var(--ok-ink);font-weight:600}
+.opt.is-correct .letter{color:var(--ok)}
+.opt.is-wrong{background:var(--bad-bg);border-color:var(--bad);color:var(--bad-ink);text-decoration:line-through}
+.opt.is-wrong .letter{color:var(--bad)}
+.opt.show-correct{border:1px dashed var(--ok);background:#f0f7f2;color:var(--ok-ink)}
+
+/* ---------- true/false ---------- */
+.tf-btns{display:flex;gap:10px}
+.tf-btn{
+  flex:1;max-width:170px;cursor:pointer;text-align:center;
+  font:600 15px Heebo;color:var(--ink);
+  background:var(--paper);border:1px solid var(--line);border-radius:12px;
+  padding:11px 14px;transition:all .15s;
+}
+.tf:not(.locked) .tf-btn:hover{border-color:var(--accent);transform:translateY(-1px)}
+.locked .tf-btn{cursor:default}
+.tf-btn.is-correct{background:var(--ok-bg);border-color:var(--ok);color:var(--ok-ink)}
+.tf-btn.is-wrong{background:var(--bad-bg);border-color:var(--bad);color:var(--bad-ink);text-decoration:line-through}
+.tf-btn.show-correct{border:1px dashed var(--ok);background:#f0f7f2;color:var(--ok-ink)}
+
+/* ---------- explanation ---------- */
+.explain{
+  display:none;margin-top:14px;
+  background:var(--paper-2);border-inline-start:3px solid var(--accent);
+  border-radius:10px;padding:13px 16px;
+  font:400 14.5px/1.75 Heebo;color:#443e30;
+}
+.explain.open{display:block;animation:fade .25s ease}
+.explain b{color:var(--ink)}
+.explain .lbl{font:700 11px 'JetBrains Mono',monospace;color:var(--accent);display:block;margin-bottom:4px;letter-spacing:.1em}
+@keyframes fade{from{opacity:0;transform:translateY(-4px)}to{opacity:1;transform:none}}
+
+/* ---------- divider ---------- */
+.divider{
+  margin:52px 0 6px;text-align:center;position:relative;
+  font:500 14px Heebo;color:var(--ink-2);
+}
+.divider::before{content:"";position:absolute;inset-inline:0;top:50%;border-top:1px dashed var(--line)}
+.divider span{position:relative;background:var(--paper);padding:0 16px}
+
+/* ---------- result ---------- */
+#result{border:2px solid var(--ink);border-radius:18px;background:var(--card);padding:26px;margin-top:18px}
+.grade-row{display:flex;align-items:baseline;gap:14px;flex-wrap:wrap}
+.grade{font:700 64px/1 'JetBrains Mono',monospace}
+.grade-of{font:400 15px 'JetBrains Mono',monospace;color:var(--ink-2)}
+.pct{font:600 14px Heebo;color:#7a5a14;background:var(--gold-bg);border:1px solid #e0ca92;border-radius:999px;padding:4px 14px}
+.break{display:flex;gap:22px;flex-wrap:wrap;margin-top:16px;font:400 14px 'JetBrains Mono',monospace;color:var(--ink-2)}
+.break b{color:var(--ink)}
+#grade-msg{margin-top:16px;font:500 16px Heebo;display:none}
+#grade-msg.show{display:block}
+#review{margin-top:10px;font:400 13.5px 'JetBrains Mono',monospace;color:var(--bad-ink);line-height:1.9}
+
+/* ---------- footer ---------- */
+footer{margin-top:70px;text-align:center;font:400 12px 'JetBrains Mono',monospace;color:var(--ink-2)}
+
+@media (max-width:560px){
+  .q,.tf,.card{padding:16px}
+  .stats .hide-s{display:none}
+  .grade{font-size:52px}
+}
+@media (prefers-reduced-motion:reduce){
+  *{animation:none!important;transition:none!important}
+  html{scroll-behavior:auto}
+}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<header class="hero">
+  <div class="kicker">מדריכי 67 · בנק שאלות משנים קודמות</div>
+  <h1>מאגר 120 — מנהיגות בארגונים</h1>
+  <p class="subtitle">90 אמריקאיות + 30 נכון/לא נכון · פתור, מנומק ומסונן לפי נושא · לקראת מועד ב׳, 20.7.2026</p>
+  <div class="meta">
+    <span dir="ltr">687-2-5991</span>
+    <span>120 שאלות</span>
+    <span>10 נושאים</span>
+    <span class="vs">🐢 סבב אחד נקי = מוכנות</span>
+  </div>
+</header>
+
+<nav class="sticky">
+  <div class="sticky-in">
+    <a class="chip" href="#intro">איך זה עובד</a>
+    <a class="chip" href="#part-a">חלק א׳</a>
+    <a class="chip" href="#part-b">חלק ב׳</a>
+    <a class="chip" href="#result-sec">תוצאה</a>
+    <button class="chip" id="reset" type="button">↺ איפוס</button>
+    <div class="stats">
+      <span class="hide-s">נענו <b id="counter">0/120</b></span>
+      <span><b id="live-score">0</b> נכונות</span>
+    </div>
+  </div>
+  <div class="progress"><i id="progress-fill"></i></div>
+</nav>
+
+<section id="intro">
+  <h2>איך זה עובד</h2>
+  <div class="card">
+    <p>זה מאגר השאלות המסכם של הקורס, מסודר ומתוקן (שגיאות סריקה כמו "וורס ויטון" ← ורום־יטון). נקודה לשאלה, 120 סה״כ. מקורות התשובות — חשוב שתדע:</p>
+    <ul>
+      <li><b>חלק ב׳ (נכון/לא נכון)</b> — הגיע עם תשובות ונימוקים במקור; כאן בגרסה מהודקת, ברמת נימוק למבחן. היגד 19 הופיע פעמיים במאגר (19 ו־29) — אוחד; פריט 26 היה שאלה פתוחה ונוסח מחדש כהיגד.</li>
+      <li><b>חלק א׳ (אמריקאיות)</b> — הגיע ללא פתרון. התשובות וההסברים הם <b>הפתרון שלי</b> לפי חומר הקורס. שלוש שאלות שסומנו במקור ״לבדוק תשובה״ (26, 49, 54) מסומנות <span class="badge-trap">⚠️ לבדוק במקור</span> — עניתי עם נימוק מלא, וכדאי להצליב מול הסיכום שלך.</li>
+      <li><b>סינון לפי נושא</b> — הצ׳יפים מתחת לכותרת של חלק א׳ מציגים נושא אחד בכל פעם. הניקוד תמיד על כל ה־120.</li>
+    </ul>
+  </div>
+</section>
+
+<section id="part-a">
+  <h2>חלק א׳ — אמריקאיות <span class="pts">90 שאלות</span></h2>
+  <p class="sec-note">לחיצה על תשובה נועלת את השאלה ופותחת הסבר. סנן לפי נושא כדי לעבוד בבלוקים.</p>
+  <div class="filters">
+    <button class="fchip active" type="button" data-topic="all">הכל <span class="cnt">90</span></button>
+    <button class="fchip" type="button" data-topic="lmx">גריין / LMX <span class="cnt">10</span></button>
+    <button class="fchip" type="button" data-topic="koach">כוח והשפעה <span class="cnt">7</span></button>
+    <button class="fchip" type="button" data-topic="charisma">כריזמטית <span class="cnt">10</span></button>
+    <button class="fchip" type="button" data-topic="meatzevet">מעצבת ועסקית <span class="cnt">8</span></button>
+    <button class="fchip" type="button" data-topic="house">נתיב היעדים <span class="cnt">6</span></button>
+    <button class="fchip" type="button" data-topic="vroom">ורום־יטון ונאס״א <span class="cnt">10</span></button>
+    <button class="fchip" type="button" data-topic="fiedler">פידלר ותלות <span class="cnt">11</span></button>
+    <button class="fchip" type="button" data-topic="traits">תכונות, הערכה והכשרה <span class="cnt">12</span></button>
+    <button class="fchip" type="button" data-topic="behavior">התנהגות <span class="cnt">8</span></button>
+    <button class="fchip" type="button" data-topic="articles">מאמרים <span class="cnt">8</span></button>
+  </div>
+
+  <div class="q" data-n="1" data-correct="3" data-topic="lmx">
+    <div class="q-head"><div class="q-num">1</div>
+      <p class="q-text">מערכת היחסים של חברי קבוצת הפנים עם המנהיג מאופיינת על ידי: <span class="topic">גריין / LMX</span></p>
+    </div>
+    <div class="opts">
+      <button class="opt" type="button"><span class="letter">א</span>יחסים בירוקרטיים עם המנהיג</button>
+      <button class="opt" type="button"><span class="letter">ב</span>יחסים גרועים עם המנהיג</button>
+      <button class="opt" type="button"><span class="letter">ג</span>יחסים פורמליים עם המנהיג</button>
+      <button class="opt" type="button"><span class="letter">ד</span>יחסים בלתי פורמליים עם המנהיג</button>
+    </div>
+    <div class="explain"><span class="lbl">הסבר</span>קבוצת הפנים (<span dir="ltr">IN</span>): קשר קרוב, אמון הדדי, תקשורת דו־כיוונית ופתיחות — יחסים <b>בלתי פורמליים</b>. פורמליות ודיסטנס מאפיינים דווקא את קבוצת החוץ.</div>
+  </div>
+
+  <div class="q" data-n="2" data-correct="0" data-topic="lmx">
+    <div class="q-head"><div class="q-num">2</div>
+      <p class="q-text">סביר להניח שמנהיג ישתמש בכוח הסמכות שלו יותר עם: <span class="topic">גריין / LMX</span></p>
+    </div>
+    <div class="opts">
+      <button class="opt" type="button"><span class="letter">א</span>חברי קבוצת החוץ שלו</button>
+      <button class="opt" type="button"><span class="letter">ב</span>חברי קבוצת הפנים שלו</button>
+      <button class="opt" type="button"><span class="letter">ג</span>א ו־ב נכונות</button>
+      <button class="opt" type="button"><span class="letter">ד</span>לא א ולא ב</button>
+    </div>
+    <div class="explain"><span class="lbl">הסבר</span>עם קבוצת הפנים עובדים דרך אמון והשפעה אישית; מול קבוצת החוץ, שהקשר איתה פורמלי, המנהיג נשען יותר על <b>סמכות פורמלית</b> (כוח עמדה).</div>
+  </div>
+
+  <div class="q" data-n="3" data-correct="1" data-topic="lmx">
+    <div class="q-head"><div class="q-num">3</div>
+      <p class="q-text">על פי גריין ניתן לצפות כי רמת התחלופה בקבוצת ____ תהיה גבוהה יותר מאשר בקבוצת ____ <span class="topic">גריין / LMX</span></p>
+    </div>
+    <div class="opts">
+      <button class="opt" type="button"><span class="letter">א</span>הפנים, החוץ</button>
+      <button class="opt" type="button"><span class="letter">ב</span>החוץ, הפנים</button>
+      <button class="opt" type="button"><span class="letter">ג</span>המשימה, החברות</button>
+      <button class="opt" type="button"><span class="letter">ד</span>החברות, המשימה</button>
+    </div>
+    <div class="explain"><span class="lbl">הסבר</span>קבוצת החוץ מקבלת יחס פורמלי, פחות תמיכה ופחות הזדמנויות — שחיקה ותחלופה גבוהות יותר. קבוצת הפנים נשארת.</div>
+  </div>
+
+  <div class="q" data-n="4" data-correct="0" data-topic="lmx">
+    <div class="q-head"><div class="q-num">4</div>
+      <p class="q-text">הרחבת התאוריה ״אחד על אחד״ כוללת את: <span class="topic">גריין / LMX</span></p>
+    </div>
+    <div class="opts">
+      <button class="opt" type="button"><span class="letter">א</span>מערכת היחסים של המנהיג עם המנהיג שלו</button>
+      <button class="opt" type="button"><span class="letter">ב</span>מערכת היחסים של הכפיפים עם מנהיגם</button>
+      <button class="opt" type="button"><span class="letter">ג</span>אופי המטלה</button>
+      <button class="opt" type="button"><span class="letter">ד</span>אופי הארגון</button>
+    </div>
+    <div class="explain"><span class="lbl">הסבר</span>ההרחבה מוסיפה את הציר כלפי מעלה: <b>יחסי המנהיג עם המנהל שלו</b> — האם הוא עצמו בקבוצת הפנים של הבוס. יחסי כפיפים–מנהיג הם המודל הבסיסי, לא ההרחבה. (זהה לשאלה 18.)</div>
+  </div>
+
+  <div class="q" data-n="5" data-correct="0" data-topic="articles">
+    <div class="q-head"><div class="q-num">5</div>
+      <p class="q-text">עפ״י המאמר ״דבר חזון״, מחקרים מראים כי: <span class="topic">מאמרים</span></p>
+    </div>
+    <div class="opts">
+      <button class="opt" type="button"><span class="letter">א</span>חברות המונעות ע״י חזון מתפקדות ביעילות יותר, בהשוואה לחברות שאינן מונעות ע״י חזון</button>
+      <button class="opt" type="button"><span class="letter">ב</span>חברות המונעות ע״י חזון מתפקדות ביעילות יותר בזמן משבר בהשוואה לזמן רגיעה</button>
+      <button class="opt" type="button"><span class="letter">ג</span>בחברות המונעות ע״י חזון ניתן למצוא יותר מנהיגים מאשר מנהלים</button>
+      <button class="opt" type="button"><span class="letter">ד</span>רוב החברות המונעות ע״י חזון הן חברות קטנות מבחינת מספר העובדים</button>
+    </div>
+    <div class="explain"><span class="lbl">הסבר</span>הממצא המרכזי: חברות מונעות־חזון <b>מתפקדות ומצליחות יותר</b> מחברות ללא חזון מניע — באופן כללי, לא רק במשבר.</div>
+  </div>
+
+  <div class="q" data-n="6" data-correct="2" data-topic="articles">
+    <div class="q-head"><div class="q-num">6</div>
+      <p class="q-text">על פי המאמר ״דבר חזון״, המנהיגים חייבים להיות ____ כדי להעביר את המסר <span class="topic">מאמרים</span></p>
+    </div>
+    <div class="opts">
+      <button class="opt" type="button"><span class="letter">א</span>חברותיים</button>
+      <button class="opt" type="button"><span class="letter">ב</span>משימתיים</button>
+      <button class="opt" type="button"><span class="letter">ג</span>אמינים</button>
+      <button class="opt" type="button"><span class="letter">ד</span>עקשניים</button>
+    </div>
+    <div class="explain"><span class="lbl">הסבר</span>חזון עובר רק כשהמנהיג <b>אמין</b>: הלימה בין דיבור למעשה. בלי אמינות — אין קנייה של המסר, מרשים ככל שיהיה.</div>
+  </div>
+
+  <div class="q" data-n="7" data-correct="3" data-topic="charisma">
+    <div class="q-head"><div class="q-num">7</div>
+      <p class="q-text">מנהיגות כריזמטית תלויה בעיקר ב: <span class="topic">כריזמטית</span></p>
+    </div>
+    <div class="opts">
+      <button class="opt" type="button"><span class="letter">א</span>אינטליגנציית המנהיג</button>
+      <button class="opt" type="button"><span class="letter">ב</span>ביטחון עצמי של המנהיג</button>
+      <button class="opt" type="button"><span class="letter">ג</span>ביטחון עצמי של הכפיפים</button>
+      <button class="opt" type="button"><span class="letter">ד</span>תפיסת הכפיפים את מנהיגם</button>
+    </div>
+    <div class="explain"><span class="lbl">הסבר</span>כריזמה היא <b>ייחוס</b> — היא קיימת בעיני המונהגים. אין ״כריזמטי אובייקטיבי״; בלי תפיסת הכפיפים אין מנהיג כריזמטי.</div>
+  </div>
+
+  <div class="q" data-n="8" data-correct="1" data-topic="charisma">
+    <div class="q-head"><div class="q-num">8</div>
+      <p class="q-text">מנהיגים כריזמטיים יהיו יעילים: <span class="topic">כריזמטית</span></p>
+    </div>
+    <div class="opts">
+      <button class="opt" type="button"><span class="letter">א</span>בעיקר בשעות רגיעה</button>
+      <button class="opt" type="button"><span class="letter">ב</span>בעיקר בשעות משבר</button>
+      <button class="opt" type="button"><span class="letter">ג</span>בעיקר בארגונים בעלי היררכיה קבועה</button>
+      <button class="opt" type="button"><span class="letter">ד</span>בעיקר בארגונים בעלי היררכיה שטוחה</button>
+    </div>
+    <div class="explain"><span class="lbl">הסבר</span>הכריזמה מתעוררת ופועלת <b>במשבר</b>: אנשים מחפשים מושיע, והמנהיג סוחף אותם רגשית באמונה שייצאו מזה.</div>
+  </div>
+
+  <div class="q" data-n="9" data-correct="1" data-topic="traits">
+    <div class="q-head"><div class="q-num">9</div>
+      <p class="q-text">המחקרים הראשונים במנהיגות התרכזו על: <span class="topic">תכונות</span></p>
+    </div>
+    <div class="opts">
+      <button class="opt" type="button"><span class="letter">א</span>התנהגותו של המנהיג</button>
+      <button class="opt" type="button"><span class="letter">ב</span>תכונות המנהיג</button>
+      <button class="opt" type="button"><span class="letter">ג</span>סביבתו של המנהיג</button>
+      <button class="opt" type="button"><span class="letter">ד</span>אף אחת מהתשובות</button>
+    </div>
+    <div class="explain"><span class="lbl">הסבר</span>נקודת הפתיחה ההיסטורית: <b>גישת התכונות</b> (״המנהיג נולד״). רק אחר כך התנהגות (אוהיו/מישיגן), ואז תלות ומצב.</div>
+  </div>
+
+  <div class="q" data-n="10" data-correct="0" data-topic="behavior">
+    <div class="q-head"><div class="q-num">10</div>
+      <p class="q-text">כאשר מנהיג מבהיר לכפיפיו את המטלה ונותן להם את האמצעים הדרושים לביצועה, התנהגותו משקפת: <span class="topic">התנהגות</span></p>
+    </div>
+    <div class="opts">
+      <button class="opt" type="button"><span class="letter">א</span>התנהגות משימתית</button>
+      <button class="opt" type="button"><span class="letter">ב</span>התנהגות חברתית</button>
+      <button class="opt" type="button"><span class="letter">ג</span>חזון</button>
+      <button class="opt" type="button"><span class="letter">ד</span>חיקוי</button>
+    </div>
+    <div class="explain"><span class="lbl">הסבר</span>הבהרת המטלה, הגדרת תפקידים ומתן אמצעים = <b>יוזם מבנה</b> — התנהגות משימתית קלאסית.</div>
+  </div>
+
+  <div class="q" data-n="11" data-correct="1" data-topic="koach">
+    <div class="q-head"><div class="q-num">11</div>
+      <p class="q-text">כוחו החוקי של מנהיג נובע מ: <span class="topic">כוח והשפעה</span></p>
+    </div>
+    <div class="opts">
+      <button class="opt" type="button"><span class="letter">א</span>הכריזמטיות שלו</button>
+      <button class="opt" type="button"><span class="letter">ב</span>סמכות גבוהה יותר בהיררכיה הארגונית</button>
+      <button class="opt" type="button"><span class="letter">ג</span>הכפיפים בארגון</button>
+      <button class="opt" type="button"><span class="letter">ד</span>הידע והכישורים</button>
+    </div>
+    <div class="explain"><span class="lbl">הסבר</span>כוח חוקי (לגיטימי) נובע מ<b>המיקום בהיררכיה</b> — הסמכות שהתפקיד מעניק. כריזמה וידע שייכים לכוח האישי.</div>
+  </div>
+
+  <div class="q" data-n="12" data-correct="2" data-topic="koach">
+    <div class="q-head"><div class="q-num">12</div>
+      <p class="q-text">מומחיות וכריזמה הם דוגמה ל: <span class="topic">כוח והשפעה</span></p>
+    </div>
+    <div class="opts">
+      <button class="opt" type="button"><span class="letter">א</span>כוח רציונאלי</button>
+      <button class="opt" type="button"><span class="letter">ב</span>כוח לגיטימי</button>
+      <button class="opt" type="button"><span class="letter">ג</span>כוח אישי</button>
+      <button class="opt" type="button"><span class="letter">ד</span>עמדת כוח</button>
+    </div>
+    <div class="explain"><span class="lbl">הסבר</span>מומחיות (<span dir="ltr">Expert</span>) והזדהות/כריזמה (<span dir="ltr">Referent</span>) שייכות לבסיס <b>הכוח האישי</b> — הולכות עם האדם, לא עם הכיסא.</div>
+  </div>
+
+  <div class="q" data-n="13" data-correct="0" data-topic="house">
+    <div class="q-head"><div class="q-num">13</div>
+      <p class="q-text">ע״פ תאוריית נתיב היעדים (האוס), מנהיגות ישירה תוביל ל: <span class="topic">נתיב היעדים</span></p>
+    </div>
+    <div class="opts">
+      <button class="opt" type="button"><span class="letter">א</span>הפחתת אי הוודאות</button>
+      <button class="opt" type="button"><span class="letter">ב</span>הפחתת העוצמה לתגמולים</button>
+      <button class="opt" type="button"><span class="letter">ג</span>הפחתת הסיכוי לתגמולים</button>
+      <button class="opt" type="button"><span class="letter">ד</span>הפחתת המאמץ של כפיפים</button>
+    </div>
+    <div class="explain"><span class="lbl">הסבר</span>מנהיגות ישירה (<span dir="ltr">Directive</span>) מבהירה מה, איך ומתי — ולכן מפחיתה <b>אי־ודאות</b> ועמימות תפקיד. מתאימה במיוחד למטלה עמומה.</div>
+  </div>
+
+  <div class="q" data-n="14" data-correct="1" data-topic="vroom">
+    <div class="q-head"><div class="q-num">14</div>
+      <p class="q-text">תאוריית קבלת ההחלטות (ורום־יטון) מזהה מספר שיטות בקבלת החלטות. איזו שיטה אינה מוזכרת? <span class="topic">ורום־יטון</span></p>
+    </div>
+    <div class="opts">
+      <button class="opt" type="button"><span class="letter">א</span>אוטוקרטית</button>
+      <button class="opt" type="button"><span class="letter">ב</span>דמוקרטית</button>
+      <button class="opt" type="button"><span class="letter">ג</span>ייעוצית</button>
+      <button class="opt" type="button"><span class="letter">ד</span>שיתופית</button>
+    </div>
+    <div class="explain"><span class="lbl">הסבר</span>הסגנונות במודל: אוטוקרטי (<span dir="ltr">AI, AII</span>), ייעוצי (<span dir="ltr">CI, CII</span>), שיתופי/קבוצתי (<span dir="ltr">G</span>). <b>״דמוקרטית״</b> אינה קטגוריה במודל.</div>
+  </div>
+
+  <div class="q" data-n="15" data-correct="3" data-topic="vroom">
+    <div class="q-head"><div class="q-num">15</div>
+      <p class="q-text">ע״פ תאוריית קבלת החלטות: אם איכות ההחלטה חשובה וסביר להניח שהכפיפים לא ירצו להגיע ליעדי הארגון — המנהיג לא צריך להשתמש ב: <span class="topic">ורום־יטון</span></p>
+    </div>
+    <div class="opts">
+      <button class="opt" type="button"><span class="letter">א</span><span dir="ltr">AI</span></button>
+      <button class="opt" type="button"><span class="letter">ב</span><span dir="ltr">AII</span></button>
+      <button class="opt" type="button"><span class="letter">ג</span><span dir="ltr">CI</span></button>
+      <button class="opt" type="button"><span class="letter">ד</span><span dir="ltr">G</span></button>
+    </div>
+    <div class="explain"><span class="lbl">הסבר</span>אם הכפיפים לא מחויבים ליעדי הארגון, אסור למסור להם את ההחלטה כקבוצה (<span dir="ltr">G</span>) — הם יחליטו נגד היעדים בדיוק כשהאיכות קריטית. (השוו לשאלה 57: כשקבלת הכפיפים הכרחית ליישום — הפסול הוא <span dir="ltr">AI</span>.)</div>
+  </div>
+
+  <div class="q" data-n="16" data-correct="0" data-topic="vroom">
+    <div class="q-head"><div class="q-num">16</div>
+      <p class="q-text">ע״פ תאוריית קבלת ההחלטות: אם איכות ההחלטה חשובה ולמנהיג אין מספיק מידע כדי להגיע להחלטה הנכונה — המנהיג לא צריך להשתמש ב: <span class="topic">ורום־יטון</span></p>
+    </div>
+    <div class="opts">
+      <button class="opt" type="button"><span class="letter">א</span><span dir="ltr">AI</span> — מקבל החלטה לבד</button>
+      <button class="opt" type="button"><span class="letter">ב</span><span dir="ltr">AII</span> — משיג את המידע ומחליט</button>
+    </div>
+    <div class="explain"><span class="lbl">הסבר</span>בלי מידע מספק אסור להחליט לבד (<span dir="ltr">AI</span>). ב־<span dir="ltr">AII</span> המנהיג לפחות אוסף מידע מהכפיפים לפני שהוא מחליט — לכן היא כשרה. (במאגר המקורי לשאלה זו שני מסיחים בלבד.)</div>
+  </div>
+
+  <div class="q" data-n="17" data-correct="1" data-topic="lmx">
+    <div class="q-head"><div class="q-num">17</div>
+      <p class="q-text">אילו מההצהרות הבאות נכונה לגבי קבוצת החוץ בתאוריה ״אחד על אחד״ (גריין)? <span class="topic">גריין / LMX</span></p>
+    </div>
+    <div class="opts">
+      <button class="opt" type="button"><span class="letter">א</span>הקבוצה עושה עבודות בלתי שגרתיות</button>
+      <button class="opt" type="button"><span class="letter">ב</span>יש לה יחסים פורמליים עם המנהיג</button>
+      <button class="opt" type="button"><span class="letter">ג</span>היא לוקחת על עצמה אחריות על משימות חשובות</button>
+      <button class="opt" type="button"><span class="letter">ד</span>היא מקבלת תמיכה ויחס אוהד מהמנהיג</button>
+    </div>
+    <div class="explain"><span class="lbl">הסבר</span>קבוצת החוץ: יחסים <b>פורמליים</b>, מטלות שגרתיות, פחות אמון ותמיכה. משימות חשובות ויחס אוהד — נחלת קבוצת הפנים.</div>
+  </div>
+
+  <div class="q" data-n="18" data-correct="2" data-topic="lmx">
+    <div class="q-head"><div class="q-num">18</div>
+      <p class="q-text">הרחבת התאוריה ״אחד על אחד״ (גריין) כוללת את: <span class="topic">גריין / LMX</span></p>
+    </div>
+    <div class="opts">
+      <button class="opt" type="button"><span class="letter">א</span>עמדת הכוח של המנהל</button>
+      <button class="opt" type="button"><span class="letter">ב</span>עמדת הכוח של הכפיפים</button>
+      <button class="opt" type="button"><span class="letter">ג</span>מערכת היחסים בין המנהל למנהל שלו</button>
+      <button class="opt" type="button"><span class="letter">ד</span>מערכת יחסים בין הכפיפים למנהל</button>
+    </div>
+    <div class="explain"><span class="lbl">הסבר</span>ההרחבה = הקומה שמעל: <b>יחסי המנהל עם המנהל שלו</b>. מנהל שנמצא ב־<span dir="ltr">IN</span> אצל הבוס — מקדם את אנשיו; מנהל ב־<span dir="ltr">OUT</span> — הקידום נתקע. (זהה לשאלה 4.)</div>
+  </div>
+
+  <div class="q" data-n="19" data-correct="3" data-topic="charisma">
+    <div class="q-head"><div class="q-num">19</div>
+      <p class="q-text">למנהיגים כריזמטיים יש כוח השפעה רב בזכות: <span class="topic">כריזמטית</span></p>
+    </div>
+    <div class="opts">
+      <button class="opt" type="button"><span class="letter">א</span>סמכותם</button>
+      <button class="opt" type="button"><span class="letter">ב</span>כוחם להעניש</button>
+      <button class="opt" type="button"><span class="letter">ג</span>כוחם החוקי</button>
+      <button class="opt" type="button"><span class="letter">ד</span>תכונותיהם הנתפסות ע״י הכפיפים</button>
+    </div>
+    <div class="explain"><span class="lbl">הסבר</span>שוב עקרון הייחוס: כוח ההשפעה נובע מ<b>התכונות שהכפיפים מייחסים</b> למנהיג — לא מסמכות פורמלית. זהו כוח הזדהות, לא כוח עמדה.</div>
+  </div>
+
+  <div class="q" data-n="20" data-correct="3" data-topic="charisma">
+    <div class="q-head"><div class="q-num">20</div>
+      <p class="q-text">למנהיגות כריזמטית יש אוריינטציה לכיוון: <span class="topic">כריזמטית</span></p>
+    </div>
+    <div class="opts">
+      <button class="opt" type="button"><span class="letter">א</span>השגת היעדים</button>
+      <button class="opt" type="button"><span class="letter">ב</span>מתן תגמולים</button>
+      <button class="opt" type="button"><span class="letter">ג</span>יציבות</button>
+      <button class="opt" type="button"><span class="letter">ד</span>שינוי</button>
+    </div>
+    <div class="explain"><span class="lbl">הסבר</span>הכריזמטי מגייס למען <b>שינוי</b> ויציאה מהמצב הקיים; יציבות היא היפוכו הגמור. תגמולים — זו המנהיגות העסקית.</div>
+  </div>
+
+  <div class="q" data-n="21" data-correct="2" data-topic="meatzevet">
+    <div class="q-head"><div class="q-num">21</div>
+      <p class="q-text">מנהיגות ____ מבוססת על מנהיגות כריזמטית (השלם את החסר) <span class="topic">מעצבת ועסקית</span></p>
+    </div>
+    <div class="opts">
+      <button class="opt" type="button"><span class="letter">א</span>חברותית</button>
+      <button class="opt" type="button"><span class="letter">ב</span>משימתית</button>
+      <button class="opt" type="button"><span class="letter">ג</span>מעצבת</button>
+      <button class="opt" type="button"><span class="letter">ד</span>מתגמלת</button>
+    </div>
+    <div class="explain"><span class="lbl">הסבר</span>המעצבת (בס) בנויה על הכריזמטית (האוס) בתוספת <span dir="ltr">I4</span>: כריזמה, השראה, הפרט כמוקד ואתגר אינטלקטואלי.</div>
+  </div>
+
+  <div class="q" data-n="22" data-correct="0" data-topic="koach">
+    <div class="q-head"><div class="q-num">22</div>
+      <p class="q-text">תאוריית החליפין החברתי (הולנדר) טוענת שחייבת להיות ____ כחלק מהחליפין <span class="topic">כוח והשפעה</span></p>
+    </div>
+    <div class="opts">
+      <button class="opt" type="button"><span class="letter">א</span>השפעה דו־כיוונית</button>
+      <button class="opt" type="button"><span class="letter">ב</span>כוח חוקי</button>
+      <button class="opt" type="button"><span class="letter">ג</span>כוח הזדהות</button>
+      <button class="opt" type="button"><span class="letter">ד</span>תרבות משותפת</button>
+    </div>
+    <div class="explain"><span class="lbl">הסבר</span>חליפין חברתי = עסקה: המנהיג נותן כיוון וערך, המונהגים מעניקים סטטוס והיענות. תנאי הכרחי: <b>השפעה דו־כיוונית</b>.</div>
+  </div>
+
+  <div class="q" data-n="23" data-correct="1" data-topic="traits">
+    <div class="q-head"><div class="q-num">23</div>
+      <p class="q-text">כל תכנית יעילה של אימון והדרכת מנהיגים חייבת שתהיה בה מידה מסוימת של: <span class="topic">הכשרה</span></p>
+    </div>
+    <div class="opts">
+      <button class="opt" type="button"><span class="letter">א</span>העברה</button>
+      <button class="opt" type="button"><span class="letter">ב</span>חיקוי מודלים</button>
+      <button class="opt" type="button"><span class="letter">ג</span>הרצאות</button>
+      <button class="opt" type="button"><span class="letter">ד</span>סדנאות</button>
+    </div>
+    <div class="explain"><span class="lbl">הסבר</span>הכשרה אפקטיבית חייבת <b>חיקוי מודלים</b> (<span dir="ltr">Behavior Modeling</span>): צפייה בהתנהגות נכונה ותרגולה. הרצאות לבד מניבות שינוי מתון בלבד (ראו שאלות 32 ו־40).</div>
+  </div>
+
+
+  <div class="q" data-n="24" data-correct="2" data-topic="traits">
+    <div class="q-head"><div class="q-num">24</div>
+      <p class="q-text">במרכזי הערכה לזיהוי וקידום מנהלים, סביר להניח כי משתמשים ב: <span class="topic">הערכה</span></p>
+    </div>
+    <div class="opts">
+      <button class="opt" type="button"><span class="letter">א</span>שאלון אישיות</button>
+      <button class="opt" type="button"><span class="letter">ב</span>שאלון תכונות</button>
+      <button class="opt" type="button"><span class="letter">ג</span>א ו־ב נכונות</button>
+      <button class="opt" type="button"><span class="letter">ד</span>לא א ולא ב</button>
+    </div>
+    <div class="explain"><span class="lbl">הסבר</span>מרכזי הערכה משלבים שאלוני אישיות ותכונות (לצד סימולציות ודינמיקה קבוצתית) לאיתור פוטנציאל ניהולי — <b>שניהם</b>. (ראו גם 74 וחלק ב׳ 28.)</div>
+  </div>
+
+  <div class="q" data-n="25" data-correct="3" data-topic="meatzevet">
+    <div class="q-head"><div class="q-num">25</div>
+      <p class="q-text">כיום יש נטייה לפתח במנהיג התנהגות ____ <span class="topic">מעצבת ועסקית</span></p>
+    </div>
+    <div class="opts">
+      <button class="opt" type="button"><span class="letter">א</span>התנהגות משימתית</button>
+      <button class="opt" type="button"><span class="letter">ב</span>התנהגות חברתית</button>
+      <button class="opt" type="button"><span class="letter">ג</span>התנהגות תמיכתית</button>
+      <button class="opt" type="button"><span class="letter">ד</span>אף אחת מהתשובות לא נכונה</button>
+    </div>
+    <div class="explain"><span class="lbl">הסבר</span>הפיתוח היום הוא של התנהגות <b>כריזמטית/מעצבת</b> — שאינה אחת משלוש המנויות, ולכן ״אף אחת״. (רמז לכך נכתב במאגר עצמו ליד השאלה.)</div>
+  </div>
+
+  <div class="q" data-n="26" data-correct="1" data-topic="house">
+    <div class="q-head"><div class="q-num">26</div>
+      <p class="q-text">ע״פ תאוריית ״נתיב היעדים״, מנהיגים תמיד צריכים לבצע את כל האמור מטה, חוץ מ: <span class="badge-trap">⚠️ לבדוק במקור</span> <span class="topic">נתיב היעדים</span></p>
+    </div>
+    <div class="opts">
+      <button class="opt" type="button"><span class="letter">א</span>להסיר מכשולים בדרך להשגת היעדים</button>
+      <button class="opt" type="button"><span class="letter">ב</span>להתנהג בצורה עקבית לאורך כל הדרך</button>
+      <button class="opt" type="button"><span class="letter">ג</span>לתגמל את העובדים על השגת היעדים</button>
+      <button class="opt" type="button"><span class="letter">ד</span>להציג לעובדים את היעדים שעליהם להגיע</button>
+    </div>
+    <div class="explain"><span class="lbl">הסבר</span>נתיב־היעדים דורשת בדיוק את ההפך מעקביות: <b>להתאים את הסגנון למצב ולעובד</b> (ישיר/תומך/שיתופי/הישגי). להסיר מכשולים, להציב יעדים ולתגמל — כן; ״להיות עקבי תמיד״ — לא.</div>
+  </div>
+
+  <div class="q" data-n="27" data-correct="0" data-topic="fiedler">
+    <div class="q-head"><div class="q-num">27</div>
+      <p class="q-text">הרעיון מאחורי תאוריית התלות של המנהיגות הוא: <span class="topic">פידלר ותלות</span></p>
+    </div>
+    <div class="opts">
+      <button class="opt" type="button"><span class="letter">א</span>אין התנהגות אחת שתמיד הכי יעילה</button>
+      <button class="opt" type="button"><span class="letter">ב</span>מנהיגות יעילה זהו דבר מסובך וקשה למדידה</button>
+      <button class="opt" type="button"><span class="letter">ג</span>עמדת הכוח של המנהיג תלויה ביחסיו עם כפיפיו</button>
+      <button class="opt" type="button"><span class="letter">ד</span>מנהיגות יעילה תלויה באיכות היחסים הבין־אישיים בין מנהיג לכפיפיו</button>
+    </div>
+    <div class="explain"><span class="lbl">הסבר</span>לב גישת התלות: <b>אין סגנון אחד שמנצח תמיד</b> — האפקטיביות תלוית־מצב. יחסי מנהיג־כפיפים הם רק אחד ממשתני המצב, לא הרעיון כולו.</div>
+  </div>
+
+  <div class="q" data-n="28" data-correct="1" data-topic="koach">
+    <div class="q-head"><div class="q-num">28</div>
+      <p class="q-text">אם חבר שלך נמצא בחדר מיון ורצית לדעת מה מצבו — תחפש/י מישהו עם כוח: <span class="topic">כוח והשפעה</span></p>
+    </div>
+    <div class="opts">
+      <button class="opt" type="button"><span class="letter">א</span>אישי</button>
+      <button class="opt" type="button"><span class="letter">ב</span>מומחיות</button>
+      <button class="opt" type="button"><span class="letter">ג</span>חוקי</button>
+      <button class="opt" type="button"><span class="letter">ד</span>הזדהות</button>
+    </div>
+    <div class="explain"><span class="lbl">הסבר</span>מה מצבו? מחפשים <b>רופא</b> — בעל מומחיות וידע. לא מנהל המחלקה (חוקי) ולא מישהו נחמד (הזדהות) — מי שיודע.</div>
+  </div>
+
+  <div class="q" data-n="29" data-correct="1" data-topic="behavior">
+    <div class="q-head"><div class="q-num">29</div>
+      <p class="q-text">אחת המסקנות הסופיות שנבעו באופן ישיר מהמחקר לגבי תיאוריית ההתנהגות היא: <span class="topic">התנהגות</span></p>
+    </div>
+    <div class="opts">
+      <button class="opt" type="button"><span class="letter">א</span>לתת לעובדים שאלונים הכוללים בדיקת תכונותיהם בלבד</button>
+      <button class="opt" type="button"><span class="letter">ב</span>לתת לעובדים שאלונים הכוללים בדיקת סוג התנהגות בלבד</button>
+      <button class="opt" type="button"><span class="letter">ג</span>א׳ ו־ב׳ נכונות</button>
+      <button class="opt" type="button"><span class="letter">ד</span>אף תשובה לא נכונה</button>
+    </div>
+    <div class="explain"><span class="lbl">הסבר</span>התוצר הישיר של מחקרי ההתנהגות: מדידת מנהיגות דרך <b>שאלוני התנהגות</b> (<span dir="ltr">LBDQ</span>) — במקום שאלוני תכונות. ההתנהגות נלמדת ונמדדת; התכונות ירדו מהבמה בשלב הזה.</div>
+  </div>
+
+  <div class="q" data-n="30" data-correct="2" data-topic="charisma">
+    <div class="q-head"><div class="q-num">30</div>
+      <p class="q-text">עפ״י המאמר ״מנהיגות כריזמטית והיפוכה״ — מהו הדבר הראשון שהולך לאיבוד במנהיגות כריזמטית? <span class="topic">כריזמטית</span></p>
+    </div>
+    <div class="opts">
+      <button class="opt" type="button"><span class="letter">א</span>חשיבות הכפיפים</button>
+      <button class="opt" type="button"><span class="letter">ב</span>שייכות המצב</button>
+      <button class="opt" type="button"><span class="letter">ג</span>עובדות המצב</button>
+      <button class="opt" type="button"><span class="letter">ד</span>היחס בין הכפיף למנהיג</button>
+    </div>
+    <div class="explain"><span class="lbl">הסבר</span>השכנוע הכריזמטי אמוציונאלי, לא רציונלי — והקורבן הראשון הוא <b>עובדות המצב</b>: הולכים אחרי המנהיג ״באש ובמים״ גם כשהעובדות אומרות אחרת.</div>
+  </div>
+
+  <div class="q" data-n="31" data-correct="0" data-topic="charisma">
+    <div class="q-head"><div class="q-num">31</div>
+      <p class="q-text">לפי אותו מאמר, מהי אחת הבעיות המרכזיות של המנהיג הכריזמטי? <span class="topic">כריזמטית</span></p>
+    </div>
+    <div class="opts">
+      <button class="opt" type="button"><span class="letter">א</span>התנערות מכל אחריות כאשר מתרחשת תבוסה</button>
+      <button class="opt" type="button"><span class="letter">ב</span>רגישות יתר לכפיפיו</button>
+      <button class="opt" type="button"><span class="letter">ג</span>מנהיגות משימתית קיצונית</button>
+      <button class="opt" type="button"><span class="letter">ד</span>מנהיגות חברתית קיצונית</button>
+    </div>
+    <div class="explain"><span class="lbl">הסבר</span>הדפוס המוכר: ניכוס ההצלחות לעצמו — ו<b>התנערות מאחריות</b> בעת כישלון. האגו במרכז, לא הארגון.</div>
+  </div>
+
+  <div class="q" data-n="32" data-correct="0" data-topic="traits">
+    <div class="q-head"><div class="q-num">32</div>
+      <p class="q-text">לפי המאמר על הכשרת מנהלים: שינוי מתון בהתנהגות מושג ע״י סדרת הרצאות על התנהגות יעילה ולא יעילה, בתוספת: <span class="topic">הכשרה</span></p>
+    </div>
+    <div class="opts">
+      <button class="opt" type="button"><span class="letter">א</span>מתן תגמולים אחרי ההתנהגות היעילה שנלמדה</button>
+      <button class="opt" type="button"><span class="letter">ב</span>מתן שאלוני אישיות</button>
+      <button class="opt" type="button"><span class="letter">ג</span>מתן סימולציה הכוללת קבוצה ללא מנהיג</button>
+      <button class="opt" type="button"><span class="letter">ד</span>אף תשובה אינה נכונה</button>
+    </div>
+    <div class="explain"><span class="lbl">הסבר</span>הרצאות לבד → שינוי מתון; מה שמקבע התנהגות חדשה הוא <b>חיזוק</b> — תגמול מיידי על ההתנהגות שנלמדה. (ניסוח השאלה במאגר היה קטוע — הושלם לפי ההקשר.)</div>
+  </div>
+
+  <div class="q" data-n="33" data-correct="0" data-topic="traits">
+    <div class="q-head"><div class="q-num">33</div>
+      <p class="q-text">במחקר נמצא כי ל____ המנהיגים יש תפקיד חשוב בהצלחת ההכשרות למנהלים: <span class="topic">הכשרה</span></p>
+    </div>
+    <div class="opts">
+      <button class="opt" type="button"><span class="letter">א</span>מוטיבציה</button>
+      <button class="opt" type="button"><span class="letter">ב</span>אינטליגנציה</button>
+      <button class="opt" type="button"><span class="letter">ג</span>רגישות</button>
+      <button class="opt" type="button"><span class="letter">ד</span>תשומת לב</button>
+    </div>
+    <div class="explain"><span class="lbl">הסבר</span><b>מוטיבציית המשתתפים</b> היא המנבא המרכזי להצלחת הכשרה — מי שלא רוצה להשתנות, שום סדנה לא תשנה אותו.</div>
+  </div>
+
+  <div class="q" data-n="34" data-correct="1" data-topic="lmx">
+    <div class="q-head"><div class="q-num">34</div>
+      <p class="q-text">באיזו קבוצת עובדים סביר להניח שנמצא עובדים המקבלים ייפוי כוח מהמנהיגים? <span class="topic">גריין / LMX</span></p>
+    </div>
+    <div class="opts">
+      <button class="opt" type="button"><span class="letter">א</span>קבוצת חוץ</button>
+      <button class="opt" type="button"><span class="letter">ב</span>קבוצת פנים</button>
+      <button class="opt" type="button"><span class="letter">ג</span>קבוצת יעדים</button>
+      <button class="opt" type="button"><span class="letter">ד</span>קבוצת תמיכה</button>
+    </div>
+    <div class="explain"><span class="lbl">הסבר</span>ייפוי כוח (העצמה) ניתן למי שסומכים עליו — <b>קבוצת הפנים</b>: אמון, אחריות ומשימות חשובות.</div>
+  </div>
+
+  <div class="q" data-n="35" data-correct="3" data-topic="fiedler">
+    <div class="q-head"><div class="q-num">35</div>
+      <p class="q-text">עפ״י המאמר של פידלר (״מתי להנהיג ומתי לסגת״), אינטליגנציית המנהיג: <span class="topic">פידלר ותלות</span></p>
+    </div>
+    <div class="opts">
+      <button class="opt" type="button"><span class="letter">א</span>תמיד חשובה</button>
+      <button class="opt" type="button"><span class="letter">ב</span>לא חשובה כלל</button>
+      <button class="opt" type="button"><span class="letter">ג</span>חשובה רק במצבי מתח שנגרמו כתוצאה משינוי ארגוני</button>
+      <button class="opt" type="button"><span class="letter">ד</span>יעילה במקרה שהמנהיג סמכותי ויחסיו עם כפיפיו לא מתוחים</button>
+    </div>
+    <div class="explain"><span class="lbl">הסבר</span>תורת המשאבים הקוגניטיביים: אינטליגנציה תורמת כשהמנהיג <b>מכוון־סמכותי והיחסים נטולי מתח</b>; תחת לחץ — דווקא הניסיון קובע, והאינטליגנציה ״נחסמת״.</div>
+  </div>
+
+  <div class="q" data-n="36" data-correct="3" data-topic="articles">
+    <div class="q-head"><div class="q-num">36</div>
+      <p class="q-text">לפי אחד המאמרים, אחת הסיבות הבולטות ביותר למספר הנמוך של נשים בעמדות ניהוליות היא: <span class="topic">מאמרים</span></p>
+    </div>
+    <div class="opts">
+      <button class="opt" type="button"><span class="letter">א</span>ביטחון עצמי נמוך</button>
+      <button class="opt" type="button"><span class="letter">ב</span>חרדות גבוהות</button>
+      <button class="opt" type="button"><span class="letter">ג</span>משכורות נמוכות</button>
+      <button class="opt" type="button"><span class="letter">ד</span>ניגוד תפקידים</button>
+    </div>
+    <div class="explain"><span class="lbl">הסבר</span><b>ניגוד תפקידים</b>: ההתנגשות בין הציפיות החברתיות מ״תפקיד האישה״ לבין דרישות ״תפקיד המנהל״ — לא חסך ביכולת או בביטחון.</div>
+  </div>
+
+  <div class="q" data-n="37" data-correct="1" data-topic="articles">
+    <div class="q-head"><div class="q-num">37</div>
+      <p class="q-text">עפ״י אותו מאמר, ישנם הבדלים ____ בין מנהיגוֹת למנהיגים: <span class="topic">מאמרים</span></p>
+    </div>
+    <div class="opts">
+      <button class="opt" type="button"><span class="letter">א</span>גדולים</button>
+      <button class="opt" type="button"><span class="letter">ב</span>מעטים</button>
+      <button class="opt" type="button"><span class="letter">ג</span>תלוי מצב</button>
+      <button class="opt" type="button"><span class="letter">ד</span>אף תשובה אינה נכונה</button>
+    </div>
+    <div class="explain"><span class="lbl">הסבר</span>הממצא המרכזי: בפועל ההבדלים בין מנהיגות למנהיגים <b>מעטים</b> — הסטראוטיפ גדול מהמציאות.</div>
+  </div>
+
+  <div class="q" data-n="38" data-correct="0" data-topic="charisma">
+    <div class="q-head"><div class="q-num">38</div>
+      <p class="q-text">למנהיגים כריזמטיים נעדרים (מרוחקים) ישנה השפעה ניכרת על כפיפים כתוצאה מ: <span class="topic">כריזמטית</span></p>
+    </div>
+    <div class="opts">
+      <button class="opt" type="button"><span class="letter">א</span>האמונה העיוורת של הכפיפים במנהיגים</button>
+      <button class="opt" type="button"><span class="letter">ב</span>רשת התקשורת המפותחת של המנהיג</button>
+      <button class="opt" type="button"><span class="letter">ג</span>הפחד של הכפיפים מהתנתקות ממנהיגם</button>
+      <button class="opt" type="button"><span class="letter">ד</span>תופעת החשיבה הקבוצתית</button>
+    </div>
+    <div class="explain"><span class="lbl">הסבר</span>מנהיג כריזמטי מרוחק/נעדר משפיע דרך <b>האמונה העיוורת</b> שהמונהגים מייחסים לו — הדמות גדולה מהאדם, והמרחק רק מגדיל אותה.</div>
+  </div>
+
+  <div class="q" data-n="39" data-correct="0" data-topic="meatzevet">
+    <div class="q-head"><div class="q-num">39</div>
+      <p class="q-text">כיום יש נטייה לפתח בארגונים מנהיגות: <span class="topic">מעצבת ועסקית</span></p>
+    </div>
+    <div class="opts">
+      <button class="opt" type="button"><span class="letter">א</span>מעצבת</button>
+      <button class="opt" type="button"><span class="letter">ב</span>תלות</button>
+      <button class="opt" type="button"><span class="letter">ג</span>בין אישית</button>
+      <button class="opt" type="button"><span class="letter">ד</span>משימתית</button>
+    </div>
+    <div class="explain"><span class="lbl">הסבר</span>המגמה הארגונית היום: פיתוח מנהיגות <b>מעצבת</b> — חזון, העצמה ופיתוח אנשים. (מקביל לשאלה 8 במבחן 2015.)</div>
+  </div>
+
+  <div class="q" data-n="40" data-correct="3" data-topic="traits">
+    <div class="q-head"><div class="q-num">40</div>
+      <p class="q-text">כל תוכנית יעילה של אימון והדרכת מנהיגים חייבת לכלול: <span class="topic">הכשרה</span></p>
+    </div>
+    <div class="opts">
+      <button class="opt" type="button"><span class="letter">א</span>תגמולים למנהיגים</button>
+      <button class="opt" type="button"><span class="letter">ב</span>חיקוי מודלים</button>
+      <button class="opt" type="button"><span class="letter">ג</span>משוב</button>
+      <button class="opt" type="button"><span class="letter">ד</span>תשובות א+ב+ג</button>
+    </div>
+    <div class="explain"><span class="lbl">הסבר</span>הכשרה אפקטיבית = <b>חיקוי מודלים + משוב + תגמולים (חיזוק)</b> — כל השלושה יחד. הרצאות לבד לא מספיקות (ראו 23 ו־32).</div>
+  </div>
+
+  <div class="q" data-n="41" data-correct="0" data-topic="lmx">
+    <div class="q-head"><div class="q-num">41</div>
+      <p class="q-text">ניתן להניח שהמנהיג ייתן ייפוי כוח לעובדיו כאשר: <span class="topic">גריין / LMX</span></p>
+    </div>
+    <div class="opts">
+      <button class="opt" type="button"><span class="letter">א</span>המנהיג רוצה ליצור מנהיגים עתידיים בקרב העובדים</button>
+      <button class="opt" type="button"><span class="letter">ב</span>המטלה אינה מובנת</button>
+      <button class="opt" type="button"><span class="letter">ג</span>היחסים בין המנהיג לעובדים פורמליים</button>
+      <button class="opt" type="button"><span class="letter">ד</span>העובדים לא מזוהים עם הארגון ויעדיו</button>
+    </div>
+    <div class="explain"><span class="lbl">הסבר</span>מעצימים כשהמטרה היא <b>לגדל מנהיגים עתידיים</b> — ובתנאי אמון והזדהות עם הארגון. יחסים פורמליים וחוסר הזדהות הם בדיוק התנאים שבהם לא מאצילים.</div>
+  </div>
+
+  <div class="q" data-n="42" data-correct="3" data-topic="charisma">
+    <div class="q-head"><div class="q-num">42</div>
+      <p class="q-text">הרגשת אחדות בקרב העובדים ומנהיגם עלולה להוביל ל: <span class="topic">כריזמטית</span></p>
+    </div>
+    <div class="opts">
+      <button class="opt" type="button"><span class="letter">א</span>התמרמרות קולקטיבית של העובדים כלפי מנהיגם</button>
+      <button class="opt" type="button"><span class="letter">ב</span>שיתוף פעולה מתמיד עם המנהיג</button>
+      <button class="opt" type="button"><span class="letter">ג</span>חשיבה לטווח קצר</button>
+      <button class="opt" type="button"><span class="letter">ד</span>חשיבה קבוצתית</button>
+    </div>
+    <div class="explain"><span class="lbl">הסבר</span>המילה ״עלולה״ מסמנת סכנה: לכידות־יתר סביב מנהיג → <b>חשיבה קבוצתית</b> — קונפורמיות, השתקת ספקות והחלטות גרועות.</div>
+  </div>
+
+  <div class="q" data-n="43" data-correct="0" data-topic="articles">
+    <div class="q-head"><div class="q-num">43</div>
+      <p class="q-text">ע״פ המאמר ״תכנון אסטרטגי לאיכות ככוח מניע״ — מהו אחד היסודות המוזכרים של תוכנית אסטרטגית לאיכות? <span class="topic">מאמרים</span></p>
+    </div>
+    <div class="opts">
+      <button class="opt" type="button"><span class="letter">א</span>גיבוש חזון</button>
+      <button class="opt" type="button"><span class="letter">ב</span>גיבוש עובדים</button>
+      <button class="opt" type="button"><span class="letter">ג</span>גיבוש הנהלה</button>
+      <button class="opt" type="button"><span class="letter">ד</span>גיבוש צוות</button>
+    </div>
+    <div class="explain"><span class="lbl">הסבר</span>היסוד הראשון בתוכנית אסטרטגית לאיכות: <b>גיבוש חזון</b> — ממנו נגזרים היעדים והתוכנית.</div>
+  </div>
+
+  <div class="q" data-n="44" data-correct="1" data-topic="traits">
+    <div class="q-head"><div class="q-num">44</div>
+      <p class="q-text">אם תאוריית התכונות תקפה, אזי: <span class="topic">תכונות</span></p>
+    </div>
+    <div class="opts">
+      <button class="opt" type="button"><span class="letter">א</span>צריך להדריך מנהלים כדי שיהפכו למנהיגים</button>
+      <button class="opt" type="button"><span class="letter">ב</span>אנשים נולדים להיות מנהיגים</button>
+      <button class="opt" type="button"><span class="letter">ג</span>צריך לפתח מנהיגות בארגונים</button>
+      <button class="opt" type="button"><span class="letter">ד</span>צריך לפתח מנהיגות כחלק מתרבות ארגונית</button>
+    </div>
+    <div class="explain"><span class="lbl">הסבר</span>אם תכונות מולדות קובעות מנהיגות — <b>מנהיגים נולדים, לא נוצרים</b>, ואין טעם בהדרכה ופיתוח. כל שאר המסיחים מניחים שמנהיגות נרכשת.</div>
+  </div>
+
+  <div class="q" data-n="45" data-correct="3" data-topic="behavior">
+    <div class="q-head"><div class="q-num">45</div>
+      <p class="q-text">בדרך כלל, להתנהגות משימתית יש השפעה על: <span class="topic">התנהגות</span></p>
+    </div>
+    <div class="opts">
+      <button class="opt" type="button"><span class="letter">א</span>ציפיות העובד</button>
+      <button class="opt" type="button"><span class="letter">ב</span>סיפוק העובד</button>
+      <button class="opt" type="button"><span class="letter">ג</span>התחשבות העובד</button>
+      <button class="opt" type="button"><span class="letter">ד</span>תפוקת העובד (יעדים)</button>
+    </div>
+    <div class="explain"><span class="lbl">הסבר</span>הצימוד הקלאסי: משימתיות (יוזם מבנה) ↔ <b>תפוקה ויעדים</b>; מתחשבת ↔ שביעות רצון וסיפוק.</div>
+  </div>
+
+  <div class="q" data-n="46" data-correct="0" data-topic="vroom">
+    <div class="q-head"><div class="q-num">46</div>
+      <p class="q-text">בתאוריית קבלת ההחלטות של ורום־יטון, 5 סגנונות קבלת ההחלטות נבדלים זה מזה ב: <span class="topic">ורום־יטון</span></p>
+    </div>
+    <div class="opts">
+      <button class="opt" type="button"><span class="letter">א</span>מידת שיתוף העובדים</button>
+      <button class="opt" type="button"><span class="letter">ב</span>הזמן הנדרש לקבלת ההחלטות</button>
+      <button class="opt" type="button"><span class="letter">ג</span>איכות ההחלטה</button>
+      <button class="opt" type="button"><span class="letter">ד</span>כל התשובות</button>
+    </div>
+    <div class="explain"><span class="lbl">הסבר</span>הציר המגדיר את הרצף <span dir="ltr">AI→AII→CI→CII→G</span> הוא <b>מידת שיתוף הכפיפים</b>. זמן ואיכות הם שיקולים בבחירת הסגנון — לא מה שמבדיל בין הסגנונות עצמם.</div>
+  </div>
+
+  <div class="q" data-n="47" data-correct="2" data-topic="behavior">
+    <div class="q-head"><div class="q-num">47</div>
+      <p class="q-text">מנהיג ____ נוטה להדגיש גם את המשימה וגם את צרכי העובדים: <span class="topic">התנהגות</span></p>
+    </div>
+    <div class="opts">
+      <button class="opt" type="button"><span class="letter">א</span><span dir="ltr">9,1</span></button>
+      <button class="opt" type="button"><span class="letter">ב</span><span dir="ltr">1,9</span></button>
+      <button class="opt" type="button"><span class="letter">ג</span><span dir="ltr">9,9</span></button>
+      <button class="opt" type="button"><span class="letter">ד</span><span dir="ltr">5,5</span></button>
+    </div>
+    <div class="explain"><span class="lbl">הסבר</span><span dir="ltr">9,9</span> — ״ניהול צוות״ ברשת של בלייק ומוטון: מקסימום משימה ומקסימום אנשים. (<span dir="ltr">9,1</span> משימה בלבד, <span dir="ltr">1,9</span> אנשים בלבד, <span dir="ltr">5,5</span> פשרה.)</div>
+  </div>
+
+  <div class="q" data-n="48" data-correct="1" data-topic="traits">
+    <div class="q-head"><div class="q-num">48</div>
+      <p class="q-text">בהווה, הדעה הרווחת לגבי חשיבות תכונותיו של המנהיג היא: <span class="topic">תכונות</span></p>
+    </div>
+    <div class="opts">
+      <button class="opt" type="button"><span class="letter">א</span>תכונותיו הן היסוד החשוב ביותר בקביעת יעילותו</button>
+      <button class="opt" type="button"><span class="letter">ב</span>תכונותיו צריכות להילקח בחשבון כשחוקרים מנהיגות יעילה</button>
+      <button class="opt" type="button"><span class="letter">ג</span>לתכונותיו אין קשר בקביעת יעילותו</button>
+      <button class="opt" type="button"><span class="letter">ד</span>אף אחת מהתשובות אינה נכונה</button>
+    </div>
+    <div class="explain"><span class="lbl">הסבר</span>העמדה המאוזנת של היום: תכונות אינן הכול — אבל <b>יש להביאן בחשבון</b> כחלק מהתמונה (לצד התנהגות ומצב).</div>
+  </div>
+
+  <div class="q" data-n="49" data-correct="3" data-topic="behavior">
+    <div class="q-head"><div class="q-num">49</div>
+      <p class="q-text">במחקרי אוהיו ומישיגן שחקרו את התנהגות המנהיג, נמצא כי סגנון ההתנהגות הקשור לתפוקה גבוהה הוא: <span class="badge-trap">⚠️ לבדוק במקור</span> <span class="topic">התנהגות</span></p>
+    </div>
+    <div class="opts">
+      <button class="opt" type="button"><span class="letter">א</span>נמוך בהתנהגות מתחשבת ונמוך בהתנהגות יוזמת</button>
+      <button class="opt" type="button"><span class="letter">ב</span>נמוך בהתנהגות מתחשבת וגבוה בהתנהגות יוזמת</button>
+      <button class="opt" type="button"><span class="letter">ג</span>גבוה בהתנהגות מתחשבת ונמוך בהתנהגות יוזמת</button>
+      <button class="opt" type="button"><span class="letter">ד</span>אף תשובה אינה נכונה</button>
+    </div>
+    <div class="explain"><span class="lbl">הסבר</span>הסגנון שנקשר לתפוקה גבוהה לאורך זמן הוא <b>גבוה־גבוה (<span dir="ltr">9,9</span>)</b> — צירוף שאינו בין המסיחים, ולכן ״אף תשובה״. המלכודת היא ב׳: יוזמת אכן קשורה לתפוקה, אבל הכריכה ״נמוך במתחשבת״ אינה חלק מהממצא.</div>
+  </div>
+
+  <div class="q" data-n="50" data-correct="3" data-topic="charisma">
+    <div class="q-head"><div class="q-num">50</div>
+      <p class="q-text">ההיסטוריה מראה כי למנהיגים כריזמטיים ישנם גם חסרונות רבים. איזה חסרון אינו מוזכר בכתבים לגבי מנהיגות כריזמטית? <span class="topic">כריזמטית</span></p>
+    </div>
+    <div class="opts">
+      <button class="opt" type="button"><span class="letter">א</span>חשיבה קבוצתית</button>
+      <button class="opt" type="button"><span class="letter">ב</span>פועלים לפני שחושבים</button>
+      <button class="opt" type="button"><span class="letter">ג</span>אגוצנטריים</button>
+      <button class="opt" type="button"><span class="letter">ד</span>חוסר גמישות</button>
+    </div>
+    <div class="explain"><span class="lbl">הסבר</span>החסרונות המתועדים: חשיבה קבוצתית, אימפולסיביות (״פועלים לפני שחושבים״) ואגוצנטריות. <b>חוסר גמישות</b> אינו ברשימה — הכריזמטי דווקא זריז ומשתנה.</div>
+  </div>
+
+  <div class="q" data-n="51" data-correct="2" data-topic="charisma">
+    <div class="q-head"><div class="q-num">51</div>
+      <p class="q-text">מנהיגים כריזמטיים מציעים לקהל שלהם: <span class="topic">כריזמטית</span></p>
+    </div>
+    <div class="opts">
+      <button class="opt" type="button"><span class="letter">א</span>תגמולים חומריים מיידיים</button>
+      <button class="opt" type="button"><span class="letter">ב</span>תגמולים חומריים לטווח הארוך</button>
+      <button class="opt" type="button"><span class="letter">ג</span>חזון לגבי עתיד טוב יותר</button>
+      <button class="opt" type="button"><span class="letter">ד</span>אף אחת מהתשובות</button>
+    </div>
+    <div class="explain"><span class="lbl">הסבר</span>הסחורה של הכריזמטי היא <b>חזון לעתיד טוב יותר</b> — לא תגמול חומרי. תגמולים הם המטבע של המנהיגות העסקית.</div>
+  </div>
+
+  <div class="q" data-n="52" data-correct="2" data-topic="house">
+    <div class="q-head"><div class="q-num">52</div>
+      <p class="q-text">על פי האוס, מנהיג יעיל צריך להיות: <span class="topic">נתיב היעדים</span></p>
+    </div>
+    <div class="opts">
+      <button class="opt" type="button"><span class="letter">א</span>גבוה במשימתיות ונמוך בחברתיות</button>
+      <button class="opt" type="button"><span class="letter">ב</span>גבוה בחברתיות ונמוך במשימתיות</button>
+      <button class="opt" type="button"><span class="letter">ג</span>גבוה במשימתיות וגבוה בחברתיות</button>
+      <button class="opt" type="button"><span class="letter">ד</span>אף אחת מהתשובות</button>
+    </div>
+    <div class="explain"><span class="lbl">הסבר</span>האוס: מנהיג יעיל <b>גבוה גם וגם</b> — משימתי וחברתי, ומחליף ביניהם לפי המצב. ההנגדה החשובה: אצל פידלר זה או־או (ראו שאלה 87).</div>
+  </div>
+
+  <div class="q" data-n="53" data-correct="1" data-topic="house">
+    <div class="q-head"><div class="q-num">53</div>
+      <p class="q-text">על פי האוס, כאשר המטלה משעממת — התנהגות ____ מצד המנהיג תהיה הכי יעילה: <span class="topic">נתיב היעדים</span></p>
+    </div>
+    <div class="opts">
+      <button class="opt" type="button"><span class="letter">א</span>ישירה (<span dir="ltr">Directive</span>)</button>
+      <button class="opt" type="button"><span class="letter">ב</span>תומכת (<span dir="ltr">Supportive</span>)</button>
+      <button class="opt" type="button"><span class="letter">ג</span>שיתופית (<span dir="ltr">Participative</span>)</button>
+      <button class="opt" type="button"><span class="letter">ד</span>הישגית (<span dir="ltr">Achievement</span>)</button>
+    </div>
+    <div class="explain"><span class="lbl">הסבר</span>מטלה משעממת/שוחקת → התנהגות <b>תומכת</b> שמפצה רגשית. הצימוד ההפוך: מטלה עמומה → ישירה (מפחיתה אי־ודאות, ראו 13).</div>
+  </div>
+
+  <div class="q" data-n="54" data-correct="0" data-topic="house">
+    <div class="q-head"><div class="q-num">54</div>
+      <p class="q-text">ע״פ האוס, כאשר אין התאמה בין המנהיג למצב: <span class="badge-trap">⚠️ לבדוק במקור</span> <span class="topic">נתיב היעדים</span></p>
+    </div>
+    <div class="opts">
+      <button class="opt" type="button"><span class="letter">א</span>המנהיג צריך להתאים את עצמו למצב</button>
+      <button class="opt" type="button"><span class="letter">ב</span>המנהיג צריך להתאים את המצב אליו</button>
+      <button class="opt" type="button"><span class="letter">ג</span>המנהיג צריך להיות תומך</button>
+      <button class="opt" type="button"><span class="letter">ד</span>המנהיג צריך להיות יותר הישגי</button>
+    </div>
+    <div class="explain"><span class="lbl">הסבר</span>זו נקודת המחלוקת הגדולה: האוס — המנהיג גמיש ו<b>מתאים את עצמו</b> למצב; פידלר (שאלה 80) — הסגנון קבוע, ולכן משנים את המצב. זכור את הצמד 54↔80 ולא תתבלבל.</div>
+  </div>
+
+  <div class="q" data-n="55" data-correct="1" data-topic="vroom">
+    <div class="q-head"><div class="q-num">55</div>
+      <p class="q-text">ורום־יטון, בתאוריית ״קבלת החלטות״, ממליצים לכל מנהיג להשתמש כמה שיותר בקבלת החלטות ____ <span class="topic">ורום־יטון</span></p>
+    </div>
+    <div class="opts">
+      <button class="opt" type="button"><span class="letter">א</span>אוטוקרטית</button>
+      <button class="opt" type="button"><span class="letter">ב</span>שיתופית / קבוצתית</button>
+      <button class="opt" type="button"><span class="letter">ג</span>ייעוצית</button>
+      <button class="opt" type="button"><span class="letter">ד</span>אף תשובה אינה נכונה</button>
+    </div>
+    <div class="explain"><span class="lbl">הסבר</span>כשהתנאים מאפשרים — ההמלצה היא הסגנון <b>השיתופי/קבוצתי</b>: מגדיל מחויבות ליישום ומפתח את העובדים. (מסיח ג׳ הושלם — היה חסר במאגר המקורי.)</div>
+  </div>
+
+  <div class="q" data-n="56" data-correct="2" data-topic="vroom">
+    <div class="q-head"><div class="q-num">56</div>
+      <p class="q-text">ההבדל בין <span dir="ltr">CI</span> ל־<span dir="ltr">CII</span> בתאוריית ״קבלת ההחלטות״ של ורום־יטון הוא: <span class="topic">ורום־יטון</span></p>
+    </div>
+    <div class="opts">
+      <button class="opt" type="button"><span class="letter">א</span><span dir="ltr">CI</span> — המנהיג מחליט, <span dir="ltr">CII</span> — הכפיפים מחליטים</button>
+      <button class="opt" type="button"><span class="letter">ב</span><span dir="ltr">CI</span> — למנהיג יש את כל המידע, <span dir="ltr">CII</span> — לכפיפים יש את כל המידע</button>
+      <button class="opt" type="button"><span class="letter">ג</span><span dir="ltr">CI</span> — המנהיג מתייעץ עם כל כפיף לחוד, <span dir="ltr">CII</span> — המנהיג מתייעץ עם הכפיפים כקבוצה</button>
+      <button class="opt" type="button"><span class="letter">ד</span><span dir="ltr">CI</span> — המנהיג משימתי, <span dir="ltr">CII</span> — המנהיג חברתי</button>
+    </div>
+    <div class="explain"><span class="lbl">הסבר</span><span dir="ltr">CI</span>: התייעצות <b>אחד־על־אחד</b>; <span dir="ltr">CII</span>: התייעצות <b>קבוצתית</b>. בשני המקרים ההחלטה נשארת אצל המנהיג — זה מה שמבדיל ייעוצי מקבוצתי (<span dir="ltr">G</span>).</div>
+  </div>
+
+  <div class="q" data-n="57" data-correct="0" data-topic="vroom">
+    <div class="q-head"><div class="q-num">57</div>
+      <p class="q-text">על פי ורום־יטון: אם קבלת ההחלטה ע״י הכפיפים הכרחית ליישומה — המנהיג בוודאי לא צריך להשתמש ב: <span class="topic">ורום־יטון</span></p>
+    </div>
+    <div class="opts">
+      <button class="opt" type="button"><span class="letter">א</span><span dir="ltr">AI</span></button>
+      <button class="opt" type="button"><span class="letter">ב</span><span dir="ltr">CI</span></button>
+      <button class="opt" type="button"><span class="letter">ג</span><span dir="ltr">CII</span></button>
+      <button class="opt" type="button"><span class="letter">ד</span><span dir="ltr">G</span></button>
+    </div>
+    <div class="explain"><span class="lbl">הסבר</span>כשקבלת הכפיפים קריטית ליישום, החלטה לבד (<span dir="ltr">AI</span>) פסולה מראש — אין להם שום בעלות עליה. הצמד המשלים: כשהם לא מזוהים עם היעדים — הפסולה היא <span dir="ltr">G</span> (שאלה 15).</div>
+  </div>
+
+  <div class="q" data-n="58" data-correct="0" data-topic="vroom">
+    <div class="q-head"><div class="q-num">58</div>
+      <p class="q-text">מבחינה מחקרית, תאוריית קבלת ההחלטות של ורום־יטון: <span class="topic">ורום־יטון</span></p>
+    </div>
+    <div class="opts">
+      <button class="opt" type="button"><span class="letter">א</span>קיבלה תמיכה במחקרים</button>
+      <button class="opt" type="button"><span class="letter">ב</span>לא קיבלה תמיכה במחקרים</button>
+      <button class="opt" type="button"><span class="letter">ג</span>לא ניתנת למדידה</button>
+      <button class="opt" type="button"><span class="letter">ד</span>אף אחת מהתשובות</button>
+    </div>
+    <div class="explain"><span class="lbl">הסבר</span>המודל <b>זכה לתמיכה אמפירית</b>: החלטות שהתקבלו בתוך ״עץ ההחלטה״ הצליחו יותר מהחלטות שחרגו ממנו.</div>
+  </div>
+
+  <div class="q" data-n="59" data-correct="3" data-topic="lmx">
+    <div class="q-head"><div class="q-num">59</div>
+      <p class="q-text">תאוריית אחד על אחד של גריין מתמקדת על: <span class="topic">גריין / LMX</span></p>
+    </div>
+    <div class="opts">
+      <button class="opt" type="button"><span class="letter">א</span>אופי המטלות</button>
+      <button class="opt" type="button"><span class="letter">ב</span>אופי המנהיג</button>
+      <button class="opt" type="button"><span class="letter">ג</span>אופי הכפיפים</button>
+      <button class="opt" type="button"><span class="letter">ד</span>אופי מערכת היחסים בין המנהיג לכל אחד מהכפיפים</button>
+    </div>
+    <div class="explain"><span class="lbl">הסבר</span>היחידה הנחקרת היא <b>הדיאדה</b>: מערכת היחסים של המנהיג עם כל כפיף בנפרד — לא המנהיג, לא הכפיפים ולא המטלה.</div>
+  </div>
+
+  <div class="q" data-n="60" data-correct="2" data-topic="lmx">
+    <div class="q-head"><div class="q-num">60</div>
+      <p class="q-text">גריין, בתאוריית אחד על אחד, מציין שבכל ארגון קיימות שתי קבוצות של כפיפים. איזו קבוצה איננה מוזכרת ע״י גריין? <span class="topic">גריין / LMX</span></p>
+    </div>
+    <div class="opts">
+      <button class="opt" type="button"><span class="letter">א</span>קבוצת פנים</button>
+      <button class="opt" type="button"><span class="letter">ב</span>קבוצת חוץ</button>
+      <button class="opt" type="button"><span class="letter">ג</span>קבוצת משימה</button>
+      <button class="opt" type="button"><span class="letter">ד</span>אף תשובה מהנ״ל</button>
+    </div>
+    <div class="explain"><span class="lbl">הסבר</span>אצל גריין יש רק פנים (<span dir="ltr">IN</span>) וחוץ (<span dir="ltr">OUT</span>). <b>״קבוצת משימה״</b> אינה חלק מהמודל.</div>
+  </div>
+
+  <div class="q" data-n="61" data-correct="1" data-topic="meatzevet">
+    <div class="q-head"><div class="q-num">61</div>
+      <p class="q-text">למנהיגות מעצבת ישנה מגמה ל: <span class="topic">מעצבת ועסקית</span></p>
+    </div>
+    <div class="opts">
+      <button class="opt" type="button"><span class="letter">א</span>יציבות</button>
+      <button class="opt" type="button"><span class="letter">ב</span>שינוי</button>
+      <button class="opt" type="button"><span class="letter">ג</span>אנשים</button>
+      <button class="opt" type="button"><span class="letter">ד</span>משימות</button>
+    </div>
+    <div class="explain"><span class="lbl">הסבר</span>גם המעצבת מכוונת <b>שינוי</b> — אבל שינוי מקדים ויזום (מניעת המשבר), לעומת הכריזמטית שמגיבה למשבר קיים.</div>
+  </div>
+
+  <div class="q" data-n="62" data-correct="0" data-topic="meatzevet">
+    <div class="q-head"><div class="q-num">62</div>
+      <p class="q-text">מנהיגות מעצבת פועלת על: <span class="topic">מעצבת ועסקית</span></p>
+    </div>
+    <div class="opts">
+      <button class="opt" type="button"><span class="letter">א</span>הרציונל של הכפיפים</button>
+      <button class="opt" type="button"><span class="letter">ב</span>הרגשות של הכפיפים</button>
+      <button class="opt" type="button"><span class="letter">ג</span>המוטיבציה של הכפיפים</button>
+      <button class="opt" type="button"><span class="letter">ד</span>הביטחון העצמי של הכפיפים</button>
+    </div>
+    <div class="explain"><span class="lbl">הסבר</span>בהבחנה של הקורס: הכריזמטי פועל על <b>הרגש</b>; המעצב — <b>רציונלי ופרואקטיבי</b>, כולל אתגר אינטלקטואלי מתוך ה־<span dir="ltr">I4</span>. (מוטיבציה וביטחון הם תוצרים, לא הערוץ.)</div>
+  </div>
+
+  <div class="q" data-n="63" data-correct="0" data-topic="koach">
+    <div class="q-head"><div class="q-num">63</div>
+      <p class="q-text">כוח הזדהות הוא סוג של: <span class="topic">כוח והשפעה</span></p>
+    </div>
+    <div class="opts">
+      <button class="opt" type="button"><span class="letter">א</span>כוח אישי</button>
+      <button class="opt" type="button"><span class="letter">ב</span>כוח עמדה</button>
+      <button class="opt" type="button"><span class="letter">ג</span>כוח היררכי</button>
+      <button class="opt" type="button"><span class="letter">ד</span>כוח רציונלי</button>
+    </div>
+    <div class="explain"><span class="lbl">הסבר</span>הזדהות (<span dir="ltr">Referent</span>) = <b>כוח אישי</b> — נובע מהאדם ומהמשיכה אליו, לא מהתפקיד. (זו בדיוק שאלה 5 מחלק ב׳ של מבחן 2015 — בכיוון ההפוך.)</div>
+  </div>
+
+  <div class="q" data-n="64" data-correct="3" data-topic="vroom">
+    <div class="q-head"><div class="q-num">64</div>
+      <p class="q-text">בסימולציה ״מה הבעיה, מה הפתרון״ — ההבדלים בין הקבוצות נבעו: <span class="topic">נאס״א ותקשורת</span></p>
+    </div>
+    <div class="opts">
+      <button class="opt" type="button"><span class="letter">א</span>ממספר חברי הקבוצה</button>
+      <button class="opt" type="button"><span class="letter">ב</span>ממספר הבעיות שניתנו לקבוצה</button>
+      <button class="opt" type="button"><span class="letter">ג</span>ממספר הפתרונות שניתנו לקבוצה</button>
+      <button class="opt" type="button"><span class="letter">ד</span>מצורת התקשורת הארגונית</button>
+    </div>
+    <div class="explain"><span class="lbl">הסבר</span>המשתנה בסימולציה היה <b>צורת התקשורת</b>: רשת פתוחה (יהלום/כוכב) מול היררכית — והוא שקבע את איכות הפתרון.</div>
+  </div>
+
+  <div class="q" data-n="65" data-correct="0" data-topic="articles">
+    <div class="q-head"><div class="q-num">65</div>
+      <p class="q-text">על פי המאמר ״מגמות והתפתחויות במהות התפקיד הניהולי״ — בחוזה הפסיכולוגי החדש: <span class="topic">מאמרים</span></p>
+    </div>
+    <div class="opts">
+      <button class="opt" type="button"><span class="letter">א</span>המנהל יהיה מחויב יותר ליושר והאצלת סמכויות</button>
+      <button class="opt" type="button"><span class="letter">ב</span>המנהל יהיה מחויב יותר להצבת יעדים קצרי מועד</button>
+      <button class="opt" type="button"><span class="letter">ג</span>המנהל יהיה מחויב יותר להצבת יעדים ארוכי מועד</button>
+      <button class="opt" type="button"><span class="letter">ד</span>המנהל יהיה מחויב יותר לרגיעה תעשייתית</button>
+    </div>
+    <div class="explain"><span class="lbl">הסבר</span>החוזה הפסיכולוגי החדש: <b>יושר, שקיפות והאצלת סמכויות</b> — אמון והעצמה במקום פיקוח וביטחון תעסוקתי.</div>
+  </div>
+
+  <div class="q" data-n="66" data-correct="0" data-topic="articles">
+    <div class="q-head"><div class="q-num">66</div>
+      <p class="q-text">על פי המאמר <span dir="ltr">"Would Women Lead Differently"</span>: <span class="topic">מאמרים</span></p>
+    </div>
+    <div class="opts">
+      <button class="opt" type="button"><span class="letter">א</span>תקרת הזכוכית נוצרת כתוצאה מסטראוטיפים מיידיים</button>
+      <button class="opt" type="button"><span class="letter">ב</span>תקרת הזכוכית נוצרת כתוצאה מהיררכיה ארגונית</button>
+      <button class="opt" type="button"><span class="letter">ג</span>תקרת הזכוכית נוצרת כתוצאה מניהול משימתי</button>
+      <button class="opt" type="button"><span class="letter">ד</span>תקרת הזכוכית נוצרת כתוצאה מניהול חברתי</button>
+    </div>
+    <div class="explain"><span class="lbl">הסבר</span>תקרת הזכוכית נוצרת מ<b>סטראוטיפים מיידיים</b> המופעלים אוטומטית על נשים בהקשר ניהולי — לא ממבנה ולא מסגנון ניהול.</div>
+  </div>
+
+  <div class="q" data-n="67" data-correct="0" data-topic="meatzevet">
+    <div class="q-head"><div class="q-num">67</div>
+      <p class="q-text">מנהיגות שנות ה־2000 משלבת את: <span class="topic">מעצבת ועסקית</span></p>
+    </div>
+    <div class="opts">
+      <button class="opt" type="button"><span class="letter">א</span>המנהיגות המעצבת והמנהיגות העסקית</button>
+      <button class="opt" type="button"><span class="letter">ב</span>המנהיגות הכריזמטית והמנהיגות העסקית</button>
+      <button class="opt" type="button"><span class="letter">ג</span>המנהיגות הכריזמטית והמנהיגות המעצבת</button>
+      <button class="opt" type="button"><span class="letter">ד</span>אף אחת מהתשובות הנ״ל</button>
+    </div>
+    <div class="explain"><span class="lbl">הסבר</span>השילוב המנצח: <b>מעצבת + עסקית</b> — חזון, השראה ופיתוח (מעצבת) לצד תיאום ציפיות ותגמול על ביצועים (עסקית). מנהיג שלם צריך את שתיהן.</div>
+  </div>
+
+  <div class="q" data-n="68" data-correct="1" data-topic="traits">
+    <div class="q-head"><div class="q-num">68</div>
+      <p class="q-text">תאוריית התכונות של מנהיגות מניחה ש: <span class="topic">תכונות</span></p>
+    </div>
+    <div class="opts">
+      <button class="opt" type="button"><span class="letter">א</span>יכולת מנהיגות זו תכונה נרכשת</button>
+      <button class="opt" type="button"><span class="letter">ב</span>יכולת מנהיגות זו תכונה מולדת</button>
+      <button class="opt" type="button"><span class="letter">ג</span>יכולת מנהיגות זו תכונה נרכשת ומולדת</button>
+      <button class="opt" type="button"><span class="letter">ד</span>יכולת מנהיגות היא התכונה החשובה ביותר אצל מנהיגים</button>
+    </div>
+    <div class="explain"><span class="lbl">הסבר</span>הנחת היסוד: מנהיגות <b>מולדת</b> — ״המנהיג נולד״. (ומכאן שאלה 44: אם התאוריה תקפה, אין טעם בהדרכה.)</div>
+  </div>
+
+  <div class="q" data-n="69" data-correct="0" data-topic="traits">
+    <div class="q-head"><div class="q-num">69</div>
+      <p class="q-text">התכונה שנמצאה בעלת המתאם הגבוה ביותר למנהיגות יעילה היא: <span class="topic">תכונות</span></p>
+    </div>
+    <div class="opts">
+      <button class="opt" type="button"><span class="letter">א</span>אינטליגנציה</button>
+      <button class="opt" type="button"><span class="letter">ב</span>ביטחון עצמי</button>
+      <button class="opt" type="button"><span class="letter">ג</span>אסרטיביות</button>
+      <button class="opt" type="button"><span class="letter">ד</span>יצירתיות</button>
+    </div>
+    <div class="explain"><span class="lbl">הסבר</span>בגישת התכונות הקלאסית, <b>אינטליגנציה</b> היא בעלת המתאם הגבוה ביותר. שימו לב להבחנה: במחקרי שנות ה־90 (קירקפטריק ולוק) התכונה המרכזית היא <b>דחף</b> — ראו חלק ב׳ היגד 1.</div>
+  </div>
+
+  <div class="q" data-n="70" data-correct="0" data-topic="meatzevet">
+    <div class="q-head"><div class="q-num">70</div>
+      <p class="q-text">מנהיגות עסקית מתבססת על: <span class="topic">מעצבת ועסקית</span></p>
+    </div>
+    <div class="opts">
+      <button class="opt" type="button"><span class="letter">א</span>חליפין חברתי בין המנהיג לכפיפיו</button>
+      <button class="opt" type="button"><span class="letter">ב</span>תיאום ציפיות בין המנהיג לכפיפיו</button>
+      <button class="opt" type="button"><span class="letter">ג</span>החלפת ידע בין המנהיג לכפיפיו</button>
+      <button class="opt" type="button"><span class="letter">ד</span>אף אחת מהתשובות הנ״ל</button>
+    </div>
+    <div class="explain"><span class="lbl">הסבר</span>עסקית (<span dir="ltr">Transactional</span>) = <b>חליפין</b>: ביצועים תמורת תגמול, עסקה בין המנהיג לכפיפים (הולנדר). תיאום ציפיות הוא כלי בתוך העסקה — לא הבסיס.</div>
+  </div>
+
+  <div class="q" data-n="71" data-correct="1" data-topic="meatzevet">
+    <div class="q-head"><div class="q-num">71</div>
+      <p class="q-text">מנהיגות עסקית מעודדת: <span class="topic">מעצבת ועסקית</span></p>
+    </div>
+    <div class="opts">
+      <button class="opt" type="button"><span class="letter">א</span>התנהגות חברתית</button>
+      <button class="opt" type="button"><span class="letter">ב</span>התנהגות משימתית</button>
+      <button class="opt" type="button"><span class="letter">ג</span>התנהגות ישירה</button>
+      <button class="opt" type="button"><span class="letter">ד</span>אף אחת מהתשובות הנ״ל</button>
+    </div>
+    <div class="explain"><span class="lbl">הסבר</span>תגמול מותנה־ביצועים ממקד את כולם במשימה — המנהיגות העסקית מעודדת <b>התנהגות משימתית</b>.</div>
+  </div>
+
+  <div class="q" data-n="72" data-correct="3" data-topic="koach">
+    <div class="q-head"><div class="q-num">72</div>
+      <p class="q-text">כיום מאמינים שמנהיגות יעילה היא תהליך של השפעה: <span class="topic">כוח והשפעה</span></p>
+    </div>
+    <div class="opts">
+      <button class="opt" type="button"><span class="letter">א</span>חד־כיווני — מהמנהיג לכפיף</button>
+      <button class="opt" type="button"><span class="letter">ב</span>חד־כיווני — מהכפיף למנהיג</button>
+      <button class="opt" type="button"><span class="letter">ג</span>חד־כיווני — בין המנהיג לכפיף</button>
+      <button class="opt" type="button"><span class="letter">ד</span>דו־כיווני — בין המנהיג לכפיפיו</button>
+    </div>
+    <div class="explain"><span class="lbl">הסבר</span>התפיסה כיום: השפעה <b>דו־כיוונית</b> בין מנהיג לכפיפים (חליפין חברתי, הולנדר). מקביל לשאלה 13 במבחן 2015 על בסיסי הכוח. (נוסח מסיח ד׳ תוקן משגיאת סריקה.)</div>
+  </div>
+
+  <div class="q" data-n="73" data-correct="1" data-topic="koach">
+    <div class="q-head"><div class="q-num">73</div>
+      <p class="q-text">כוח העמדה של המנהיג מתבסס על: <span class="topic">כוח והשפעה</span></p>
+    </div>
+    <div class="opts">
+      <button class="opt" type="button"><span class="letter">א</span>אופיו של המנהיג</button>
+      <button class="opt" type="button"><span class="letter">ב</span>מקומו של המנהיג בהיררכיה הארגונית</button>
+      <button class="opt" type="button"><span class="letter">ג</span>אופיים של הכפיפים</button>
+      <button class="opt" type="button"><span class="letter">ד</span>מקומם של הכפיפים בהיררכיה הארגונית</button>
+    </div>
+    <div class="explain"><span class="lbl">הסבר</span>כוח עמדה = <b>המיקום בהיררכיה</b>: תגמול, חוקי וענישה מגיעים עם הכיסא. אופי ואישיות — זה הכוח האישי.</div>
+  </div>
+
+  <div class="q" data-n="74" data-correct="2" data-topic="traits">
+    <div class="q-head"><div class="q-num">74</div>
+      <p class="q-text">כתוצאה ממסקנות תאוריית התכונות, במרכזי הערכה היום משתמשים ב: <span class="topic">הערכה</span></p>
+    </div>
+    <div class="opts">
+      <button class="opt" type="button"><span class="letter">א</span>מבחני אישיות</button>
+      <button class="opt" type="button"><span class="letter">ב</span>מבחני מצב</button>
+      <button class="opt" type="button"><span class="letter">ג</span>א׳ ו־ב׳</button>
+      <button class="opt" type="button"><span class="letter">ד</span>לא א׳ ולא ב׳</button>
+    </div>
+    <div class="explain"><span class="lbl">הסבר</span>מרכזי הערכה משלבים <b>מבחני אישיות ומבחני מצב</b> (סימולציות, דינמיקה קבוצתית) — תכונות + התמודדות עם מצבים משתנים. (ראו חלק ב׳ היגד 28.)</div>
+  </div>
+
+  <div class="q" data-n="75" data-correct="0" data-topic="traits">
+    <div class="q-head"><div class="q-num">75</div>
+      <p class="q-text">במחקרים השונים נמצא כי מוטיבציית המנהיג: <span class="topic">תכונות</span></p>
+    </div>
+    <div class="opts">
+      <button class="opt" type="button"><span class="letter">א</span>חשובה לניבוי מנהיגות יעילה</button>
+      <button class="opt" type="button"><span class="letter">ב</span>לא חשובה לניבוי מנהיגות יעילה</button>
+      <button class="opt" type="button"><span class="letter">ג</span>גורם שולי בניבוי מנהיגות יעילה</button>
+      <button class="opt" type="button"><span class="letter">ד</span>גורם מעכב בניבוי מנהיגות יעילה</button>
+    </div>
+    <div class="explain"><span class="lbl">הסבר</span>מוטיבציה/דחף של המנהיג — <b>המנבא המרכזי</b> של מנהיגות אפקטיבית במחקרי שנות ה־90 (קירקפטריק ולוק): הישגיות, אנרגיה, נחישות ויוזמה.</div>
+  </div>
+
+  <div class="q" data-n="76" data-correct="2" data-topic="behavior">
+    <div class="q-head"><div class="q-num">76</div>
+      <p class="q-text">תאוריות ההתנהגות מבטאות כי מנהיג יעיל הוא מנהיג בעל: <span class="topic">התנהגות</span></p>
+    </div>
+    <div class="opts">
+      <button class="opt" type="button"><span class="letter">א</span><span dir="ltr">1,1</span></button>
+      <button class="opt" type="button"><span class="letter">ב</span><span dir="ltr">5,5</span></button>
+      <button class="opt" type="button"><span class="letter">ג</span><span dir="ltr">9,9</span></button>
+      <button class="opt" type="button"><span class="letter">ד</span>אף אחת מהתשובות הנ״ל</button>
+    </div>
+    <div class="explain"><span class="lbl">הסבר</span>הכתרת גישת ההתנהגות: <b><span dir="ltr">9,9</span></b> — ניהול צוות, גבוה במשימה וגבוה באנשים.</div>
+  </div>
+
+  <div class="q" data-n="77" data-correct="1" data-topic="behavior">
+    <div class="q-head"><div class="q-num">77</div>
+      <p class="q-text">מחקרי אוהיו ומישיגן חילקו את התנהגות המנהיג לשתי קבוצות, והן: <span class="topic">התנהגות</span></p>
+    </div>
+    <div class="opts">
+      <button class="opt" type="button"><span class="letter">א</span>התנהגות אקטיבית והתנהגות פסיבית</button>
+      <button class="opt" type="button"><span class="letter">ב</span>התנהגות משימתית והתנהגות מתחשבת</button>
+      <button class="opt" type="button"><span class="letter">ג</span>התנהגות אישית והתנהגות קבוצתית</button>
+      <button class="opt" type="button"><span class="letter">ד</span>התנהגות ״גברית״ והתנהגות ״נשית״</button>
+    </div>
+    <div class="explain"><span class="lbl">הסבר</span>שני הצירים: <b>משימתית</b> (יוזם מבנה) ו<b>מתחשבת</b> (<span dir="ltr">Consideration</span>) — הבסיס לשאלון ה־<span dir="ltr">LBDQ</span>.</div>
+  </div>
+
+  <div class="q" data-n="78" data-correct="3" data-topic="behavior">
+    <div class="q-head"><div class="q-num">78</div>
+      <p class="q-text">אחת המסקנות העיקריות של תיאוריית ההתנהגות היא: <span class="topic">התנהגות</span></p>
+    </div>
+    <div class="opts">
+      <button class="opt" type="button"><span class="letter">א</span>התנהגות משימתית היא החשובה ביותר למנהיגות יעילה</button>
+      <button class="opt" type="button"><span class="letter">ב</span>התנהגות חברתית היא החשובה ביותר למנהיגות יעילה</button>
+      <button class="opt" type="button"><span class="letter">ג</span>התנהגות עקבית היא החשובה ביותר למנהיגות יעילה</button>
+      <button class="opt" type="button"><span class="letter">ד</span>אף תשובה אינה נכונה</button>
+    </div>
+    <div class="explain"><span class="lbl">הסבר</span>המסקנה היא <b>השילוב</b> — גבוה־גבוה (<span dir="ltr">9,9</span>), לא עליונות של ציר יחיד ולא עקביות. אף מסיח לא אומר את זה → ד. (אותו היגיון כמו שאלה 49.)</div>
+  </div>
+
+  <div class="q" data-n="79" data-correct="1" data-topic="fiedler">
+    <div class="q-head"><div class="q-num">79</div>
+      <p class="q-text">מהו המתאם בין שנות ניסיונו של המנהיג לביצועיו? <span class="topic">פידלר ותלות</span></p>
+    </div>
+    <div class="opts">
+      <button class="opt" type="button"><span class="letter">א</span>חיובי גבוה</button>
+      <button class="opt" type="button"><span class="letter">ב</span>חיובי נמוך</button>
+      <button class="opt" type="button"><span class="letter">ג</span>שלילי גבוה</button>
+      <button class="opt" type="button"><span class="letter">ד</span>שלילי נמוך</button>
+    </div>
+    <div class="explain"><span class="lbl">הסבר</span>הממצא המפתיע של פידלר: מתאם <b>חיובי נמוך</b> (כמעט אפסי) בין ותק לביצועים. ניסיון עוזר בעיקר תחת לחץ — לא באופן גורף.</div>
+  </div>
+
+  <div class="q" data-n="80" data-correct="1" data-topic="fiedler">
+    <div class="q-head"><div class="q-num">80</div>
+      <p class="q-text">כאשר אין התאמה בין המנהיג למצב, פידלר מאמין כי: <span class="topic">פידלר ותלות</span></p>
+    </div>
+    <div class="opts">
+      <button class="opt" type="button"><span class="letter">א</span>המנהיג צריך להתאים את עצמו למצב</button>
+      <button class="opt" type="button"><span class="letter">ב</span>המנהיג צריך להתאים את המצב אליו</button>
+      <button class="opt" type="button"><span class="letter">ג</span>המנהיג צריך להיות יותר חברתי</button>
+      <button class="opt" type="button"><span class="letter">ד</span>המנהיג צריך להיות יותר משימתי</button>
+    </div>
+    <div class="explain"><span class="lbl">הסבר</span>פידלר: הסגנון <b>קבוע</b> (<span dir="ltr">LPC</span>), ולכן <b>משנים את המצב</b> — הנדסת מצב. הראי של שאלה 54 (האוס: מתאים את עצמו).</div>
+  </div>
+
+  <div class="q" data-n="81" data-correct="0" data-topic="vroom">
+    <div class="q-head"><div class="q-num">81</div>
+      <p class="q-text">התרגיל נאס״א שנערך בכיתה בחן: <span class="topic">נאס״א ותקשורת</span></p>
+    </div>
+    <div class="opts">
+      <button class="opt" type="button"><span class="letter">א</span>תהליכי קבלת החלטות</button>
+      <button class="opt" type="button"><span class="letter">ב</span>תקשורת ״כוכב״</button>
+      <button class="opt" type="button"><span class="letter">ג</span>התנהגות משימתית</button>
+      <button class="opt" type="button"><span class="letter">ד</span>התנהגות חברתית</button>
+    </div>
+    <div class="explain"><span class="lbl">הסבר</span>נאס״א בחן <b>תהליכי קבלת החלטות</b>: דירוג יחיד מול דירוג קבוצתי — סינרגיה (<span dir="ltr">1+1&gt;2</span>) ורשתות תקשורת כתשתית.</div>
+  </div>
+
+  <div class="q" data-n="82" data-correct="0" data-topic="house">
+    <div class="q-head"><div class="q-num">82</div>
+      <p class="q-text">תיאוריית ״נתיב היעדים״ של האוס פותחה כדי להסביר כיצד ____ של המנהיג משפיעים על שביעות רצון הכפופים: <span class="topic">נתיב היעדים</span></p>
+    </div>
+    <div class="opts">
+      <button class="opt" type="button"><span class="letter">א</span>התנהגויותיו</button>
+      <button class="opt" type="button"><span class="letter">ב</span>תכונותיו</button>
+      <button class="opt" type="button"><span class="letter">ג</span>האינטליגנציה</button>
+      <button class="opt" type="button"><span class="letter">ד</span>אף אחת מהתשובות הנ״ל</button>
+    </div>
+    <div class="explain"><span class="lbl">הסבר</span>נתיב־היעדים היא תאוריית <b>התנהגות</b> תלוית־מצב: איך התנהגויות המנהיג (ישיר/תומך/שיתופי/הישגי) משפיעות על שביעות הרצון והביצועים.</div>
+  </div>
+
+  <div class="q" data-n="83" data-correct="2" data-topic="articles">
+    <div class="q-head"><div class="q-num">83</div>
+      <p class="q-text">עפ״י המאמר ״על ניהול, מנהיגות, מוטיבציה ומחויבות״ — מנהיגות צריכה להיות מושתתת בעיקר על: <span class="topic">מאמרים</span></p>
+    </div>
+    <div class="opts">
+      <button class="opt" type="button"><span class="letter">א</span>ניהול</button>
+      <button class="opt" type="button"><span class="letter">ב</span>מוטיבציה</button>
+      <button class="opt" type="button"><span class="letter">ג</span>מחויבות</button>
+      <button class="opt" type="button"><span class="letter">ד</span>אף אחת מהתשובות הנ״ל</button>
+    </div>
+    <div class="explain"><span class="lbl">הסבר</span>ההבחנה במאמר: ניהול משיג היענות וממריץ; מנהיגות אמיתית בונה <b>מחויבות</b> — אנשים שרוצים, לא רק מצייתים.</div>
+  </div>
+
+  <div class="q" data-n="84" data-correct="2" data-topic="fiedler">
+    <div class="q-head"><div class="q-num">84</div>
+      <p class="q-text">תיאוריות התלות של מנהיגות מראות כי: <span class="topic">פידלר ותלות</span></p>
+    </div>
+    <div class="opts">
+      <button class="opt" type="button"><span class="letter">א</span>מנהיגות יעילה תלויה בהתאמה בין תכונותיו של המנהיג להתנהגותו</button>
+      <button class="opt" type="button"><span class="letter">ב</span>מנהיגות יעילה תלויה בהתאמה בין אופיו של המנהיג לאופיים של הכפיפים</button>
+      <button class="opt" type="button"><span class="letter">ג</span>מנהיגות יעילה תלויה בהתאמה בין המנהיג למצב</button>
+      <button class="opt" type="button"><span class="letter">ד</span>מנהיגות יעילה תלויה בהתאמה בין תרבותו של המנהיג לתרבות הארגונית</button>
+    </div>
+    <div class="explain"><span class="lbl">הסבר</span>שורת המחץ של גישת התלות: אפקטיביות = <b>התאמה בין המנהיג למצב</b>. כל שאר המסיחים מציעים התאמות אחרות — ולא זו הטענה.</div>
+  </div>
+
+  <div class="q" data-n="85" data-correct="0" data-topic="fiedler">
+    <div class="q-head"><div class="q-num">85</div>
+      <p class="q-text">את שאלון ה־<span dir="ltr">LPC</span> של פידלר: <span class="topic">פידלר ותלות</span></p>
+    </div>
+    <div class="opts">
+      <button class="opt" type="button"><span class="letter">א</span>ממלא המנהיג</button>
+      <button class="opt" type="button"><span class="letter">ב</span>ממלא הכפיף</button>
+      <button class="opt" type="button"><span class="letter">ג</span>ממלא מנהלו של המנהיג</button>
+      <button class="opt" type="button"><span class="letter">ד</span>ממלא הלקוח</button>
+    </div>
+    <div class="explain"><span class="lbl">הסבר</span>את ה־<span dir="ltr">LPC</span> ממלא <b>המנהיג עצמו</b> — והתיאור שלו את העמית הקשה חושף את הסגנון שלו (ראו 86).</div>
+  </div>
+
+  <div class="q" data-n="86" data-correct="1" data-topic="fiedler">
+    <div class="q-head"><div class="q-num">86</div>
+      <p class="q-text">בשאלון ה־<span dir="ltr">LPC</span> של פידלר, המנהל מתבקש: <span class="topic">פידלר ותלות</span></p>
+    </div>
+    <div class="opts">
+      <button class="opt" type="button"><span class="letter">א</span>לתאר עמית לעבודה שאיתו קל לעבוד</button>
+      <button class="opt" type="button"><span class="letter">ב</span>לתאר עמית לעבודה שאיתו קשה לעבוד</button>
+      <button class="opt" type="button"><span class="letter">ג</span>לתאר מנהל עבודה שאיתו קל לעבוד</button>
+      <button class="opt" type="button"><span class="letter">ד</span>לתאר מנהל עבודה שאיתו קשה לעבוד</button>
+    </div>
+    <div class="explain"><span class="lbl">הסבר</span><span dir="ltr">Least Preferred Coworker</span>: מתארים את <b>העמית שהכי קשה לעבוד איתו</b>. תיאור אוהד = <span dir="ltr">LPC</span> גבוה (חברתי); תיאור עוין = נמוך (משימתי).</div>
+  </div>
+
+  <div class="q" data-n="87" data-correct="3" data-topic="fiedler">
+    <div class="q-head"><div class="q-num">87</div>
+      <p class="q-text">עפ״י פידלר, מנהיג יעיל צריך להיות: <span class="topic">פידלר ותלות</span></p>
+    </div>
+    <div class="opts">
+      <button class="opt" type="button"><span class="letter">א</span>גבוה במשימתיות ונמוך בחברתיות</button>
+      <button class="opt" type="button"><span class="letter">ב</span>גבוה בחברתיות ונמוך במשימתיות</button>
+      <button class="opt" type="button"><span class="letter">ג</span>גבוה במשימתיות וגבוה בחברתיות</button>
+      <button class="opt" type="button"><span class="letter">ד</span>אף אחת מהתשובות הנ״ל</button>
+    </div>
+    <div class="explain"><span class="lbl">הסבר</span>אצל פידלר אין ״גבוה־גבוה״ ואין מתכון קבוע: המנהיג הוא <b>או</b> משימתי <b>או</b> חברתי, והיעילות תלויה בהתאמה למצב — לכן אף תשובה. הראי המדויק של שאלה 52 (האוס: גם וגם).</div>
+  </div>
+
+  <div class="q" data-n="88" data-correct="1" data-topic="fiedler">
+    <div class="q-head"><div class="q-num">88</div>
+      <p class="q-text">עפ״י פידלר, מנהיג עם <span dir="ltr">LPC</span> גבוה נוטה בראש ובראשונה: <span class="topic">פידלר ותלות</span></p>
+    </div>
+    <div class="opts">
+      <button class="opt" type="button"><span class="letter">א</span>להשיג את יעדי הארגון</button>
+      <button class="opt" type="button"><span class="letter">ב</span>לדאוג לכפיפיו</button>
+      <button class="opt" type="button"><span class="letter">ג</span>לחזק את התרבות הארגונית</button>
+      <button class="opt" type="button"><span class="letter">ד</span>אף אחת מהתשובות הנ״ל</button>
+    </div>
+    <div class="explain"><span class="lbl">הסבר</span><span dir="ltr">LPC</span> גבוה = מכוון־יחסים: קודם כול <b>דואג לכפיפים</b>. <span dir="ltr">LPC</span> נמוך = מכוון־משימה, קודם היעדים.</div>
+  </div>
+
+  <div class="q" data-n="89" data-correct="3" data-topic="fiedler">
+    <div class="q-head"><div class="q-num">89</div>
+      <p class="q-text">אילו מהיבטי המצב הבאים נכללים במודל של פידלר? <span class="topic">פידלר ותלות</span></p>
+    </div>
+    <div class="opts">
+      <button class="opt" type="button"><span class="letter">א</span>עמדת כוח</button>
+      <button class="opt" type="button"><span class="letter">ב</span>מבנה המטלה</button>
+      <button class="opt" type="button"><span class="letter">ג</span>היחס בין המנהיג לכפיפיו</button>
+      <button class="opt" type="button"><span class="letter">ד</span>א׳, ב׳, ג׳</button>
+    </div>
+    <div class="explain"><span class="lbl">הסבר</span>שלושת משתני המצב, לפי סדר חשיבות: <b>יחסי מנהיג־מונהגים ← מובנות המטלה ← עמדת כוח</b>. כולם במודל.</div>
+  </div>
+
+  <div class="q" data-n="90" data-correct="0" data-topic="fiedler">
+    <div class="q-head"><div class="q-num">90</div>
+      <p class="q-text">הרחבת המודל של פידלר כוללת את חשיבות: <span class="topic">פידלר ותלות</span></p>
+    </div>
+    <div class="opts">
+      <button class="opt" type="button"><span class="letter">א</span>אינטליגנציית המנהיג</button>
+      <button class="opt" type="button"><span class="letter">ב</span>מוטיבציית המנהיג</button>
+      <button class="opt" type="button"><span class="letter">ג</span>אינטליגנציית הכפיפים</button>
+      <button class="opt" type="button"><span class="letter">ד</span>מוטיבציית הכפיפים</button>
+    </div>
+    <div class="explain"><span class="lbl">הסבר</span>ההרחבה = תורת המשאבים הקוגניטיביים: <b>אינטליגנציית המנהיג</b> (לצד ניסיון ולחץ) — מתי היא תורמת ומתי נחסמת (ראו 35).</div>
+  </div>
+
+</section>
+
+<div class="divider"><span>90 מאחוריך 🙂 עכשיו 30 היגדים — בהצלחה!</span></div>
+
+<section id="part-b">
+  <h2>חלק ב׳ — נכון / לא נכון + נימוק <span class="pts">30 היגדים</span></h2>
+  <p class="sec-note">הנימוקים כאן מבוססים על אלה שהגיעו עם המאגר, מהודקים לרמת כתיבה במבחן. לקרוא, לסגור, לשחזר בכתב.</p>
+
+  <div class="tf" data-n="1" data-correct="t">
+    <div class="q-head"><div class="q-num">1</div>
+      <p class="q-text">על פי המחקרים של שנות ה־90, קיים מתאם חיובי בין מנהיגות אפקטיבית למוטיבציה פנימית.</p>
+    </div>
+    <div class="tf-btns">
+      <button class="tf-btn" type="button" data-v="t">נכון</button>
+      <button class="tf-btn" type="button" data-v="f">לא נכון</button>
+    </div>
+    <div class="explain"><span class="lbl">נימוק ברמת מבחן</span><b>נכון.</b> קירקפטריק ולוק (שנות ה־90) מצאו שהתכונה בעלת המתאם הגבוה ביותר למנהיגים אפקטיביים היא <b>דחף</b>, המתחלק לשלושה סוגים שאינם תלויי סביבה: הישגיות (לשנות, להצליח), אנרגיה (כריזמה אישית) ונחישות ויוזמה (דחף פנימי). מוטיבציה פנימית ↔ אפקטיביות: מתאם חיובי.</div>
+  </div>
+
+  <div class="tf" data-n="2" data-correct="f">
+    <div class="q-head"><div class="q-num">2</div>
+      <p class="q-text">אדיג׳ס מחלק את התנהגותו של מנהל ל־3 קטגוריות.</p>
+    </div>
+    <div class="tf-btns">
+      <button class="tf-btn" type="button" data-v="t">נכון</button>
+      <button class="tf-btn" type="button" data-v="f">לא נכון</button>
+    </div>
+    <div class="explain"><span class="lbl">נימוק ברמת מבחן</span><b>לא נכון.</b> אדיג׳ס מחלק ל<b>ארבעה</b> טיפוסים (<span dir="ltr">PAEI</span>): P ביצועיסט (״מה״, טווח קצר), A מנהלן (״איך״, סדר ונהלים), E יזם (״למה/אולי אחרת״, מחוץ לקופסה), I מתכלל (״עם מי״, אווירה ואנשים). מי שמחלק ל־3 קטגוריות — בינאישי, ניתוח מידע, קבלת החלטות — הוא <b>מינצברג</b> (10 תפקידים). זו ההחלפה שההיגד מנסה למכור.</div>
+  </div>
+
+  <div class="tf" data-n="3" data-correct="f">
+    <div class="q-head"><div class="q-num">3</div>
+      <p class="q-text">כפי שבשאלוני <span dir="ltr">LBDQ</span> לאדם יכולות להיות גם התנהגות יוזמת וגם התנהגות מתחשבת, כך גם בשאלוני <span dir="ltr">LPC</span> אדם יכול להיות גם משימתי וגם חברתי.</p>
+    </div>
+    <div class="tf-btns">
+      <button class="tf-btn" type="button" data-v="t">נכון</button>
+      <button class="tf-btn" type="button" data-v="f">לא נכון</button>
+    </div>
+    <div class="explain"><span class="lbl">נימוק ברמת מבחן</span><b>לא נכון.</b> ב־<span dir="ltr">LBDQ</span> (איחוד מחקרי אוהיו ומישיגן) שני הצירים בלתי תלויים — אפשר גבוה גם ביוזמת (משימתית) וגם במתחשבת (חברתית). אצל פידלר (<span dir="ltr">LPC</span>) הסגנון קבוע וחד־ערכי: המנהיג משימתי <b>או</b> חברתי — לא שניהם יחד.</div>
+  </div>
+
+  <div class="tf" data-n="4" data-correct="f">
+    <div class="q-head"><div class="q-num">4</div>
+      <p class="q-text">אבי אבות תיאוריית התלות הינו האוס.</p>
+    </div>
+    <div class="tf-btns">
+      <button class="tf-btn" type="button" data-v="t">נכון</button>
+      <button class="tf-btn" type="button" data-v="f">לא נכון</button>
+    </div>
+    <div class="explain"><span class="lbl">נימוק ברמת מבחן</span><b>לא נכון.</b> אבי תיאוריות התלות הוא <b>פידלר</b> — הראשון שטען שאפקטיביות (יעדים + שביעות רצון) תלויה בהתאמה בין המנהיג למצב. האוס הציג את <b>נתיב־היעדים</b>, השמה דגש על מוטיבציה ונשענת על תורת הציפיות (ורום) והצבת היעדים (לוק).</div>
+  </div>
+
+  <div class="tf" data-n="5" data-correct="f">
+    <div class="q-head"><div class="q-num">5</div>
+      <p class="q-text">מרכזי ההערכה שפותחו ע״י <span dir="ltr">AT&amp;T</span> התמקדו בזיהוי דפוסי ההתנהגות של המנהיג.</p>
+    </div>
+    <div class="tf-btns">
+      <button class="tf-btn" type="button" data-v="t">נכון</button>
+      <button class="tf-btn" type="button" data-v="f">לא נכון</button>
+    </div>
+    <div class="explain"><span class="lbl">נימוק ברמת מבחן</span><b>לא נכון.</b> מרכז ההערכה של <span dir="ltr">AT&amp;T</span> היה הארגון הראשון ש<b>החזיר את גישת התכונות</b>: איתור עובדים עם פוטנציאל להנהיג — עתודה ניהולית. המוקד היה תכונות ופוטנציאל, לא דפוסי התנהגות.</div>
+  </div>
+
+  <div class="tf" data-n="6" data-correct="f">
+    <div class="q-head"><div class="q-num">6</div>
+      <p class="q-text">שיטת דלפי מכילה בתוכה את <span dir="ltr">AII</span> ו־<span dir="ltr">CII</span>.</p>
+    </div>
+    <div class="tf-btns">
+      <button class="tf-btn" type="button" data-v="t">נכון</button>
+      <button class="tf-btn" type="button" data-v="f">לא נכון</button>
+    </div>
+    <div class="explain"><span class="lbl">נימוק ברמת מבחן</span><b>לא נכון.</b> דלפי מקבילה ל־<b><span dir="ltr">CI</span>+<span dir="ltr">CII</span></b>: המנהל שולח לכל עובד את הדילמה ומקבל פתרונות בעילום שם (<span dir="ltr">CI</span>), מפיץ את הפתרונות להערכה ומתדיין או מחליט (<span dir="ltr">CII</span>). היא אינה תואמת את <span dir="ltr">AII</span>, שבה המנהל רק אוסף מידע ומחליט לבד.</div>
+  </div>
+
+  <div class="tf" data-n="7" data-correct="t">
+    <div class="q-head"><div class="q-num">7</div>
+      <p class="q-text">״אני הולך אחרי המנהיג באש ובמים״ — זאת אמירה נפוצה ביחס למנהיגות כריזמטית.</p>
+    </div>
+    <div class="tf-btns">
+      <button class="tf-btn" type="button" data-v="t">נכון</button>
+      <button class="tf-btn" type="button" data-v="f">לא נכון</button>
+    </div>
+    <div class="explain"><span class="lbl">נימוק ברמת מבחן</span><b>נכון.</b> הכריזמטית (האוס) היא סובייקטיבית — קיימת בעיני המונהגים — ומתעוררת בזמן משבר: המנהיג סוחף רגשית באמונה שנצא מזה (דוגמת הקורס: משה רבנו ויציאת מצרים). לכן ילכו אחריו ״באש ובמים״ גם כשזה לא רציונלי.</div>
+  </div>
+
+  <div class="tf" data-n="8" data-correct="f">
+    <div class="q-head"><div class="q-num">8</div>
+      <p class="q-text">מודל אחד על אחד מדגיש את החשיבות, ההגינות והאמינות שנרקמות במערכת היחסים בין המנהל ועמיתיו המנהלים.</p>
+    </div>
+    <div class="tf-btns">
+      <button class="tf-btn" type="button" data-v="t">נכון</button>
+      <button class="tf-btn" type="button" data-v="f">לא נכון</button>
+    </div>
+    <div class="explain"><span class="lbl">נימוק ברמת מבחן</span><b>לא נכון.</b> בסיס המודל של גריין הוא יחסי המנהיג עם <b>עובדיו</b> — דיאדה עם כל מונהג בנפרד: קבוצת פנים (קשר טוב, תקשורת דו־כיוונית, אמון) מול קבוצת חוץ (קשר פורמלי), וכמעט בלתי אפשרי לעבור ביניהן. עמיתים מנהלים אינם חלק מהמודל הבסיסי.</div>
+  </div>
+
+  <div class="tf" data-n="9" data-correct="f">
+    <div class="q-head"><div class="q-num">9</div>
+      <p class="q-text">מרכיב D בנוסחתו של ביר מסמל את הדיפולט, ומרכיב ה־M מסמל את העלות הכספית הנדרשת.</p>
+    </div>
+    <div class="tf-btns">
+      <button class="tf-btn" type="button" data-v="t">נכון</button>
+      <button class="tf-btn" type="button" data-v="f">לא נכון</button>
+    </div>
+    <div class="explain"><span class="lbl">נימוק ברמת מבחן</span><b>לא נכון.</b> בנוסחת ביר: <b>D</b> = אי־שביעות רצון מהמצב הקיים, <b>M</b> = המודל הניהולי, <b>P</b> = התהליך (הפשרה ← שינוי ← הקפאה), <b>C</b> = עלות (כסף). שינוי מוטמע כאשר <span dir="ltr">D×M×P &gt; C</span>, וכל הפרמטרים חייבים להיות חיוביים ומעל האפס.</div>
+  </div>
+
+  <div class="tf" data-n="10" data-correct="f">
+    <div class="q-head"><div class="q-num">10</div>
+      <p class="q-text">פרנץ׳ ורייבן הציעו במקור 5 סוגי כוח; המחקר של שנות ה־90 הוסיף עוד 2 סוגי כוח: כוח הזדמנויות וכוח אקולוגי.</p>
+    </div>
+    <div class="tf-btns">
+      <button class="tf-btn" type="button" data-v="t">נכון</button>
+      <button class="tf-btn" type="button" data-v="f">לא נכון</button>
+    </div>
+    <div class="explain"><span class="lbl">נימוק ברמת מבחן</span><b>לא נכון.</b> בגרסת הקורס, לפרנץ׳ ורייבן <b>6 סוגי כוח בשני בסיסים</b>: כוח עמדה — מתגמל, חוקי/לגיטימי, ענישה; כוח אישי — הזדהות, מומחיות, ידע. אין ״הזדמנויות״ ו״אקולוגי״. כלל האצבע: מתחילים בכוח האישי, ורק אם לא עובד — עוברים לעמדה.</div>
+  </div>
+
+  <div class="tf" data-n="11" data-correct="t">
+    <div class="q-head"><div class="q-num">11</div>
+      <p class="q-text">סביר להניח שמנהיג מעצב — ולא המנהיג הכריזמטי — יפתח את עובדיו, יעצים אותם ויקנה להם ביטחון עצמי.</p>
+    </div>
+    <div class="tf-btns">
+      <button class="tf-btn" type="button" data-v="t">נכון</button>
+      <button class="tf-btn" type="button" data-v="f">לא נכון</button>
+    </div>
+    <div class="explain"><span class="lbl">נימוק ברמת מבחן</span><b>נכון.</b> המנהיג המעצב (בס) מתקשר למטרות גדולות — ייעוד, חזון, ערכים — ופועל דרך <span dir="ltr">I4</span>: כריזמה, השראה, <b>הפרט כמוקד</b> ואתגר אינטלקטואלי, שמפתחים את הפוטנציאל ומקנים ביטחון עצמי. הכריזמטי סוחף במשבר אך אינו ממוקד בפיתוח האנשים.</div>
+  </div>
+
+  <div class="tf" data-n="12" data-correct="f">
+    <div class="q-head"><div class="q-num">12</div>
+      <p class="q-text">גישת התכונות וגישת ההתנהגות ״נפגשות״ לראשונה בתאוריית המנהיגות המעצבת.</p>
+    </div>
+    <div class="tf-btns">
+      <button class="tf-btn" type="button" data-v="t">נכון</button>
+      <button class="tf-btn" type="button" data-v="f">לא נכון</button>
+    </div>
+    <div class="explain"><span class="lbl">נימוק ברמת מבחן</span><b>לא נכון.</b> המפגש הראשון הוא בתאוריית המנהיגות <b>הכריזמטית</b> (האוס), הנשענת על שלוש גישות: מצב (צצה בזמן משבר), התנהגות (המנהיג האפקטיבי <span dir="ltr">9,9</span>) ותכונות (ביטחון, סחף, יצירתיות, אינטליגנציה רגשית). המעצבת רק נשענת על הכריזמטית.</div>
+  </div>
+
+  <div class="tf" data-n="13" data-correct="f">
+    <div class="q-head"><div class="q-num">13</div>
+      <p class="q-text">המנהיגות המעצבת האפקטיבית ביותר צומחת ופועלת מתוך משבר.</p>
+    </div>
+    <div class="tf-btns">
+      <button class="tf-btn" type="button" data-v="t">נכון</button>
+      <button class="tf-btn" type="button" data-v="f">לא נכון</button>
+    </div>
+    <div class="explain"><span class="lbl">נימוק ברמת מבחן</span><b>לא נכון.</b> מתוך משבר צומחת <b>הכריזמטית</b> — פועלת על האמוציות, לא רציונלית. המעצבת פועלת <b>למניעת</b> המשבר: רציונלית ופרואקטיבית, מבוססת <span dir="ltr">I4</span> — כריזמה, השראה, הפרט כמוקד ואתגר אינטלקטואלי.</div>
+  </div>
+
+  <div class="tf" data-n="14" data-correct="t">
+    <div class="q-head"><div class="q-num">14</div>
+      <p class="q-text">עיקר תפקידו של מנהל נקשר עם יעילות ארגונית, בעוד שעיקר תפקידו של המנהיג נקשר באפקטיביות ארגונית.</p>
+    </div>
+    <div class="tf-btns">
+      <button class="tf-btn" type="button" data-v="t">נכון</button>
+      <button class="tf-btn" type="button" data-v="f">לא נכון</button>
+    </div>
+    <div class="explain"><span class="lbl">נימוק ברמת מבחן</span><b>נכון.</b> המנהל — טקטיקה, אובייקטיבי, ממוקד ב<b>״איך״</b> לבצע במינימום משאבים = יעילות. המנהיג — אסטרטגיה, סובייקטיבי, ממוקד ב<b>״מה״</b> = השגת המטרה, אפקטיביות.</div>
+  </div>
+
+  <div class="tf" data-n="15" data-correct="f">
+    <div class="q-head"><div class="q-num">15</div>
+      <p class="q-text">סביר להניח כי בארגונים גדולים ובירוקרטיים לא תתפתח תרבות ארגונית חזקה.</p>
+    </div>
+    <div class="tf-btns">
+      <button class="tf-btn" type="button" data-v="t">נכון</button>
+      <button class="tf-btn" type="button" data-v="f">לא נכון</button>
+    </div>
+    <div class="explain"><span class="lbl">נימוק ברמת מבחן</span><b>לא נכון.</b> דווקא ענקיות כמו גוגל ו־<span dir="ltr">IBM</span> מדגימות תרבות חזקה: <b>עקביות</b> בערכים בתוך הארגון ומחוצה לו, מודעות של כלל העובדים והזדהות איתה. ככל שהתרבות חזקה יותר — הארגון אפקטיבי יותר. גודל אינו מכשול.</div>
+  </div>
+
+  <div class="tf" data-n="16" data-correct="f">
+    <div class="q-head"><div class="q-num">16</div>
+      <p class="q-text">בארגון עם תרבות ארגונית חזקה ייתכן כי נראה פער אובייקטיבי, אך בשום אופן לא יתקיים פער סובייקטיבי.</p>
+    </div>
+    <div class="tf-btns">
+      <button class="tf-btn" type="button" data-v="t">נכון</button>
+      <button class="tf-btn" type="button" data-v="f">לא נכון</button>
+    </div>
+    <div class="explain"><span class="lbl">נימוק ברמת מבחן</span><b>לא נכון.</b> הפוך בדיוק: בתרבות חזקה הפער <b>האובייקטיבי אינו קיים</b>, ואילו פער <b>סובייקטיבי ייתכן</b> — כל עוד אינו סותר את ערכי הליבה.</div>
+  </div>
+
+  <div class="tf" data-n="17" data-correct="f">
+    <div class="q-head"><div class="q-num">17</div>
+      <p class="q-text">המחקר מראה שמנהיגות כריזמטית תשפיע בעיקר כאשר קיים רצון בקרב העובדים למנוע משבר.</p>
+    </div>
+    <div class="tf-btns">
+      <button class="tf-btn" type="button" data-v="t">נכון</button>
+      <button class="tf-btn" type="button" data-v="f">לא נכון</button>
+    </div>
+    <div class="explain"><span class="lbl">נימוק ברמת מבחן</span><b>לא נכון.</b> הכריזמטית מתעוררת ומשפיעה כשהמשבר <b>כבר כאן</b> — אנשים פונים למנהיג להצילם, והוא משכנע אמוציונאלית ובחזון. כשרוצים <b>למנוע</b> משבר מראש — זו זירת המנהיגות המעצבת.</div>
+  </div>
+
+  <div class="tf" data-n="18" data-correct="t">
+    <div class="q-head"><div class="q-num">18</div>
+      <p class="q-text">״שינוי מקדים״ הינו אחד מעקרונות הליבה של מנהיגות מעצבת, ומשמש בשלב מוקדם לנוסחתו של ביר.</p>
+    </div>
+    <div class="tf-btns">
+      <button class="tf-btn" type="button" data-v="t">נכון</button>
+      <button class="tf-btn" type="button" data-v="f">לא נכון</button>
+    </div>
+    <div class="explain"><span class="lbl">נימוק ברמת מבחן</span><b>נכון.</b> שינוי מקדים = לקרוא לשינוי היום כדי למנוע את משבר המחר — להקדים תרופה למכה. משמעותו שאין מחכים לאי־שביעות רצון, כלומר הוא <b>מייתר את ה־D</b> בנוסחת ביר. המחיר: קשה יותר לגייס אנשים לשינוי כשעוד לא כואב.</div>
+  </div>
+
+  <div class="tf" data-n="19" data-correct="f">
+    <div class="q-head"><div class="q-num">19</div>
+      <p class="q-text">המחקר בנוגע להרחבה של המודל של גריין מראה שתמיד העובד שיקודם הכי מהר הוא העובד שנמצא בקבוצת הפנים של המנהיג. <span class="badge-trap">♻️ הופיע פעמיים במאגר (19 ו־29)</span></p>
+    </div>
+    <div class="tf-btns">
+      <button class="tf-btn" type="button" data-v="t">נכון</button>
+      <button class="tf-btn" type="button" data-v="f">לא נכון</button>
+    </div>
+    <div class="explain"><span class="lbl">נימוק ברמת מבחן</span><b>לא נכון.</b> ״תמיד״ מפיל. ההרחבה מוסיפה קומה: הקידום תלוי גם היכן <b>המנהל שלך</b> יושב אצל המנהל <b>שלו</b>. עובד <span dir="ltr">IN</span> אצל מנהל שהוא <span dir="ltr">IN</span> אצל הבוס — מסלול מהיר; מנהל שנמצא ב־<span dir="ltr">OUT</span> — הבכיר לא יקדם, והעובד אף יחשוש לאכוף סמכות. (וזה בדיוק היגד 3 ממבחן 2015 — חוזר שוב ושוב.)</div>
+  </div>
+
+  <div class="tf" data-n="20" data-correct="t">
+    <div class="q-head"><div class="q-num">20</div>
+      <p class="q-text">בהתבסס על תאוריית המנהיגות ״נתיב היעדים״, תאוריית המוטיבציה ״ניהול לפי יעדים״ והדוגמה שניתנה בכיתה על חברת <span dir="ltr">3M</span> — מנהיג אפקטיבי, בדרך כלל, צריך להעלות את רף היעדים.</p>
+    </div>
+    <div class="tf-btns">
+      <button class="tf-btn" type="button" data-v="t">נכון</button>
+      <button class="tf-btn" type="button" data-v="f">לא נכון</button>
+    </div>
+    <div class="explain"><span class="lbl">נימוק ברמת מבחן</span><b>נכון.</b> נתיב־היעדים (נשענת על ציפיות של ורום והצבת יעדים של לוק): המנהיג מזהה את המצב, סולל את הדרך ומתאים את התנהגותו. <span dir="ltr">3M</span> הגדירה שישה ממדי מנהיג: מתווה את הנתיב, <b>מעלה את הרף</b>, ממריץ אחרים, מחדש בתושייה, חי את ערכי החברה, מביא תוצאות. הצלחה ← מעלים רף.</div>
+  </div>
+
+  <div class="tf" data-n="21" data-correct="t">
+    <div class="q-head"><div class="q-num">21</div>
+      <p class="q-text">על פי בחינת הפעילויות הכתובות ביומן המנהל, ניתן להסיק שהקצאת זמן היא אחת מהפעילויות המשקפות את תפיסתו וסגנון התנהגותו של המנהיג.</p>
+    </div>
+    <div class="tf-btns">
+      <button class="tf-btn" type="button" data-v="t">נכון</button>
+      <button class="tf-btn" type="button" data-v="f">לא נכון</button>
+    </div>
+    <div class="explain"><span class="lbl">נימוק ברמת מבחן</span><b>נכון.</b> מינצברג טען שיומני המנהל משקפים את האוריינטציה הניהולית: הקצאת הזמן היא סדר העדיפויות <b>בפועל</b> — ולכן משקפת תפיסה וסגנון. (הופיע כלשונו במבחן 2015, חלק ב׳ שאלה 8.)</div>
+  </div>
+
+  <div class="tf" data-n="22" data-correct="t">
+    <div class="q-head"><div class="q-num">22</div>
+      <p class="q-text">על פי המודל של אדיג׳ס, ניהול אפקטיבי מכיל 4 סגנונות ניהול.</p>
+    </div>
+    <div class="tf-btns">
+      <button class="tf-btn" type="button" data-v="t">נכון</button>
+      <button class="tf-btn" type="button" data-v="f">לא נכון</button>
+    </div>
+    <div class="explain"><span class="lbl">נימוק ברמת מבחן</span><b>נכון.</b> ניהול אפקטיבי מכיל את כל ארבעת סגנונות <span dir="ltr">PAEI</span> באיזון: P ביצועיסט (טווח קצר, ״מה״), A מנהלן (״איך״), E יזם (טווח ארוך, ״למה״), I מתכלל (״עם מי״). המנהל האידיאלי — מינימום פערים בין הטיפוסים.</div>
+  </div>
+
+  <div class="tf" data-n="23" data-correct="f">
+    <div class="q-head"><div class="q-num">23</div>
+      <p class="q-text">תגובה למשבר מאפיינת את המנהיג המעצב.</p>
+    </div>
+    <div class="tf-btns">
+      <button class="tf-btn" type="button" data-v="t">נכון</button>
+      <button class="tf-btn" type="button" data-v="f">לא נכון</button>
+    </div>
+    <div class="explain"><span class="lbl">נימוק ברמת מבחן</span><b>לא נכון.</b> תגובה למשבר מאפיינת את <b>הכריזמטי</b>. המעצב מקדים את המשבר — עקרון ״שינוי מקדים״: תרופה לפני המכה, מניעת אי־שביעות הרצון מראש.</div>
+  </div>
+
+  <div class="tf" data-n="24" data-correct="f">
+    <div class="q-head"><div class="q-num">24</div>
+      <p class="q-text">הנחת היסוד שעליה מבוססת המנהיגות המצבית היא שמנהיגות אפקטיבית תלויה בהתאמה בין שביעות רצון המנהיג כלפי מונהגיו, ולהפך.</p>
+    </div>
+    <div class="tf-btns">
+      <button class="tf-btn" type="button" data-v="t">נכון</button>
+      <button class="tf-btn" type="button" data-v="f">לא נכון</button>
+    </div>
+    <div class="explain"><span class="lbl">נימוק ברמת מבחן</span><b>לא נכון.</b> הנחת היסוד: אפקטיביות תלויה בהתאמה בין <b>המנהיג למצב</b> — לא בשביעות רצון הדדית. מה שאפקטיבי במצב ניהולי אחד לא בהכרח אפקטיבי במצב אחר.</div>
+  </div>
+
+  <div class="tf" data-n="25" data-correct="f">
+    <div class="q-head"><div class="q-num">25</div>
+      <p class="q-text">מנהיגות מעצבת נשענת על קבלת החלטות פאסיבית.</p>
+    </div>
+    <div class="tf-btns">
+      <button class="tf-btn" type="button" data-v="t">נכון</button>
+      <button class="tf-btn" type="button" data-v="f">לא נכון</button>
+    </div>
+    <div class="explain"><span class="lbl">נימוק ברמת מבחן</span><b>לא נכון.</b> המעצבת מבוססת על הכריזמטית אך היא <b>רציונלית ופרואקטיבית</b> — קבלת החלטות יזומה שמקדמת את השינוי לפני שהוא נכפה. פאסיביות היא היפוכה.</div>
+  </div>
+
+  <div class="tf" data-n="26" data-correct="t">
+    <div class="q-head"><div class="q-num">26</div>
+      <p class="q-text">מתוך ה־<span dir="ltr">I4</span> של המנהיגות המעצבת, טיפוס ה־I (המתכלל) של אדיג׳ס הוא המועמד הטבעי להצטיין ב״הפרט כמוקד״ (התייחסות אינדיבידואלית). <span class="badge-trap">✎ נוסח מחדש מפריט פתוח במאגר</span></p>
+    </div>
+    <div class="tf-btns">
+      <button class="tf-btn" type="button" data-v="t">נכון</button>
+      <button class="tf-btn" type="button" data-v="f">לא נכון</button>
+    </div>
+    <div class="explain"><span class="lbl">נימוק ברמת מבחן</span><b>נכון.</b> המתכלל (I) חי את שאלת <b>״עם מי״</b>: אווירה, אנשים ושיתופי פעולה, יעיל בטווח הארוך. לכן ההתייחסות האישית לכל עובד טבעית לו יותר מלביצועיסט (מה), למנהלן (איך) וליזם (למה). במאגר זו הייתה שאלה פתוחה עם פירוט ארבעת הטיפוסים.</div>
+  </div>
+
+  <div class="tf" data-n="27" data-correct="f">
+    <div class="q-head"><div class="q-num">27</div>
+      <p class="q-text">אחת המסקנות שהעלינו בכיתה, בהתבסס על תרגיל נאס״א, היא שתקשורת יהלום או כוכב מתאימה רק לארגונים קטנים (מבחינת כוח אדם) ושטוחים (מבחינת היררכיה).</p>
+    </div>
+    <div class="tf-btns">
+      <button class="tf-btn" type="button" data-v="t">נכון</button>
+      <button class="tf-btn" type="button" data-v="f">לא נכון</button>
+    </div>
+    <div class="explain"><span class="lbl">נימוק ברמת מבחן</span><b>לא נכון.</b> רשת יהלום/כוכב, שבה המידע אינו עובר היררכית, מיושמת גם בארגון גדול — דרך <b>צוותי עבודה קטנים</b> (כ־7 חברים, הטרוגניים). מורכבות המשימה קובעת, לא גודל הארגון. (זהה להיגד 2 ממבחן 2015.)</div>
+  </div>
+
+  <div class="tf" data-n="28" data-correct="f">
+    <div class="q-head"><div class="q-num">28</div>
+      <p class="q-text">במרכזי הערכה היום מיישמים את גישת התכונות בלבד, בניסיון למצוא את המנהיגים שבנבחנים.</p>
+    </div>
+    <div class="tf-btns">
+      <button class="tf-btn" type="button" data-v="t">נכון</button>
+      <button class="tf-btn" type="button" data-v="f">לא נכון</button>
+    </div>
+    <div class="explain"><span class="lbl">נימוק ברמת מבחן</span><b>לא נכון.</b> מרכזי ההערכה אכן מיישמים את גישת התכונות (מבחני אישיות, אינטליגנציה, דינמיקה קבוצתית) — אבל <b>לא רק</b>: בוחנים גם התמודדות עם מצבים משתנים בסימולציות. שילוב תכונות + מצב. (הראי של שאלות 24 ו־74 בחלק א׳.)</div>
+  </div>
+
+  <div class="tf" data-n="30" data-correct="t">
+    <div class="q-head"><div class="q-num">30</div>
+      <p class="q-text">פידלר היה הראשון שפיתח את תיאוריית התלות במנהיגות.</p>
+    </div>
+    <div class="tf-btns">
+      <button class="tf-btn" type="button" data-v="t">נכון</button>
+      <button class="tf-btn" type="button" data-v="f">לא נכון</button>
+    </div>
+    <div class="explain"><span class="lbl">נימוק ברמת מבחן</span><b>נכון.</b> פידלר — הראשון לטעון שאפקטיביות תלויה בהתאמה בין המנהיג למצב. הסגנון קבוע (<span dir="ltr">LPC</span>: משימתי או חברתי), שלושה משתני מצב לפי סדר חשיבות: יחסי מנהיג–מונהגים, מובנות המטלה, עמדת כוח — ובאין התאמה <b>משנים את המצב</b>, לא את המנהיג.</div>
+  </div>
+
+  <div class="tf" data-n="31" data-correct="f">
+    <div class="q-head"><div class="q-num">31</div>
+      <p class="q-text">על פי אדיג׳ס, P הוא המנהל הטוב ביותר במצבי קיצון.</p>
+    </div>
+    <div class="tf-btns">
+      <button class="tf-btn" type="button" data-v="t">נכון</button>
+      <button class="tf-btn" type="button" data-v="f">לא נכון</button>
+    </div>
+    <div class="explain"><span class="lbl">נימוק ברמת מבחן</span><b>לא נכון.</b> ערבוב מודלים: הטענה על מצבי קיצון שייכת ל<b>פידלר</b> — במצבים קיצוניים (נוח מאוד או לא נוח בכלל) המנהיג <b>המשימתי</b> עדיף, ובמצבי ביניים החברתי. אצל אדיג׳ס אין ״P הכי טוב בקיצון״ — האידיאל הוא מינימום פערים בין ארבעת הטיפוסים.</div>
+  </div>
+
+</section>
+
+<section id="result-sec">
+  <h2>תוצאה <span class="pts">מתעדכן חי</span></h2>
+  <div id="result">
+    <div class="grade-row">
+      <span class="grade" id="final-grade" dir="ltr">0</span>
+      <span class="grade-of">/ 120</span>
+      <span class="pct" id="pct-badge" dir="rtl">0% מהנענו</span>
+    </div>
+    <div class="break">
+      <span>חלק א׳: <b id="a-line" dir="ltr">0/90</b></span>
+      <span>חלק ב׳: <b id="b-line" dir="ltr">0/30</b></span>
+    </div>
+    <p id="grade-msg"></p>
+    <p id="review">עדיין בלי טעויות — קדימה.</p>
+  </div>
+</section>
+
+<footer>מדריכי 67 · JAM 2.0 · vanilla, כמו שצריך · 🐢🚀 לאט זה חלק, חלק זה מהר</footer>
+
+</div><!-- /wrap -->
+
+<script>
+(function(){
+  var TOTAL = 120;
+  var state = { answered:0, points:0, aOk:0, bOk:0, wrong:[] };
+  function $$(s, el){ return Array.prototype.slice.call((el||document).querySelectorAll(s)); }
+
+  var progressEl = document.getElementById('progress-fill');
+  var counterEl  = document.getElementById('counter');
+  var scoreEl    = document.getElementById('live-score');
+  var gradeEl    = document.getElementById('final-grade');
+  var pctEl      = document.getElementById('pct-badge');
+  var aLineEl    = document.getElementById('a-line');
+  var bLineEl    = document.getElementById('b-line');
+  var msgEl      = document.getElementById('grade-msg');
+  var reviewEl   = document.getElementById('review');
+
+  function update(){
+    progressEl.style.width = (state.answered / TOTAL * 100) + '%';
+    counterEl.textContent  = state.answered + '/' + TOTAL;
+    scoreEl.textContent    = state.points;
+    gradeEl.textContent    = state.points;
+    var pct = state.answered ? Math.round(state.points / state.answered * 100) : 0;
+    pctEl.textContent = pct + '% מהנענו';
+    aLineEl.textContent = state.aOk + '/90';
+    bLineEl.textContent = state.bOk + '/30';
+    reviewEl.textContent = state.wrong.length
+      ? 'לחזרה: ' + state.wrong.join(' · ')
+      : 'עדיין בלי טעויות — קדימה.';
+    if (state.answered === TOTAL) {
+      var fp = Math.round(state.points / TOTAL * 100);
+      msgEl.classList.add('show');
+      if (fp >= 90)      msgEl.textContent = '🐢🚀 שליטה מלאה (' + fp + '%). המאגר סגור — אתה מוכן למועד ב׳.';
+      else if (fp >= 75) msgEl.textContent = 'בסיס חזק (' + fp + '%). הפערים מרוכזים בנושאים בודדים — סנן לפיהם ורוץ סבב ממוקד.';
+      else               msgEl.textContent = 'סבב ראשון מאחוריך (' + fp + '%). סנן לפי נושא, נקה את החורים אחד־אחד, ואז סבב מלא נוסף. לאט זה חלק, חלק זה מהר.';
+    } else {
+      msgEl.classList.remove('show');
+    }
+  }
+
+  /* ---- part A: multiple choice ---- */
+  $$('.q').forEach(function(q){
+    var correct = parseInt(q.getAttribute('data-correct'), 10);
+    var opts = $$('.opt', q);
+    opts.forEach(function(btn, i){
+      btn.addEventListener('click', function(){
+        if (q.classList.contains('locked')) return;
+        q.classList.add('locked');
+        var ok = (i === correct);
+        btn.classList.add(ok ? 'is-correct' : 'is-wrong');
+        if (ok) { state.points += 1; state.aOk++; }
+        else {
+          opts[correct].classList.add('show-correct');
+          state.wrong.push('א׳/' + q.getAttribute('data-n'));
+        }
+        q.classList.add(ok ? 'q-ok' : 'q-bad');
+        q.querySelector('.explain').classList.add('open');
+        state.answered++;
+        update();
+      });
+    });
+  });
+
+  /* ---- part B: true / false ---- */
+  $$('.tf').forEach(function(q){
+    var correct = q.getAttribute('data-correct'); /* 't' | 'f' */
+    var btns = $$('.tf-btn', q);
+    btns.forEach(function(btn){
+      btn.addEventListener('click', function(){
+        if (q.classList.contains('locked')) return;
+        q.classList.add('locked');
+        var ok = (btn.getAttribute('data-v') === correct);
+        btn.classList.add(ok ? 'is-correct' : 'is-wrong');
+        if (ok) { state.points += 1; state.bOk++; }
+        else {
+          btns.forEach(function(b){
+            if (b.getAttribute('data-v') === correct) b.classList.add('show-correct');
+          });
+          state.wrong.push('ב׳/' + q.getAttribute('data-n'));
+        }
+        q.classList.add(ok ? 'q-ok' : 'q-bad');
+        q.querySelector('.explain').classList.add('open');
+        state.answered++;
+        update();
+      });
+    });
+  });
+
+  /* ---- topic filters ---- */
+  var fchips = $$('.fchip');
+  fchips.forEach(function(c){
+    c.addEventListener('click', function(){
+      fchips.forEach(function(x){ x.classList.remove('active'); });
+      c.classList.add('active');
+      var t = c.getAttribute('data-topic');
+      $$('.q').forEach(function(q){
+        q.classList.toggle('hide', t !== 'all' && q.getAttribute('data-topic') !== t);
+      });
+    });
+  });
+
+  /* ---- reset ---- */
+  document.getElementById('reset').addEventListener('click', function(){
+    state = { answered:0, points:0, aOk:0, bOk:0, wrong:[] };
+    $$('.q, .tf').forEach(function(q){ q.classList.remove('locked','q-ok','q-bad'); });
+    $$('.opt, .tf-btn').forEach(function(b){ b.classList.remove('is-correct','is-wrong','show-correct'); });
+    $$('.explain').forEach(function(e){ e.classList.remove('open'); });
+    update();
+    window.scrollTo({ top:0, behavior:'smooth' });
+  });
+
+  update();
+})();
+</script>
+</body>
+</html>

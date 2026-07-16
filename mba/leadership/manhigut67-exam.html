@@ -1,0 +1,655 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>תרגול 67 · מנהיגות בארגונים · מבחן 2015</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Frank+Ruhl+Libre:wght@500;700;900&family=Heebo:wght@400;500;600;700&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --paper:#f6f2e9;
+  --paper-2:#ede6d6;
+  --card:#fbf8f1;
+  --ink:#211f1a;
+  --ink-2:#6f6754;
+  --line:#d9d0bb;
+  --accent:#0e7264;
+  --gold:#b98a2f;
+  --gold-bg:#f4e7c6;
+  --ok:#1c7a4d;
+  --ok-ink:#14512f;
+  --ok-bg:#e4f2e9;
+  --bad:#b23a2e;
+  --bad-ink:#7c261c;
+  --bad-bg:#f7e5e1;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{
+  font-family:'Heebo',sans-serif;
+  background:
+    radial-gradient(1200px 500px at 50% -100px, #fdfaf3 0%, transparent 70%),
+    var(--paper);
+  color:var(--ink);
+  font-size:16.5px;
+  line-height:1.65;
+}
+.wrap{max-width:840px;margin:0 auto;padding:0 18px 90px}
+.mono{font-family:'JetBrains Mono',monospace}
+
+/* ---------- hero ---------- */
+.hero{padding:42px 0 26px}
+.kicker{font:700 12px 'JetBrains Mono',monospace;letter-spacing:.18em;color:var(--accent);margin-bottom:10px}
+h1{font:900 clamp(28px,5.4vw,40px)/1.2 'Frank Ruhl Libre',serif;margin-bottom:8px}
+.subtitle{font:500 16px Heebo;color:var(--ink-2);margin-bottom:16px}
+.meta{display:flex;flex-wrap:wrap;gap:8px}
+.meta span{
+  font:400 12px 'JetBrains Mono',monospace;
+  border:1px solid var(--line);border-radius:999px;
+  background:var(--card);padding:5px 12px;color:var(--ink-2);white-space:nowrap;
+}
+.meta span.vs{border-color:var(--gold);background:var(--gold-bg);color:#7a5a14;font-weight:700}
+
+/* ---------- sticky nav ---------- */
+.sticky{
+  position:sticky;top:0;z-index:60;
+  background:rgba(246,242,233,.93);
+  backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);
+  border-bottom:1px solid var(--line);
+  margin:0 -18px;
+}
+.sticky-in{display:flex;align-items:center;gap:8px;overflow-x:auto;padding:10px 18px;scrollbar-width:none}
+.sticky-in::-webkit-scrollbar{display:none}
+.chip{
+  font:500 13px Heebo;color:var(--ink-2);text-decoration:none;
+  border:1px solid var(--line);border-radius:999px;background:var(--card);
+  padding:6px 14px;white-space:nowrap;transition:.15s;cursor:pointer;
+}
+.chip:hover{border-color:var(--accent);color:var(--accent)}
+button.chip{font-family:Heebo}
+.stats{margin-inline-start:auto;display:flex;gap:12px;align-items:center;font:700 12px 'JetBrains Mono',monospace;color:var(--ink-2);white-space:nowrap}
+.stats b{color:var(--accent);font-weight:700}
+.progress{height:3px;background:var(--paper-2)}
+.progress i{display:block;height:100%;width:0;background:var(--accent);transition:width .35s ease}
+
+/* ---------- sections ---------- */
+section{margin-top:44px}
+h2{font:700 26px 'Frank Ruhl Libre',serif;display:flex;align-items:baseline;gap:12px;flex-wrap:wrap}
+h2 .pts{font:700 12px 'JetBrains Mono',monospace;color:var(--paper);background:var(--ink);border-radius:8px;padding:3px 10px}
+.sec-note{font:400 14px Heebo;color:var(--ink-2);margin-top:6px}
+
+.card{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:20px 22px;margin-top:16px}
+.card ul{padding-inline-start:20px;margin-top:8px}
+.card li{margin-bottom:6px;font-size:15px}
+.card li::marker{color:var(--accent)}
+
+/* ---------- question ---------- */
+.q,.tf{
+  background:var(--card);border:1px solid var(--line);border-radius:16px;
+  padding:20px 22px;margin-top:18px;box-shadow:0 1px 0 rgba(0,0,0,.03);
+  transition:border-color .25s;
+}
+.q.q-ok,.tf.q-ok{border-color:#b9d6c4}
+.q.q-bad,.tf.q-bad{border-color:#e4b7ae}
+.q-head{display:flex;gap:14px;align-items:flex-start;margin-bottom:14px}
+.q-num{
+  font:700 13px 'JetBrains Mono',monospace;flex:none;
+  background:var(--ink);color:var(--paper);border-radius:9px;
+  min-width:32px;height:32px;display:flex;align-items:center;justify-content:center;
+}
+.q-text{font:500 16.5px/1.6 Heebo}
+.q-text .src{color:var(--ink-2);font-weight:400}
+.badge-trap{
+  display:inline-block;margin-inline-start:8px;vertical-align:2px;
+  font:600 11px Heebo;color:#7a5a14;background:var(--gold-bg);
+  border:1px solid #e0ca92;border-radius:999px;padding:2px 10px;white-space:nowrap;
+}
+
+.opts{display:grid;gap:8px}
+.opt{
+  display:block;width:100%;text-align:start;cursor:pointer;
+  font:400 15.5px/1.55 Heebo;color:var(--ink);
+  background:var(--paper);border:1px solid var(--line);border-radius:12px;
+  padding:11px 14px;transition:all .15s;
+}
+.opt .letter{font:700 13px 'JetBrains Mono',monospace;color:var(--ink-2);margin-inline-end:9px}
+.q:not(.locked) .opt:hover{border-color:var(--accent);transform:translateY(-1px)}
+.locked .opt{cursor:default}
+.opt.is-correct{background:var(--ok-bg);border-color:var(--ok);color:var(--ok-ink);font-weight:600}
+.opt.is-correct .letter{color:var(--ok)}
+.opt.is-wrong{background:var(--bad-bg);border-color:var(--bad);color:var(--bad-ink);text-decoration:line-through}
+.opt.is-wrong .letter{color:var(--bad)}
+.opt.show-correct{border:1px dashed var(--ok);background:#f0f7f2;color:var(--ok-ink)}
+
+/* ---------- true/false ---------- */
+.tf-btns{display:flex;gap:10px}
+.tf-btn{
+  flex:1;max-width:170px;cursor:pointer;text-align:center;
+  font:600 15px Heebo;color:var(--ink);
+  background:var(--paper);border:1px solid var(--line);border-radius:12px;
+  padding:11px 14px;transition:all .15s;
+}
+.tf:not(.locked) .tf-btn:hover{border-color:var(--accent);transform:translateY(-1px)}
+.locked .tf-btn{cursor:default}
+.tf-btn.is-correct{background:var(--ok-bg);border-color:var(--ok);color:var(--ok-ink)}
+.tf-btn.is-wrong{background:var(--bad-bg);border-color:var(--bad);color:var(--bad-ink);text-decoration:line-through}
+.tf-btn.show-correct{border:1px dashed var(--ok);background:#f0f7f2;color:var(--ok-ink)}
+
+/* ---------- explanation ---------- */
+.explain{
+  display:none;margin-top:14px;
+  background:var(--paper-2);border-inline-start:3px solid var(--accent);
+  border-radius:10px;padding:13px 16px;
+  font:400 14.5px/1.75 Heebo;color:#443e30;
+}
+.explain.open{display:block;animation:fade .25s ease}
+.explain b{color:var(--ink)}
+.explain .lbl{font:700 11px 'JetBrains Mono',monospace;color:var(--accent);display:block;margin-bottom:4px;letter-spacing:.1em}
+@keyframes fade{from{opacity:0;transform:translateY(-4px)}to{opacity:1;transform:none}}
+
+/* ---------- divider ---------- */
+.divider{
+  margin:52px 0 6px;text-align:center;position:relative;
+  font:500 14px Heebo;color:var(--ink-2);
+}
+.divider::before{content:"";position:absolute;inset-inline:0;top:50%;border-top:1px dashed var(--line)}
+.divider span{position:relative;background:var(--paper);padding:0 16px}
+
+/* ---------- result ---------- */
+#result{border:2px solid var(--ink);border-radius:18px;background:var(--card);padding:26px;margin-top:18px}
+#result .pending{color:var(--ink-2);font-size:15px;text-align:center}
+#result .detail{display:none}
+#result.show .pending{display:none}
+#result.show .detail{display:block;animation:fade .3s ease}
+.grade-row{display:flex;align-items:baseline;gap:14px;flex-wrap:wrap}
+.grade{font:700 64px/1 'JetBrains Mono',monospace}
+.grade-of{font:400 15px 'JetBrains Mono',monospace;color:var(--ink-2)}
+.vs-96{font:600 14px Heebo;color:#7a5a14;background:var(--gold-bg);border:1px solid #e0ca92;border-radius:999px;padding:4px 14px}
+.break{display:flex;gap:22px;flex-wrap:wrap;margin-top:16px;font:400 14px 'JetBrains Mono',monospace;color:var(--ink-2)}
+.break b{color:var(--ink)}
+#grade-msg{margin-top:16px;font:500 16px Heebo}
+#review{margin-top:10px;font:400 13.5px 'JetBrains Mono',monospace;color:var(--bad-ink)}
+
+/* ---------- footer ---------- */
+footer{margin-top:70px;text-align:center;font:400 12px 'JetBrains Mono',monospace;color:var(--ink-2)}
+
+@media (max-width:560px){
+  .q,.tf,.card{padding:16px}
+  .stats .hide-s{display:none}
+  .grade{font-size:52px}
+}
+@media (prefers-reduced-motion:reduce){
+  *{animation:none!important;transition:none!important}
+  html{scroll-behavior:auto}
+}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<header class="hero">
+  <div class="kicker">מדריכי 67 · תרגול מבחן אמת</div>
+  <h1>מנהיגות בארגונים — מבחן 2015</h1>
+  <p class="subtitle">פרק תרגול אינטראקטיבי · נלווה ל־manhigut67 · לקראת מועד ב׳, 20.7.2026</p>
+  <div class="meta">
+    <span dir="ltr">687-2-5991</span>
+    <span>ד״ר איריס כהן־קנר</span>
+    <span>מועד א׳ תשע״ה · 24.2.2015</span>
+    <span>23 שאלות · 100 נק׳</span>
+    <span class="vs">🎯 היריב: טופס בדוק, ציון 96</span>
+  </div>
+</header>
+
+<nav class="sticky">
+  <div class="sticky-in">
+    <a class="chip" href="#intro">מבנה</a>
+    <a class="chip" href="#part-a">חלק א׳</a>
+    <a class="chip" href="#part-b">חלק ב׳</a>
+    <a class="chip" href="#result">תוצאה</a>
+    <button class="chip" id="reset" type="button">↺ איפוס</button>
+    <div class="stats">
+      <span class="hide-s">נענו <b id="counter">0/23</b></span>
+      <span><b id="live-score">0</b> נק׳</span>
+    </div>
+  </div>
+  <div class="progress"><i id="progress-fill"></i></div>
+</nav>
+
+<section id="intro">
+  <h2>איך זה עובד</h2>
+  <div class="card">
+    <p>זה המבחן האמיתי ממועד א׳ 2015 — מהטופס הבדוק שקיבל <b>96</b>. עונים, מקבלים פידבק מיידי והסבר, ובסוף ציון לפי הניקוד המקורי. ארבע שאלות מסומנות <span class="badge-trap">⚠️ הפילה את ה־96</span> — אלה המלכודות שעלו לנבחן המצטיין 16 נקודות בחלק א׳.</p>
+    <ul>
+      <li><b>חלק א׳</b> — 15 שאלות אמריקאיות, 4 נק׳ כל אחת (60 נק׳). במבחן מסמנים בדף התשובות בלבד.</li>
+      <li><b>חלק ב׳</b> — 8 היגדי נכון/לא נכון, 5 נק׳ כל אחד (40 נק׳). <b>רק נימוק מלא ומנומק מזכה במלוא הניקוד</b> — לכן אחרי כל תשובה מופיע נימוק ברמת מבחן, לשינון.</li>
+      <li>המבחן חסוי, ללא חומר עזר, שעתיים, בעט בלבד. אין לחרוג מהשורות המוגדרות.</li>
+    </ul>
+  </div>
+</section>
+
+<section id="part-a">
+  <h2>חלק א׳ — אמריקאיות <span class="pts">15 × 4 = 60 נק׳</span></h2>
+  <p class="sec-note">לחיצה על תשובה נועלת את השאלה ופותחת הסבר.</p>
+
+  <div class="q" data-n="1" data-correct="2">
+    <div class="q-head"><div class="q-num">1</div>
+      <p class="q-text">על פי מודל הניהול של אדיג׳ס, ברמה האישית/מיקרו, כל מנהל צריך</p>
+    </div>
+    <div class="opts">
+      <button class="opt" type="button"><span class="letter">א</span>להיות דומיננטי ב־P</button>
+      <button class="opt" type="button"><span class="letter">ב</span>להיות דומיננטי ב־E</button>
+      <button class="opt" type="button"><span class="letter">ג</span>להגיע לאיזונים</button>
+      <button class="opt" type="button"><span class="letter">ד</span>אף תשובה אינה נכונה</button>
+    </div>
+    <div class="explain"><span class="lbl">הסבר</span>אין מנהל <span dir="ltr">PAEI</span> מושלם — אף אדם לא מצטיין בכל ארבעת התפקידים. ברמת הפרט השאיפה היא <b>איזון</b>: רמת סף בכל תפקיד, בלי "אפסים", עם בולטות טבעית באחד־שניים.</div>
+  </div>
+
+  <div class="q" data-n="2" data-correct="3">
+    <div class="q-head"><div class="q-num">2</div>
+      <p class="q-text">על פי מודל התרבות הארגונית של אדיג׳ס, ברמת הארגון/מאקרו, כל ארגון צריך</p>
+    </div>
+    <div class="opts">
+      <button class="opt" type="button"><span class="letter">א</span>להיות דומיננטי ב־P</button>
+      <button class="opt" type="button"><span class="letter">ב</span>להיות דומיננטי ב־E</button>
+      <button class="opt" type="button"><span class="letter">ג</span>להגיע לאיזונים</button>
+      <button class="opt" type="button"><span class="letter">ד</span>אף תשובה אינה נכונה</button>
+    </div>
+    <div class="explain"><span class="lbl">הסבר</span>ברמת הארגון התמהיל הרצוי <b>תלוי בשלב במחזור החיים</b>: חיזור/ינקות — E ו־P דומיננטיים; בגרות — איזון; זקנה — עודף A. אין דרישה אחת לכל ארגון, ולכן "אף תשובה". שימו לב לצמד 1–2: אותו מודל, תשובה שונה לפי הרמה.</div>
+  </div>
+
+  <div class="q" data-n="3" data-correct="1">
+    <div class="q-head"><div class="q-num">3</div>
+      <p class="q-text">אפקטיביות של מנהיגות נמדדת עפ״י:</p>
+    </div>
+    <div class="opts">
+      <button class="opt" type="button"><span class="letter">א</span>השגת יעדים ושביעות רצון לקוחות</button>
+      <button class="opt" type="button"><span class="letter">ב</span>השגת יעדים ושביעות רצון עובדים</button>
+      <button class="opt" type="button"><span class="letter">ג</span>השגת יעדים אישיים והשגת יעדים ארגוניים</button>
+      <button class="opt" type="button"><span class="letter">ד</span>כל התשובות נכונות</button>
+    </div>
+    <div class="explain"><span class="lbl">הסבר</span>שני מדדי האפקטיביות הקלאסיים: <b>ביצועים</b> (השגת יעדים) + <b>עמדות המונהגים</b> (שביעות רצון עובדים). המסיח "לקוחות" הוא המלכודת.</div>
+  </div>
+
+  <div class="q" data-n="4" data-correct="1">
+    <div class="q-head"><div class="q-num">4</div>
+      <p class="q-text">על פי גישת התכונות, אילו יכולות נחשבות כחשובות ביותר לדרג ניהולי בכיר? <span class="badge-trap">⚠️ הפילה את ה־96</span></p>
+    </div>
+    <div class="opts">
+      <button class="opt" type="button"><span class="letter">א</span>יכולות אנושיות</button>
+      <button class="opt" type="button"><span class="letter">ב</span>יכולות תפיסתיות</button>
+      <button class="opt" type="button"><span class="letter">ג</span>יכולות טכניות</button>
+      <button class="opt" type="button"><span class="letter">ד</span>אף תשובה אינה נכונה</button>
+    </div>
+    <div class="explain"><span class="lbl">הסבר</span>מודל המיומנויות של כץ: דרג זוטר — <b>טכניות</b>; דרג בכיר — <b>תפיסתיות</b> (ראייה מערכתית, אסטרטגיה, הפשטה); <b>אנושיות</b> חשובות בכל הדרגים — ולכן הן המסיח המפתה. הנבחן של ה־96 סימן "אנושיות" ונפל בדיוק כאן.</div>
+  </div>
+
+  <div class="q" data-n="5" data-correct="3">
+    <div class="q-head"><div class="q-num">5</div>
+      <p class="q-text">על פי השאלון <span dir="ltr">LBDQ</span>, ניהול הצוות מאופיין ב____</p>
+    </div>
+    <div class="opts">
+      <button class="opt" type="button"><span class="letter">א</span>נמוך בפאן המתחשב ונמוך בפאן היוזם</button>
+      <button class="opt" type="button"><span class="letter">ב</span>גבוה בפאן המתחשב ונמוך בפאן היוזם</button>
+      <button class="opt" type="button"><span class="letter">ג</span>נמוך בפאן המתחשב וגבוה בפאן היוזם</button>
+      <button class="opt" type="button"><span class="letter">ד</span>גבוה בפאן המתחשב וגבוה בפאן היוזם</button>
+    </div>
+    <div class="explain"><span class="lbl">הסבר</span>"ניהול צוות" הוא ה־<span dir="ltr">(9,9)</span> ברשת הניהולית של בלייק ומוטון: גבוה גם במתחשב (אנשים, <span dir="ltr">Consideration</span>) וגם ביוזם מבנה (משימה, <span dir="ltr">Initiating Structure</span>).</div>
+  </div>
+
+  <div class="q" data-n="6" data-correct="0">
+    <div class="q-head"><div class="q-num">6</div>
+      <p class="q-text">התובנות העולות מהמאמר ״כריזמה ואתיקה בקרב מנהיגים — אוקסימורון או היבטים משלימים״ <span class="src">(דודי אילת)</span> הן:</p>
+    </div>
+    <div class="opts">
+      <button class="opt" type="button"><span class="letter">א</span>עלינו לבחון בביקורתיות מועמדים להנהגה</button>
+      <button class="opt" type="button"><span class="letter">ב</span>אנשים שנראים טוב ונשמעים טוב הם מנהיגים כריזמטיים חברתיים</button>
+      <button class="opt" type="button"><span class="letter">ג</span>במצב משבר קל יותר להיעזר באינטואיציה על מנת לזהות את טיב המנהיג</button>
+      <button class="opt" type="button"><span class="letter">ד</span>במצב משבר מנהיגים פועלים למען צרכי המונהגים</button>
+    </div>
+    <div class="explain"><span class="lbl">הסבר</span>כריזמה יכולה להסוות מנהיג <b>כריזמטי־אישי</b> (מקדם את עצמו, לא אתי), ודווקא במשבר אנחנו הכי פגיעים לקסם שלו. המסקנה: לא אינטואיציה ולא רושם חיצוני — אלא <b>בחינה ביקורתית</b> של מועמדים להנהגה.</div>
+  </div>
+
+  <div class="q" data-n="7" data-correct="2">
+    <div class="q-head"><div class="q-num">7</div>
+      <p class="q-text">את ההמלצה בשימוש במודיעין עסקי באופן כזה או אחר ניתן למצוא ב____ מודל של מינצברג</p>
+    </div>
+    <div class="opts">
+      <button class="opt" type="button"><span class="letter">א</span>תפקידים הבינאישיים</button>
+      <button class="opt" type="button"><span class="letter">ב</span>תפקידי קבלת החלטות</button>
+      <button class="opt" type="button"><span class="letter">ג</span>תפקידים הקשורים לניתוח מידע</button>
+      <button class="opt" type="button"><span class="letter">ד</span>כל התשובות נכונות</button>
+    </div>
+    <div class="explain"><span class="lbl">הסבר</span>מודיעין עסקי = איסוף וניתוח מידע, כלומר <b>תפקידי המידע</b> של מינצברג: מרכז מידע (<span dir="ltr">Monitor</span>), מפיץ, דובר.</div>
+  </div>
+
+  <div class="q" data-n="8" data-correct="0">
+    <div class="q-head"><div class="q-num">8</div>
+      <p class="q-text">סגנון המנהיגות הנתפסת כאפקטיבי ביותר במאה ה־21 הינו המנהיגות ה____</p>
+    </div>
+    <div class="opts">
+      <button class="opt" type="button"><span class="letter">א</span>מעצבת</button>
+      <button class="opt" type="button"><span class="letter">ב</span>כריזמטית</button>
+      <button class="opt" type="button"><span class="letter">ג</span>מצבית</button>
+      <button class="opt" type="button"><span class="letter">ד</span>משתפת</button>
+    </div>
+    <div class="explain"><span class="lbl">הסבר</span>המנהיגות <b>המעצבת</b> (<span dir="ltr">Transformational</span>): חזון, השראה, גירוי אינטלקטואלי ויחס אישי. כריזמה היא רכיב בתוכה — לא הסגנון עצמו.</div>
+  </div>
+
+  <div class="q" data-n="9" data-correct="0">
+    <div class="q-head"><div class="q-num">9</div>
+      <p class="q-text">על פי המאמר ״סיעור מוחות של ממש״ <span class="src">(שי הרשקוביץ)</span>, מעוררת הלמידה המשותפת 3 סוגי התנגדויות: <span class="badge-trap">⚠️ הפילה את ה־96</span></p>
+    </div>
+    <div class="opts">
+      <button class="opt" type="button"><span class="letter">א</span>פחד מכישלון, פגיעה בייחודיות, הפרה של שתיקות מוסכמות</button>
+      <button class="opt" type="button"><span class="letter">ב</span>חשש להיראות טיפש, תחושת פגיעה בסמכויות, ירידה בכוחו של היועץ</button>
+      <button class="opt" type="button"><span class="letter">ג</span>התנגדות לשינוי, תחושת פגיעה בסמכויות, הפרה של שתיקות מוסכמות</button>
+      <button class="opt" type="button"><span class="letter">ד</span>ירידה בכוחו של היועץ, פחד מכישלון, צורך לשנות פרדיגמות אישיות</button>
+    </div>
+    <div class="explain"><span class="lbl">הסבר</span>השלישייה המדויקת של המאמר: <b>פחד מכישלון</b> (להיכשל בפומבי), <b>פגיעה בייחודיות</b> (אובדן מעמד "המומחה"), <b>הפרת שתיקות מוסכמות</b> (פתיחת נושאים שסוכם בשקט לא לגעת בהם). המסיחים מערבבים רכיבים נכונים־למחצה — צריך את הצירוף המלא. הנבחן של ה־96 סימן ב׳.</div>
+  </div>
+
+  <div class="q" data-n="10" data-correct="0">
+    <div class="q-head"><div class="q-num">10</div>
+      <p class="q-text">חזון הינו ____ <span class="badge-trap">⚠️ הפילה את ה־96</span></p>
+    </div>
+    <div class="opts">
+      <button class="opt" type="button"><span class="letter">א</span>הצהרת כוונות כללית</button>
+      <button class="opt" type="button"><span class="letter">ב</span>הצהרת כוונות ספציפית</button>
+      <button class="opt" type="button"><span class="letter">ג</span>דבר ששואפים אליו אבל אף פעם לא מגיעים אליו</button>
+      <button class="opt" type="button"><span class="letter">ד</span>מסמך הכולל את מטרות הארגון</button>
+    </div>
+    <div class="explain"><span class="lbl">הסבר</span>חזון = תמונת עתיד רחבה ומעוררת השראה — <b>הצהרת כוונות כללית</b>. "ספציפית" זה כבר יעדים; "מסמך מטרות" זו תוכנית עבודה; ג׳ היא מטאפורה רומנטית, לא הגדרה. הנבחן של ה־96 סימן ד׳.</div>
+  </div>
+
+  <div class="q" data-n="11" data-correct="1">
+    <div class="q-head"><div class="q-num">11</div>
+      <p class="q-text">בהתבסס על השיעור על קבלת החלטות ועל תרגול ההדרכה של ורום וייטון, איזו שיטה של קבלת החלטות הינה הנדירה ביותר בתרשים הזרימה? <span class="badge-trap">⚠️ הפילה את ה־96</span></p>
+    </div>
+    <div class="opts">
+      <button class="opt" type="button"><span class="letter">א</span><span dir="ltr">A</span> — אוטוקרטי</button>
+      <button class="opt" type="button"><span class="letter">ב</span><span dir="ltr">C1</span> — התייעצות פרטנית</button>
+      <button class="opt" type="button"><span class="letter">ג</span><span dir="ltr">C2</span> — התייעצות קבוצתית</button>
+      <button class="opt" type="button"><span class="letter">ד</span><span dir="ltr">G</span> — החלטה משותפת</button>
+    </div>
+    <div class="explain"><span class="lbl">הסבר</span>בתרשים הזרימה של ורום־יטון, <b><span dir="ltr">C1</span></b> (התייעצות אחד־על־אחד) היא התוצאה הנדירה ביותר — מגיעים אליה כמעט במסלול אחד בלבד, בעוד <span dir="ltr">A</span> ו־<span dir="ltr">G</span> חוזרים במסלולים רבים. הנבחן של ה־96 סימן <span dir="ltr">G</span>.</div>
+  </div>
+
+  <div class="q" data-n="12" data-correct="3">
+    <div class="q-head"><div class="q-num">12</div>
+      <p class="q-text">על פי המאמר ״אני ואתה נשנה (כי לבד לא נצליח)״ <span class="src">(עמרי גפן ודורית ציוני)</span>, אחד החסמים האוניברסליים המקשים על מימוש שיתופי פעולה אפקטיביים:</p>
+    </div>
+    <div class="opts">
+      <button class="opt" type="button"><span class="letter">א</span>חסם המבנה, משום שמבנה ארגוני לרוב מגביל תקשורת</button>
+      <button class="opt" type="button"><span class="letter">ב</span>חסם הפיזיולוגיה, משום שהפיזיולוגיה שלנו מגבילה את יכולת הלמידה והזכירה</button>
+      <button class="opt" type="button"><span class="letter">ג</span>חסם התרבות, משום שהתרבות כיום מעודדת אינדיבידואליות</button>
+      <button class="opt" type="button"><span class="letter">ד</span>חסם התרבות, משום שהתרבות כיום מעודדת תחרותיות</button>
+    </div>
+    <div class="explain"><span class="lbl">הסבר</span>החסם האוניברסלי הוא <b>תרבותי</b> — חינכו אותנו <b>להתחרות</b>, לא לשתף. המלכודת בג׳: "אינדיבידואליות" נשמעת דומה, אבל הנימוק המדויק במאמר הוא <b>תחרותיות</b>.</div>
+  </div>
+
+  <div class="q" data-n="13" data-correct="2">
+    <div class="q-head"><div class="q-num">13</div>
+      <p class="q-text">את 11 בסיסי הכוח שלמדנו בכיתה, ניתן ליישם</p>
+    </div>
+    <div class="opts">
+      <button class="opt" type="button"><span class="letter">א</span>מלמעלה למטה בלבד</button>
+      <button class="opt" type="button"><span class="letter">ב</span>מלמטה למעלה בלבד</button>
+      <button class="opt" type="button"><span class="letter">ג</span>א + ב</button>
+      <button class="opt" type="button"><span class="letter">ד</span>לא ניתן לומר בבירור</button>
+    </div>
+    <div class="explain"><span class="lbl">הסבר</span>כוח פועל <b>לשני הכיוונים</b>: גם עובדים מפעילים כלפי מנהליהם כוח מומחה, כוח מידע והזדהות. היררכיה אינה תנאי לכוח.</div>
+  </div>
+
+  <div class="q" data-n="14" data-correct="1">
+    <div class="q-head"><div class="q-num">14</div>
+      <p class="q-text">על פי המאמר ״הקונפליקט הגובר שבין אפקטיביות ליעילות״ <span class="src">(פנחס יחזקאלי)</span>, הדוגמא של פורד ממחישה כי:</p>
+    </div>
+    <div class="opts">
+      <button class="opt" type="button"><span class="letter">א</span>בעבר ניתן היה להיות רק יעילים ולא אפקטיביים</button>
+      <button class="opt" type="button"><span class="letter">ב</span>בעבר ניתן היה להיות מאד יעילים וגם אפקטיביים</button>
+      <button class="opt" type="button"><span class="letter">ג</span>כיום ניתן להיות גם יעילים וגם אפקטיביים</button>
+      <button class="opt" type="button"><span class="letter">ד</span>כיום לא ניתן להיות יעילים</button>
+    </div>
+    <div class="explain"><span class="lbl">הסבר</span>מודל T: בעידן ההוא ייצור יעיל ואחיד היה <b>בדיוק</b> מה שהשוק רצה — יעילות ואפקטיביות חפפו. הטענה של יחזקאלי: כיום הן מתנגשות, ולכן ג׳ שגויה.</div>
+  </div>
+
+  <div class="q" data-n="15" data-correct="3">
+    <div class="q-head"><div class="q-num">15</div>
+      <p class="q-text">על פי המאמר ״ללכת שבי אחריך: איך להצליח יותר כמנהיגים״ <span class="src">(סער פאר, יפעת בר־קול גרכט)</span>, לביצועים הטובים ביותר מגיעים:</p>
+    </div>
+    <div class="opts">
+      <button class="opt" type="button"><span class="letter">א</span>צוות ריאקטיבי עם מנהיג מוחצן</button>
+      <button class="opt" type="button"><span class="letter">ב</span>צוות פרואקטיבי עם מנהיג מוחצן</button>
+      <button class="opt" type="button"><span class="letter">ג</span>צוות ריאקטיבי עם מנהיג מופנם</button>
+      <button class="opt" type="button"><span class="letter">ד</span>צוות פרואקטיבי עם מנהיג מופנם</button>
+    </div>
+    <div class="explain"><span class="lbl">הסבר</span>מחקר אדם גרנט: מנהיג <b>מופנם</b> מקשיב ונותן במה ליוזמות, ולכן ממקסם צוות <b>פרואקטיבי</b>. מנהיג מוחצן עלול לחנוק יוזמה — הוא משתלב טוב יותר עם צוות פסיבי.</div>
+  </div>
+
+</section>
+
+<div class="divider"><span>זה עוד לא נגמר 🙂 חלק ב׳ בהמשך — בהצלחה!</span></div>
+
+<section id="part-b">
+  <h2>חלק ב׳ — נכון / לא נכון + נימוק <span class="pts">8 × 5 = 40 נק׳</span></h2>
+  <p class="sec-note">במבחן עצמו: רק נימוק מלא ומנומק מזכה במלוא הניקוד. אחרי כל תשובה כאן מופיע נימוק ברמת מבחן — לקרוא, לסגור, לשחזר בכתב.</p>
+
+  <div class="tf" data-n="1" data-correct="f">
+    <div class="q-head"><div class="q-num">1</div>
+      <p class="q-text">בהתבסס על מילוי שאלוני ההתנהגות במהלך הסמסטר (אדיג׳ס + <span dir="ltr">LBDQ</span>), הסגנון המשימתי והסגנון החברתי הם <b>הבסיס</b> להתנהגות אפקטיבית.</p>
+    </div>
+    <div class="tf-btns">
+      <button class="tf-btn" type="button" data-v="t">נכון</button>
+      <button class="tf-btn" type="button" data-v="f">לא נכון</button>
+    </div>
+    <div class="explain"><span class="lbl">נימוק ברמת מבחן</span><b>לא נכון.</b> שאלון <span dir="ltr">LBDQ</span> מודד שני ממדים בלבד — משימתי וחברתי — המקבילים בעיקר לתפקידי P ו־I במודל אדיג׳ס. התנהגות אפקטיבית דורשת איזון בין כל ארבעת תפקידי <span dir="ltr">PAEI</span>, כולל A (מנהלה) ו־E (יזמות). לכן שני הסגנונות הללו הם חלק מהתמונה, אך אינם "הבסיס" — הבסיס הוא האיזון המלא.</div>
+  </div>
+
+  <div class="tf" data-n="2" data-correct="f">
+    <div class="q-head"><div class="q-num">2</div>
+      <p class="q-text">אחת המסקנות שהעלנו בכיתה, בהתבסס על תרגיל נאס״א, היא שתקשורת יהלום/כוכב מתאימה <b>רק</b> לארגונים קטנים (מבחינת כוח אדם) ושטוחים (מבחינת היררכיה).</p>
+    </div>
+    <div class="tf-btns">
+      <button class="tf-btn" type="button" data-v="t">נכון</button>
+      <button class="tf-btn" type="button" data-v="f">לא נכון</button>
+    </div>
+    <div class="explain"><span class="lbl">נימוק ברמת מבחן</span><b>לא נכון.</b> רשת תקשורת פתוחה (יהלום/כוכב — כולם עם כולם) מייצרת סינרגיה (<span dir="ltr">1+1&gt;2</span>) ומתאימה להחלטות מורכבות. ניתן וכדאי ליישמה גם בארגונים גדולים והיררכיים — בתוך צוותים, הנהלות ופורומים. הבחירה ברשת נגזרת ממורכבות המשימה, לא מגודל הארגון או ממבנהו.</div>
+  </div>
+
+  <div class="tf" data-n="3" data-correct="f">
+    <div class="q-head"><div class="q-num">3</div>
+      <p class="q-text">המחקר בנוגע להרחבה של המודל של גריין (<span dir="ltr">LMX</span>) מראה ש<b>תמיד</b> העובד שיקודם הכי מהר הוא העובד שנמצא בקבוצת הפנים של המנהיג.</p>
+    </div>
+    <div class="tf-btns">
+      <button class="tf-btn" type="button" data-v="t">נכון</button>
+      <button class="tf-btn" type="button" data-v="f">לא נכון</button>
+    </div>
+    <div class="explain"><span class="lbl">נימוק ברמת מבחן</span><b>לא נכון.</b> המילה "תמיד" מפילה את ההיגד. הרחבת מודל ה־<span dir="ltr">LMX</span> גורסת שעל המנהיג להציע יחסי חליפין איכותיים לכל העובדים — "להפוך את כולם לקבוצת פנים". חברות בקבוצת הפנים משפרת סיכויי קידום, אך אינה מבטיחה שדווקא חבר קבוצת הפנים יקודם הכי מהר בכל מקרה. <b>כלל 67 לחלק ב׳:</b> "תמיד" / "רק" / "בלבד" — נורת אזהרה.</div>
+  </div>
+
+  <div class="tf" data-n="4" data-correct="t">
+    <div class="q-head"><div class="q-num">4</div>
+      <p class="q-text">בהתבסס על תיאוריית המנהיגות ״נתיב היעדים״, תיאוריית המוטיבציה ״ניהול לפי יעדים״, והדוגמא של חברת <span dir="ltr">3M</span> — מנהיג אפקטיבי, בדרך כלל, צריך להעלות את רף היעדים.</p>
+    </div>
+    <div class="tf-btns">
+      <button class="tf-btn" type="button" data-v="t">נכון</button>
+      <button class="tf-btn" type="button" data-v="f">לא נכון</button>
+    </div>
+    <div class="explain"><span class="lbl">נימוק ברמת מבחן</span><b>נכון.</b> מנהיג אפקטיבי מציב יעדים מאתגרים אך ברי־השגה (<span dir="ltr">SMART</span>). לפי נתיב־היעדים תפקידו לסלול את הדרך ליעד; לפי תורת הציפייה (<span dir="ltr">M = E × I × V</span>) הצלחה מחזקת את הציפייה והמסוגלות — ולכן אחרי הצלחה מעלים את הרף, כמו יעדי המתיחה של <span dir="ltr">3M</span> (אחוז מהמכירות ממוצרים חדשים). שרשרת ההיגיון: יעד נכון ← הצלחה ← העלאת הרף. <b>הערה מהטופס:</b> גם הנבחן של ה־96 ענה "נכון" וקיבל רק 3/5 — כי הנימוק שלו התפזר. שרשרת מלאה = ניקוד מלא.</div>
+  </div>
+
+  <div class="tf" data-n="5" data-correct="f">
+    <div class="q-head"><div class="q-num">5</div>
+      <p class="q-text">על פי מקורות הכוח שלמדנו בכיתה, כוח ידע, מומחיות והזדהות הינם דוגמאות ל<b>כוח עמדה</b>.</p>
+    </div>
+    <div class="tf-btns">
+      <button class="tf-btn" type="button" data-v="t">נכון</button>
+      <button class="tf-btn" type="button" data-v="f">לא נכון</button>
+    </div>
+    <div class="explain"><span class="lbl">נימוק ברמת מבחן</span><b>לא נכון.</b> לפי פרנץ׳ ורייבן, כוח עמדה נובע מהתפקיד: לגיטימי, תגמול, כפייה. ידע, מומחיות והזדהות הם מקורות <b>כוח אישי</b> (<span dir="ltr">Expert, Referent</span>) — נובעים מהאדם עצמו והולכים איתו לכל תפקיד, לא מהכיסא.</div>
+  </div>
+
+  <div class="tf" data-n="6" data-correct="f">
+    <div class="q-head"><div class="q-num">6</div>
+      <p class="q-text">על־פי המאמר ״בעידן של כאוס ניהול הופך לשיתוף״ <span class="src">(ירון בלומנטל)</span>, מורכבות העידן הנוכחי מחייבת חזרה לבסיס: לשליטה ולבקרה ניהולית.</p>
+    </div>
+    <div class="tf-btns">
+      <button class="tf-btn" type="button" data-v="t">נכון</button>
+      <button class="tf-btn" type="button" data-v="f">לא נכון</button>
+    </div>
+    <div class="explain"><span class="lbl">נימוק ברמת מבחן</span><b>לא נכון.</b> בלומנטל טוען בדיוק את ההפך: מורכבות העידן — כאוס, קצב שינוי, ידע מבוזר — הופכת שליטה ובקרה הדוקות לבלתי אפשריות. אף מנהל יחיד אינו מחזיק את כל הידע, ולכן נדרש ניהול משתף: האצלה, העצמה, אמון ורשתות.</div>
+  </div>
+
+  <div class="tf" data-n="7" data-correct="t">
+    <div class="q-head"><div class="q-num">7</div>
+      <p class="q-text">על־פי המאמר ״לנהל, להבין, להצליח, לנהל׳״ <span class="src">(גרי טריגר)</span>, על המנהל לנהל את רגשותיו בעזרת מודל <span dir="ltr">RULES</span>.</p>
+    </div>
+    <div class="tf-btns">
+      <button class="tf-btn" type="button" data-v="t">נכון</button>
+      <button class="tf-btn" type="button" data-v="f">לא נכון</button>
+    </div>
+    <div class="explain"><span class="lbl">נימוק ברמת מבחן</span><b>נכון.</b> על המנהל לנהל את רגשותיו (אינטליגנציה רגשית) בעזרת <span dir="ltr">RULES</span>: לזהות (<span dir="ltr">Recognize</span>) את הרגש, להבין (<span dir="ltr">Understand</span>) את מקורו, לתייג (<span dir="ltr">Label</span>) אותו במדויק, לבטא (<span dir="ltr">Express</span>) אותו באופן מותאם, ולווסת (<span dir="ltr">Self-regulate</span>). ניהול רגשי משפר קבלת החלטות ויחסים בארגון.</div>
+  </div>
+
+  <div class="tf" data-n="8" data-correct="t">
+    <div class="q-head"><div class="q-num">8</div>
+      <p class="q-text">על פי ניתוח הפעילויות הכתובות ביומן המנהל ועל פי המאמר ״מעשים שמניעים אנשים״, ניתן להסיק שהקצאת זמן היא אחת הפעילויות המשקפות את תפיסתו וסגנון התנהגותו של המנהיג.</p>
+    </div>
+    <div class="tf-btns">
+      <button class="tf-btn" type="button" data-v="t">נכון</button>
+      <button class="tf-btn" type="button" data-v="f">לא נכון</button>
+    </div>
+    <div class="explain"><span class="lbl">נימוק ברמת מבחן</span><b>נכון.</b> ניתוח יומן המנהל (ברוח מינצברג) מראה שהקצאת הזמן חושפת את סדרי העדיפויות בפועל — לא בהצהרות. לפי "מעשים שמניעים אנשים", מה שהמנהיג משקיע בו זמן משדר לעובדים מה באמת חשוב לו. לכן הקצאת זמן משקפת את תפיסתו וסגנון התנהגותו.</div>
+  </div>
+
+</section>
+
+<section id="result-sec">
+  <h2>תוצאה <span class="pts">מול ה־96</span></h2>
+  <div id="result">
+    <p class="pending">ענה על כל 23 השאלות כדי לקבל ציון ולראות אם ניצחת את הטופס הבדוק.</p>
+    <div class="detail">
+      <div class="grade-row">
+        <span class="grade" id="final-grade" dir="ltr">0</span>
+        <span class="grade-of">/ 100</span>
+        <span class="vs-96" id="vs-badge">🎯 היריב: 96</span>
+      </div>
+      <div class="break">
+        <span>חלק א׳: <b id="a-line" dir="ltr"></b></span>
+        <span>חלק ב׳: <b id="b-line" dir="ltr"></b></span>
+      </div>
+      <p id="grade-msg"></p>
+      <p id="review"></p>
+    </div>
+  </div>
+</section>
+
+<footer>מדריכי 67 · JAM 2.0 · vanilla, כמו שצריך · 🐢🚀 לאט זה חלק, חלק זה מהר</footer>
+
+</div><!-- /wrap -->
+
+<script>
+(function(){
+  var TOTAL = 23;
+  var state = { answered:0, points:0, aOk:0, bOk:0, wrong:[] };
+  function $$(s, el){ return Array.prototype.slice.call((el||document).querySelectorAll(s)); }
+
+  var progressEl = document.getElementById('progress-fill');
+  var counterEl  = document.getElementById('counter');
+  var scoreEl    = document.getElementById('live-score');
+  var resultEl   = document.getElementById('result');
+
+  function update(){
+    progressEl.style.width = (state.answered / TOTAL * 100) + '%';
+    counterEl.textContent  = state.answered + '/' + TOTAL;
+    scoreEl.textContent    = state.points;
+    if (state.answered === TOTAL) showResult();
+  }
+
+  /* ---- part A: multiple choice ---- */
+  $$('.q').forEach(function(q){
+    var correct = parseInt(q.getAttribute('data-correct'), 10);
+    var opts = $$('.opt', q);
+    opts.forEach(function(btn, i){
+      btn.addEventListener('click', function(){
+        if (q.classList.contains('locked')) return;
+        q.classList.add('locked');
+        var ok = (i === correct);
+        btn.classList.add(ok ? 'is-correct' : 'is-wrong');
+        if (ok) { state.points += 4; state.aOk++; }
+        else {
+          opts[correct].classList.add('show-correct');
+          state.wrong.push('א׳/' + q.getAttribute('data-n'));
+        }
+        q.classList.add(ok ? 'q-ok' : 'q-bad');
+        q.querySelector('.explain').classList.add('open');
+        state.answered++;
+        update();
+      });
+    });
+  });
+
+  /* ---- part B: true / false ---- */
+  $$('.tf').forEach(function(q){
+    var correct = q.getAttribute('data-correct'); /* 't' | 'f' */
+    var btns = $$('.tf-btn', q);
+    btns.forEach(function(btn){
+      btn.addEventListener('click', function(){
+        if (q.classList.contains('locked')) return;
+        q.classList.add('locked');
+        var ok = (btn.getAttribute('data-v') === correct);
+        btn.classList.add(ok ? 'is-correct' : 'is-wrong');
+        if (ok) { state.points += 5; state.bOk++; }
+        else {
+          btns.forEach(function(b){
+            if (b.getAttribute('data-v') === correct) b.classList.add('show-correct');
+          });
+          state.wrong.push('ב׳/' + q.getAttribute('data-n'));
+        }
+        q.classList.add(ok ? 'q-ok' : 'q-bad');
+        q.querySelector('.explain').classList.add('open');
+        state.answered++;
+        update();
+      });
+    });
+  });
+
+  /* ---- result ---- */
+  function showResult(){
+    resultEl.classList.add('show');
+    var p = state.points;
+    document.getElementById('final-grade').textContent = p;
+    document.getElementById('a-line').textContent = state.aOk + '/15 = ' + (state.aOk * 4);
+    document.getElementById('b-line').textContent = state.bOk + '/8 = ' + (state.bOk * 5);
+    document.getElementById('vs-badge').textContent = p > 96 ? '🏆 ניצחת את ה־96' : (p >= 96 ? '🤝 תיקו עם ה־96' : '🎯 היריב: 96');
+
+    var msg = document.getElementById('grade-msg');
+    if (p === 100)      msg.textContent = '💯 מושלם. עברת את הטופס הבדוק — סוגרים את הקורס הזה. 🐢🚀';
+    else if (p >= 96)   msg.textContent = '🐢🚀 ברמה של הטופס הבדוק ומעלה. אתה מוכן למועד ב׳ — עכשיו רק לשמר.';
+    else if (p >= 85)   msg.textContent = 'קרוב מאוד. עבור שוב על השאלות שסומנו למטה — רובן מלכודות מוכרות, לא חוסר ידע.';
+    else                msg.textContent = 'בסיס טוב. לקרוא שוב את ההסברים בשאלות האדומות, לנוח, ולרוץ סבב נוסף. לאט זה חלק, חלק זה מהר.';
+
+    document.getElementById('review').textContent =
+      state.wrong.length ? 'לחזרה: ' + state.wrong.join(' · ') : 'אפס טעויות — אין מה לחזור עליו.';
+
+    document.getElementById('result-sec').scrollIntoView({ behavior:'smooth', block:'start' });
+  }
+
+  /* ---- reset ---- */
+  document.getElementById('reset').addEventListener('click', function(){
+    state = { answered:0, points:0, aOk:0, bOk:0, wrong:[] };
+    $$('.q, .tf').forEach(function(q){ q.classList.remove('locked','q-ok','q-bad'); });
+    $$('.opt, .tf-btn').forEach(function(b){ b.classList.remove('is-correct','is-wrong','show-correct'); });
+    $$('.explain').forEach(function(e){ e.classList.remove('open'); });
+    resultEl.classList.remove('show');
+    update();
+    window.scrollTo({ top:0, behavior:'smooth' });
+  });
+
+  update();
+})();
+</script>
+</body>
+</html>
