@@ -1,0 +1,259 @@
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #ffffff;
+            width: 1024px;
+            height: 768px;
+            overflow: hidden;
+        }
+
+        .reogrid-container {
+            width: 100%;
+            height: 100%;
+            background-color: #ffffff;
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* כותרת ראשית */
+        .main-header {
+            background-color: #d3d3d3;
+            text-align: center;
+            padding: 12px;
+            font-size: 21px;
+            font-weight: bold;
+            border: 1px solid #a0a0a0;
+            color: #000000;
+            position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        /* שעון דיגיטלי */
+        .digital-clock {
+            position: absolute;
+            right: 20px;
+            top: 50%;
+            transform: translateY(-50%);
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            border: 1px solid #8d86ce;
+        }
+
+        .clock-time {
+            font-family: 'Courier New', monospace;
+            font-size: 21px;
+            font-weight: bold;
+            color: #667eea;
+            text-shadow: 0 0 10px rgba(33, 150, 243, 0.3);
+            letter-spacing: 1px;
+        }
+
+        .clock-date {
+            font-size: 12px;
+            color: #666;
+            text-align: right;
+        }
+
+        /* ווידג'ט מזג אויר */
+        .weather-widget {
+            position: absolute;
+            left: 20px;
+            top: 50%;
+            transform: translateY(-50%);
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            padding: 4px 10px;
+            border-radius: 15px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        .weather-icon {
+            font-size: 20px;
+        }
+
+        .weather-info {
+            display: flex;
+            flex-direction: column;
+            color: white;
+        }
+
+        .weather-temp {
+            font-size: 14px;
+            font-weight: bold;
+            line-height: 1;
+        }
+
+        .weather-desc {
+            font-size: 9px;
+            opacity: 0.9;
+        }
+
+        .weather-city {
+            font-size: 8px;
+            opacity: 0.8;
+        }
+
+        /* גריד */
+        .grid-wrapper {
+            flex: 1;
+            overflow: hidden;
+            background-color: #ffffff;
+            padding-right: 30px; /* הזזה ימינה */
+        }
+
+        .grid {
+            width: 100%;
+            border-collapse: collapse;
+            table-layout: fixed;
+        }
+
+        /* כותרות עמודות */
+        .grid thead th {
+            background-color: #98c5ff; /* כחול בהיר */
+            border: 2px solid #333333; /* קו בולט */
+            padding: 6px 4px;
+            font-size: 20px;
+            font-weight: bold;
+            font-family: 'Aharoni', 'Tahoma', sans-serif;
+            color: #000000;
+            text-align: center;
+            height: 28px;
+        }
+
+        /* תאים רגילים */
+        .grid td {
+            border: 2px solid #333333; /* קווים מפרידים בולטים */
+            padding: 4px 6px;
+            font-size: 20px;
+            font-weight: 700; /* כתב מודגש */
+            color: #000000; /* כתב שחור */
+            background-color: #ffffff;
+            vertical-align: middle;
+            height: 32px;
+        }
+
+        /* תאים עם רקע צהוב (בקרים) */
+        .grid td.controller {
+            background-color: #ffff00;
+        }
+
+        /* תאים ממוזגים (מרכז) */
+        .grid td.merged {
+            text-align: center;
+            font-weight: bold;
+            vertical-align: middle;
+        }
+
+        /* צבעי רקע לצוותים - לסירוגין לבן וסגול */
+        .grid tr.crew-even td {
+            background-color: #ffffff; /* לבן */
+            color: #000000; /* כתב שחור */
+        }
+
+        .grid tr.crew-even td.controller {
+            background-color: #ffff00; /* בקרים נשארים צהובים */
+        }
+
+        .grid tr.crew-odd td {
+             /* #529eff - סגול לפי הבקשה -   */
+            background-color: hsl(225, 87%, 79%); 
+            color: #000000; /* כתב שחור */
+        }
+
+        .grid tr.crew-odd td.controller {
+            background-color: #ffff00; /* בקרים נשארים צהובים */
+        }
+
+        /* תאים ממוזגים - שומרים על הצבע */
+        .grid tr.crew-even td.merged {
+            background-color: #ffffff; /* לבן */
+            color: #000000;
+        }
+
+        .grid tr.crew-odd td.merged {
+            background-color: hsl(225, 87%, 79%); /* סגול מלא */
+            color: #000000;
+        }
+
+        /* רוחב עמודות */
+        .col-tool {
+            width: 60px;
+        }
+
+        .col-name {
+            width: 200px;
+            text-align: right;
+        }
+
+        .col-empno {
+            width: 100px;
+            text-align: right;
+        }
+
+        .col-role {
+            width: 200px;
+            text-align: right;
+        }
+
+        .col-crew {
+            width: 50px;
+        }
+
+        .col-company {
+            width: 50px;
+        }
+
+        .col-ship {
+            width: 200px;
+        }
+
+        .col-pier {
+            width: 70px;
+        }
+
+        /* גלילה */
+        .grid-scroll {
+            overflow-y: auto;
+            overflow-x: hidden;
+            max-height: calc(768px - 80px);
+        }
+
+        /* מונה עמודים */
+        .page-info {
+            position: fixed;
+            bottom: 10px;
+            left: 10px;
+            background-color: rgba(255, 255, 255, 0.9);
+            padding: 5px 10px;
+            border: 1px solid #ccc;
+            border-radius: 3px;
+            font-size: 12px;
+            color: #666;
+            z-index: 1000;
+        }
+
+        /* אנימציה לשעון */
+        @keyframes pulse {
+            0%,
+            100% {
+                opacity: 1;
+            }
+            50% {
+                opacity: 0.5;
+            }
+        }
+
+        .clock-separator {
+            animation: pulse 1s infinite;
+        }
