@@ -1,0 +1,400 @@
+
+using System;
+using System.Collections.Generic;
+using System.Diagnostics;
+using System.IO;
+using System.Net;
+using System.Net.Http;
+using System.Net.NetworkInformation;
+using System.Text;
+using System.Text.Json;
+using System.Threading;
+using System.Threading.Tasks;
+using System.Linq;
+
+// ═══════════════════════════════════════════════════════════
+// digi67 — DIGI Rugged Computer Monitor
+//  
+// Scans 177 DIGI computers on port cranes, hoists & vehicles
+// Writes results.json → serves dashboard to OT network
+//  
+// Ashdod Port | 67CODES
+// ═══════════════════════════════════════════════════════════
+
+namespace Digi67
+{
+    class Program
+    {
+        // ── Config ──
+        static string RECEIVER_URL = "https://api.67.codes/digi67/report";
+        static int INTERVAL_SECONDS = 60;
+        static int PING_TIMEOUT_MS = 3000;
+        static int BATCH_SIZE = 20;
+        static int LOCAL_PORT = 8067;
+        static string CONFIG_FILE = "digi67-config.json";
+        static string MACHINES_FILE = "machines.json";
+
+        static readonly string BASE_DIR = AppDomain.CurrentDomain.BaseDirectory;
+        static readonly string PUBLIC_DIR = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "public");
+        static readonly string RESULTS_FILE = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "public", "results.json");
+
+        static readonly HttpClient http = new HttpClient { Timeout = TimeSpan.FromSeconds(30) };
+
+        static List<Category> categories = new List<Category>();
+        static DateTime lastMachinesLoad = DateTime.MinValue;
+
+        static void Main(string[] args)
+        {
+            Console.OutputEncoding = Encoding.UTF8;
+            PrintBanner();
+            LoadConfig();
+
+            if (args.Length >= 1) RECEIVER_URL = args[0];
+            if (args.Length >= 2) int.TryParse(args[1], out INTERVAL_SECONDS);
+
+            Directory.CreateDirectory(PUBLIC_DIR);
+            LoadMachinesFile();
+
+            Log($"Receiver: {RECEIVER_URL}");
+            Log($"Dashboard: http://localhost:{LOCAL_PORT}");
+            Log($"Results: {RESULTS_FILE}");
+            Log($"Interval: {INTERVAL_SECONDS}s");
+            Log($"DIGI units: {categories.Sum(c => c.Addresses.Count)} in {categories.Count} categories");
+            Log("");
+
+            new Thread(RunStaticServer) { IsBackground = true }.Start();
+
+            while (true)
+            {
+                try
+                {
+                    ReloadMachinesIfChanged();
+                    RunCycle().GetAwaiter().GetResult();
+                }
+                catch (Exception ex) { LogError($"Cycle failed: {ex.Message}"); }
+
+                Log($"Sleeping {INTERVAL_SECONDS}s...\n");
+                Thread.Sleep(INTERVAL_SECONDS * 1000);
+            }
+        }
+
+        // ═══════════════════════════════════
+        // Ping Cycle → Write results.json
+        // ═══════════════════════════════════
+
+        static async Task RunCycle()
+        {
+            var sw = Stopwatch.StartNew();
+            var allMachines = new List<(string Addr, string CatKey, string CatName)>();
+            foreach (var c in categories)
+                foreach (var a in c.Addresses)
+                    allMachines.Add((a, c.Key, c.Name));
+
+            Log($"[SCAN] Starting — {allMachines.Count} DIGI units");
+
+            var results = new List<MachineResult>();
+
+            for (int i = 0; i < allMachines.Count; i += BATCH_SIZE)
+            {
+                var batch = allMachines.Skip(i).Take(BATCH_SIZE).ToList();
+                var tasks = batch.Select(async m =>
+                {
+                    var r = await PingHost(m.Addr);
+                    return new MachineResult
+                    {
+                        address = m.Addr,
+                        category = m.CatKey,
+                        categoryHe = m.CatName,
+                        connected = r.Alive,
+                        pingMs = r.Ms,
+                        lastSeen = r.Alive ? DateTime.Now.ToString("o") : null
+                    };
+                });
+
+                results.AddRange(await Task.WhenAll(tasks));
+                Console.Write($"\r Progress: {Math.Min(i + BATCH_SIZE, allMachines.Count)}/{allMachines.Count} ");
+            }
+            Console.WriteLine();
+
+            sw.Stop();
+            var now = DateTime.Now.ToString("o");
+            int online = results.Count(r => r.connected);
+
+            Log($"[SCAN] Done {sw.Elapsed.TotalSeconds:F1}s — {online}/{results.Count} online");
+
+            WriteResultsFile(results, now, (int)sw.ElapsedMilliseconds);
+            await SendReport();
+        }
+
+        static void WriteResultsFile(List<MachineResult> results, string timestamp, int cycleMs)
+        {
+            try
+            {
+                var online = results.Count(r => r.connected);
+                var data = new
+                {
+                    timestamp,
+                    agentName = Environment.MachineName,
+                    cycleDurationMs = cycleMs,
+                    summary = new { total = results.Count, online, offline = results.Count - online },
+                    categories = categories.Select(c => new { key = c.Key, name = c.Name, icon = c.Icon, color = c.Color }),
+                    machines = results
+                };
+
+                var json = JsonSerializer.Serialize(data, new JsonSerializerOptions
+                {
+                    PropertyNamingPolicy = JsonNamingPolicy.CamelCase,
+                    WriteIndented = false
+                });
+
+                var tmp = RESULTS_FILE + ".tmp";
+                File.WriteAllText(tmp, json, Encoding.UTF8);
+                File.Move(tmp, RESULTS_FILE, true);
+
+                Log($"[FILE] results.json ({(json.Length / 1024.0):F1}KB)");
+            }
+            catch (Exception ex) { LogError($"[FILE] {ex.Message}"); }
+        }
+
+        static async Task<(bool Alive, double? Ms)> PingHost(string host)
+        {
+            try
+            {
+                using var pinger = new Ping();
+                var reply = await pinger.SendPingAsync(host, PING_TIMEOUT_MS);
+                if (reply.Status == IPStatus.Success) return (true, reply.RoundtripTime);
+            }
+            catch { }
+            return (false, null);
+        }
+
+        // ═══════════════════════════════════
+        // Static File Server
+        // ═══════════════════════════════════
+
+        static readonly Dictionary<string, string> MIME = new()
+        {
+            { ".html", "text/html; charset=utf-8" },
+            { ".json", "application/json; charset=utf-8" },
+            { ".css", "text/css" },
+            { ".js", "application/javascript" },
+            { ".png", "image/png" },
+            { ".ico", "image/x-icon" }
+        };
+
+        static void RunStaticServer()
+        {
+            var listener = new HttpListener();
+            listener.Prefixes.Add($"http://+:{LOCAL_PORT}/");
+
+            try { listener.Start(); }
+            catch
+            {
+                listener = new HttpListener();
+                listener.Prefixes.Add($"http://localhost:{LOCAL_PORT}/");
+                listener.Start();
+            }
+
+            Log($"[HTTP] Dashboard on port {LOCAL_PORT}");
+
+            while (true)
+            {
+                try
+                {
+                    var ctx = listener.GetContext();
+                    Task.Run(() => ServeFile(ctx));
+                }
+                catch (Exception ex) { LogError($"[HTTP] {ex.Message}"); }
+            }
+        }
+
+        static void ServeFile(HttpListenerContext ctx)
+        {
+            var res = ctx.Response;
+
+            try
+            {
+                var reqPath = ctx.Request.Url.AbsolutePath;
+                if (reqPath == "/") reqPath = "/index.html";
+
+                var filePath = Path.Combine(PUBLIC_DIR, reqPath.TrimStart('/'));
+
+                if (!Path.GetFullPath(filePath).StartsWith(Path.GetFullPath(PUBLIC_DIR)))
+                {
+                    res.StatusCode = 403; res.Close(); return;
+                }
+
+                if (File.Exists(filePath))
+                {
+                    var ext = Path.GetExtension(filePath);
+                    res.ContentType = MIME.GetValueOrDefault(ext, "application/octet-stream");
+                    res.StatusCode = 200;
+
+                    if (filePath.EndsWith("results.json"))
+                    {
+                        res.Headers.Add("Cache-Control", "no-cache, no-store");
+                        res.Headers.Add("Access-Control-Allow-Origin", "*");
+                    }
+
+                    var bytes = File.ReadAllBytes(filePath);
+                    res.OutputStream.Write(bytes, 0, bytes.Length);
+                }
+                else
+                {
+                    res.StatusCode = 404;
+                    var msg = Encoding.UTF8.GetBytes("404");
+                    res.OutputStream.Write(msg, 0, msg.Length);
+                }
+                res.Close();
+            }
+            catch { try { res.Close(); } catch { } }
+        }
+
+        // ═══════════════════════════════════
+        // POST to turtle67
+        // ═══════════════════════════════════
+
+        static async Task SendReport()
+        {
+            if (string.IsNullOrEmpty(RECEIVER_URL) || RECEIVER_URL == "none") return;
+
+            try
+            {
+                var json = File.ReadAllText(RESULTS_FILE);
+                var response = await http.PostAsync(RECEIVER_URL,
+                    new StringContent(json, Encoding.UTF8, "application/json"));
+
+                if (response.IsSuccessStatusCode)
+                    Log($"[SEND] OK → turtle67");
+                else
+                    LogError($"[SEND] HTTP {(int)response.StatusCode}");
+            }
+            catch (Exception ex) { LogError($"[SEND] {ex.Message}"); }
+        }
+
+        // ═══════════════════════════════════
+        // machines.json
+        // ═══════════════════════════════════
+
+        static void LoadMachinesFile()
+        {
+            var path = Path.Combine(BASE_DIR, MACHINES_FILE);
+
+            if (!File.Exists(path))
+            {
+                LogError($"[MACHINES] {MACHINES_FILE} not found!");
+                return;
+            }
+
+            try
+            {
+                using var doc = JsonDocument.Parse(File.ReadAllText(path, Encoding.UTF8));
+                var newCats = new List<Category>();
+
+                foreach (var cat in doc.RootElement.GetProperty("categories").EnumerateArray())
+                {
+                    var c = new Category
+                    {
+                        Key = cat.GetProperty("key").GetString(),
+                        Name = cat.GetProperty("name").GetString(),
+                        Icon = cat.TryGetProperty("icon", out var i) ? i.GetString() : "📦",
+                        Color = cat.TryGetProperty("color", out var cl) ? cl.GetString() : "#7a8a9e",
+                        Addresses = new List<string>()
+                    };
+                    foreach (var addr in cat.GetProperty("addresses").EnumerateArray())
+                        c.Addresses.Add(addr.GetString());
+                    newCats.Add(c);
+                }
+
+                categories = newCats;
+                lastMachinesLoad = File.GetLastWriteTime(path);
+                Log($"[MACHINES] {categories.Sum(c => c.Addresses.Count)} DIGI units, {categories.Count} categories");
+            }
+            catch (Exception ex) { LogError($"[MACHINES] {ex.Message}"); }
+        }
+
+        static void ReloadMachinesIfChanged()
+        {
+            var path = Path.Combine(BASE_DIR, MACHINES_FILE);
+            if (!File.Exists(path)) return;
+            if (File.GetLastWriteTime(path) > lastMachinesLoad)
+            {
+                Log("[MACHINES] File changed — reloading...");
+                LoadMachinesFile();
+            }
+        }
+
+        // ═══════════════════════════════════
+        // Config
+        // ═══════════════════════════════════
+
+        static void LoadConfig()
+        {
+            if (!File.Exists(CONFIG_FILE))
+            {
+                var defaults = new Dictionary<string, object>
+                {
+                    { "receiverUrl", RECEIVER_URL },
+                    { "intervalSeconds", INTERVAL_SECONDS },
+                    { "pingTimeoutMs", PING_TIMEOUT_MS },
+                    { "batchSize", BATCH_SIZE },
+                    { "localPort", LOCAL_PORT },
+                    { "machinesFile", MACHINES_FILE }
+                };
+                File.WriteAllText(CONFIG_FILE,
+                    JsonSerializer.Serialize(defaults, new JsonSerializerOptions { WriteIndented = true }));
+                Log($"[CONFIG] Created {CONFIG_FILE}");
+                return;
+            }
+
+            try
+            {
+                using var doc = JsonDocument.Parse(File.ReadAllText(CONFIG_FILE));
+                var r = doc.RootElement;
+                if (r.TryGetProperty("receiverUrl", out var v1)) RECEIVER_URL = v1.GetString();
+                if (r.TryGetProperty("intervalSeconds", out var v2)) INTERVAL_SECONDS = v2.GetInt32();
+                if (r.TryGetProperty("pingTimeoutMs", out var v3)) PING_TIMEOUT_MS = v3.GetInt32();
+                if (r.TryGetProperty("batchSize", out var v4)) BATCH_SIZE = v4.GetInt32();
+                if (r.TryGetProperty("localPort", out var v5)) LOCAL_PORT = v5.GetInt32();
+                if (r.TryGetProperty("machinesFile", out var v6)) MACHINES_FILE = v6.GetString();
+                Log($"[CONFIG] Loaded");
+            }
+            catch (Exception ex) { LogError($"[CONFIG] {ex.Message}"); }
+        }
+
+        static void PrintBanner()
+        {
+            Console.ForegroundColor = ConsoleColor.Cyan;
+            Console.WriteLine(@"
+  ╔════════════════════════════════════════════╗
+  ║ digi67 — DIGI Network Monitor ║
+  ║ Ashdod Port | 67CODES ║
+  ╚════════════════════════════════════════════╝
+");
+            Console.ResetColor();
+        }
+
+        static void Log(string m) { Console.Write($" {DateTime.Now:HH:mm:ss} "); Console.WriteLine(m); }
+        static void LogError(string m) { Console.ForegroundColor = ConsoleColor.Red; Log(m); Console.ResetColor(); }
+    }
+
+    class Category
+    {
+        public string Key { get; set; }
+        public string Name { get; set; }
+        public string Icon { get; set; }
+        public string Color { get; set; }
+        public List<string> Addresses { get; set; }
+    }
+
+    class MachineResult
+    {
+        public string address { get; set; }
+        public string category { get; set; }
+        public string categoryHe { get; set; }
+        public bool connected { get; set; }
+        public double? pingMs { get; set; }
+        public string lastSeen { get; set; }
+    }
+}
+
