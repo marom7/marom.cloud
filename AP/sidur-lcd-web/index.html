@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<!-- ReoGrid Style -->
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=1024, height=768">
+    <title>תצוגת משמרות-סידור עבודה</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+    <div class="page-info">
+        עמוד <span id="pageNum">1</span> מתוך <span id="totalPages">1</span>
+    </div>
+
+    <div class="reogrid-container">
+        <div class="main-header">
+            <!-- ווידג'ט מזג אויר -->
+            <div class="weather-widget">
+                <div class="weather-icon" id="weatherIcon">🌤️</div>
+                <div class="weather-info">
+                    <div class="weather-temp" id="weatherTemp">--°C</div>
+                    <div class="weather-desc" id="weatherDesc">טוען...</div>
+                    <div class="weather-city">אשדוד</div>
+                </div>
+            </div>
+
+            <!-- כותרת מרכזית -->
+            <div>
+                <span id="shiftDisplay"></span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span
+                    id="dateDisplay"></span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span id="nameSidurDisplay"></span>
+            </div>
+
+            <!-- שעון דיגיטלי -->
+            <div class="digital-clock">
+                <div class="clock-time" id="clockTime">00:00:00</div>
+            </div>
+        </div>
+
+        <div class="grid-scroll">
+            <table class="grid">
+                <thead>
+                    <tr>
+                        <th class="col-pier">רציף</th>
+                        <th class="col-ship">אוניה / משימה</th>
+                        <th class="col-company">ספנה</th>
+                        <th class="col-crew">צוות</th>
+                        <th class="col-role">תפקיד</th>
+                        <th class="col-empno">מס.עובד</th>
+                        <th class="col-name">שם עובד</th>
+                        <th class="col-tool">כלי</th>
+                    </tr>
+                </thead>
+                <tbody id="gridBody">
+                    <!-- הנתונים ייטענו כאן -->
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <script src="api.js"></script>
+    <script src="app.js"></script>
+</body>
+
+</html>
