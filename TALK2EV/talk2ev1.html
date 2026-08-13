@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>OCPP Dashboard | ABB Terra</title>
+    <style>
+        :root {
+            --bg-color: #121212;
+            --panel-bg: #1e1e1e;
+            --text-main: #ffffff;
+            --text-muted: #a0a0a0;
+            --accent-green: #00c853;
+            --accent-red: #d50000;
+            --accent-blue: #2979ff;
+            --border-radius: 12px;
+        }
+
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background-color: var(--bg-color); color: var(--text-main); margin: 0; padding: 20px; display: flex; flex-direction: column; align-items: center; }
+        .header { text-align: center; margin-bottom: 30px; }
+        .header h1 { margin: 0; font-size: 28px; letter-spacing: 1px; }
+        .header p { color: var(--text-muted); margin-top: 5px; direction: ltr; }
+        
+        .dashboard-container { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 20px; width: 100%; max-width: 1000px; margin-bottom: 20px; }
+        .card { background-color: var(--panel-bg); padding: 25px; border-radius: var(--border-radius); box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3); display: flex; flex-direction: column; }
+        .card h2 { margin-top: 0; font-size: 18px; border-bottom: 1px solid #333; padding-bottom: 10px; margin-bottom: 20px; }
+        
+        /* סטטוס */
+        .status-indicator { display: flex; align-items: center; gap: 10px; font-size: 22px; font-weight: bold; margin-bottom: 15px; }
+        .dot { width: 15px; height: 15px; background-color: var(--text-muted); border-radius: 50%; box-shadow: 0 0 10px currentColor; }
+        .dot.online { background-color: var(--accent-green); color: var(--accent-green); }
+        .dot.charging { background-color: var(--accent-blue); color: var(--accent-blue); animation: pulse 1.5s infinite; }
+        @keyframes pulse { 0% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(41, 121, 255, 0.7); } 70% { transform: scale(1); box-shadow: 0 0 0 10px rgba(41, 121, 255, 0); } 100% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(41, 121, 255, 0); } }
+
+        /* כפתורים ושליטה */
+        .form-group { margin-bottom: 15px; }
+        .form-group label { display: block; margin-bottom: 5px; color: var(--text-muted); font-size: 14px; }
+        .form-group input { width: 100%; padding: 10px; background-color: #2a2a2a; border: 1px solid #444; color: white; border-radius: 6px; box-sizing: border-box; font-family: monospace; }
+        .btn-group { display: flex; gap: 10px; margin-top: 10px; }
+        button { flex: 1; padding: 12px; border: none; border-radius: 6px; font-size: 16px; font-weight: bold; cursor: pointer; transition: 0.2s; color: white; }
+        button:active { transform: scale(0.98); }
+        .btn-start { background-color: var(--accent-green); } .btn-start:hover { background-color: #00e676; }
+        .btn-stop { background-color: var(--accent-red); } .btn-stop:hover { background-color: #ff1744; }
+
+        /* לוח מדדים בזמן אמת */
+        .metrics-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 15px; text-align: center; }
+        .metric-box { background-color: #252525; padding: 15px 10px; border-radius: 8px; border: 1px solid #333; }
+        .metric-icon { font-size: 24px; margin-bottom: 5px; }
+        .metric-title { color: var(--text-muted); font-size: 13px; margin-bottom: 8px; }
+        .metric-value { font-size: 24px; font-weight: bold; font-family: monospace; }
+        .metric-unit { font-size: 14px; color: #888; }
+        .charging-active { color: var(--accent-blue); text-shadow: 0 0 10px rgba(41,121,255,0.4); }
+
+        /* לוגים */
+        .log-container { background-color: #000000; padding: 15px; border-radius: var(--border-radius); font-family: 'Courier New', monospace; font-size: 13px; color: #00e676; height: 120px; overflow-y: auto; border: 1px solid #333; }
+        .log-entry { margin-bottom: 5px; border-bottom: 1px dashed #222; padding-bottom: 2px; }
+        .log-time { color: #888; margin-left: 10px; }
+        .log-error { color: #ff1744; }
+    </style>
+</head>
+<body>
+
+    <div class="header">
+        <h1>⚡ ניהול טעינה מרחוק</h1>
+        <p>Server: talk2ev.app | Charger ID: ABB1</p>
+    </div>
+
+    <div class="dashboard-container">
+        <!-- 1. סטטוס העמדה -->
+        <div class="card">
+            <h2>מצב נוכחי</h2>
+            <div class="status-indicator">
+                <div class="dot online" id="statusDot"></div>
+                <span id="statusText">זמין</span>
+            </div>
+            <p style="color: var(--text-muted); font-size: 14px;">
+                מזהה רשת: TACW2243221G0550<br>
+                חיבור נוכחי: <span id="connectionStatus" style="color: var(--accent-green)">מחובר</span>
+            </p>
+        </div>
+
+        <!-- 2. נתוני טעינה בזמן אמת -->
+        <div class="card" style="grid-column: span 2;">
+            <h2>נתוני טעינה (Meter Values)</h2>
+            <div class="metrics-grid">
+                <div class="metric-box">
+                    <div class="metric-icon">⚡</div>
+                    <div class="metric-title">הספק רגעי</div>
+                    <div class="metric-value" id="val-power">0.0 <span class="metric-unit">kW</span></div>
+                </div>
+                <div class="metric-box">
+                    <div class="metric-icon">🔋</div>
+                    <div class="metric-title">אנרגיה שסופקה</div>
+                    <div class="metric-value" id="val-energy">0.00 <span class="metric-unit">kWh</span></div>
+                </div>
+                <div class="metric-box">
+                    <div class="metric-icon">⏱️</div>
+                    <div class="metric-title">זמן טעינה</div>
+                    <div class="metric-value" id="val-duration">00:00:00</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="dashboard-container">
+        <!-- 3. שליטה ובקרה -->
+        <div class="card">
+            <h2>פעולות מערכת</h2>
+            <div class="form-group">
+                <label for="idTag">תג זיהוי (RFID):</label>
+                <input type="text" id="idTag" value="APP-USER-01">
+            </div>
+            <div class="btn-group">
+                <button class="btn-start" onclick="sendAction('start')">הפעל טעינה</button>
+                <button class="btn-stop" onclick="sendAction('stop')">הפסק טעינה</button>
+            </div>
+        </div>
+
+        <!-- 4. חלון לוגים -->
+        <div class="card" style="grid-column: span 2;">
+            <h2>תקשורת (API Logs)</h2>
+            <div class="log-container" id="terminal">
+                <div class="log-entry"><span class="log-time">מערכת</span> ממשק משתמש נטען. ממתין לנתונים...</div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // בבדיקה מקומית (localhost) שנה ל- http://localhost:9220/api
+        const API_BASE_URL = 'https://talk2ev.app/api'; 
+        const CHARGER_ID = 'ABB1';
+
+        function log(message, isError = false) {
+            const terminal = document.getElementById('terminal');
+            const time = new Date().toLocaleTimeString('he-IL');
+            const colorClass = isError ? 'log-error' : '';
+            terminal.innerHTML += `<div class="log-entry ${colorClass}"><span class="log-time">[${time}]</span> ${message}</div>`;
+            terminal.scrollTop = terminal.scrollHeight;
+        }
+
+        async function sendAction(action) {
+            const idTag = document.getElementById('idTag').value;
+            const endpoint = `${API_BASE_URL}/${action}-charging/${CHARGER_ID}`;
+            const payload = action === 'start' ? { idTag: idTag } : { transactionId: 1 };
+            
+            log(`שולח בקשת ${action.toUpperCase()}...`);
+
+            try {
+                const response = await fetch(endpoint, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(payload)
+                });
+                const data = await response.json();
+                response.ok ? log(`✅ ${data.message}`) : log(`❌ ${data.error}`, true);
+            } catch (err) {
+                log(`⚠️ שגיאת רשת: ${err.message}`, true);
+            }
+        }
+
+        // ==========================================
+        // משיכת נתונים בזמן אמת מהשרת (Polling)
+        // ==========================================
+        async function fetchLiveStatus() {
+            try {
+                const response = await fetch(`${API_BASE_URL}/status/${CHARGER_ID}`);
+                if (!response.ok) throw new Error("Charger Offline");
+                
+                const data = await response.json();
+                
+                // עדכון המדדים הוויזואליים
+                document.getElementById('val-power').innerHTML = `${data.powerKw.toFixed(1)} <span class="metric-unit">kW</span>`;
+                document.getElementById('val-energy').innerHTML = `${data.energyKwh.toFixed(2)} <span class="metric-unit">kWh</span>`;
+                document.getElementById('val-duration').innerText = data.durationFormatted;
+
+                // עדכון כדורי הסטטוס והצבעים
+                const dot = document.getElementById('statusDot');
+                const powerEl = document.getElementById('val-power');
+                
+                if (data.isCharging) {
+                    dot.className = 'dot charging';
+                    document.getElementById('statusText').innerText = 'בטעינה...';
+                    powerEl.classList.add('charging-active');
+                } else {
+                    dot.className = 'dot online';
+                    document.getElementById('statusText').innerText = 'זמין / מחובר';
+                    powerEl.classList.remove('charging-active');
+                }
+                
+                document.getElementById('connectionStatus').innerText = "מחובר";
+                document.getElementById('connectionStatus').style.color = "var(--accent-green)";
+
+            } catch (err) {
+                // במקרה שהעמדה נותקה מהאינטרנט או שהשרת למטה
+                document.getElementById('statusDot').className = 'dot';
+                document.getElementById('statusText').innerText = 'מנותק';
+                document.getElementById('connectionStatus').innerText = "מנותק מהרשת";
+                document.getElementById('connectionStatus').style.color = "var(--accent-red)";
+                
+                // איפוס נתונים
+                document.getElementById('val-power').innerHTML = `0.0 <span class="metric-unit">kW</span>`;
+                document.getElementById('val-energy').innerHTML = `0.00 <span class="metric-unit">kWh</span>`;
+                document.getElementById('val-power').classList.remove('charging-active');
+            }
+        }
+
+        // דגימת נתונים מהשרת כל 3 שניות
+        setInterval(fetchLiveStatus, 3000);
+        
+        // קריאה ראשונית מיד עם טעינת הדף
+        fetchLiveStatus();
+    </script>
+</body>
+</html>
