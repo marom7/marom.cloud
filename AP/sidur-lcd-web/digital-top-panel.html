@@ -1,0 +1,438 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>פאנל עליון דיגיטלי</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500;700&family=Heebo:wght@400;500;700&display=swap" rel="stylesheet">
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      background: #0d1117;
+      font-family: 'Heebo', system-ui, sans-serif;
+      color: #e6edf3;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding-top: 20px;
+    }
+
+    /* === DIGITAL TOP PANEL === */
+    .digital-panel {
+      width: 100%;
+      max-width: 1400px;
+      background: linear-gradient(180deg, #0a0f1a 0%, #0d1525 100%);
+      border-bottom: 2px solid #00e5ff;
+      box-shadow: 
+        0 0 20px rgba(0, 229, 255, 0.25),
+        inset 0 -1px 0 rgba(0, 229, 255, 0.15);
+      padding: 10px 18px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      flex-wrap: wrap;
+      position: relative;
+      overflow: hidden;
+    }
+
+    /* subtle scanline / digital texture */
+    .digital-panel::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background: repeating-linear-gradient(
+        0deg,
+        transparent,
+        transparent 2px,
+        rgba(0, 229, 255, 0.015) 2px,
+        rgba(0, 229, 255, 0.015) 4px
+      );
+      pointer-events: none;
+    }
+
+    .panel-section {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      white-space: nowrap;
+    }
+
+    /* CLOCK */
+    .clock {
+      font-family: 'Orbitron', monospace;
+      font-weight: 700;
+      font-size: 1.85rem;
+      letter-spacing: 2px;
+      color: #00e5ff;
+      text-shadow: 
+        0 0 8px rgba(0, 229, 255, 0.7),
+        0 0 18px rgba(0, 229, 255, 0.35);
+      background: rgba(0, 40, 60, 0.45);
+      padding: 6px 18px;
+      border-radius: 6px;
+      border: 1px solid rgba(0, 229, 255, 0.45);
+      width: 200px;              /* רוחב קבוע רחב – מונע יציאת ספרות */
+      min-width: 200px;
+      max-width: 200px;
+      text-align: center;
+      direction: ltr;
+      font-variant-numeric: tabular-nums;
+      box-sizing: border-box;
+      flex-shrink: 0;
+      overflow: hidden;
+    }
+
+    /* DATE + SHIFT */
+    .date-shift {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      font-size: 1.05rem;
+      font-weight: 500;
+    }
+
+    .day-date {
+      color: #7ee8ff;
+      font-weight: 600;
+      letter-spacing: 0.5px;
+    }
+
+    .shift {
+      background: linear-gradient(90deg, #00b4d8, #0077b6);
+      color: #fff;
+      padding: 3px 12px;
+      border-radius: 4px;
+      font-weight: 700;
+      font-size: 0.95rem;
+      box-shadow: 0 0 10px rgba(0, 180, 216, 0.4);
+      letter-spacing: 0.5px;
+    }
+
+    .separator {
+      color: #00e5ff;
+      opacity: 0.55;
+      font-weight: 300;
+      font-size: 1.3rem;
+      user-select: none;
+    }
+
+    /* WEATHER */
+    .weather {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      color: #a5f3fc;
+      font-size: 0.98rem;
+    }
+
+    .weather-icon {
+      font-size: 1.25rem;
+    }
+
+    .weather-temp {
+      font-family: 'Orbitron', monospace;
+      font-weight: 600;
+      color: #00e5ff;
+      direction: ltr;
+    }
+
+    /* SHABBAT + PARSHA */
+    .shabbat {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      color: #fef08a;
+      font-size: 0.98rem;
+      font-weight: 500;
+    }
+
+    .shabbat-label {
+      color: #fde047;
+      opacity: 0.9;
+    }
+
+    .parsha {
+      color: #fef9c3;
+      font-weight: 600;
+    }
+
+    /* Loading state */
+    .loading {
+      opacity: 0.6;
+      font-style: italic;
+    }
+
+    /* Responsive */
+    @media (max-width: 900px) {
+      .digital-panel {
+        justify-content: center;
+        gap: 8px;
+        padding: 12px 10px;
+      }
+      .clock {
+        font-size: 1.5rem;
+        width: 165px;
+        min-width: 165px;
+        max-width: 165px;
+        letter-spacing: 1.5px;
+        padding: 5px 14px;
+      }
+      .date-shift, .weather, .shabbat {
+        font-size: 0.9rem;
+      }
+    }
+
+    @media (max-width: 600px) {
+      .digital-panel {
+        flex-direction: column;
+        align-items: stretch;
+        gap: 10px;
+      }
+      .panel-section {
+        justify-content: center;
+      }
+      .separator {
+        display: none;
+      }
+    }
+
+    /* Demo content below */
+    .demo-info {
+      margin-top: 40px;
+      max-width: 700px;
+      padding: 20px;
+      background: #161b22;
+      border-radius: 12px;
+      border: 1px solid #30363d;
+      line-height: 1.6;
+      color: #8b949e;
+      font-size: 0.95rem;
+    }
+    .demo-info h2 {
+      color: #00e5ff;
+      margin-bottom: 12px;
+      font-size: 1.2rem;
+    }
+    .demo-info code {
+      background: #0d1117;
+      padding: 2px 6px;
+      border-radius: 4px;
+      color: #7ee8ff;
+      font-size: 0.85rem;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ========== הפאנל העליון ========== -->
+  <header class="digital-panel" id="digitalPanel">
+    
+    <!-- שעון דיגיטלי -->
+    <div class="panel-section">
+      <div class="clock" id="clock">--:--:--</div>
+    </div>
+
+    <!-- תאריך + משמרת -->
+    <div class="panel-section date-shift">
+      <span class="day-date" id="dayDate">טוען...</span>
+      <span class="shift" id="shift">משמרת ב'</span>
+    </div>
+
+    <div class="separator">|</div>
+
+    <!-- מזג האוויר -->
+    <div class="panel-section weather" id="weather">
+      <span class="weather-icon">🌡️</span>
+      <span class="loading">מזג האוויר טוען...</span>
+    </div>
+
+    <div class="separator">|</div>
+
+    <!-- כניסת שבת + פרשה -->
+    <div class="panel-section shabbat" id="shabbat">
+      <span class="loading">כניסת שבת + פרשה טוענים...</span>
+    </div>
+
+  </header>
+
+  <!-- הוראות שימוש (ניתן למחוק בפרודקשן) -->
+  <div class="demo-info">
+    <h2>פאנל עליון דיגיטלי מוכן לשימוש</h2>
+    <p>
+      הפאנל כולל:<br>
+      • שעון דיגיטלי חי (זמן ישראל)<br>
+      • תאריך עברי-לועזי דיגיטלי (יום + DD/MM/YY)<br>
+      • משמרת (כרגע קבוע "משמרת ב'" – ניתן לשנות בקוד)<br>
+      • מזג אוויר חי מאשדוד (Open-Meteo)<br>
+      • כניסת שבת + פרשת השבוע (Hebcal, מיקום אשדוד)
+    </p>
+    <p style="margin-top:12px">
+      כדי להטמיע באתר שלך – העתק את כל ה־<code>&lt;header class="digital-panel"&gt;...&lt;/header&gt;</code> 
+      יחד עם ה־CSS וה־JS. אפשר גם לשים את הקובץ כ־iframe או להעתיק את הסגנונות.
+    </p>
+  </div>
+
+  <script>
+    // ========== הגדרות ==========
+    const ASHDOD_LAT = 31.804;
+    const ASHDOD_LON = 34.655;
+    const GEONAME_ID = 295629; // Ashdod
+
+    // שמות ימים בעברית
+    const HEBREW_DAYS = ['ראשון', 'שני', 'שלישי', 'רביעי', 'חמישי', 'שישי', 'שבת'];
+
+    // מיפוי קודי מזג אוויר (WMO) לעברית + אייקון
+    const WEATHER_MAP = {
+      0:  { text: 'בהיר', icon: '☀️' },
+      1:  { text: 'מעונן חלקית', icon: '🌤️' },
+      2:  { text: 'מעונן חלקית', icon: '⛅' },
+      3:  { text: 'מעונן', icon: '☁️' },
+      45: { text: 'ערפל', icon: '🌫️' },
+      48: { text: 'ערפל כבד', icon: '🌫️' },
+      51: { text: 'רסס קל', icon: '🌦️' },
+      53: { text: 'רסס', icon: '🌦️' },
+      55: { text: 'רסס חזק', icon: '🌧️' },
+      61: { text: 'גשם קל', icon: '🌧️' },
+      63: { text: 'גשם', icon: '🌧️' },
+      65: { text: 'גשם חזק', icon: '🌧️' },
+      71: { text: 'שלג קל', icon: '🌨️' },
+      73: { text: 'שלג', icon: '❄️' },
+      75: { text: 'שלג כבד', icon: '❄️' },
+      80: { text: 'ממטרים קלים', icon: '🌦️' },
+      81: { text: 'ממטרים', icon: '🌧️' },
+      82: { text: 'ממטרים חזקים', icon: '⛈️' },
+      95: { text: 'סופת רעמים', icon: '⛈️' },
+      96: { text: 'רעמים עם ברד', icon: '⛈️' },
+      99: { text: 'רעמים עם ברד', icon: '⛈️' }
+    };
+
+    // ========== שעון ותאריך ==========
+    function updateClockAndDate() {
+      const now = new Date();
+      
+      // שעון – זמן ישראל (פורמט קבוע לחלוטין כדי שהמסגרת לא תקפוץ)
+      const formatter = new Intl.DateTimeFormat('en-GB', {
+        timeZone: 'Asia/Jerusalem',
+        hour: '2-digit',
+        minute: '2-digit',
+        second: '2-digit',
+        hour12: false
+      });
+      // en-GB נותן תמיד HH:MM:SS עם אפסים מובילים
+      const timeStr = formatter.format(now);
+      document.getElementById('clock').textContent = timeStr;
+
+      // תאריך
+      const dayName = HEBREW_DAYS[now.getDay()];
+      const day = String(now.getDate()).padStart(2, '0');
+      const month = String(now.getMonth() + 1).padStart(2, '0');
+      const year = String(now.getFullYear()).slice(-2);
+      document.getElementById('dayDate').textContent = `יום ${dayName} ${day}/${month}/${year}`;
+    }
+
+    // ========== מזג אוויר ==========
+    async function fetchWeather() {
+      try {
+        const url = `https://api.open-meteo.com/v1/forecast?latitude=${ASHDOD_LAT}&longitude=${ASHDOD_LON}&current=temperature_2m,weather_code&timezone=Asia/Jerusalem`;
+        const res = await fetch(url);
+        const data = await res.json();
+        
+        const temp = Math.round(data.current.temperature_2m);
+        const code = data.current.weather_code;
+        const weather = WEATHER_MAP[code] || { text: 'לא ידוע', icon: '🌡️' };
+
+        document.getElementById('weather').innerHTML = `
+          <span class="weather-icon">${weather.icon}</span>
+          <span>${weather.text}</span>
+          <span class="weather-temp">${temp}°</span>
+        `;
+      } catch (err) {
+        document.getElementById('weather').innerHTML = `
+          <span class="weather-icon">🌡️</span>
+          <span>מזג האוויר לא זמין</span>
+        `;
+        console.error('Weather error:', err);
+      }
+    }
+
+    // ========== כניסת שבת + פרשה ==========
+    async function fetchShabbat() {
+      try {
+        const url = `https://www.hebcal.com/shabbat?cfg=json&geonameid=${GEONAME_ID}&M=on&lg=he`;
+        const res = await fetch(url);
+        const data = await res.json();
+
+        let candleTime = '';
+        let parsha = '';
+
+        // חיפוש בפריטים
+        for (const item of data.items || []) {
+          if (item.category === 'candles') {
+            // "הַדְלָקַת נֵרוֹת: 18:50" → לוקחים רק את השעה
+            const match = item.title.match(/(\d{1,2}:\d{2})/);
+            candleTime = match ? match[1] : item.title;
+          }
+          if (item.category === 'parashat') {
+            // "פָּרָשַׁת כִּי־תָבוֹא" או hebrew
+            parsha = item.hebrew || item.title.replace(/^פָּרָשַׁת\s*/, 'פרשת ');
+          }
+        }
+
+        // fallback לסיכום אם יש
+        if (!candleTime && data.summary?.candle_lighting?.time) {
+          candleTime = data.summary.candle_lighting.time;
+        }
+        if (!parsha && data.summary?.parashat?.hebrew) {
+          parsha = data.summary.parashat.hebrew;
+        }
+
+        // ניקוי קצת את הפרשה
+        if (parsha) {
+          parsha = parsha.replace(/פָּרָשַׁת|פרשת/g, '').trim();
+          parsha = 'פרשת ' + parsha;
+        }
+
+        document.getElementById('shabbat').innerHTML = `
+          <span class="shabbat-label">כניסת שבת:</span>
+          <span style="font-family:'Orbitron',monospace; direction:ltr">${candleTime || '--:--'}</span>
+          <span style="opacity:0.5">•</span>
+          <span class="parsha">${parsha || '—'}</span>
+        `;
+      } catch (err) {
+        document.getElementById('shabbat').innerHTML = `
+          <span class="loading">כניסת שבת לא זמינה כרגע</span>
+        `;
+        console.error('Shabbat error:', err);
+      }
+    }
+
+    // ========== אתחול ==========
+    function init() {
+      updateClockAndDate();
+      setInterval(updateClockAndDate, 1000);
+
+      fetchWeather();
+      // רענון מזג אוויר כל 10 דקות
+      setInterval(fetchWeather, 10 * 60 * 1000);
+
+      fetchShabbat();
+      // רענון שבת פעם ביום מספיק (או כל שעתיים)
+      setInterval(fetchShabbat, 2 * 60 * 60 * 1000);
+    }
+
+    // אפשר לשנות משמרת בקלות:
+    // document.getElementById('shift').textContent = 'משמרת א\'';
+
+    init();
+  </script>
+</body>
+</html>
