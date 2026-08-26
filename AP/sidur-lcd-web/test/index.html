@@ -14,28 +14,36 @@
     </div>
 
     <div class="reogrid-container">
-        <div class="main-header">
-            <!-- ווידג'ט מזג אויר -->
-            <div class="weather-widget">
-                <div class="weather-icon" id="weatherIcon">🌤️</div>
-                <div class="weather-info">
-                    <div class="weather-temp" id="weatherTemp">--°C</div>
-                    <div class="weather-desc" id="weatherDesc">טוען...</div>
-                    <div class="weather-city">אשדוד</div>
-                </div>
-            </div>
+      <!-- ========== הפאנל העליון ========== -->
+  <header class="digital-panel" id="digitalPanel">
+    
+    <!-- שעון דיגיטלי -->
+    <div class="panel-section">
+      <div class="clock" id="clock">--:--:--</div>
+    </div>
 
-            <!-- כותרת מרכזית -->
-            <div>
-                <span id="shiftDisplay"></span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span
-                    id="dateDisplay"></span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span id="nameSidurDisplay"></span>
-            </div>
+    <!-- תאריך + משמרת -->
+    <div class="panel-section date-shift">
+      <span class="day-date" id="dayDate">טוען...</span>
+      <span class="shift" id="shift">משמרת ב'</span>
+    </div>
 
-            <!-- שעון דיגיטלי -->
-            <div class="digital-clock">
-                <div class="clock-time" id="clockTime">00:00:00</div>
-            </div>
-        </div>
+    <div class="separator">|</div>
+
+    <!-- מזג האוויר -->
+    <div class="panel-section weather" id="weather">
+      <span class="weather-icon">🌡️</span>
+      <span class="loading">מזג האוויר טוען...</span>
+    </div>
+
+    <div class="separator">|</div>
+
+    <!-- כניסת שבת + פרשה -->
+    <div class="panel-section shabbat" id="shabbat">
+      <span class="loading">כניסת שבת + פרשה טוענים...</span>
+    </div>
+
+  </header>
 
         <div class="grid-scroll">
             <table class="grid">
@@ -60,6 +68,159 @@
 
     <script src="api.js"></script>
     <script src="app.js"></script>
+    <script>
+    // ========== הגדרות ==========
+    const ASHDOD_LAT = 31.804;
+    const ASHDOD_LON = 34.655;
+    const GEONAME_ID = 295629; // Ashdod
+
+    // שמות ימים בעברית
+    const HEBREW_DAYS = ['ראשון', 'שני', 'שלישי', 'רביעי', 'חמישי', 'שישי', 'שבת'];
+
+    // מיפוי קודי מזג אוויר (WMO) לעברית + אייקון
+    const WEATHER_MAP = {
+      0:  { text: 'בהיר', icon: '☀️' },
+      1:  { text: 'מעונן חלקית', icon: '🌤️' },
+      2:  { text: 'מעונן חלקית', icon: '⛅' },
+      3:  { text: 'מעונן', icon: '☁️' },
+      45: { text: 'ערפל', icon: '🌫️' },
+      48: { text: 'ערפל כבד', icon: '🌫️' },
+      51: { text: 'רסס קל', icon: '🌦️' },
+      53: { text: 'רסס', icon: '🌦️' },
+      55: { text: 'רסס חזק', icon: '🌧️' },
+      61: { text: 'גשם קל', icon: '🌧️' },
+      63: { text: 'גשם', icon: '🌧️' },
+      65: { text: 'גשם חזק', icon: '🌧️' },
+      71: { text: 'שלג קל', icon: '🌨️' },
+      73: { text: 'שלג', icon: '❄️' },
+      75: { text: 'שלג כבד', icon: '❄️' },
+      80: { text: 'ממטרים קלים', icon: '🌦️' },
+      81: { text: 'ממטרים', icon: '🌧️' },
+      82: { text: 'ממטרים חזקים', icon: '⛈️' },
+      95: { text: 'סופת רעמים', icon: '⛈️' },
+      96: { text: 'רעמים עם ברד', icon: '⛈️' },
+      99: { text: 'רעמים עם ברד', icon: '⛈️' }
+    };
+
+    // ========== שעון ותאריך ==========
+    function updateClockAndDate() {
+      const now = new Date();
+      
+      // שעון – זמן ישראל (פורמט קבוע לחלוטין כדי שהמסגרת לא תקפוץ)
+      const formatter = new Intl.DateTimeFormat('en-GB', {
+        timeZone: 'Asia/Jerusalem',
+        hour: '2-digit',
+        minute: '2-digit',
+        second: '2-digit',
+        hour12: false
+      });
+      // en-GB נותן תמיד HH:MM:SS עם אפסים מובילים
+      const timeStr = formatter.format(now);
+      document.getElementById('clock').textContent = timeStr;
+
+      // תאריך
+      const dayName = HEBREW_DAYS[now.getDay()];
+      const day = String(now.getDate()).padStart(2, '0');
+      const month = String(now.getMonth() + 1).padStart(2, '0');
+      const year = String(now.getFullYear()).slice(-2);
+      document.getElementById('dayDate').textContent = `יום ${dayName} ${day}/${month}/${year}`;
+    }
+
+    // ========== מזג אוויר ==========
+    async function fetchWeather() {
+      try {
+        const url = `https://api.open-meteo.com/v1/forecast?latitude=${ASHDOD_LAT}&longitude=${ASHDOD_LON}&current=temperature_2m,weather_code&timezone=Asia/Jerusalem`;
+        const res = await fetch(url);
+        const data = await res.json();
+        
+        const temp = Math.round(data.current.temperature_2m);
+        const code = data.current.weather_code;
+        const weather = WEATHER_MAP[code] || { text: 'לא ידוע', icon: '🌡️' };
+
+        document.getElementById('weather').innerHTML = `
+          <span class="weather-icon">${weather.icon}</span>
+          <span>${weather.text}</span>
+          <span class="weather-temp">${temp}°</span>
+        `;
+      } catch (err) {
+        document.getElementById('weather').innerHTML = `
+          <span class="weather-icon">🌡️</span>
+          <span>מזג האוויר לא זמין</span>
+        `;
+        console.error('Weather error:', err);
+      }
+    }
+
+    // ========== כניסת שבת + פרשה ==========
+    async function fetchShabbat() {
+      try {
+        const url = `https://www.hebcal.com/shabbat?cfg=json&geonameid=${GEONAME_ID}&M=on&lg=he`;
+        const res = await fetch(url);
+        const data = await res.json();
+
+        let candleTime = '';
+        let parsha = '';
+
+        // חיפוש בפריטים
+        for (const item of data.items || []) {
+          if (item.category === 'candles') {
+            // "הַדְלָקַת נֵרוֹת: 18:50" → לוקחים רק את השעה
+            const match = item.title.match(/(\d{1,2}:\d{2})/);
+            candleTime = match ? match[1] : item.title;
+          }
+          if (item.category === 'parashat') {
+            // "פָּרָשַׁת כִּי־תָבוֹא" או hebrew
+            parsha = item.hebrew || item.title.replace(/^פָּרָשַׁת\s*/, 'פרשת ');
+          }
+        }
+
+        // fallback לסיכום אם יש
+        if (!candleTime && data.summary?.candle_lighting?.time) {
+          candleTime = data.summary.candle_lighting.time;
+        }
+        if (!parsha && data.summary?.parashat?.hebrew) {
+          parsha = data.summary.parashat.hebrew;
+        }
+
+        // ניקוי קצת את הפרשה
+        if (parsha) {
+          parsha = parsha.replace(/פָּרָשַׁת|פרשת/g, '').trim();
+          parsha = 'פרשת ' + parsha;
+        }
+
+        document.getElementById('shabbat').innerHTML = `
+          <span class="shabbat-label">כניסת שבת:</span>
+          <span style="font-family:'Orbitron',monospace; direction:ltr">${candleTime || '--:--'}</span>
+          <span style="opacity:0.5">•</span>
+          <span class="parsha">${parsha || '—'}</span>
+        `;
+      } catch (err) {
+        document.getElementById('shabbat').innerHTML = `
+          <span class="loading">כניסת שבת לא זמינה כרגע</span>
+        `;
+        console.error('Shabbat error:', err);
+      }
+    }
+
+    // ========== אתחול ==========
+    function init() {
+      updateClockAndDate();
+      setInterval(updateClockAndDate, 1000);
+
+      fetchWeather();
+      // רענון מזג אוויר כל 10 דקות
+      setInterval(fetchWeather, 10 * 60 * 1000);
+
+      fetchShabbat();
+      // רענון שבת פעם ביום מספיק (או כל שעתיים)
+      setInterval(fetchShabbat, 2 * 60 * 60 * 1000);
+    }
+
+    // אפשר לשנות משמרת בקלות:
+    // document.getElementById('shift').textContent = 'משמרת א\'';
+
+    init();
+    </script>
 </body>
 
 </html>

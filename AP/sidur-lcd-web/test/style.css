@@ -36,6 +36,211 @@
             justify-content: center;
         }
 
+        /* === DIGITAL TOP PANEL === */
+    .digital-panel {
+      width: 100%;
+      max-width: 1400px;
+      background: linear-gradient(180deg, #0a0f1a 0%, #0d1525 100%);
+      border-bottom: 2px solid #00e5ff;
+      box-shadow: 
+        0 0 20px rgba(0, 229, 255, 0.25),
+        inset 0 -1px 0 rgba(0, 229, 255, 0.15);
+      padding: 10px 18px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      flex-wrap: wrap;
+      position: relative;
+      overflow: hidden;
+    }
+
+    /* subtle scanline / digital texture */
+    .digital-panel::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background: repeating-linear-gradient(
+        0deg,
+        transparent,
+        transparent 2px,
+        rgba(0, 229, 255, 0.015) 2px,
+        rgba(0, 229, 255, 0.015) 4px
+      );
+      pointer-events: none;
+    }
+
+    .panel-section {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      white-space: nowrap;
+    }
+
+    /* CLOCK */
+    .clock {
+      font-family: 'Orbitron', monospace;
+      font-weight: 700;
+      font-size: 1.85rem;
+      letter-spacing: 2px;
+      color: #00e5ff;
+      text-shadow: 
+        0 0 8px rgba(0, 229, 255, 0.7),
+        0 0 18px rgba(0, 229, 255, 0.35);
+      background: rgba(0, 40, 60, 0.45);
+      padding: 6px 18px;
+      border-radius: 6px;
+      border: 1px solid rgba(0, 229, 255, 0.45);
+      width: 200px;              /* רוחב קבוע רחב – מונע יציאת ספרות */
+      min-width: 200px;
+      max-width: 200px;
+      text-align: center;
+      direction: ltr;
+      font-variant-numeric: tabular-nums;
+      box-sizing: border-box;
+      flex-shrink: 0;
+      overflow: hidden;
+    }
+
+    /* DATE + SHIFT */
+    .date-shift {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      font-size: 1.05rem;
+      font-weight: 500;
+    }
+
+    .day-date {
+      color: #7ee8ff;
+      font-weight: 600;
+      letter-spacing: 0.5px;
+    }
+
+    .shift {
+      background: linear-gradient(90deg, #00b4d8, #0077b6);
+      color: #fff;
+      padding: 3px 12px;
+      border-radius: 4px;
+      font-weight: 700;
+      font-size: 0.95rem;
+      box-shadow: 0 0 10px rgba(0, 180, 216, 0.4);
+      letter-spacing: 0.5px;
+    }
+
+    .separator {
+      color: #00e5ff;
+      opacity: 0.55;
+      font-weight: 300;
+      font-size: 1.3rem;
+      user-select: none;
+    }
+
+    /* WEATHER */
+    .weather {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      color: #a5f3fc;
+      font-size: 0.98rem;
+    }
+
+    .weather-icon {
+      font-size: 1.25rem;
+    }
+
+    .weather-temp {
+      font-family: 'Orbitron', monospace;
+      font-weight: 600;
+      color: #00e5ff;
+      direction: ltr;
+    }
+
+    /* SHABBAT + PARSHA */
+    .shabbat {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      color: #fef08a;
+      font-size: 0.98rem;
+      font-weight: 500;
+    }
+
+    .shabbat-label {
+      color: #fde047;
+      opacity: 0.9;
+    }
+
+    .parsha {
+      color: #fef9c3;
+      font-weight: 600;
+    }
+
+    /* Loading state */
+    .loading {
+      opacity: 0.6;
+      font-style: italic;
+    }
+
+    /* Responsive */
+    @media (max-width: 900px) {
+      .digital-panel {
+        justify-content: center;
+        gap: 8px;
+        padding: 12px 10px;
+      }
+      .clock {
+        font-size: 1.5rem;
+        width: 165px;
+        min-width: 165px;
+        max-width: 165px;
+        letter-spacing: 1.5px;
+        padding: 5px 14px;
+      }
+      .date-shift, .weather, .shabbat {
+        font-size: 0.9rem;
+      }
+    }
+
+    @media (max-width: 600px) {
+      .digital-panel {
+        flex-direction: column;
+        align-items: stretch;
+        gap: 10px;
+      }
+      .panel-section {
+        justify-content: center;
+      }
+      .separator {
+        display: none;
+      }
+    }
+
+    /* Demo content below */
+    .demo-info {
+      margin-top: 40px;
+      max-width: 700px;
+      padding: 20px;
+      background: #161b22;
+      border-radius: 12px;
+      border: 1px solid #30363d;
+      line-height: 1.6;
+      color: #8b949e;
+      font-size: 0.95rem;
+    }
+    .demo-info h2 {
+      color: #00e5ff;
+      margin-bottom: 12px;
+      font-size: 1.2rem;
+    }
+    .demo-info code {
+      background: #0d1117;
+      padding: 2px 6px;
+      border-radius: 4px;
+      color: #7ee8ff;
+      font-size: 0.85rem;
+    }
+    /* ---------------------------------------------- */
         /* שעון דיגיטלי */
         .digital-clock {
             position: absolute;
