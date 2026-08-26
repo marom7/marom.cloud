@@ -40,8 +40,8 @@
     .digital-panel {
       width: 100%;
       max-width: 1400px;
-      height: 25%;
-      /* max-height: 130px; */
+      
+      /* max-height: 130px; height: 25%;*/
       background: linear-gradient(180deg, #0a0f1a 0%, #0d1525 100%);
       border-bottom: 2px solid #00e5ff;
       box-shadow: 
