@@ -41,6 +41,7 @@
       width: 100%;
       max-width: 1400px;
       height: 7%;
+      max-height: 20px;
       background: linear-gradient(180deg, #0a0f1a 0%, #0d1525 100%);
       border-bottom: 2px solid #00e5ff;
       box-shadow: 
