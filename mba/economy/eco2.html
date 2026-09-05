@@ -1,0 +1,357 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>הכנה טקטית למבחן בכלכלה - תוכנית ה-70</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <!-- Chosen Palette: Slate & Indigo - Professional, calm, and focused on learning. -->
+    <!-- Application Structure Plan: A tabbed SPA focusing on strategic exam passing. The main view is an interactive step-by-step solver for Question 1 (Microeconomics), allowing the user to visualize aggregate supply/demand, equilibrium, and government intervention (taxes). A secondary view provides a quick-reference interactive formula sheet. This structure directly supports the user's goal of mastering the mechanical/calculable questions to guarantee a passing grade. -->
+    <!-- Visualization & Content Choices: 
+         1. Interactive Market Chart (Chart.js): Visualizes Q1 mathematically. Goal: Show the connection between equations and the graph. Interaction: Buttons to add curves and apply tax. Justification: Best way to understand CS/PS and equilibrium shifts. 
+         2. Step-by-Step Accordion (HTML/JS): Breaks down the algebra for Q1. Goal: Teach the algorithm for solving. Interaction: Reveal answers. 
+         3. Formula Cards (HTML/CSS): Organizes key formulas. -->
+    <!-- CONFIRMATION: NO SVG graphics used. NO Mermaid JS used. -->
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Rubik:wght@300;400;500;600;700&display=swap');
+        body { font-family: 'Rubik', sans-serif; background-color: #f8fafc; }
+        .chart-container { position: relative; width: 100%; max-width: 800px; margin-left: auto; margin-right: auto; height: 400px; max-height: 500px; }
+        @media (max-width: 768px) { .chart-container { height: 300px; } }
+        .tab-active { border-bottom: 2px solid #4f46e5; color: #4f46e5; font-weight: 600; }
+        .hidden-content { display: none; }
+    </style>
+</head>
+<body class="text-slate-800 antialiased">
+
+    <nav class="bg-white shadow-sm border-b border-slate-200 sticky top-0 z-10">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between h-16">
+                <div class="flex items-center">
+                    <span class="text-2xl font-bold text-indigo-600 ml-2">📊</span>
+                    <span class="font-bold text-xl tracking-tight text-slate-900">מרתון כלכלה: תוכנית 70</span>
+                </div>
+                <div class="flex items-center space-x-4 space-x-reverse">
+                    <button onclick="switchTab('q1-tab')" id="nav-q1" class="tab-active px-3 py-2 text-sm font-medium transition-colors duration-200">פיצוח שאלה 1 (מיקרו)</button>
+                    <button onclick="switchTab('formulas-tab')" id="nav-formulas" class="text-slate-500 hover:text-indigo-600 px-3 py-2 text-sm font-medium transition-colors duration-200">דף נוסחאות ממוקד</button>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+
+        <div id="q1-tab" class="content-section">
+            <div class="mb-8 bg-indigo-50 border-r-4 border-indigo-500 p-6 rounded-l-lg shadow-sm">
+                <h1 class="text-2xl font-bold text-indigo-900 mb-2">סימולטור שאלה 1: היצע וביקוש מצרפי</h1>
+                <p class="text-slate-700 text-lg">
+                    סעיף זה מהווה כ-23 נקודות מהמבחן והוא מבוסס לחלוטין על אלגברה פשוטה. המטרה כאן היא להבין את <strong>האלגוריתם</strong>: מעבר מפונקציית יחיד למצרפית, מציאת שיווי משקל (חיתוך), וחישוב שטחים (עודף יצרן/צרכן). עקוב אחר השלבים מטה, נסה לחשב בעצמך, ולחץ על הכפתורים כדי לראות את הפתרון ואת הביטוי הגרפי שלו.
+                </p>
+            </div>
+
+            <div class="grid grid-cols-1 xl:grid-cols-2 gap-8">
+                
+                <div class="space-y-6">
+                    <div class="bg-white p-6 rounded-xl shadow-sm border border-slate-200">
+                        <h2 class="text-xl font-semibold mb-4 border-b pb-2">נתוני הפתיחה</h2>
+                        <ul class="space-y-2 text-lg">
+                            <li><span class="font-medium text-blue-600">צרכנים:</span> 10 צרכנים זהים. כל אחד: <code class="bg-slate-100 px-2 py-1 rounded">P = 300 - 5q</code></li>
+                            <li><span class="font-medium text-emerald-600">יצרנים:</span> 20 יצרנים זהים. כל אחד: <code class="bg-slate-100 px-2 py-1 rounded">P = 40q</code></li>
+                        </ul>
+                    </div>
+
+                    <div class="bg-white p-6 rounded-xl shadow-sm border border-slate-200">
+                        <h2 class="text-xl font-semibold mb-4">שלב 1: פונקציות מצרפיות (Aggregate)</h2>
+                        <p class="text-sm text-slate-500 mb-4">כלל ברזל: תמיד מבודדים את הכמות (q) לפני שמכפילים במספר האנשים!</p>
+                        
+                        <div class="space-y-4">
+                            <div class="border rounded-lg p-4 bg-slate-50">
+                                <h3 class="font-medium mb-2">א. ביקוש מצרפי (Demand)</h3>
+                                <button onclick="toggleElement('ans-demand')" class="bg-blue-100 text-blue-700 px-4 py-2 rounded text-sm font-medium hover:bg-blue-200 transition">הצג דרך פתרון</button>
+                                <div id="ans-demand" class="hidden-content mt-3 text-slate-700 bg-white p-3 rounded border border-blue-100">
+                                    <p>1. נבודד את q: <br> <code class="bg-slate-100 px-1">5q = 300 - P  &rArr;  q = 60 - 0.2P</code></p>
+                                    <p class="mt-2">2. נכפיל ב-10 צרכנים: <br> <code class="bg-slate-100 px-1">Q_D = 10 &times; (60 - 0.2P) = 600 - 2P</code></p>
+                                    <p class="mt-2 font-bold text-blue-700">המשוואה הסופית: P = 300 - 0.5Q</p>
+                                </div>
+                            </div>
+
+                            <div class="border rounded-lg p-4 bg-slate-50">
+                                <h3 class="font-medium mb-2">ב. היצע מצרפי (Supply)</h3>
+                                <button onclick="toggleElement('ans-supply')" class="bg-emerald-100 text-emerald-700 px-4 py-2 rounded text-sm font-medium hover:bg-emerald-200 transition">הצג דרך פתרון</button>
+                                <div id="ans-supply" class="hidden-content mt-3 text-slate-700 bg-white p-3 rounded border border-emerald-100">
+                                    <p>1. נבודד את q: <br> <code class="bg-slate-100 px-1">q = P / 40</code></p>
+                                    <p class="mt-2">2. נכפיל ב-20 יצרנים: <br> <code class="bg-slate-100 px-1">Q_S = 20 &times; (P / 40) = 0.5P</code></p>
+                                    <p class="mt-2 font-bold text-emerald-700">המשוואה הסופית: P = 2Q</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="bg-white p-6 rounded-xl shadow-sm border border-slate-200">
+                        <h2 class="text-xl font-semibold mb-4">שלב 2: שיווי משקל (Equilibrium)</h2>
+                        <p class="text-sm text-slate-500 mb-4">משווים את הביקוש המצרפי להיצע המצרפי: Q_D = Q_S או P_D = P_S</p>
+                        <button onclick="calculateEq()" class="w-full bg-indigo-600 text-white px-4 py-3 rounded-lg font-medium hover:bg-indigo-700 transition shadow-md">חשב שיווי משקל והצג בגרף</button>
+                        
+                        <div id="eq-result" class="hidden-content mt-4 bg-indigo-50 p-4 rounded-lg border border-indigo-100 text-center text-lg">
+                            <p>חיתוך: <code class="bg-white px-2 py-1 rounded">300 - 0.5Q = 2Q</code> &rArr; <code class="bg-white px-2 py-1 rounded">2.5Q = 300</code></p>
+                            <div class="mt-2 text-2xl font-bold text-indigo-800">
+                                כמות: Q* = 120 <br> מחיר: P* = 240
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="bg-white p-6 rounded-xl shadow-sm border border-slate-200">
+                        <h2 class="text-xl font-semibold mb-4 text-red-600">שלב 3: התערבות ממשלתית - מס</h2>
+                        <p class="text-slate-700 mb-4">הממשלה מטילה מס קצוב של <strong>60 ₪</strong> ליחידה. מס מקטין את ההיצע (מזיז את העקומה שמאלה/למעלה).</p>
+                        <p class="text-sm text-slate-500 mb-4">נוסחה: <code class="bg-slate-100 px-1">New Supply: P = (Old P) + Tax</code></p>
+                        <button onclick="applyTax()" class="bg-red-100 text-red-700 px-4 py-2 rounded-lg font-medium hover:bg-red-200 transition border border-red-200">הטל מס ועדכן שיווי משקל</button>
+                        
+                        <div id="tax-result" class="hidden-content mt-4 bg-red-50 p-4 rounded-lg border border-red-100">
+                            <p>היצע חדש: <code class="bg-white px-2 py-1 rounded">P = 2Q + 60</code></p>
+                            <p class="mt-2">שיווי משקל חדש:</p>
+                            <p><code class="bg-white px-2 py-1 rounded">300 - 0.5Q = 2Q + 60</code> &rArr; <code class="bg-white px-2 py-1 rounded">2.5Q = 240</code></p>
+                            <ul class="mt-2 font-bold text-red-800">
+                                <li>כמות חדשה: Q = 96</li>
+                                <li>מחיר לצרכן: Pd = 252</li>
+                                <li>מחיר ליצרן: Ps = 192 (252 - 60)</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="bg-white p-6 rounded-xl shadow-sm border border-slate-200 sticky top-24 h-fit">
+                    <h2 class="text-xl font-semibold mb-2 text-center">התצוגה הגרפית (מודל השוק)</h2>
+                    <p class="text-center text-sm text-slate-500 mb-4">הגרף יתעדכן ככל שתתקדם בשלבים משמאל.</p>
+                    <div class="chart-container">
+                        <canvas id="marketChart"></canvas>
+                    </div>
+                    <div id="chart-legend" class="mt-4 flex flex-wrap justify-center gap-4 text-sm hidden-content">
+                        <div class="flex items-center"><span class="w-3 h-3 rounded-full bg-blue-500 ml-2"></span> ביקוש מצרפי (D)</div>
+                        <div class="flex items-center"><span class="w-3 h-3 rounded-full bg-emerald-500 ml-2"></span> היצע מצרפי (S)</div>
+                        <div class="flex items-center"><span class="w-3 h-3 rounded-full bg-red-500 ml-2"></span> היצע + מס (S')</div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+        <div id="formulas-tab" class="content-section hidden-content">
+             <div class="mb-8 bg-slate-50 border-r-4 border-slate-500 p-6 rounded-l-lg shadow-sm">
+                <h1 class="text-2xl font-bold text-slate-900 mb-2">דף נוסחאות ממוקד ומבואר</h1>
+                <p class="text-slate-700 text-lg">
+                    ריכוז הנוסחאות הקריטיות שישמשו אותך במבחן. התמקד בהבנת המשתנים והיכן להציב אותם. זהו כלי העבודה המרכזי שלך לשאלות 2, 5 ו-6.
+                </p>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div class="bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden">
+                    <div class="bg-indigo-600 text-white p-4 font-bold text-lg flex justify-between items-center">
+                        <span>מיקרו כלכלה - תורת היצרן</span>
+                        <span>&#128188;</span>
+                    </div>
+                    <div class="p-6 space-y-4 text-slate-800">
+                        <div class="border-b pb-3">
+                            <div class="font-semibold text-indigo-700 text-lg">TC = VC + FC</div>
+                            <p class="text-sm text-slate-600 mt-1">עלות כוללת = עלות משתנה + עלות קבועה. (חשוב לשאלה 2).</p>
+                        </div>
+                        <div class="border-b pb-3">
+                            <div class="font-semibold text-indigo-700 text-lg">AC = TC / Q</div>
+                            <p class="text-sm text-slate-600 mt-1">עלות ממוצעת. סך ההוצאות חלקי כמות התפוקה.</p>
+                        </div>
+                        <div class="border-b pb-3">
+                            <div class="font-semibold text-indigo-700 text-lg">AVC = VC / Q</div>
+                            <p class="text-sm text-slate-600 mt-1">עלות משתנה ממוצעת. כלל ההשבתה: פירמה תייצר רק אם המחיר (P) גדול או שווה ל-AVC המינימלי.</p>
+                        </div>
+                        <div class="pb-1">
+                            <div class="font-semibold text-indigo-700 text-lg">&Pi; = P &times; Q - TC</div>
+                            <p class="text-sm text-slate-600 mt-1">נוסחת הרווח (&Pi;). פדיון כולל (מחיר כפול כמות) פחות סך העלויות.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden">
+                    <div class="bg-emerald-600 text-white p-4 font-bold text-lg flex justify-between items-center">
+                        <span>מאקרו - מודל קיינסיאני</span>
+                        <span>&#127970;</span>
+                    </div>
+                    <div class="p-6 space-y-4 text-slate-800">
+                        <div class="border-b pb-3">
+                            <div class="font-semibold text-emerald-700 text-lg">Y = C + I + G + X - IM</div>
+                            <p class="text-sm text-slate-600 mt-1">משוואת שיווי משקל (דו"ח מקורות ושימושים). זו המשוואה המרכזית לשאלה 5! מציבים את כל הפונקציות הנתונות ומוצאים את התוצר Y.</p>
+                        </div>
+                         <div class="border-b pb-3">
+                            <div class="font-semibold text-emerald-700 text-lg">Yd = Y - T + TR</div>
+                            <p class="text-sm text-slate-600 mt-1">הכנסה פנויה = תוצר פחות מיסים פלוס העברות. מציבים את זה בתוך פונקציית הצריכה (C).</p>
+                        </div>
+                        <div class="border-b pb-3">
+                            <div class="font-semibold text-emerald-700 text-lg">(X - IM) + CF = 0</div>
+                            <p class="text-sm text-slate-600 mt-1">מאזן תשלומים במשטר שער חליפין נייד. עודף היצוא (או גירעון היבוא) פלוס תנועות הון נטו (CF) חייבים להיות שווים לאפס. משתמשים בזה כדי למצוא את שער החליפין.</p>
+                        </div>
+                        <div class="pb-1">
+                            <div class="font-semibold text-emerald-700 text-lg">Sp = Yd - C  |  Sg = T - G</div>
+                            <p class="text-sm text-slate-600 mt-1">חיסכון פרטי (Sp) וחיסכון ציבורי/ממשלתי (Sg). (חשוב לשאלה 6).</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </main>
+
+    <script>
+        let chartInstance = null;
+        let isEqCalculated = false;
+        let isTaxApplied = false;
+
+        function switchTab(tabId) {
+            document.querySelectorAll('.content-section').forEach(el => el.classList.add('hidden-content'));
+            document.getElementById(tabId).classList.remove('hidden-content');
+            
+            document.querySelectorAll('nav button').forEach(el => {
+                el.classList.remove('tab-active');
+                el.classList.add('text-slate-500');
+            });
+            
+            if(tabId === 'q1-tab') {
+                document.getElementById('nav-q1').classList.add('tab-active');
+                document.getElementById('nav-q1').classList.remove('text-slate-500');
+            } else {
+                document.getElementById('nav-formulas').classList.add('tab-active');
+                document.getElementById('nav-formulas').classList.remove('text-slate-500');
+            }
+        }
+
+        function toggleElement(id) {
+            const el = document.getElementById(id);
+            if (el.classList.contains('hidden-content')) {
+                el.classList.remove('hidden-content');
+            } else {
+                el.classList.add('hidden-content');
+            }
+        }
+
+        function initChart() {
+            const ctx = document.getElementById('marketChart').getContext('2d');
+            
+            chartInstance = new Chart(ctx, {
+                type: 'line',
+                data: {
+                    datasets: []
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    scales: {
+                        x: {
+                            type: 'linear',
+                            position: 'bottom',
+                            min: 0,
+                            max: 200,
+                            title: { display: true, text: 'כמות (Q)', font: { size: 14, family: 'Rubik' } }
+                        },
+                        y: {
+                            min: 0,
+                            max: 350,
+                            title: { display: true, text: 'מחיר (P)', font: { size: 14, family: 'Rubik' } }
+                        }
+                    },
+                    plugins: {
+                        tooltip: {
+                            callbacks: {
+                                label: function(context) {
+                                    return context.dataset.label + ': (Q=' + context.parsed.x + ', P=' + context.parsed.y + ')';
+                                }
+                            }
+                        },
+                        legend: { display: false } 
+                    },
+                    elements: {
+                        line: { tension: 0, borderWidth: 3 },
+                        point: { radius: 0, hitRadius: 10, hoverRadius: 6 }
+                    }
+                }
+            });
+        }
+
+        function calculateEq() {
+            document.getElementById('eq-result').classList.remove('hidden-content');
+            document.getElementById('chart-legend').classList.remove('hidden-content');
+            isEqCalculated = true;
+            updateChartData();
+        }
+
+        function applyTax() {
+            if(!isEqCalculated) {
+                alert("אנא חשב קודם את שיווי המשקל המקורי (שלב 2).");
+                return;
+            }
+            document.getElementById('tax-result').classList.remove('hidden-content');
+            isTaxApplied = true;
+            updateChartData();
+        }
+
+        function updateChartData() {
+            if (!chartInstance) initChart();
+
+            const datasets = [];
+
+            if (isEqCalculated) {
+                datasets.push({
+                    label: 'ביקוש (D)',
+                    data: [{x: 0, y: 300}, {x: 600, y: 0}], 
+                    borderColor: '#3b82f6', 
+                    backgroundColor: '#3b82f6'
+                });
+                datasets.push({
+                    label: 'היצע מקורי (S)',
+                    data: [{x: 0, y: 0}, {x: 150, y: 300}], 
+                    borderColor: '#10b981', 
+                    backgroundColor: '#10b981'
+                });
+                
+                chartInstance.options.elements.point.radius = function(context) {
+                    return (context.dataIndex === 0 || context.dataIndex === 1) ? 0 : 6;
+                };
+
+                const eqPoint = {x: 120, y: 240};
+                datasets.push({
+                    label: 'נקודת שיווי משקל מקורית',
+                    data: [eqPoint],
+                    backgroundColor: '#1e40af',
+                    borderColor: '#1e40af',
+                    pointRadius: 6,
+                    showLine: false
+                });
+            }
+
+            if (isTaxApplied) {
+                datasets.push({
+                    label: 'היצע עם מס (S\')',
+                    data: [{x: 0, y: 60}, {x: 120, y: 300}],
+                    borderColor: '#ef4444', 
+                    backgroundColor: '#ef4444',
+                    borderDash: [5, 5]
+                });
+
+                const eqTaxPoint = {x: 96, y: 252};
+                datasets.push({
+                    label: 'שיווי משקל חדש (עם מס)',
+                    data: [eqTaxPoint],
+                    backgroundColor: '#991b1b',
+                    borderColor: '#991b1b',
+                    pointRadius: 6,
+                    showLine: false
+                });
+            }
+
+            chartInstance.data.datasets = datasets;
+            chartInstance.update();
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            initChart();
+        });
+
+    </script>
+</body>
+</html>

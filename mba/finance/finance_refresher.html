@@ -1,0 +1,332 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>מימון למנהלים · דף ריענון</title>
+<style>
+  :root{
+    --ink:#1a1f2e;
+    --ink-soft:#4a5168;
+    --paper:#f7f5ef;
+    --card:#ffffff;
+    --line:#e3ded2;
+    --accent:#1d6e56;      /* teal — core/anchor */
+    --accent-soft:#e1f5ee;
+    --gold:#b07c2b;        /* amber — warnings/tricks */
+    --gold-soft:#faeeda;
+    --blue:#185fa5;
+    --blue-soft:#e6f1fb;
+    --radius:14px;
+    --mono:"SF Mono",ui-monospace,"Cascadia Code",Menlo,Consolas,monospace;
+  }
+  *{box-sizing:border-box;}
+  body{
+    margin:0;
+    background:var(--paper);
+    color:var(--ink);
+    font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","Helvetica Neue",Arial,"Noto Sans Hebrew",sans-serif;
+    line-height:1.7;
+    -webkit-font-smoothing:antialiased;
+  }
+  .wrap{max-width:820px;margin:0 auto;padding:32px 20px 80px;}
+
+  header.top{
+    border-bottom:3px solid var(--ink);
+    padding-bottom:18px;margin-bottom:8px;
+  }
+  header.top .kicker{
+    font-size:13px;letter-spacing:.5px;color:var(--accent);font-weight:600;text-transform:uppercase;
+  }
+  header.top h1{
+    font-size:30px;margin:6px 0 4px;font-weight:700;letter-spacing:-.5px;
+  }
+  header.top p{margin:0;color:var(--ink-soft);font-size:15px;}
+
+  /* the anchor box */
+  .anchor{
+    background:var(--accent);color:#fff;border-radius:var(--radius);
+    padding:18px 22px;margin:22px 0 10px;
+  }
+  .anchor h2{margin:0 0 6px;font-size:18px;font-weight:600;color:#fff;}
+  .anchor p{margin:0;font-size:14.5px;color:#d7f0e7;}
+  .anchor code{background:rgba(255,255,255,.16);color:#fff;padding:2px 7px;border-radius:6px;font-family:var(--mono);font-size:13px;}
+
+  /* table of contents */
+  nav.toc{
+    display:flex;flex-wrap:wrap;gap:8px;margin:18px 0 28px;
+  }
+  nav.toc a{
+    text-decoration:none;color:var(--ink);background:var(--card);
+    border:1px solid var(--line);border-radius:999px;
+    padding:6px 14px;font-size:13.5px;font-weight:500;transition:all .15s;
+  }
+  nav.toc a:hover{border-color:var(--accent);color:var(--accent);}
+  nav.toc a .n{color:var(--accent);font-weight:700;margin-left:5px;}
+
+  section.topic{
+    background:var(--card);border:1px solid var(--line);border-radius:var(--radius);
+    padding:22px 24px;margin-bottom:18px;scroll-margin-top:16px;
+  }
+  section.topic > h3{
+    margin:0 0 14px;font-size:19px;font-weight:700;display:flex;align-items:baseline;gap:10px;
+    border-bottom:1px solid var(--line);padding-bottom:10px;
+  }
+  section.topic > h3 .num{
+    color:#fff;background:var(--accent);width:28px;height:28px;border-radius:8px;
+    display:inline-flex;align-items:center;justify-content:center;font-size:15px;flex-shrink:0;
+  }
+  .sub{font-weight:600;font-size:15px;margin:16px 0 6px;color:var(--ink);}
+
+  .formula{
+    font-family:var(--mono);background:#f3f1ea;border:1px solid var(--line);
+    border-radius:9px;padding:11px 14px;margin:8px 0;font-size:14px;
+    direction:ltr;text-align:left;overflow-x:auto;color:var(--ink);
+  }
+  .formula b{color:var(--accent);font-weight:700;}
+
+  p.note{margin:8px 0;color:var(--ink-soft);font-size:14.5px;}
+
+  /* worked example block */
+  .ex{
+    background:var(--blue-soft);border:1px solid #c9e0f5;border-radius:10px;
+    padding:13px 16px;margin:12px 0 4px;
+  }
+  .ex .label{font-size:12px;font-weight:700;color:var(--blue);text-transform:uppercase;letter-spacing:.5px;margin-bottom:4px;}
+  .ex .q{font-size:14px;color:var(--ink);margin-bottom:8px;}
+  .ex .calc{font-family:var(--mono);direction:ltr;text-align:left;font-size:13.5px;color:#0c447c;background:rgba(255,255,255,.6);border-radius:7px;padding:8px 11px;}
+  .ex .calc .res{color:var(--accent);font-weight:700;}
+
+  /* trick / warning callouts */
+  .callout{
+    border-radius:10px;padding:11px 15px;margin:12px 0;font-size:14px;
+    display:flex;gap:10px;align-items:flex-start;
+  }
+  .callout .ic{font-size:17px;line-height:1.4;flex-shrink:0;}
+  .trick{background:var(--gold-soft);border:1px solid #ecd2a0;color:#6a4a12;}
+  .trick b{color:var(--gold);}
+  .warn{background:#fbece7;border:1px solid #f0c4b3;color:#7a3318;}
+  .warn b{color:#c0451f;}
+
+  /* mini decision table */
+  table.dec{border-collapse:collapse;width:100%;margin:10px 0;font-size:13.5px;}
+  table.dec th,table.dec td{border:1px solid var(--line);padding:7px 10px;text-align:right;}
+  table.dec th{background:#f3f1ea;font-weight:600;}
+  table.dec code{font-family:var(--mono);direction:ltr;display:inline-block;}
+
+  footer.foot{
+    margin-top:30px;padding:18px 22px;background:var(--ink);color:#fff;border-radius:var(--radius);
+  }
+  footer.foot h3{margin:0 0 10px;font-size:16px;color:#fff;}
+  footer.foot ul{margin:0;padding-right:20px;}
+  footer.foot li{margin:5px 0;font-size:14px;color:#d4d8e2;}
+  footer.foot li b{color:#fff;}
+
+  .pill{display:inline-block;background:var(--accent-soft);color:var(--accent);font-size:12px;font-weight:600;padding:2px 9px;border-radius:999px;margin-right:6px;}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <header class="top">
+    <div class="kicker">מימון למנהלים · דוד פלד · MBA בן-גוריון</div>
+    <h1>דף ריענון — כל הקורס על עמוד אחד</h1>
+    <p>6 שאלות · 3 שעות · מחשבון בלבד · חובה להציג דרך פתרון. ריענון, לא לימוד מאפס.</p>
+  </header>
+
+  <div class="anchor">
+    <h2>🔑 העוגן: הכל זה נוסחה אחת</h2>
+    <p>כל הקורס בנוי על <b>ערך הזמן של הכסף</b>. אג"ח = <code>PV</code> של קופונים. NPV = <code>PV</code> של תזרימים. שפיצר = <code>PV</code> של תשלומים שנותרו. תזרים = בונים ואז <code>PV</code>. תלמד נוסחה אחת — ו-7 ההקשרים שבהם היא חוזרת.</p>
+  </div>
+
+  <nav class="toc">
+    <a href="#t1"><span>ערך הזמן</span><span class="n">1</span></a>
+    <a href="#t2"><span>ריבית אפקטיבית</span><span class="n">2</span></a>
+    <a href="#t3"><span>ריאלי/נומינלי</span><span class="n">3</span></a>
+    <a href="#t4"><span>לוחות סילוקין</span><span class="n">4</span></a>
+    <a href="#t5"><span>אג"ח</span><span class="n">5</span></a>
+    <a href="#t6"><span>NPV / IRR / PI</span><span class="n">6</span></a>
+    <a href="#t7"><span>תזרים מזומנים</span><span class="n">7</span></a>
+    <a href="#t8"><span>תיקי השקעות</span><span class="n">8</span></a>
+  </nav>
+
+  <!-- 1 -->
+  <section class="topic" id="t1">
+    <h3><span class="num">1</span> ערך הזמן של הכסף <span class="pill">הבסיס</span></h3>
+    <p class="note">שקל היום > שקל מחר. ארבע נוסחאות — סכום בודד או סדרה, קדימה (FV) או אחורה (PV).</p>
+
+    <div class="sub">סכום חד-פעמי</div>
+    <div class="formula"><b>FV</b> = PV × (1 + r)^n &nbsp;&nbsp;|&nbsp;&nbsp; <b>PV</b> = Cn / (1 + r)^n</div>
+
+    <div class="sub">סדרת תשלומים קבועים</div>
+    <div class="formula"><b>PV</b> = C × [ 1 − 1/(1+r)^n ] / r &nbsp;=&nbsp; C × PVFA(r,n)</div>
+    <div class="formula"><b>FV</b> = C × [ (1+r)^n − 1 ] / r &nbsp;=&nbsp; C × FVFA(r,n)</div>
+    <div class="formula">סדרה אינסופית (פרפטואיטי): &nbsp; <b>PV</b> = C / r</div>
+
+    <div class="ex">
+      <div class="label">דוגמה</div>
+      <div class="q">מפקידים 10,000 ₪ ל-8 שנים בריבית 7%. כמה יהיה?</div>
+      <div class="calc">FV = 10,000 × (1.07)^8 = <span class="res">17,182 ₪</span></div>
+    </div>
+
+    <div class="callout trick"><span class="ic">💡</span><div><b>הפקדה בתחילת תקופה?</b> הנוסחה הרגילה מניחה סוף תקופה. אם זה בתחילת כל תקופה — כפול הכל ב-(1+r).</div></div>
+    <div class="callout warn"><span class="ic">⚠️</span><div><b>ריבית משתנה?</b> אסור PVFA/FVFA! הן רק לריבית קבועה. משרשרים כל תקופה בנפרד.</div></div>
+  </section>
+
+  <!-- 2 -->
+  <section class="topic" id="t2">
+    <h3><span class="num">2</span> תקופות קצרות מהשנה</h3>
+    <p class="note">כשהחישוב חודשי/רבעוני — מתאימים את n ואת הריבית.</p>
+
+    <div class="formula">n = t × m &nbsp;&nbsp;(שנים × תקופות בשנה)</div>
+    <div class="formula">ריבית לתקופה: <b>rm</b> = i / m</div>
+    <div class="formula">אפקטיבית שנתית: <b>R</b> = (1 + i/m)^m − 1</div>
+    <div class="formula">מעבר אפקטיבי→קצר: <b>rm</b> = (1 + R)^(1/m) − 1</div>
+
+    <div class="ex">
+      <div class="label">דוגמה</div>
+      <div class="q">ריבית נקובה 12% לשנה, חישוב חודשי. מה האפקטיבית השנתית?</div>
+      <div class="calc">rm = 12%/12 = 1%<br>R = (1.01)^12 − 1 = <span class="res">12.68%</span></div>
+    </div>
+
+    <div class="callout trick"><span class="ic">🎯</span><div><b>כלל הזהב:</b> ריבית חודשית הולכת רק עם n בחודשים. ריבית שנתית רק עם n בשנים. תבדוק את זה לפני כל היוון.</div></div>
+  </section>
+
+  <!-- 3 -->
+  <section class="topic" id="t3">
+    <h3><span class="num">3</span> ריבית ריאלית ונומינלית</h3>
+    <p class="note">נומינלי = כולל אינפלציה. ריאלי = מנוכה אינפלציה.</p>
+
+    <div class="sub">נוסחת פישר</div>
+    <div class="formula">1 + <b>rN</b> = (1 + rR) × (1 + h)</div>
+    <div class="formula"><b>rR</b> = (1 + rN) / (1 + h) − 1 &nbsp;&nbsp;(h = אינפלציה)</div>
+
+    <div class="ex">
+      <div class="label">דוגמה</div>
+      <div class="q">ריבית נומינלית 10%, אינפלציה 20%. מה הריאלית?</div>
+      <div class="calc">rR = 1.10 / 1.20 − 1 = <span class="res">−8.33%</span></div>
+    </div>
+
+    <div class="callout trick"><span class="ic">💡</span><div><b>עקביות:</b> תזרים <u>צמוד</u> → היוון בריבית <u>ריאלית</u>. תזרים <u>לא צמוד</u> → ריבית <u>נומינלית</u>. אסור לערבב.</div></div>
+  </section>
+
+  <!-- 4 -->
+  <section class="topic" id="t4">
+    <h3><span class="num">4</span> הלוואות ולוחות סילוקין</h3>
+
+    <div class="sub">שפיצר — תשלום קבוע</div>
+    <div class="formula"><b>C</b> = Loan / PVFA(r, n)</div>
+    <p class="note">ריבית = יתרת קרן × r &nbsp;·&nbsp; קרן = C − ריבית &nbsp;·&nbsp; יתרה חדשה = יתרה − קרן</p>
+
+    <div class="callout trick"><span class="ic">🔥</span><div><b>טריק יתרת הקרן (חוסך לוח שלם!):</b><br><span style="font-family:var(--mono);direction:ltr;display:inline-block;margin-top:4px;">Balance_t = C × PVFA(r, n−t)</span><br>כמה שולם ע"ח קרן בשנה 10? פשוט <code style="font-family:var(--mono)">Balance₉ − Balance₁₀</code>.</div></div>
+
+    <div class="sub">לוח רגיל — קרן קבועה</div>
+    <div class="formula">קרן לתקופה = Loan / n &nbsp;·&nbsp; תשלום = קרן קבועה + (יתרה × r)</div>
+
+    <div class="sub">צמודות למדד</div>
+    <p class="note">1) בונים לוח בערכים ריאליים (ריבית ריאלית). 2) מכפילים כל תשלום במדד הצבור:</p>
+    <div class="formula">תשלום נומינלי = C_real × (1 + h)^t</div>
+
+    <div class="sub">הלוואות גישור</div>
+    <p class="note"><b>בולט:</b> רק ריבית שוטפת, קרן בסוף. <b>בלון:</b> הכל (קרן+ריבית) בסוף. <b>גרייס:</b> דחיית תשלומים, הריבית נצברת.</p>
+  </section>
+
+  <!-- 5 -->
+  <section class="topic" id="t5">
+    <h3><span class="num">5</span> הערכת אגרות חוב</h3>
+    <p class="note">מחיר אג"ח = PV של כל הקופונים + PV של הערך הנקוב.</p>
+
+    <div class="formula"><b>P</b> = C × PVFA(r, n) + F / (1 + r)^n &nbsp;&nbsp;|&nbsp;&nbsp; C = i × F</div>
+
+    <table class="dec">
+      <tr><th>יחס</th><th>סטטוס</th><th>מחיר</th></tr>
+      <tr><td><code>r = i</code></td><td>פארי</td><td><code>P = F</code></td></tr>
+      <tr><td><code>r &gt; i</code></td><td>ניכיון</td><td><code>P &lt; F</code></td></tr>
+      <tr><td><code>r &lt; i</code></td><td>פרמיה</td><td><code>P &gt; F</code></td></tr>
+    </table>
+
+    <div class="callout warn"><span class="ic">⚠️</span><div><b>קופון חצי-שנתי:</b> n = שנים×2 &nbsp;·&nbsp; C = (i/2)×F &nbsp;·&nbsp; <b>r חייב להיות אפקטיבי חצי-שנתי:</b> <code style="font-family:var(--mono)">r½ = (1+R)^(1/2) − 1</code>. לא לחלק ב-2 סתם!</div></div>
+
+    <div class="sub">סוגים נוספים</div>
+    <p class="note"><b>אפס קופון:</b> <span style="font-family:var(--mono);direction:ltr;">P = F/(1+r)^n</span>. &nbsp;<b>מק"מ:</b> <span style="font-family:var(--mono);direction:ltr;">P = 100/(1+R)^(days/365)</span>.</p>
+    <div class="sub">תשואת החזקה (HPR)</div>
+    <div class="formula"><b>HPR</b> = (P2 + C − P1) / P1</div>
+  </section>
+
+  <!-- 6 -->
+  <section class="topic" id="t6">
+    <h3><span class="num">6</span> תקצוב הון — NPV / IRR / PI</h3>
+
+    <div class="sub">NPV — ערך נוכחי נקי</div>
+    <div class="formula"><b>NPV</b> = −I0 + Σ CFt/(1+r)^t &nbsp;&nbsp;(קבוע: −I0 + CF×PVFA)</div>
+    <p class="note">כלל: <b>NPV &gt; 0</b> → כדאי. <b>NPV &lt; 0</b> → לא כדאי.</p>
+
+    <div class="sub">IRR — שיעור תשואה פנימי</div>
+    <p class="note">ה-r שמאפס את ה-NPV. כלל: <b>IRR &gt; r</b> → כדאי.</p>
+    <div class="callout trick"><span class="ic">🔥</span><div><b>IRR כשיש 2 תקופות (משוואה ריבועית):</b> הצב <code style="font-family:var(--mono)">X = 1/(1+IRR)</code>, פתור <span style="font-family:var(--mono);direction:ltr;">−I0 + CF1·X + CF2·X² = 0</span> בנוסחת השורשים, ואז <code style="font-family:var(--mono)">IRR = 1/X − 1</code>.</div></div>
+
+    <div class="sub">PI — מדד רווחיות</div>
+    <div class="formula"><b>PI</b> = PV / I0 = 1 + NPV/I0 &nbsp;&nbsp;(PI &gt; 1 → כדאי)</div>
+
+    <div class="callout warn"><span class="ic">⚠️</span><div><b>פרויקטים שמוציאים זה את זה:</b> אם IRR סותר את NPV — <b>תמיד מחליטים לפי NPV הגבוה</b>.</div></div>
+  </section>
+
+  <!-- 7 -->
+  <section class="topic" id="t7">
+    <h3><span class="num">7</span> בניית תזרים מזומנים <span class="pill">השאלה הגדולה · 20-32 נק'</span></h3>
+    <p class="note">בונים טבלה שורה-שורה, ואז עושים לזה NPV. אל תיבהל מהגודל.</p>
+
+    <div class="sub">3 עקרונות קשיחים</div>
+    <table class="dec">
+      <tr><th>עיקרון</th><th>מה עושים</th></tr>
+      <tr><td>עלות שקועה</td><td>כבר הוצא בעבר (ייעוץ, מחקר) → <b>לא נכלל בכלל</b></td></tr>
+      <tr><td>עלות אלטרנטיבית</td><td>נכס קיים שיכל להימכר → שוויו <b>נחשב כהשקעה</b></td></tr>
+      <tr><td>תזרים תוספתי</td><td>רק שינויים מהפרויקט. קניבליזציה → מפחיתים</td></tr>
+    </table>
+
+    <div class="sub">מבנה הטבלה (סדר השורות)</div>
+    <div class="formula" style="line-height:1.9;">
+      &nbsp;&nbsp;הכנסות (כמות × מחיר)<br>
+      − הוצאות תפעוליות<br>
+      − ירידה בהכנסות קיימות<br>
+      − פחת לצורכי מס &nbsp;<b>(D = עלות / שנות פחת)</b><br>
+      = רווח לפני מס<br>
+      − מס הכנסה<br>
+      = רווח אחרי מס<br>
+      <b>+ החזר פחת ←← אל תשכח!</b><br>
+      −/+ השקעה/החזר הון חוזר &nbsp;(בסוף חוזר במלואו)<br>
+      − השקעה בציוד (זמן 0)<br>
+      + תמורה ממכירת ציוד (שנה אחרונה)<br>
+      −/+ מס על רווח/הפסד הון<br>
+      <b>= תזרים נקי (NCF) → ל-NPV</b>
+    </div>
+
+    <div class="callout trick"><span class="ic">🔥</span><div><b>מס על רווח הון בסוף:</b><br>ע"ב = עלות − פחת שנצבר &nbsp;·&nbsp; רווח הון = מחיר מכירה − ע"ב &nbsp;·&nbsp; מס = רווח × 25%</div></div>
+    <div class="callout warn"><span class="ic">⚠️</span><div>שים לב לשני שיעורי מס שונים! מס חברות שוטף (30%) מול מס רווחי הון (25%). אל תתבלבל.</div></div>
+  </section>
+
+  <!-- 8 -->
+  <section class="topic" id="t8">
+    <h3><span class="num">8</span> תיקי השקעות (אי-ודאות)</h3>
+
+    <div class="formula"><b>תוחלת:</b> E(R) = Σ Pi × Ri</div>
+    <div class="formula"><b>שונות:</b> Var = Σ Pi × (Ri − E(R))²</div>
+    <div class="formula"><b>סטיית תקן:</b> SD = √Var &nbsp;(מדד הסיכון)</div>
+
+    <div class="sub">קריטריון תוחלת-שונות (MV)</div>
+    <p class="note">נכס א' דומיננטי על ב' אם: תוחלת גבוהה/שווה <b>וגם</b> סטיית תקן נמוכה/שווה (לפחות אחד ממש לטובתו). שונא סיכון בוחר תמיד את הדומיננטי.</p>
+  </section>
+
+  <footer class="foot">
+    <h3>🎯 טיפים אחרונים ל-65 ומעלה</h3>
+    <ul>
+      <li><b>ניהול זמן:</b> 30 דקות בדיוק לשאלה. נתקעת? תעבור הלאה ותחזור.</li>
+      <li><b>הצג דרך פתרון:</b> נוסחה + הצבה + טבלה = 70-80% מהניקוד גם אם הטעית במחשבון. אל תכתוב רק שורה סופית.</li>
+      <li><b>עקביות יחידות:</b> לפני כל היוון — "הריבית והזמן באותן יחידות?"</li>
+      <li><b>שאלת התזרים:</b> צייר טבלה לפי המבנה, מלא שורה-שורה. תזכור: החזר פחת, החזר הון חוזר.</li>
+    </ul>
+  </footer>
+
+</div>
+</body>
+</html>

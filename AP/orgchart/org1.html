@@ -1,0 +1,307 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+  <meta charset="UTF-8" />
+  <title>תרשים מבנה ארגוני</title>
+  <style>
+    body {
+      font-family: system-ui, -apple-system, "Segoe UI", sans-serif;
+      background: #f5f5f5;
+      margin: 0;
+      padding: 24px;
+    }
+
+    h1 {
+      text-align: center;
+      margin-bottom: 24px;
+    }
+
+    .org-wrapper {
+      display: flex;
+      justify-content: center;
+      overflow-x: auto;
+    }
+
+    .tree {
+      text-align: center;
+    }
+
+    .tree ul {
+      padding-top: 20px;
+      position: relative;
+      padding-inline-start: 0;
+      display: inline-block;
+    }
+
+    .tree li {
+      list-style-type: none;
+      margin: 0 10px;
+      padding: 20px 5px 0 5px;
+      position: relative;
+      display: inline-block;
+      vertical-align: top;
+    }
+
+    /* קווים בין צמתים */
+    .tree li::before,
+    .tree li::after {
+      content: '';
+      position: absolute;
+      top: 0;
+      border-top: 1px solid #ccc;
+      width: 50%;
+      height: 20px;
+    }
+
+    .tree li::before {
+      right: 50%;
+    }
+
+    .tree li::after {
+      left: 50%;
+    }
+
+    .tree li:only-child::before,
+    .tree li:only-child::after {
+      display: none;
+    }
+
+    .tree li:only-child {
+      padding-top: 0;
+    }
+
+    .tree li:first-child::before {
+      border: 0 none;
+    }
+
+    .tree li:last-child::after {
+      border: 0 none;
+    }
+
+    .tree ul::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      right: 50%;
+      border-right: 1px solid #ccc;
+      width: 0;
+      height: 20px;
+    }
+
+    .node {
+      display: inline-block;
+      min-width: 160px;
+      max-width: 220px;
+      background: #fff;
+      border-radius: 6px;
+      border: 1px solid #d0d0d0;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.08);
+      padding: 8px 10px;
+      cursor: pointer;
+      transition: background 0.15s, border-color 0.15s, transform 0.1s;
+    }
+
+    .node:hover {
+      background: #e9f3ff;
+      border-color: #6b9cff;
+      transform: translateY(-1px);
+    }
+
+    .node-title {
+      font-weight: 600;
+      font-size: 14px;
+      color: #222;
+      margin-bottom: 2px;
+    }
+
+    .node-meta {
+      font-size: 12px;
+      color: #666;
+      line-height: 1.4;
+    }
+
+    .collapsed > ul {
+      display: none;
+    }
+
+    .node::after {
+      content: '▼';
+      font-size: 10px;
+      color: #999;
+      float: left;
+      margin-top: 2px;
+    }
+
+    .collapsed > .node::after {
+      content: '▶';
+    }
+  </style>
+</head>
+<body>
+  <h1>תרשים מבנה ארגוני – חטיבת משאבים</h1>
+
+  <div class="org-wrapper">
+    <div id="org-tree" class="tree"></div>
+  </div>
+
+  <script>
+    // ===== דוגמת נתונים שנגזרה מהקובץ =====
+    // כל אובייקט מייצג שורה ב-Excel:
+    // חטיבה, מחלקה, שם יחידה, שם משרה, כפיפות ישירה וכו'.
+    // לדוגמה, מתוך הקובץ:
+    // "חטיבת משאבים / מחלקת מש\"א / מדור משאבים לוגיסטיים / מדור שירותי מנהלה והיסעים / רכז משאבים לוגיסטיים"
+    const rows = [
+      {
+        division: 'חטיבת משאבים',
+        department: 'מחלקת מש"א',
+        unit: 'מדור משאבים לוגיסטיים',
+        subUnit: 'מדור שירותי מנהלה והיסעים',
+        role: 'רכז משאבים לוגיסטיים'
+      },
+      {
+        division: 'חטיבת משאבים',
+        department: 'מחלקת מש"א',
+        unit: 'מדור משאבים לוגיסטיים',
+        subUnit: 'מדור שירותי מנהלה והיסעים',
+        role: 'נהג'
+      },
+      {
+        division: 'חטיבת משאבים',
+        department: 'מחלקת מש"א',
+        unit: 'מדור משאבים לוגיסטיים',
+        subUnit: 'מדור שירותי מנהלה והיסעים',
+        role: 'מחסנאי'
+      },
+      {
+        division: 'חטיבת משאבים',
+        department: 'מחלקת מיחשוב',
+        unit: 'פרוייקטים מיחשוב',
+        subUnit: 'מדור פרויקטים במערכות מידע',
+        role: 'מנהל/ת פרויקטים במערכות מידע'
+      },
+      {
+        division: 'חטיבת משאבים',
+        department: 'מחלקת מיחשוב',
+        unit: 'פרוייקטים מיחשוב',
+        subUnit: 'מדור פרויקטים במערכות מידע',
+        role: 'מיישמ/ת מערכות מידע'
+      },
+      {
+        division: 'חטיבת משאבים',
+        department: 'מחלקת מש"א',
+        unit: 'מדור שכר',
+        subUnit: '',
+        role: 'מנהל/ת מדור שכר'
+      },
+      {
+        division: 'חטיבת משאבים',
+        department: 'מחלקת מש"א',
+        unit: 'מדור שכר',
+        subUnit: '',
+        role: 'חשב שכר'
+      }
+      // כאן ממשיכים את כל השורות מהקובץ באותו פורמט
+    ];
+
+    // ===== בניית עץ היררכי מרמות הארגון =====
+    function buildTreeFromRows(rows) {
+      const root = { name: 'ארגון', children: [] };
+
+      function findOrCreateChild(parent, name, type) {
+        if (!name) return parent; // אם אין רמה – מדלגים
+        let child = parent.children.find(c => c.name === name && c.type === type);
+        if (!child) {
+          child = { name, type, children: [] };
+          parent.children.push(child);
+        }
+        return child;
+      }
+
+      rows.forEach(r => {
+        let divisionNode = findOrCreateChild(root, r.division, 'division');
+        let deptNode     = findOrCreateChild(divisionNode, r.department, 'department');
+        let unitNode     = findOrCreateChild(deptNode, r.unit, 'unit');
+        let subUnitNode  = findOrCreateChild(unitNode, r.subUnit, 'subUnit');
+        // משרה היא עלה
+        if (r.role) {
+          subUnitNode.children.push({
+            name: r.role,
+            type: 'role',
+            children: []
+          });
+        }
+      });
+
+      return root;
+    }
+
+    // ===== רינדור העץ ל-HTML =====
+    function renderNode(node) {
+      const li = document.createElement('li');
+
+      const box = document.createElement('div');
+      box.className = 'node';
+
+      const title = document.createElement('div');
+      title.className = 'node-title';
+      title.textContent = node.name;
+
+      const meta = document.createElement('div');
+      meta.className = 'node-meta';
+      meta.textContent = labelForType(node.type);
+
+      box.appendChild(title);
+      if (node.type) {
+        box.appendChild(meta);
+      }
+
+      li.appendChild(box);
+
+      if (node.children && node.children.length > 0) {
+        const ul = document.createElement('ul');
+        node.children.forEach(child => {
+          ul.appendChild(renderNode(child));
+        });
+        li.appendChild(ul);
+
+        // אפשרות קיפול/פתיחה
+        box.addEventListener('click', (e) => {
+          e.stopPropagation();
+          li.classList.toggle('collapsed');
+        });
+      }
+
+      return li;
+    }
+
+    function labelForType(type) {
+      switch (type) {
+        case 'division':  return 'חטיבה';
+        case 'department':return 'מחלקה';
+        case 'unit':      return 'יחידה / מדור';
+        case 'subUnit':   return 'תת-יחידה / מדור';
+        case 'role':      return 'משרה';
+        default:          return '';
+      }
+    }
+
+    function renderTree(containerId, rows) {
+      const container = document.getElementById(containerId);
+      container.innerHTML = '';
+
+      const treeData = buildTreeFromRows(rows);
+
+      const ul = document.createElement('ul');
+      // מציגים רק את "חטיבת משאבים" כשורש בפועל
+      const divisionNodes = treeData.children.filter(c => c.name === 'חטיבת משאבים');
+      (divisionNodes.length ? divisionNodes : treeData.children).forEach(rootNode => {
+        ul.appendChild(renderNode(rootNode));
+      });
+
+      container.appendChild(ul);
+    }
+
+    renderTree('org-tree', rows);
+  </script>
+</body>
+</html>

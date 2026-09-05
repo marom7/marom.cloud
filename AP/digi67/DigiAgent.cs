@@ -1,0 +1,410 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Diagnostics;
+using System.IO;
+using System.Net;
+using System.Net.NetworkInformation;
+using System.Net.Sockets;
+using System.Text;
+using System.Text.Json;
+using System.Threading;
+using System.Threading.Tasks;
+
+// ═══════════════════════════════════════════════════════════
+//  digi67 — DIGI Rugged Computer Monitor
+//  
+//  Scans DIGI computers on port cranes, hoists & vehicles
+//  Writes results.json → serves dashboard (TcpListener, no Admin)
+//  Copies results.json to shared folder → IT forwards to turtle67
+//
+//  Ashdod Port | 67CODES
+// ═══════════════════════════════════════════════════════════
+
+
+using System.Linq;
+
+namespace DigiAgent
+{
+    class Program
+    {
+        // ── Config ──
+        static int INTERVAL_SECONDS = 60;
+        static int PING_TIMEOUT_MS = 3000;
+        static int BATCH_SIZE = 20;
+        static int LOCAL_PORT = 8067;
+        static string CONFIG_FILE = "digi67-config.json";
+        static string MACHINES_FILE = "machines.json";
+        static string SHARED_FOLDER = "Y:\\DIGI";  // e.g. \\\\server\\ot-to-it
+
+        static readonly string BASE_DIR = AppDomain.CurrentDomain.BaseDirectory;
+        static readonly string PUBLIC_DIR = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "public");
+        static readonly string RESULTS_FILE = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "public", "results.json");
+
+        static List<Category> categories = new List<Category>();
+        static DateTime lastMachinesLoad = DateTime.MinValue;
+
+        static void Main(string[] args)
+        {
+            Console.OutputEncoding = Encoding.UTF8;
+            PrintBanner();
+            LoadConfig();
+
+            Directory.CreateDirectory(PUBLIC_DIR);
+            LoadMachinesFile();
+
+            Log($"Dashboard:    http://OTVDIHD06:{LOCAL_PORT}");
+            Log($"Results:      {RESULTS_FILE}");
+            Log($"Shared:       {(string.IsNullOrEmpty(SHARED_FOLDER) ? "disabled" : SHARED_FOLDER)}");
+            Log($"Interval:     {INTERVAL_SECONDS}s");
+            Log($"DIGI units:   {categories.Sum(c => c.Addresses.Count)} in {categories.Count} categories");
+            Log("");
+
+            // TcpListener — no Admin required!
+            new Thread(RunTcpServer) { IsBackground = true }.Start();
+
+            // Main ping loop
+            while (true)
+            {
+                try
+                {
+                    ReloadMachinesIfChanged();
+                    RunCycle().GetAwaiter().GetResult();
+                }
+                catch (Exception ex) { LogError($"Cycle failed: {ex.Message}"); }
+
+                Log($"Sleeping {INTERVAL_SECONDS}s...\n");
+                Thread.Sleep(INTERVAL_SECONDS * 1000);
+            }
+        }
+
+        // ═══════════════════════════════════
+        //  Ping Cycle → Write results.json
+        // ═══════════════════════════════════
+
+        static async Task RunCycle()
+        {
+            var sw = Stopwatch.StartNew();
+            var allMachines = new List<(string Addr, string CatKey, string CatName)>();
+            foreach (var c in categories)
+                foreach (var a in c.Addresses)
+                    allMachines.Add((a, c.Key, c.Name));
+
+            Log($"[SCAN] Starting — {allMachines.Count} DIGI units");
+
+            var results = new List<MachineResult>();
+
+            for (int i = 0; i < allMachines.Count; i += BATCH_SIZE)
+            {
+                var batch = allMachines.Skip(i).Take(BATCH_SIZE).ToList();
+                var tasks = batch.Select(async m =>
+                {
+                    var r = await PingHost(m.Addr);
+                    return new MachineResult
+                    {
+                        address = m.Addr,
+                        category = m.CatKey,
+                        categoryHe = m.CatName,
+                        connected = r.Alive,
+                        pingMs = r.Ms,
+                        lastSeen = r.Alive ? DateTime.Now.ToString("o") : null
+                    };
+                });
+
+                results.AddRange(await Task.WhenAll(tasks));
+                Console.Write($"\r  Progress: {Math.Min(i + BATCH_SIZE, allMachines.Count)}/{allMachines.Count}  ");
+            }
+            Console.WriteLine();
+
+            sw.Stop();
+            var now = DateTime.Now.ToString("o");
+            int online = results.Count(r => r.connected);
+
+            Log($"[SCAN] Done {sw.Elapsed.TotalSeconds:F1}s — {online}/{results.Count} online");
+
+            WriteResultsFile(results, now, (int)sw.ElapsedMilliseconds);
+            CopyToSharedFolder();
+        }
+
+        static void WriteResultsFile(List<MachineResult> results, string timestamp, int cycleMs)
+        {
+            try
+            {
+                var online = results.Count(r => r.connected);
+                var data = new
+                {
+                    timestamp,
+                    agentName = Environment.MachineName,
+                    cycleDurationMs = cycleMs,
+                    summary = new { total = results.Count, online, offline = results.Count - online },
+                    categories = categories.Select(c => new { key = c.Key, name = c.Name, icon = c.Icon, color = c.Color }),
+                    machines = results
+                };
+
+                var json = JsonSerializer.Serialize(data, new JsonSerializerOptions
+                {
+                    PropertyNamingPolicy = JsonNamingPolicy.CamelCase,
+                    WriteIndented = false
+                });
+
+                var tmp = RESULTS_FILE + ".tmp";
+                File.WriteAllText(tmp, json, Encoding.UTF8);
+                File.Move(tmp, RESULTS_FILE, true);
+
+                Log($"[FILE] results.json ({(json.Length / 1024.0):F1}KB)");
+            }
+            catch (Exception ex) { LogError($"[FILE] {ex.Message}"); }
+        }
+
+        static void CopyToSharedFolder()
+        {
+            if (string.IsNullOrEmpty(SHARED_FOLDER)) return;
+
+            try
+            {
+                if (!Directory.Exists(SHARED_FOLDER))
+                {
+                    LogError($"[SHARE] Folder not found: {SHARED_FOLDER}");
+                    return;
+                }
+
+                var dest = Path.Combine(SHARED_FOLDER, "results.json");
+                var tmp = dest + ".tmp";
+                File.Copy(RESULTS_FILE, tmp, true);
+                if (File.Exists(dest)) File.Delete(dest);
+                File.Move(tmp, dest);
+
+                Log($"[SHARE] → {SHARED_FOLDER}");
+            }
+            catch (Exception ex) { LogError($"[SHARE] {ex.Message}"); }
+        }
+
+        static async Task<(bool Alive, double? Ms)> PingHost(string host)
+        {
+            try
+            {
+                using var pinger = new Ping();
+                var reply = await pinger.SendPingAsync(host, PING_TIMEOUT_MS);
+                if (reply.Status == IPStatus.Success) return (true, reply.RoundtripTime);
+            }
+            catch { }
+            return (false, null);
+        }
+
+        // ═══════════════════════════════════
+        //  TCP Web Server (NO ADMIN NEEDED)
+        // ═══════════════════════════════════
+
+        static readonly Dictionary<string, string> MIME = new()
+        {
+            { ".html", "text/html; charset=utf-8" },
+            { ".json", "application/json; charset=utf-8" },
+            { ".css", "text/css" },
+            { ".js", "application/javascript" },
+            { ".png", "image/png" },
+            { ".ico", "image/x-icon" }
+        };
+
+        static void RunTcpServer()
+        {
+            var listener = new TcpListener(IPAddress.Any, LOCAL_PORT);
+            listener.Start();
+            Log($"[HTTP] Dashboard on port {LOCAL_PORT} (no Admin needed)");
+
+            while (true)
+            {
+                try
+                {
+                    var client = listener.AcceptTcpClient();
+                    Task.Run(() => HandleClient(client));
+                }
+                catch (Exception ex) { LogError($"[HTTP] {ex.Message}"); }
+            }
+        }
+
+        static void HandleClient(TcpClient client)
+        {
+            try
+            {
+                using (client)
+                using (var stream = client.GetStream())
+                {
+                    stream.ReadTimeout = 5000;
+
+                    // Read request
+                    var buffer = new byte[4096];
+                    int bytesRead = stream.Read(buffer, 0, buffer.Length);
+                    var request = Encoding.UTF8.GetString(buffer, 0, bytesRead);
+
+                    // Parse: GET /path HTTP/1.1
+                    var firstLine = request.Split('\n')[0].Trim();
+                    var parts = firstLine.Split(' ');
+                    if (parts.Length < 2) { Send(stream, 400, "text/plain", "Bad Request"); return; }
+
+                    var rawPath = parts[1].Split('?')[0];
+                    if (rawPath == "/") rawPath = "/index.html";
+
+                    var filePath = Path.Combine(PUBLIC_DIR, rawPath.TrimStart('/'));
+
+                    // Security
+                    if (!Path.GetFullPath(filePath).StartsWith(Path.GetFullPath(PUBLIC_DIR)))
+                    {
+                        Send(stream, 403, "text/plain", "Forbidden");
+                        return;
+                    }
+
+                    if (File.Exists(filePath))
+                    {
+                        var ext = Path.GetExtension(filePath);
+                        var contentType = MIME.GetValueOrDefault(ext, "application/octet-stream");
+                        var body = File.ReadAllBytes(filePath);
+
+                        var extra = filePath.EndsWith("results.json")
+                            ? "Cache-Control: no-cache, no-store\r\nAccess-Control-Allow-Origin: *\r\n"
+                            : "";
+
+                        var header = $"HTTP/1.1 200 OK\r\nContent-Type: {contentType}\r\nContent-Length: {body.Length}\r\n{extra}Connection: close\r\n\r\n";
+                        var hdr = Encoding.UTF8.GetBytes(header);
+                        stream.Write(hdr, 0, hdr.Length);
+                        stream.Write(body, 0, body.Length);
+                    }
+                    else
+                    {
+                        Send(stream, 404, "text/plain; charset=utf-8", "404");
+                    }
+                }
+            }
+            catch { }
+        }
+
+        static void Send(NetworkStream stream, int code, string type, string body)
+        {
+            var status = code switch { 400 => "Bad Request", 403 => "Forbidden", _ => "Not Found" };
+            var b = Encoding.UTF8.GetBytes(body);
+            var h = Encoding.UTF8.GetBytes($"HTTP/1.1 {code} {status}\r\nContent-Type: {type}\r\nContent-Length: {b.Length}\r\nConnection: close\r\n\r\n");
+            stream.Write(h, 0, h.Length);
+            stream.Write(b, 0, b.Length);
+        }
+
+        // ═══════════════════════════════════
+        //  machines.json
+        // ═══════════════════════════════════
+
+        static void LoadMachinesFile()
+        {
+            var path = Path.Combine(BASE_DIR, MACHINES_FILE);
+            if (!File.Exists(path)) { LogError($"[MACHINES] {MACHINES_FILE} not found!"); return; }
+
+            try
+            {
+                using var doc = JsonDocument.Parse(File.ReadAllText(path, Encoding.UTF8));
+                var newCats = new List<Category>();
+
+                foreach (var cat in doc.RootElement.GetProperty("categories").EnumerateArray())
+                {
+                    var c = new Category
+                    {
+                        Key = cat.GetProperty("key").GetString(),
+                        Name = cat.GetProperty("name").GetString(),
+                        Icon = cat.TryGetProperty("icon", out var i) ? i.GetString() : "📦",
+                        Color = cat.TryGetProperty("color", out var cl) ? cl.GetString() : "#7a8a9e",
+                        Addresses = new List<string>()
+                    };
+                    foreach (var addr in cat.GetProperty("addresses").EnumerateArray())
+                        c.Addresses.Add(addr.GetString());
+                    newCats.Add(c);
+                }
+
+                categories = newCats;
+                lastMachinesLoad = File.GetLastWriteTime(path);
+                Log($"[MACHINES] {categories.Sum(c => c.Addresses.Count)} DIGI units, {categories.Count} categories");
+            }
+            catch (Exception ex) { LogError($"[MACHINES] {ex.Message}"); }
+        }
+
+        static void ReloadMachinesIfChanged()
+        {
+            var path = Path.Combine(BASE_DIR, MACHINES_FILE);
+            if (!File.Exists(path)) return;
+            if (File.GetLastWriteTime(path) > lastMachinesLoad)
+            {
+                Log("[MACHINES] File changed — reloading...");
+                LoadMachinesFile();
+            }
+        }
+
+        // ═══════════════════════════════════
+        //  Config
+        // ═══════════════════════════════════
+
+        static void LoadConfig()
+        {
+            if (!File.Exists(CONFIG_FILE))
+            {
+                var defaults = new Dictionary<string, object>
+                {
+                    { "intervalSeconds", INTERVAL_SECONDS },
+                    { "pingTimeoutMs", PING_TIMEOUT_MS },
+                    { "batchSize", BATCH_SIZE },
+                    { "localPort", LOCAL_PORT },
+                    { "machinesFile", MACHINES_FILE },
+                    { "sharedFolder", "" }
+                };
+                File.WriteAllText(CONFIG_FILE,
+                    JsonSerializer.Serialize(defaults, new JsonSerializerOptions { WriteIndented = true }));
+                Log($"[CONFIG] Created {CONFIG_FILE}");
+                return;
+            }
+
+            try
+            {
+                using var doc = JsonDocument.Parse(File.ReadAllText(CONFIG_FILE));
+                var r = doc.RootElement;
+                if (r.TryGetProperty("intervalSeconds", out var v1)) INTERVAL_SECONDS = v1.GetInt32();
+                if (r.TryGetProperty("pingTimeoutMs", out var v2)) PING_TIMEOUT_MS = v2.GetInt32();
+                if (r.TryGetProperty("batchSize", out var v3)) BATCH_SIZE = v3.GetInt32();
+                if (r.TryGetProperty("localPort", out var v4)) LOCAL_PORT = v4.GetInt32();
+                if (r.TryGetProperty("machinesFile", out var v5)) MACHINES_FILE = v5.GetString();
+                if (r.TryGetProperty("sharedFolder", out var v6)) SHARED_FOLDER = v6.GetString();
+                Log($"[CONFIG] Loaded");
+            }
+            catch (Exception ex) { LogError($"[CONFIG] {ex.Message}"); }
+        }
+
+        static void PrintBanner()
+        {
+            Console.ForegroundColor = ConsoleColor.Cyan;
+            Console.WriteLine(@"
+  ╔════════════════════════════════════════════╗
+  ║       digi67 — DIGI Network Monitor       ║
+  ║       Ashdod Port | 67CODES               ║
+  ╚════════════════════════════════════════════╝
+");
+            Console.ResetColor();
+        }
+
+        static void Log(string m) { Console.Write($"  {DateTime.Now:HH:mm:ss} "); Console.WriteLine(m); }
+        static void LogError(string m) { Console.ForegroundColor = ConsoleColor.Red; Log(m); Console.ResetColor(); }
+    }
+
+    class Category
+    {
+        public string Key { get; set; }
+        public string Name { get; set; }
+        public string Icon { get; set; }
+        public string Color { get; set; }
+        public List<string> Addresses { get; set; }
+    }
+
+    class MachineResult
+    {
+        public string address { get; set; }
+        public string category { get; set; }
+        public string categoryHe { get; set; }
+        public bool connected { get; set; }
+        public double? pingMs { get; set; }
+        public string lastSeen { get; set; }
+    }
+}
+
+// uder: admin
+// pass: adminir / yossigtr

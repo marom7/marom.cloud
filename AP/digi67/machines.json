@@ -1,0 +1,81 @@
+﻿
+{
+  "categories": [
+    {
+      "key": "GORERIM",
+      "name": "גוררים",
+      "icon": "🚛",
+      "color": "#5c9bff",
+      "addresses": [
+        "YT509","YT510","YT511","YT512","YT513","YT514","YT515","YT517","YT518","YT519",
+        "YT520","YT521","YT522","YT523","YT524","YT525","YT526","YT527","YT528","YT529",
+        "YT530","YT531","YT532","YT533","YT534","YT535","YT536","YT537","YT538","YT539",
+        "YT540","YT541","YT542","YT543","YT544","YT545","YT546","YT547","YT548","YT549",
+        "YT550","YT551","YT552","YT553","YT554","YT555","YT556","YT557","YT558","YT559",
+        "YT561","YT562","YT563","YT564","YT565","YT567","YT568","YT569","YT570","YT571",
+        "YT572","YT573","YT574","YT575","YT576","YT577","YT578","YT579","YT580","YT581",
+        "YT582","YT583","YT584","YT585","YT586","YT587","YT588","YT589","YT591","YT592",
+        "YT593","YT594","YT595","YT596","YT597"
+      ]
+    },
+    {
+      "key": "MALGEZOT",
+      "name": "מלגזות",
+      "icon": "🏗️",
+      "color": "#b388ff",
+      "addresses": [
+        "YQ421","YQ422","YQ423","YQ424","YQ425","YQ426","YQ427",
+        "YQ816","YQ818","YQ819","YQ820","YQ821","YQ822","YQ824",
+        "YQ825","YQ826","YQ827","YQ828","YQ829","YQ830","YQ831"
+      ]
+    },
+    {
+      "key": "SHAAR",
+      "name": "מנופי שער",
+      "icon": "🚪",
+      "color": "#64ffda",
+      "addresses": [
+        "RMGA1","RMGA2","RMGA3","RMGA4","RMGB1","RMGB2","RMGB3","RMGC1","RMGC2","RMGC3"
+      ]
+    },
+    {
+      "key": "GESHER",
+      "name": "מנופי גשר",
+      "icon": "🌉",
+      "color": "#ffd54f",
+      "addresses": [
+        "Crane73","Crane74","Crane75","Crane91","Crane92","Crane93","Crane221","Crane222"
+      ]
+    },
+    {
+      "key": "MANOF",
+      "name": "מנופי RTG",
+      "icon": "⚙️",
+      "color": "#ffab40",
+      "addresses": [
+        "RTG130","RTG131","RTG132","RTG133","RTG134","RTG135","RTG136",
+        "RTG160","RTG161","RTG164","RTG165","RTG166","RTG167","RTG168",
+        "RTG169","RTG170","RTG171","RTG172","RTG174","RTG177","RTG178",
+        "RTG179","RTG180","RTG182"
+      ]
+    },
+    {
+      "key": "ZIUD_NOSAF",
+      "name": "ציוד נוסף",
+      "icon": "🔧",
+      "color": "#80cbc4",
+      "addresses": [
+        "CRANE31","CRANE32","CRANE33","CRANE34","CRANE35",
+        "CRANE41","CRANE42","CRANE52","CRANE53","CRANE54","CRANE55","CRANE56",
+        "CRANE76","CRANE77","CRANE78","CRANE201","CRANE202",
+        "CRANE211.ashdodport.co.il","CRANE212.ashdodport.co.il",
+        "CRANE213.ashdodport.co.il","CRANE214.ashdodport.co.il",
+        "CRANE215.ashdodport.co.il","CRANE231",
+        "CRANE232.ashdodport.co.il","CRANE233.ashdodport.co.il",
+        "CRANE234.ashdodport.co.il","CRANE235.ashdodport.co.il",
+        "CRANE236.ashdodport.co.il","CRANE237.ashdodport.co.il"
+      ]
+    }
+  ]
+}
+

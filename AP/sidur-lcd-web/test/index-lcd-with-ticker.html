@@ -1,0 +1,470 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<!-- ReoGrid Style -->
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=1024, height=768">
+    <title>תצוגת משמרות-סידור עבודה</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500;700&family=Heebo:wght@400;500;700&family=Share+Tech+Mono&display=swap" rel="stylesheet">
+    <style>
+      /* === פאנל עליון — לא נוגע בטבלה / style.css === */
+      .digital-panel {
+        width: 100%;
+        max-width: none;
+        background: linear-gradient(180deg, #0a0f1a 0%, #0d1525 100%);
+        --page-cycle: 14s;
+        border-bottom: 2px solid rgba(0, 229, 255, 0.22);
+        box-shadow: 0 0 12px rgba(0, 229, 255, 0.2), inset 0 -1px 0 rgba(0, 229, 255, 0.15);
+        padding: 4px 10px;
+        display: flex;
+        align-items: center;
+        justify-content: flex-start;
+        gap: 8px;
+        flex-wrap: nowrap;
+        position: relative;
+        overflow: hidden;
+        min-height: 38px;
+        height: 38px;
+        box-sizing: border-box;
+      }
+      .digital-panel::before {
+        content: "";
+        position: absolute;
+        inset: 0;
+        background: repeating-linear-gradient(0deg, transparent, transparent 2px, rgba(0,229,255,0.015) 2px, rgba(0,229,255,0.015) 4px);
+        pointer-events: none;
+      }
+      .digital-panel::after {
+        content: "";
+        position: absolute;
+        right: 0; bottom: 0; left: auto;
+        height: 2px; width: 100%;
+        background: linear-gradient(to left, #00e5ff, #7af0ff 70%, #fff);
+        box-shadow: 0 0 8px rgba(0,229,255,0.8);
+        transform: scaleX(0);
+        transform-origin: right center;
+        animation: pageCycleFill var(--page-cycle) linear infinite;
+        pointer-events: none;
+        z-index: 2;
+      }
+      @keyframes pageCycleFill {
+        0% { transform: scaleX(0); opacity: 0.85; }
+        88% { transform: scaleX(0.88); opacity: 1; }
+        97% { transform: scaleX(1); opacity: 1; }
+        100% { transform: scaleX(1); opacity: 0.25; }
+      }
+      @keyframes glowPulse {
+        0%, 100% { box-shadow: 0 0 6px rgba(0,229,255,0.25); }
+        50% { box-shadow: 0 0 12px rgba(0,229,255,0.55); }
+      }
+      .digital-panel .panel-section {
+        display: flex; align-items: center; gap: 8px;
+        white-space: nowrap; flex-shrink: 0;
+      }
+      .digital-panel .clock {
+        font-family: 'Orbitron', monospace;
+        font-weight: 700; font-size: 1.35rem; letter-spacing: 1.5px;
+        color: #00e5ff;
+        text-shadow: 0 0 6px rgba(0,229,255,0.6), 0 0 12px rgba(0,229,255,0.3);
+        background: rgba(0,40,60,0.45);
+        padding: 3px 12px; border-radius: 5px;
+        border: 1px solid rgba(0,229,255,0.45);
+        width: 148px; min-width: 148px; max-width: 148px;
+        text-align: center; direction: ltr;
+        font-variant-numeric: tabular-nums;
+        box-sizing: border-box; overflow: hidden; line-height: 1.2;
+        animation: glowPulse 3s ease-in-out infinite;
+      }
+      .digital-panel .date-shift {
+        display: flex; align-items: center; gap: 8px;
+        font-size: 0.88rem; font-weight: 500; min-width: 0; flex-shrink: 1;
+      }
+      .digital-panel .day-date { color: #7ee8ff; font-weight: 600; }
+      .digital-panel .shift {
+        --shift-p: 0;
+        position: relative; isolation: isolate; overflow: hidden;
+        background: #00060d; color: #fffef2;
+        padding: 2px 12px 9px; border-radius: 4px;
+        font-weight: 800; font-size: 0.88rem;
+        box-shadow: 0 0 8px rgba(0,180,216,0.35);
+        min-width: 96px; text-align: center;
+      }
+      .digital-panel .shift::before {
+        content: "";
+        position: absolute; inset: 0;
+        background: linear-gradient(to left, #0369a1, #0ea5e9, #38bdf8);
+        transform: scaleX(var(--shift-p));
+        transform-origin: right center;
+        transition: transform 1.2s ease-out;
+        z-index: -1;
+      }
+      .digital-panel .shift-label {
+        position: relative; z-index: 1; color: #fff; font-weight: 800;
+        -webkit-text-stroke: 1px #000; paint-order: stroke fill;
+        text-shadow: 1px 0 0 #000, -1px 0 0 #000, 0 1px 0 #000, 0 -1px 0 #000;
+      }
+      .digital-panel .shift-pct {
+        position: absolute; left: 4px; bottom: 1px; z-index: 2;
+        font-family: Orbitron, monospace; font-size: 0.52rem; font-weight: 700;
+        color: #b8f0ff; text-shadow: 0 0 3px #000; direction: ltr; line-height: 1;
+        pointer-events: none;
+      }
+      .digital-panel .shift-type {
+        background: linear-gradient(90deg, #f59e0b, #d97706);
+        color: #1a1a1a; padding: 2px 10px; border-radius: 4px;
+        font-weight: 800; font-size: 0.84rem;
+        box-shadow: 0 0 10px rgba(245,158,11,0.45);
+        border: 1px solid rgba(253,224,71,0.5);
+        white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+        max-width: 220px;
+      }
+      .digital-panel .separator { color: #00e5ff; opacity: 0.5; font-size: 1.05rem; }
+      .digital-panel .weather { display: flex; align-items: center; gap: 5px; color: #a5f3fc; font-size: 0.88rem; }
+      .digital-panel .weather-temp { font-family: Orbitron, monospace; font-weight: 600; color: #00e5ff; direction: ltr; }
+      .digital-panel .shabbat { display: flex; align-items: center; gap: 6px; color: #fef08a; font-size: 0.88rem; font-weight: 500; }
+      .digital-panel .shabbat-label { color: #fde047; }
+      .digital-panel .parsha { color: #fef9c3; font-weight: 600; }
+      .digital-panel .brand-mark {
+        margin-inline-start: auto; flex-shrink: 0;
+        font-family: "Share Tech Mono", Orbitron, monospace;
+        font-size: 0.78rem; letter-spacing: -0.04em;
+        color: #00e5ff; text-decoration: none; direction: ltr;
+        padding: 1px 5px; border: 1px solid rgba(0,229,255,0.28); border-radius: 3px;
+        text-shadow: 0 0 6px rgba(0,229,255,0.55); opacity: 0.78; white-space: nowrap;
+      }
+      .digital-panel .brand-mark .bm-codes { font-size: 0.68em; }
+      .digital-panel .loading { opacity: 0.6; font-style: italic; }
+
+      /* === טיקר תחתון === */
+      .news-ticker {
+        position: fixed; left: 0; right: 0; bottom: 0; z-index: 80;
+        height: 24px; display: flex; align-items: stretch;
+        background: linear-gradient(180deg, #0d1525 0%, #070b14 100%);
+        border-top: 2px solid #066bed;
+        box-shadow: 0 -4px 14px rgba(6,107,237,0.22);
+        overflow: hidden;
+      }
+      .news-ticker[hidden] { display: none !important; }
+      .news-tag {
+        flex-shrink: 0; display: flex; align-items: center; justify-content: center;
+        padding: 0 10px; background: #066bed; color: #fff;
+        font-weight: 800; font-size: 0.68rem;
+      }
+      .news-viewport { flex: 1; min-width: 0; overflow: hidden; display: flex; align-items: center; direction: ltr; }
+      .news-track {
+        display: inline-flex; align-items: center; white-space: nowrap;
+        width: max-content; direction: ltr;
+        animation: newsSlide 100s linear infinite; padding-inline: 8px;
+      }
+      .news-ticker:hover .news-track { animation-play-state: paused; }
+      @keyframes newsSlide {
+        from { transform: translateX(-50%); }
+        to { transform: translateX(0); }
+      }
+      .news-item {
+        display: inline-flex; align-items: center;
+        color: #dbeafe; font-size: 0.78rem; font-weight: 600;
+        text-decoration: none; white-space: nowrap;
+        direction: rtl; unicode-bidi: plaintext;
+      }
+      .news-dot { color: #60a5fa; padding: 0 16px; font-weight: 800; }
+      .news-track.loading-news { animation: none !important; color: #9aa4b2; transform: none !important; }
+      .news-close {
+        flex-shrink: 0; width: 22px; border: 0; background: transparent;
+        color: #93c5fd; cursor: pointer; font-size: 0.85rem;
+      }
+      body.ticker-on .grid-scroll { padding-bottom: 26px; }
+      body.ticker-on .page-info { bottom: 30px !important; }
+    </style>
+</head>
+
+<body>
+    <div class="page-info">
+        עמוד <span id="pageNum">1</span> מתוך <span id="totalPages">1</span>
+    </div>
+
+    <div class="reogrid-container">
+      <header class="digital-panel" id="digitalPanel">
+        <div class="panel-section">
+          <div class="clock" id="clock">--:--:--</div>
+        </div>
+
+        <div class="panel-section date-shift">
+          <span class="day-date" id="dayDate">טוען...</span>
+          <span class="shift" id="shift">
+            <span class="shift-label" id="shiftLabel">משמרת א'</span>
+            <span class="shift-pct" id="shiftPct">0%</span>
+          </span>
+          <span class="shift-type" id="shiftType">מנופי חוף</span>
+        </div>
+
+        <div class="separator">|</div>
+
+        <div class="panel-section weather" id="weather">
+          <span class="weather-icon">🌡️</span>
+          <span class="loading">מזג האוויר טוען...</span>
+        </div>
+
+        <div class="separator">|</div>
+
+        <div class="panel-section shabbat" id="shabbat">
+          <span class="loading">כניסת שבת + פרשה טוענים...</span>
+        </div>
+
+        <a class="brand-mark" href="https://67.codes" target="_blank" rel="noopener" title="67.codes">&lt;/67.<span class="bm-codes">codes</span>&gt;</a>
+      </header>
+
+        <div class="grid-scroll">
+            <table class="grid">
+                <thead>
+                    <tr>
+                        <th class="col-pier">רציף</th>
+                        <th class="col-ship">אוניה / משימה</th>
+                        <th class="col-company">ספנה</th>
+                        <th class="col-crew">צוות</th>
+                        <th class="col-role">תפקיד</th>
+                        <th class="col-empno">מס.עובד</th>
+                        <th class="col-name">שם עובד</th>
+                        <th class="col-tool">כלי</th>
+                    </tr>
+                </thead>
+                <tbody id="gridBody">
+                    <!-- הנתונים ייטענו כאן -->
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <div class="news-ticker" id="newsTicker" title="עצירה במעבר עכבר">
+      <div class="news-tag">וואלה!</div>
+      <div class="news-viewport">
+        <div class="news-track loading-news" id="newsTrack">טוען חדשות...</div>
+      </div>
+      <button type="button" class="news-close" id="newsClose" title="הסתר טיקר">×</button>
+    </div>
+
+    <script src="api.js"></script>
+    <script src="app.js"></script>
+    <script>
+    const ASHDOD_LAT = 31.804;
+    const ASHDOD_LON = 34.655;
+    const GEONAME_ID = 295629;
+    const SHOW_TICKER = true;
+    const WALLA_RSS = "https://rss.walla.co.il/feed/1";
+    const CURRENT_SHIFT = 'auto';
+    const SHIFTS = {
+      'א': { start: [6, 30],  end: [14, 30], label: "משמרת א'" },
+      'ב': { start: [14, 30], end: [22, 30], label: "משמרת ב'" },
+      'ג': { start: [22, 30], end: [6, 30],  label: "משמרת ג'" }
+    };
+    const HEBREW_DAYS = ['ראשון', 'שני', 'שלישי', 'רביעי', 'חמישי', 'שישי', 'שבת'];
+    const WEATHER_MAP = {
+      0:  { text: 'בהיר', icon: '☀️' },
+      1:  { text: 'מעונן חלקית', icon: '🌤️' },
+      2:  { text: 'מעונן חלקית', icon: '⛅' },
+      3:  { text: 'מעונן', icon: '☁️' },
+      45: { text: 'ערפל', icon: '🌫️' },
+      48: { text: 'ערפל כבד', icon: '🌫️' },
+      51: { text: 'רסס קל', icon: '🌦️' },
+      53: { text: 'רסס', icon: '🌦️' },
+      55: { text: 'רסס חזק', icon: '🌧️' },
+      61: { text: 'גשם קל', icon: '🌧️' },
+      63: { text: 'גשם', icon: '🌧️' },
+      65: { text: 'גשם חזק', icon: '🌧️' },
+      71: { text: 'שלג קל', icon: '🌨️' },
+      73: { text: 'שלג', icon: '❄️' },
+      75: { text: 'שלג כבד', icon: '❄️' },
+      80: { text: 'ממטרים קלים', icon: '🌦️' },
+      81: { text: 'ממטרים', icon: '🌧️' },
+      82: { text: 'ממטרים חזקים', icon: '⛈️' },
+      95: { text: 'סופת רעמים', icon: '⛈️' },
+      96: { text: 'רעמים עם ברד', icon: '⛈️' },
+      99: { text: 'רעמים עם ברד', icon: '⛈️' }
+    };
+
+    function updateClockAndDate() {
+      const now = new Date();
+      const formatter = new Intl.DateTimeFormat('en-GB', {
+        timeZone: 'Asia/Jerusalem', hour: '2-digit', minute: '2-digit', second: '2-digit', hour12: false
+      });
+      document.getElementById('clock').textContent = formatter.format(now);
+      const dayName = HEBREW_DAYS[now.getDay()];
+      const day = String(now.getDate()).padStart(2, '0');
+      const month = String(now.getMonth() + 1).padStart(2, '0');
+      const year = String(now.getFullYear()).slice(-2);
+      document.getElementById('dayDate').textContent = `יום ${dayName} ${day}/${month}/${year}`;
+      updateShiftProgress(now);
+    }
+
+    function jerusalemParts(date) {
+      const parts = new Intl.DateTimeFormat('en-GB', {
+        timeZone: 'Asia/Jerusalem', hour: '2-digit', minute: '2-digit', hour12: false
+      }).formatToParts(date);
+      const hour = Number(parts.find(p => p.type === 'hour').value);
+      const minute = Number(parts.find(p => p.type === 'minute').value);
+      return { hour, minute, total: hour * 60 + minute };
+    }
+    function shiftWindow(key, nowTotal) {
+      const s = SHIFTS[key];
+      let start = s.start[0] * 60 + s.start[1];
+      let end = s.end[0] * 60 + s.end[1];
+      if (end <= start) end += 24 * 60;
+      let now = nowTotal;
+      if (end > 24 * 60 && now < s.start[0] * 60 + s.start[1]) now += 24 * 60;
+      return { start, end, now, duration: end - start };
+    }
+    function detectShift(nowTotal) {
+      for (const key of ['א', 'ב', 'ג']) {
+        const w = shiftWindow(key, nowTotal);
+        if (w.now >= w.start && w.now < w.end) return key;
+      }
+      return 'א';
+    }
+    function updateShiftProgress(now) {
+      const { total } = jerusalemParts(now);
+      const key = CURRENT_SHIFT === 'auto' ? detectShift(total) : CURRENT_SHIFT;
+      const shift = SHIFTS[key] || SHIFTS['ב'];
+      const w = shiftWindow(key, total);
+      let progress = (w.now - w.start) / w.duration;
+      if (progress < 0) progress = 0;
+      if (progress > 1) progress = 1;
+      const el = document.getElementById('shift');
+      const label = document.getElementById('shiftLabel');
+      if (label) label.textContent = shift.label;
+      if (el) el.style.setProperty('--shift-p', progress.toFixed(4));
+      const pct = Math.round(progress * 100);
+      const pctEl = document.getElementById('shiftPct');
+      if (pctEl) pctEl.textContent = pct + '%';
+      if (el) el.title = `${shift.label} • ${pct}% מהמשמרת`;
+    }
+
+    async function fetchWeather() {
+      try {
+        const url = `https://api.open-meteo.com/v1/forecast?latitude=${ASHDOD_LAT}&longitude=${ASHDOD_LON}&current=temperature_2m,weather_code&timezone=Asia/Jerusalem`;
+        const res = await fetch(url);
+        const data = await res.json();
+        const temp = Math.round(data.current.temperature_2m);
+        const weather = WEATHER_MAP[data.current.weather_code] || { text: 'לא ידוע', icon: '🌡️' };
+        document.getElementById('weather').innerHTML = `
+          <span class="weather-icon">${weather.icon}</span>
+          <span>${weather.text}</span>
+          <span class="weather-temp">${temp}°</span>`;
+      } catch (err) {
+        document.getElementById('weather').innerHTML = `<span class="weather-icon">🌡️</span><span>מזג האוויר לא זמין</span>`;
+        console.error('Weather error:', err);
+      }
+    }
+
+    async function fetchShabbat() {
+      try {
+        const url = `https://www.hebcal.com/shabbat?cfg=json&geonameid=${GEONAME_ID}&M=on&lg=he`;
+        const res = await fetch(url);
+        const data = await res.json();
+        let candleTime = '', parsha = '';
+        for (const item of data.items || []) {
+          if (item.category === 'candles') {
+            const match = item.title.match(/(\d{1,2}:\d{2})/);
+            candleTime = match ? match[1] : item.title;
+          }
+          if (item.category === 'parashat') {
+            parsha = item.hebrew || item.title.replace(/^פָּרָשַׁת\s*/, 'פרשת ');
+          }
+        }
+        if (parsha) {
+          parsha = parsha.replace(/פָּרָשַׁת|פרשת/g, '').trim();
+          parsha = 'פרשת ' + parsha;
+        }
+        document.getElementById('shabbat').innerHTML = `
+          <span class="shabbat-label">כניסת שבת:</span>
+          <span style="font-family:'Orbitron',monospace; direction:ltr">${candleTime || '--:--'}</span>
+          <span style="opacity:0.5">•</span>
+          <span class="parsha">${parsha || '—'}</span>`;
+      } catch (err) {
+        document.getElementById('shabbat').innerHTML = `<span class="loading">כניסת שבת לא זמינה כרגע</span>`;
+        console.error('Shabbat error:', err);
+      }
+    }
+
+    function isTickerEnabled() {
+      const q = new URLSearchParams(location.search);
+      if (q.get("ticker") === "0" || q.get("noticker") === "1") return false;
+      if (q.get("ticker") === "1") return true;
+      try { if (localStorage.getItem("hideTicker") === "1") return false; } catch (_) {}
+      return SHOW_TICKER !== false;
+    }
+    function hideTicker() {
+      const el = document.getElementById("newsTicker");
+      if (el) el.hidden = true;
+      document.body.classList.remove("ticker-on");
+      try { localStorage.setItem("hideTicker", "1"); } catch (_) {}
+    }
+    function showTicker() {
+      const el = document.getElementById("newsTicker");
+      if (el) el.hidden = false;
+      document.body.classList.add("ticker-on");
+      try { localStorage.removeItem("hideTicker"); } catch (_) {}
+    }
+    window.hideTicker = hideTicker;
+    window.showTicker = showTicker;
+
+    function esc(s) {
+      return String(s).replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;");
+    }
+    function renderNews(items) {
+      const track = document.getElementById("newsTrack");
+      if (!track) return;
+      const piece = items.map((it) => {
+        const title = esc((it.title || "").replace(/\s+/g, " ").trim());
+        const href = esc(it.link || "https://news.walla.co.il");
+        return `<a class="news-item" href="${href}" target="_blank" rel="noopener">${title}</a><span class="news-dot">◆</span>`;
+      }).join("");
+      track.classList.remove("loading-news");
+      track.style.animation = "none";
+      track.innerHTML = piece + piece;
+      void track.offsetWidth;
+      track.style.animation = "";
+      track.style.animationDuration = Math.max(90, items.length * 10) + "s";
+    }
+    async function fetchWallaNews() {
+      const track = document.getElementById("newsTrack");
+      try {
+        const url = "https://api.rss2json.com/v1/api.json?rss_url=" + encodeURIComponent(WALLA_RSS);
+        const res = await fetch(url);
+        if (!res.ok) throw new Error("http " + res.status);
+        const data = await res.json();
+        if (data.status && data.status !== "ok") throw new Error(data.message || "rss2json");
+        let items = (data.items || []).filter(it => it.title && it.title.length > 8);
+        if (!items.length) throw new Error("empty");
+        renderNews(items.slice(0, 15));
+      } catch (err) {
+        console.error("Walla RSS error:", err);
+        if (track) {
+          track.classList.add("loading-news");
+          track.textContent = "חדשות וואלה! לא זמינות כרגע";
+        }
+      }
+    }
+
+    function init() {
+      updateClockAndDate();
+      setInterval(updateClockAndDate, 1000);
+      fetchWeather();
+      setInterval(fetchWeather, 10 * 60 * 1000);
+      fetchShabbat();
+      setInterval(fetchShabbat, 2 * 60 * 60 * 1000);
+      if (isTickerEnabled()) {
+        document.body.classList.add("ticker-on");
+        fetchWallaNews();
+        setInterval(fetchWallaNews, 5 * 60 * 1000);
+        document.getElementById("newsClose")?.addEventListener("click", hideTicker);
+      } else {
+        hideTicker();
+      }
+    }
+    init();
+    </script>
+</body>
+</html>

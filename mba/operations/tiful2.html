@@ -1,0 +1,1360 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ניהול התפעול למנהלים | אתר למידה</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Heebo:wght@300;400;500;700;900&family=Rubik:wght@400;500;600;700&display=swap');
+
+:root {
+  --bg: #0a1628;
+  --surface: #111d33;
+  --surface2: #172640;
+  --border: #1e3455;
+  --accent: #3b82f6;
+  --accent2: #60a5fa;
+  --accent-glow: rgba(59, 130, 246, 0.15);
+  --green: #22c55e;
+  --orange: #f59e0b;
+  --red: #ef4444;
+  --purple: #a78bfa;
+  --text: #e2e8f0;
+  --text2: #94a3b8;
+  --text3: #64748b;
+  --white: #f8fafc;
+}
+
+* { margin:0; padding:0; box-sizing:border-box; }
+
+body {
+  font-family: 'Heebo', sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  line-height: 1.7;
+  min-height: 100vh;
+}
+
+/* Scrollbar */
+::-webkit-scrollbar { width: 6px; }
+::-webkit-scrollbar-track { background: var(--bg); }
+::-webkit-scrollbar-thumb { background: var(--border); border-radius: 3px; }
+
+/* Header */
+.hero {
+  background: linear-gradient(135deg, #0a1628 0%, #1a2f52 50%, #0f2341 100%);
+  border-bottom: 1px solid var(--border);
+  padding: 3rem 2rem 2.5rem;
+  text-align: center;
+  position: relative;
+  overflow: hidden;
+}
+.hero::before {
+  content: '';
+  position: absolute;
+  top: -50%; left: -50%;
+  width: 200%; height: 200%;
+  background: radial-gradient(ellipse at 30% 50%, rgba(59,130,246,0.08) 0%, transparent 60%);
+  pointer-events: none;
+}
+.hero-badge {
+  display: inline-block;
+  background: var(--accent-glow);
+  border: 1px solid rgba(59,130,246,0.3);
+  color: var(--accent2);
+  padding: 0.3rem 1rem;
+  border-radius: 20px;
+  font-size: 0.8rem;
+  font-weight: 500;
+  margin-bottom: 1rem;
+  letter-spacing: 0.5px;
+}
+.hero h1 {
+  font-family: 'Rubik', sans-serif;
+  font-size: 2.4rem;
+  font-weight: 700;
+  color: var(--white);
+  margin-bottom: 0.5rem;
+}
+.hero .subtitle {
+  color: var(--text2);
+  font-size: 1rem;
+  font-weight: 300;
+}
+.hero .meta {
+  display: flex;
+  justify-content: center;
+  gap: 2rem;
+  margin-top: 1.2rem;
+  flex-wrap: wrap;
+}
+.hero .meta span {
+  color: var(--text3);
+  font-size: 0.85rem;
+}
+.hero .meta span strong {
+  color: var(--text2);
+  font-weight: 500;
+}
+
+/* Nav */
+.nav {
+  background: var(--surface);
+  border-bottom: 1px solid var(--border);
+  padding: 0.8rem 1.5rem;
+  display: flex;
+  gap: 0.5rem;
+  overflow-x: auto;
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  -webkit-overflow-scrolling: touch;
+}
+.nav-btn {
+  background: transparent;
+  border: 1px solid transparent;
+  color: var(--text3);
+  padding: 0.5rem 1rem;
+  border-radius: 8px;
+  cursor: pointer;
+  font-family: 'Heebo', sans-serif;
+  font-size: 0.85rem;
+  font-weight: 500;
+  white-space: nowrap;
+  transition: all 0.2s;
+}
+.nav-btn:hover {
+  color: var(--text);
+  background: var(--surface2);
+}
+.nav-btn.active {
+  background: var(--accent-glow);
+  border-color: rgba(59,130,246,0.3);
+  color: var(--accent2);
+}
+
+/* Main */
+.main {
+  max-width: 960px;
+  margin: 0 auto;
+  padding: 2rem 1.5rem 4rem;
+}
+
+/* Section */
+.section {
+  display: none;
+}
+.section.active {
+  display: block;
+}
+
+/* Cards */
+.card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 1.5rem;
+  margin-bottom: 1.2rem;
+  transition: border-color 0.2s;
+}
+.card:hover {
+  border-color: rgba(59,130,246,0.3);
+}
+.card h3 {
+  font-family: 'Rubik', sans-serif;
+  font-size: 1.15rem;
+  color: var(--white);
+  margin-bottom: 0.8rem;
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+}
+.card h3 .icon {
+  font-size: 1.3rem;
+}
+.card p, .card li {
+  color: var(--text2);
+  font-size: 0.92rem;
+  line-height: 1.8;
+}
+.card ul {
+  list-style: none;
+  padding: 0;
+}
+.card ul li {
+  padding: 0.3rem 0;
+  padding-right: 1.2rem;
+  position: relative;
+}
+.card ul li::before {
+  content: '◆';
+  position: absolute;
+  right: 0;
+  color: var(--accent);
+  font-size: 0.5rem;
+  top: 0.7rem;
+}
+
+/* Topic Header */
+.topic-header {
+  margin-bottom: 1.5rem;
+}
+.topic-header h2 {
+  font-family: 'Rubik', sans-serif;
+  font-size: 1.6rem;
+  color: var(--white);
+  margin-bottom: 0.3rem;
+}
+.topic-header p {
+  color: var(--text3);
+  font-size: 0.9rem;
+}
+
+/* Collapsible */
+.collapse-btn {
+  width: 100%;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 1.2rem 1.5rem;
+  color: var(--white);
+  cursor: pointer;
+  text-align: right;
+  font-family: 'Rubik', sans-serif;
+  font-size: 1.05rem;
+  font-weight: 600;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 0.5rem;
+  transition: all 0.2s;
+}
+.collapse-btn:hover {
+  border-color: rgba(59,130,246,0.3);
+  background: var(--surface2);
+}
+.collapse-btn .arrow {
+  transition: transform 0.3s;
+  font-size: 0.8rem;
+  color: var(--text3);
+}
+.collapse-btn.open .arrow {
+  transform: rotate(180deg);
+}
+.collapse-btn .tag {
+  font-size: 0.7rem;
+  font-weight: 500;
+  padding: 0.2rem 0.6rem;
+  border-radius: 4px;
+  margin-left: 0.5rem;
+  font-family: 'Heebo', sans-serif;
+}
+.tag-exam { background: rgba(239,68,68,0.15); color: var(--red); }
+.tag-core { background: rgba(59,130,246,0.15); color: var(--accent2); }
+.tag-method { background: rgba(34,197,94,0.15); color: var(--green); }
+
+.collapse-content {
+  display: none;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-top: none;
+  border-radius: 0 0 12px 12px;
+  padding: 1.5rem;
+  margin-top: -0.6rem;
+  margin-bottom: 1rem;
+}
+.collapse-content.open {
+  display: block;
+}
+
+/* Formula box */
+.formula {
+  background: var(--bg);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 1rem 1.2rem;
+  margin: 0.8rem 0;
+  font-family: 'Courier New', monospace;
+  direction: ltr;
+  text-align: center;
+  color: var(--accent2);
+  font-size: 0.95rem;
+  line-height: 1.9;
+  overflow-x: auto;
+}
+
+/* Example box */
+.example {
+  background: rgba(34,197,94,0.05);
+  border: 1px solid rgba(34,197,94,0.2);
+  border-radius: 8px;
+  padding: 1rem 1.2rem;
+  margin: 0.8rem 0;
+}
+.example-title {
+  color: var(--green);
+  font-weight: 600;
+  font-size: 0.85rem;
+  margin-bottom: 0.5rem;
+}
+
+/* Tip box */
+.tip {
+  background: rgba(245,158,11,0.08);
+  border: 1px solid rgba(245,158,11,0.25);
+  border-radius: 8px;
+  padding: 1rem 1.2rem;
+  margin: 0.8rem 0;
+}
+.tip-title {
+  color: var(--orange);
+  font-weight: 600;
+  font-size: 0.85rem;
+  margin-bottom: 0.3rem;
+}
+.tip p {
+  color: var(--text2);
+  font-size: 0.88rem;
+}
+
+/* Warning */
+.warn {
+  background: rgba(239,68,68,0.08);
+  border: 1px solid rgba(239,68,68,0.25);
+  border-radius: 8px;
+  padding: 1rem 1.2rem;
+  margin: 0.8rem 0;
+}
+.warn-title {
+  color: var(--red);
+  font-weight: 600;
+  font-size: 0.85rem;
+  margin-bottom: 0.3rem;
+}
+
+/* Table */
+.tbl-wrap {
+  overflow-x: auto;
+  margin: 0.8rem 0;
+}
+table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.88rem;
+}
+th {
+  background: var(--surface2);
+  color: var(--accent2);
+  font-weight: 600;
+  padding: 0.7rem 1rem;
+  text-align: right;
+  border-bottom: 2px solid var(--border);
+  white-space: nowrap;
+}
+td {
+  padding: 0.6rem 1rem;
+  border-bottom: 1px solid var(--border);
+  color: var(--text2);
+}
+tr:hover td {
+  background: rgba(59,130,246,0.04);
+}
+
+/* Steps */
+.step {
+  display: flex;
+  gap: 1rem;
+  margin: 0.8rem 0;
+  align-items: flex-start;
+}
+.step-num {
+  min-width: 32px;
+  height: 32px;
+  background: var(--accent-glow);
+  border: 1px solid rgba(59,130,246,0.3);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--accent2);
+  font-size: 0.85rem;
+  font-weight: 700;
+}
+.step-text {
+  color: var(--text2);
+  font-size: 0.92rem;
+  padding-top: 0.2rem;
+}
+.step-text strong {
+  color: var(--text);
+}
+
+/* Overview grid */
+.stats-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: 1rem;
+  margin: 1.5rem 0;
+}
+.stat-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 1.2rem;
+  text-align: center;
+}
+.stat-card .num {
+  font-family: 'Rubik', sans-serif;
+  font-size: 2rem;
+  font-weight: 700;
+  color: var(--accent2);
+}
+.stat-card .label {
+  color: var(--text3);
+  font-size: 0.82rem;
+  margin-top: 0.2rem;
+}
+
+/* Topics grid */
+.topics-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 1rem;
+  margin: 1rem 0;
+}
+.topic-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 1.2rem;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+.topic-card:hover {
+  border-color: rgba(59,130,246,0.4);
+  transform: translateY(-2px);
+}
+.topic-card .tc-icon {
+  font-size: 1.8rem;
+  margin-bottom: 0.5rem;
+}
+.topic-card .tc-title {
+  font-family: 'Rubik', sans-serif;
+  font-weight: 600;
+  color: var(--white);
+  font-size: 1rem;
+  margin-bottom: 0.3rem;
+}
+.topic-card .tc-desc {
+  color: var(--text3);
+  font-size: 0.82rem;
+}
+.topic-card .tc-weight {
+  display: inline-block;
+  margin-top: 0.6rem;
+  font-size: 0.75rem;
+  padding: 0.2rem 0.5rem;
+  border-radius: 4px;
+  background: rgba(59,130,246,0.1);
+  color: var(--accent2);
+}
+
+/* Exam pattern */
+.exam-q {
+  background: var(--surface2);
+  border-radius: 8px;
+  padding: 1rem;
+  margin: 0.6rem 0;
+  border-right: 3px solid var(--accent);
+}
+.exam-q .q-type {
+  color: var(--accent2);
+  font-weight: 600;
+  font-size: 0.85rem;
+}
+.exam-q .q-detail {
+  color: var(--text2);
+  font-size: 0.88rem;
+  margin-top: 0.3rem;
+}
+
+/* Progress tracker */
+.progress-bar {
+  background: var(--bg);
+  border-radius: 4px;
+  height: 6px;
+  margin: 0.5rem 0;
+  overflow: hidden;
+}
+.progress-fill {
+  height: 100%;
+  background: linear-gradient(90deg, var(--accent), var(--accent2));
+  border-radius: 4px;
+  transition: width 0.4s;
+}
+
+/* Sub-heading */
+.sub-h {
+  color: var(--accent2);
+  font-family: 'Rubik', sans-serif;
+  font-size: 1rem;
+  font-weight: 600;
+  margin: 1.2rem 0 0.6rem;
+  padding-bottom: 0.3rem;
+  border-bottom: 1px solid var(--border);
+}
+
+/* Quiz */
+.quiz-box {
+  background: var(--surface2);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 1.5rem;
+  margin: 1rem 0;
+}
+.quiz-q {
+  color: var(--white);
+  font-weight: 600;
+  margin-bottom: 1rem;
+  font-size: 0.95rem;
+}
+.quiz-opts label {
+  display: block;
+  padding: 0.6rem 1rem;
+  margin: 0.4rem 0;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  cursor: pointer;
+  color: var(--text2);
+  font-size: 0.9rem;
+  transition: all 0.2s;
+}
+.quiz-opts label:hover {
+  border-color: rgba(59,130,246,0.3);
+}
+.quiz-opts input[type="radio"] {
+  display: none;
+}
+.quiz-opts label.correct {
+  background: rgba(34,197,94,0.1);
+  border-color: var(--green);
+  color: var(--green);
+}
+.quiz-opts label.wrong {
+  background: rgba(239,68,68,0.1);
+  border-color: var(--red);
+  color: var(--red);
+}
+.quiz-result {
+  margin-top: 0.8rem;
+  padding: 0.8rem;
+  border-radius: 8px;
+  font-size: 0.88rem;
+  display: none;
+}
+.quiz-result.show { display: block; }
+.quiz-result.success {
+  background: rgba(34,197,94,0.08);
+  border: 1px solid rgba(34,197,94,0.2);
+  color: var(--green);
+}
+.quiz-result.fail {
+  background: rgba(239,68,68,0.08);
+  border: 1px solid rgba(239,68,68,0.2);
+  color: var(--red);
+}
+
+.check-btn {
+  background: var(--accent);
+  color: white;
+  border: none;
+  padding: 0.6rem 1.5rem;
+  border-radius: 8px;
+  cursor: pointer;
+  font-family: 'Heebo', sans-serif;
+  font-size: 0.9rem;
+  font-weight: 500;
+  margin-top: 0.5rem;
+  transition: background 0.2s;
+}
+.check-btn:hover { background: #2563eb; }
+
+/* Inline code/highlight */
+.hl {
+  color: var(--accent2);
+  font-weight: 500;
+}
+.hl-green { color: var(--green); font-weight: 600; }
+.hl-orange { color: var(--orange); font-weight: 600; }
+
+/* Responsive */
+@media (max-width: 640px) {
+  .hero { padding: 2rem 1.2rem 1.8rem; }
+  .hero h1 { font-size: 1.7rem; }
+  .hero .meta { gap: 1rem; }
+  .main { padding: 1.2rem 1rem 3rem; }
+  .stats-grid { grid-template-columns: repeat(2, 1fr); }
+  .topics-grid { grid-template-columns: 1fr; }
+  .nav { padding: 0.6rem 0.8rem; }
+}
+
+/* Separator */
+.sep {
+  border: none;
+  border-top: 1px solid var(--border);
+  margin: 2rem 0;
+}
+
+/* Footer */
+.footer {
+  text-align: center;
+  padding: 2rem;
+  color: var(--text3);
+  font-size: 0.8rem;
+  border-top: 1px solid var(--border);
+}
+.footer .brand { color: var(--accent2); font-weight: 500; }
+</style>
+</head>
+<body>
+
+<!-- HERO -->
+<div class="hero">
+  <div class="hero-badge">🐢🚀 MBA – אוניברסיטת בן גוריון בנגב</div>
+  <h1>ניהול התפעול למנהלים</h1>
+  <p class="subtitle">ד"ר משה צופי · קורס 687-2-0300 · סמסטר ב' תשפ"ו</p>
+  <div class="meta">
+    <span>📝 <strong>מבחן 80%</strong> + תרגילים 20%</span>
+    <span>📚 <strong>7 נושאים</strong> מרכזיים</span>
+    <span>⏱ <strong>3 שעות</strong> מבחן</span>
+  </div>
+</div>
+
+<!-- NAV -->
+<div class="nav" id="nav">
+  <button class="nav-btn active" onclick="showSection('overview')">סקירה</button>
+  <button class="nav-btn" onclick="showSection('lp')">תכנות ליניארי</button>
+  <button class="nav-btn" onclick="showSection('graphs')">גרפים ורשתות</button>
+  <button class="nav-btn" onclick="showSection('assign')">השמה וכיסוי</button>
+  <button class="nav-btn" onclick="showSection('transport')">שינוע והפצה</button>
+  <button class="nav-btn" onclick="showSection('decision')">קבלת החלטות</button>
+  <button class="nav-btn" onclick="showSection('forecast')">חיזוי</button>
+  <button class="nav-btn" onclick="showSection('mrp')">MRP</button>
+  <button class="nav-btn" onclick="showSection('lean')">Lean & JIT</button>
+  <button class="nav-btn" onclick="showSection('exams')">מבחנים</button>
+</div>
+
+<div class="main">
+
+<!-- ============ OVERVIEW ============ -->
+<div class="section active" id="sec-overview">
+  <div class="topic-header">
+    <h2>סקירת הקורס</h2>
+    <p>חקר ביצועים, תכנון וניהול הייצור והתפעול – כלים כמותיים למנהלים</p>
+  </div>
+
+  <div class="stats-grid">
+    <div class="stat-card"><div class="num">7</div><div class="label">נושאי ליבה</div></div>
+    <div class="stat-card"><div class="num">4</div><div class="label">שאלות במבחן</div></div>
+    <div class="stat-card"><div class="num">80%</div><div class="label">משקל המבחן</div></div>
+    <div class="stat-card"><div class="num">65</div><div class="label">ציון עובר משוקלל</div></div>
+  </div>
+
+  <div class="card">
+    <h3><span class="icon">🎯</span>מבנה הציון</h3>
+    <p><strong>תרגילי בית (20%):</strong> תרגיל שבועי, חובה להגיש את כולם. הגשה שבוע מיום הקבלה.</p>
+    <p style="margin-top:0.5rem"><strong>מבחן מסכם (80%):</strong> 4 שאלות, 3 שעות, חומר עזר מותר. ניתן לצבור עד 105 נקודות. חובה לעבור את המבחן + ציון משוקלל ≥ 65.</p>
+  </div>
+
+  <div class="card">
+    <h3><span class="icon">📋</span>נושאי הקורס</h3>
+    <div class="topics-grid">
+      <div class="topic-card" onclick="showSection('lp')">
+        <div class="tc-icon">📐</div>
+        <div class="tc-title">תכנות ליניארי</div>
+        <div class="tc-desc">ניסוח, פתרון גרפי, LINDO, ניתוח רגישות</div>
+        <div class="tc-weight">שיעורים 1-2 · ~25% מהמבחן</div>
+      </div>
+      <div class="topic-card" onclick="showSection('graphs')">
+        <div class="tc-icon">🔗</div>
+        <div class="tc-title">גרפים ורשתות</div>
+        <div class="tc-desc">דייקסטרא, עץ פורש מינימלי</div>
+        <div class="tc-weight">שיעור 3</div>
+      </div>
+      <div class="topic-card" onclick="showSection('assign')">
+        <div class="tc-icon">🧩</div>
+        <div class="tc-title">השמה וכיסוי</div>
+        <div class="tc-desc">בעיית השמה הונגרית, כיסוי קודקודים</div>
+        <div class="tc-weight">שיעור 4 · ~25% מהמבחן</div>
+      </div>
+      <div class="topic-card" onclick="showSection('transport')">
+        <div class="tc-icon">🚚</div>
+        <div class="tc-title">שינוע והפצה</div>
+        <div class="tc-desc">TSP, VRP, אלגוריתם חסכונות</div>
+        <div class="tc-weight">שיעור 5</div>
+      </div>
+      <div class="topic-card" onclick="showSection('decision')">
+        <div class="tc-icon">🎲</div>
+        <div class="tc-title">קבלת החלטות</div>
+        <div class="tc-desc">וודאות, אי-וודאות, סיכון, עצי החלטה</div>
+        <div class="tc-weight">שיעור 6</div>
+      </div>
+      <div class="topic-card" onclick="showSection('forecast')">
+        <div class="tc-icon">📈</div>
+        <div class="tc-title">חיזוי</div>
+        <div class="tc-desc">סדרות עתיות, מודלים ליניאריים, רגרסיה, עונתיות</div>
+        <div class="tc-weight">שיעורים 7-9 · ~25% מהמבחן</div>
+      </div>
+      <div class="topic-card" onclick="showSection('mrp')">
+        <div class="tc-icon">🏭</div>
+        <div class="tc-title">MRP</div>
+        <div class="tc-desc">עצי מוצר, S&M, Wagner-Whitin, גודל מנה</div>
+        <div class="tc-weight">שיעורים 10-12 · ~25-30% מהמבחן</div>
+      </div>
+      <div class="topic-card" onclick="showSection('lean')">
+        <div class="tc-icon">🔄</div>
+        <div class="tc-title">Lean & JIT</div>
+        <div class="tc-desc">ייצור רזה, שרשרת קריטית, באפרים</div>
+        <div class="tc-weight">שיעור 12</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="tip">
+    <div class="tip-title">💡 אסטרטגיית מבחן</div>
+    <p>על פי ניתוח מבחנים קודמים, כמעט תמיד יש שאלה אחת על <strong>תכנות ליניארי + LINDO</strong>, שאלה על <strong>גרפים/השמה/כיסוי/TSP</strong>, שאלה על <strong>חיזוי</strong>, ושאלה על <strong>MRP (S&M ו-WW)</strong>. חומר עזר מותר – הכן דף נוסחאות מסודר!</p>
+  </div>
+</div>
+
+<!-- ============ LP ============ -->
+<div class="section" id="sec-lp">
+  <div class="topic-header">
+    <h2>📐 תכנות ליניארי</h2>
+    <p>ניסוח בעיות, פתרון גרפי, פתרון באמצעות LINDO וניתוח רגישות</p>
+  </div>
+
+  <button class="collapse-btn" onclick="toggle(this)">
+    <span>ניסוח בעיות תכנות ליניארי <span class="tag tag-core">ליבה</span></span>
+    <span class="arrow">▼</span>
+  </button>
+  <div class="collapse-content">
+    <p>כל בעיית LP מורכבת משלושה מרכיבים:</p>
+    <div class="step"><div class="step-num">1</div><div class="step-text"><strong>משתני החלטה:</strong> מה אנחנו צריכים לקבוע? (כמויות, הקצאות, זמנים)</div></div>
+    <div class="step"><div class="step-num">2</div><div class="step-text"><strong>פונקציית מטרה:</strong> מה רוצים למקסם (רווח) או למזער (עלות)?<br><span class="formula">Max/Min Z = c₁x₁ + c₂x₂ + ... + cₙxₙ</span></div></div>
+    <div class="step"><div class="step-num">3</div><div class="step-text"><strong>אילוצים:</strong> מגבלות על המשאבים (תקציב, קיבולת, זמן, מלאי וכו')<br>+ אילוצי אי-שליליות: xᵢ ≥ 0</div></div>
+
+    <div class="example">
+      <div class="example-title">✅ דוגמה מהמבחן (תשע"ו מועד ב')</div>
+      <p>אלי מביא מוצרי חשמל ממכולה – LED, מקררים, מצלמות, מחשבים. יש אילוץ תקציב (840,000₪), אילוץ נפח (60 מ"ק), ואילוץ מלאי (≤20 מסכי LED).</p>
+      <div class="formula">Max Z = 4500x₁ + 2500x₂ + 2800x₃ + 2200x₄</div>
+      <p>שים לב: המקדמים הם <strong>רווח = מכירה − קנייה</strong> (לא מחיר מכירה!)</p>
+    </div>
+
+    <div class="tip">
+      <div class="tip-title">💡 טיפים לניסוח</div>
+      <p>• תמיד הגדר מהם משתני ההחלטה לפני הניסוח<br>
+      • הרווח = מחיר מכירה − מחיר קנייה (לא לשכוח!)<br>
+      • אם במבחן נתונים כבר משתנים ואילוצים – אל תנסח מחדש, עבוד עם מה שנתון<br>
+      • ציין אם נדרשים שלמים (Integers) – זה בדר"כ בשאלות שמדברות על כמויות שלמות</p>
+    </div>
+  </div>
+
+  <button class="collapse-btn" onclick="toggle(this)">
+    <span>פתרון גרפי (2 משתנים) <span class="tag tag-method">שיטה</span></span>
+    <span class="arrow">▼</span>
+  </button>
+  <div class="collapse-content">
+    <div class="step"><div class="step-num">1</div><div class="step-text"><strong>שרטט את האילוצים</strong> כקווים ישרים (הפוך ≤ ל-=)</div></div>
+    <div class="step"><div class="step-num">2</div><div class="step-text"><strong>סמן את אזור האפשרי</strong> (intersection כל האילוצים)</div></div>
+    <div class="step"><div class="step-num">3</div><div class="step-text"><strong>מצא את קודקודי הפוליגון</strong> (נקודות חיתוך)</div></div>
+    <div class="step"><div class="step-num">4</div><div class="step-text"><strong>חשב Z בכל קודקוד</strong> – הערך הגבוה ביותר (Max) / הנמוך ביותר (Min) הוא הפתרון</div></div>
+
+    <div class="example">
+      <div class="example-title">✅ דוגמה: סעיף ד' – אלי מביא רק LED ומחשבים</div>
+      <div class="formula">Max Z = 4500x₁ + 2200x₄<br>
+s.t. 1000x₁ + 2000x₄ ≤ 840,000<br>
+0.5x₁ + 0.25x₄ ≤ 60<br>
+x₁ ≤ 20</div>
+      <p>נקודות קודקוד: A(0,0), B(20,0), C(20,200), D(0,240)<br>
+      פתרון אופטימלי: C → x₁=20, x₄=200, Z=530,000₪</p>
+    </div>
+  </div>
+
+  <button class="collapse-btn" onclick="toggle(this)">
+    <span>קריאת פלט LINDO <span class="tag tag-exam">חובה למבחן</span></span>
+    <span class="arrow">▼</span>
+  </button>
+  <div class="collapse-content">
+    <div class="sub-h">מבנה הפלט</div>
+    <div class="tbl-wrap">
+      <table>
+        <tr><th>שדה</th><th>משמעות</th><th>שימוש</th></tr>
+        <tr><td>OBJECTIVE VALUE</td><td>ערך פונק' המטרה</td><td>הרווח/עלות האופטימליים</td></tr>
+        <tr><td>VALUE</td><td>ערך כל משתנה בפתרון</td><td>כמה לייצר/לקנות מכל סוג</td></tr>
+        <tr><td>REDUCED COST</td><td>כמה צריך להשתפר מקדם של משתנה שלא בבסיס כדי שייכנס</td><td>עבור משתנה עם VALUE=0</td></tr>
+        <tr><td>SLACK/SURPLUS</td><td>עודף של אילוץ (0 = אילוץ פעיל)</td><td>האם המשאב נוצל במלואו</td></tr>
+        <tr><td>DUAL PRICE (מחיר צל)</td><td>שינוי ב-Z עבור הגדלת ה-RHS ביחידה</td><td>כמה שווה עוד יחידה מהמשאב</td></tr>
+      </table>
+    </div>
+
+    <div class="sub-h">ניתוח רגישות (RANGES)</div>
+    <div class="tbl-wrap">
+      <table>
+        <tr><th>סוג</th><th>משמעות</th></tr>
+        <tr><td>OBJ COEFFICIENT RANGES</td><td>עד כמה ניתן לשנות את מקדם המשתנה בפונקציית המטרה מבלי שבסיס הפתרון ישתנה</td></tr>
+        <tr><td>RIGHTHAND SIDE RANGES</td><td>עד כמה ניתן לשנות את ה-RHS של אילוץ מבלי שבסיס הפתרון ישתנה (מחיר הצל תקף בטווח זה)</td></tr>
+      </table>
+    </div>
+
+    <div class="warn">
+      <div class="warn-title">⚠️ טעויות נפוצות</div>
+      <p style="color:var(--text2);font-size:0.88rem">
+      • DUAL PRICE (מחיר צל) רלוונטי רק לאילוצים שבהם SLACK=0<br>
+      • כשמוסיפים אילוץ חדש – קודם בדוק אם הפתרון הקיים מקיים אותו!<br>
+      • REDUCED COST רלוונטי רק למשתנים שערכם 0 (לא בבסיס)<br>
+      • מחיר צל תקף רק בתחום ה-RHS RANGES</p>
+    </div>
+
+    <div class="example">
+      <div class="example-title">✅ איך לענות על "האם בסיס הפתרון ישתנה?"</div>
+      <p><strong>הוספת אילוץ חדש:</strong> הצב את הפתרון הקיים באילוץ. אם הוא מקיים → הפתרון לא ישתנה. אם לא מקיים → צריך לפתור מחדש.</p>
+      <p><strong>שינוי RHS:</strong> בדוק אם השינוי בתוך ה-ALLOWABLE INCREASE/DECREASE. אם כן → בסיס לא ישתנה, חשב Z חדש = Z ישן + שינוי × DUAL PRICE.</p>
+      <p><strong>שינוי מקדם בפונק' מטרה:</strong> בדוק אם בתוך ה-OBJ COEF RANGES. אם כן → אותן כמויות, Z חדש.</p>
+    </div>
+  </div>
+
+  <button class="collapse-btn" onclick="toggle(this)">
+    <span>חישוב ערכי משתנים לאחר שינוי RHS <span class="tag tag-exam">חובה למבחן</span></span>
+    <span class="arrow">▼</span>
+  </button>
+  <div class="collapse-content">
+    <p>כשמשנים RHS של אילוץ בתחום המותר, <strong>בסיס הפתרון לא משתנה</strong> אבל הערכים כן. לחישוב:</p>
+    <div class="step"><div class="step-num">1</div><div class="step-text">זהה את המשתנים <strong>בבסיס</strong> (VALUE ≠ 0) ואת אלה <strong>מחוץ לבסיס</strong> (VALUE = 0)</div></div>
+    <div class="step"><div class="step-num">2</div><div class="step-text">משתנים מחוץ לבסיס נשארים 0</div></div>
+    <div class="step"><div class="step-num">3</div><div class="step-text">הצב את ה-RHS החדש במערכת המשוואות (מהאילוצים הפעילים) ופתור</div></div>
+
+    <div class="example">
+      <div class="example-title">✅ דוגמה: מכולה 84 מ"ק (במקום 60)</div>
+      <p>בסיס: x₁, x₃, x₄ (x₂ נשאר 0). שלושה אילוצים פעילים:<br>
+      1000·20 + 4000x₃ + 2000x₄ = 840,000<br>
+      0.5·20 + 0.2x₃ + 0.25x₄ = 84 (RHS חדש)<br>
+      → x₃=95, x₄=220, Z=840,000₪</p>
+    </div>
+  </div>
+
+  <!-- Quiz -->
+  <div class="quiz-box">
+    <div class="quiz-q">📝 תרגול: בפלט LINDO, SLACK=0 עבור אילוץ מסוים. מה המשמעות?</div>
+    <div class="quiz-opts" id="q-lp1">
+      <label onclick="checkQuiz('q-lp1',this,true)"><input type="radio" name="q-lp1">האילוץ פעיל – המשאב נוצל במלואו</label>
+      <label onclick="checkQuiz('q-lp1',this,false)"><input type="radio" name="q-lp1">האילוץ מיותר ואפשר להסירו</label>
+      <label onclick="checkQuiz('q-lp1',this,false)"><input type="radio" name="q-lp1">הפתרון האופטימלי הוא 0</label>
+    </div>
+    <div class="quiz-result" id="q-lp1-res"></div>
+  </div>
+</div>
+
+<!-- ============ GRAPHS ============ -->
+<div class="section" id="sec-graphs">
+  <div class="topic-header">
+    <h2>🔗 גרפים ורשתות</h2>
+    <p>אלגוריתם דייקסטרא למסלול קצר ביותר ועץ פורש מינימלי</p>
+  </div>
+
+  <button class="collapse-btn" onclick="toggle(this)">
+    <span>אלגוריתם דייקסטרא – מסלול קצר ביותר <span class="tag tag-exam">חובה למבחן</span></span>
+    <span class="arrow">▼</span>
+  </button>
+  <div class="collapse-content">
+    <p>מוצא את המסלול הקצר ביותר מקודקוד מקור לכל שאר הקודקודים בגרף עם משקלים חיוביים.</p>
+    
+    <div class="sub-h">שלבי האלגוריתם</div>
+    <div class="step"><div class="step-num">1</div><div class="step-text">אתחל: מרחק קודקוד המקור = 0. כל השאר = ∞. סמן את כולם כ"לא סופי".</div></div>
+    <div class="step"><div class="step-num">2</div><div class="step-text">בחר את הקודקוד <strong>הלא-סופי</strong> עם המרחק הקטן ביותר. סמן אותו כ<strong>"סופי"</strong>.</div></div>
+    <div class="step"><div class="step-num">3</div><div class="step-text">עבור כל שכן לא-סופי: אם מרחק_נוכחי + משקל_קשת < מרחק_שכן → עדכן.</div></div>
+    <div class="step"><div class="step-num">4</div><div class="step-text">חזור לשלב 2 עד שכל הקודקודים סופיים.</div></div>
+
+    <div class="tip">
+      <div class="tip-title">💡 במבחן</div>
+      <p>בדר"כ מבקשים להשלים שורה/עמודה חסרה בטבלת מרחקים. עבוד בטבלה מסודרת: עמודה לכל קודקוד, שורה לכל שלב. רשום מאיזה קודקוד הגעת כדי לשחזר את המסלול.</p>
+    </div>
+  </div>
+
+  <button class="collapse-btn" onclick="toggle(this)">
+    <span>עץ פורש מינימלי (MST) <span class="tag tag-core">ליבה</span></span>
+    <span class="arrow">▼</span>
+  </button>
+  <div class="collapse-content">
+    <p>מטרה: לחבר את כל הקודקודים במשקל כולל מינימלי, ללא מעגלים.</p>
+    <div class="sub-h">אלגוריתם Prim / Kruskal</div>
+    <p><strong>Kruskal:</strong> מיין את כל הקשתות לפי משקל. הוסף קשתות מהקלה לכבדה, תוך דילוג על קשת שיוצרת מעגל. עצור כשיש n-1 קשתות.</p>
+    <p><strong>Prim:</strong> התחל מקודקוד כלשהו. בכל שלב הוסף את הקשת הזולה ביותר שמחברת קודקוד בעץ לקודקוד מחוצה לו.</p>
+  </div>
+</div>
+
+<!-- ============ ASSIGNMENT ============ -->
+<div class="section" id="sec-assign">
+  <div class="topic-header">
+    <h2>🧩 בעיות השמה וכיסוי</h2>
+    <p>האלגוריתם ההונגרי לבעיית השמה ובעיות כיסוי קודקודים</p>
+  </div>
+
+  <button class="collapse-btn" onclick="toggle(this)">
+    <span>בעיית השמה – האלגוריתם ההונגרי <span class="tag tag-exam">חובה למבחן</span></span>
+    <span class="arrow">▼</span>
+  </button>
+  <div class="collapse-content">
+    <p>שיבוץ n עובדים ל-n משימות כך שהעלות הכוללת תהיה מינימלית (או הרווח מקסימלי).</p>
+
+    <div class="sub-h">שלבי הפתרון</div>
+    <div class="step"><div class="step-num">0</div><div class="step-text"><strong>אם בעיית מקסימום:</strong> כפול את כל הערכים ב-(-1) להפוך למינימום</div></div>
+    <div class="step"><div class="step-num">1</div><div class="step-text"><strong>חסר מינימום שורה:</strong> בכל שורה, חסר את הערך הקטן ביותר מכל האיברים</div></div>
+    <div class="step"><div class="step-num">2</div><div class="step-text"><strong>חסר מינימום עמודה:</strong> בכל עמודה, חסר את הערך הקטן ביותר מכל האיברים</div></div>
+    <div class="step"><div class="step-num">3</div><div class="step-text"><strong>כיסוי אפסים:</strong> כסה את כל האפסים במספר מינימלי של קווים (שורות/עמודות)</div></div>
+    <div class="step"><div class="step-num">4</div><div class="step-text">אם מספר הקווים = n → <strong>בצע השמה</strong>. אחרת → מצא את המינימום הלא מכוסה, חסר אותו מכל תא לא מכוסה, הוסף אותו לכל תא שעליו שני קווים. חזור ל-3.</div></div>
+
+    <div class="warn">
+      <div class="warn-title">⚠️ מצבים מיוחדים</div>
+      <p style="color:var(--text2);font-size:0.88rem">
+      <strong>מטריצה לא מרובעת:</strong> הוסף שורה/עמודה פיקטיבית עם ערכים 0.<br>
+      <strong>תא אסור (עובד לא יכול לעבוד במשימה):</strong> שים M (מאוד גדול) בבעיית מינימום, או -M בבעיית מקסימום.<br>
+      <strong>כפיית שיבוץ:</strong> שים M בתא הפיקטיבי של העובד שחייב לקבל משימה.</p>
+    </div>
+
+    <div class="example">
+      <div class="example-title">✅ דוגמה: משפחת רוזנשטיין (תשע"ו)</div>
+      <p>4 משכנעים, 3 שכונות → הוסף עמודה פיקטיבית (אחד יישאר בלי עבודה). מיכאל לא יכול ברמת אביב ב' → -M. בעיית מקסימום → כפל ב-(-1). תוצאה: עמיר→ב', שלום→א', מיכאל→ג', סה"כ 193.</p>
+    </div>
+  </div>
+
+  <button class="collapse-btn" onclick="toggle(this)">
+    <span>בעיות כיסוי – האלגוריתם החמדני <span class="tag tag-method">שיטה</span></span>
+    <span class="arrow">▼</span>
+  </button>
+  <div class="collapse-content">
+    <p>מטרה: למקם מספר מינימלי של יחידות (ניידות, דוכנים) כך שכל נקודה בגרף תהיה מכוסה (בטווח מרחק D).</p>
+
+    <div class="sub-h">בניית מטריצת כיסוי</div>
+    <p>בטבלת המרחקים, סמן 1 בכל תא שבו המרחק ≤ D, ו-0 אחרת. כל שורה = נקודה שצריך לכסות. כל עמודה = מיקום אפשרי.</p>
+
+    <div class="sub-h">האלגוריתם החמדני</div>
+    <div class="step"><div class="step-num">1</div><div class="step-text">חשב את סכום כל עמודה (כמה קודקודים כל מיקום מכסה)</div></div>
+    <div class="step"><div class="step-num">2</div><div class="step-text">בחר את העמודה עם הסכום הגבוה ביותר → מקם שם יחידה</div></div>
+    <div class="step"><div class="step-num">3</div><div class="step-text">מחק את כל השורות שכוסו</div></div>
+    <div class="step"><div class="step-num">4</div><div class="step-text">חזור עד שכל השורות מכוסות</div></div>
+
+    <div class="tip">
+      <div class="tip-title">💡 שים לב</div>
+      <p>האלגוריתם החמדני לא מבטיח פתרון אופטימלי! הוא נותן פתרון טוב אך לא בהכרח מינימלי. במבחן בדר"כ מספיק.</p>
+    </div>
+  </div>
+</div>
+
+<!-- ============ TRANSPORT ============ -->
+<div class="section" id="sec-transport">
+  <div class="topic-header">
+    <h2>🚚 שינוע והפצה</h2>
+    <p>TSP, VRP ואלגוריתם החסכונות של Clarke & Wright</p>
+  </div>
+
+  <button class="collapse-btn" onclick="toggle(this)">
+    <span>אלגוריתם החסכונות (Savings Algorithm) <span class="tag tag-exam">חובה למבחן</span></span>
+    <span class="arrow">▼</span>
+  </button>
+  <div class="collapse-content">
+    <p>מציאת מסלול קצר היוצא מנקודה 0, עובר דרך קבוצת קודקודים וחוזר ל-0.</p>
+    
+    <div class="sub-h">חישוב החסכון</div>
+    <div class="formula">S(i,j) = d(0,i) + d(0,j) − d(i,j)</div>
+    <p>החסכון מייצג כמה "חוסכים" אם במקום לנסוע 0→i→0→j→0 נוסעים 0→i→j→0.</p>
+
+    <div class="sub-h">האלגוריתם</div>
+    <div class="step"><div class="step-num">1</div><div class="step-text">חשב את מטריצת החסכונות S(i,j) עבור כל זוגות קודקודים (לא כולל 0)</div></div>
+    <div class="step"><div class="step-num">2</div><div class="step-text">מיין את החסכונות בסדר יורד</div></div>
+    <div class="step"><div class="step-num">3</div><div class="step-text">התחל עם מסלולים בודדים: 0→i→0 לכל i</div></div>
+    <div class="step"><div class="step-num">4</div><div class="step-text">עבור כל חסכון (מהגבוה לנמוך): שלב את i ו-j לאותו מסלול, אם שניהם בקצוות מסלולים שונים ואין הפרה של אילוצים</div></div>
+    <div class="step"><div class="step-num">5</div><div class="step-text">המשך עד שכולם במסלול אחד (TSP) או עד שאי אפשר לשלב יותר (VRP)</div></div>
+
+    <div class="tip">
+      <div class="tip-title">💡 במבחן</div>
+      <p>בנה טבלת חסכונות רק עבור הקודקודים הרלוונטיים. עבוד בטבלה משולשת (חצי מטריצה). סמן בכל שלב את המסלול הנוכחי.</p>
+    </div>
+  </div>
+</div>
+
+<!-- ============ DECISION ============ -->
+<div class="section" id="sec-decision">
+  <div class="topic-header">
+    <h2>🎲 קבלת החלטות</h2>
+    <p>החלטות בתנאי וודאות, אי-וודאות וסיכון</p>
+  </div>
+
+  <button class="collapse-btn" onclick="toggle(this)">
+    <span>קבלת החלטות בתנאי אי-וודאות <span class="tag tag-core">ליבה</span></span>
+    <span class="arrow">▼</span>
+  </button>
+  <div class="collapse-content">
+    <div class="tbl-wrap">
+      <table>
+        <tr><th>קריטריון</th><th>תיאור</th><th>אופי מקבל ההחלטה</th></tr>
+        <tr><td><strong>MaxiMax</strong></td><td>בחר את האלטרנטיבה שהמקסימום שלה הכי גבוה</td><td>אופטימי</td></tr>
+        <tr><td><strong>MaxiMin</strong></td><td>בחר את האלטרנטיבה שהמינימום שלה הכי גבוה</td><td>פסימי (שמרן)</td></tr>
+        <tr><td><strong>Hurwicz</strong></td><td>α·Max + (1-α)·Min, בחר את הגבוה</td><td>שילוב (α = מקדם אופטימיות)</td></tr>
+        <tr><td><strong>LaPlace</strong></td><td>ממוצע כל התוצאות, בחר את הגבוה</td><td>נייטרלי (הסתברויות שוות)</td></tr>
+        <tr><td><strong>MiniMax Regret</strong></td><td>חשב חרטה = Max בעמודה − ערך. בחר את האלטרנטיבה שהחרטה המקסימלית שלה הכי נמוכה</td><td>מפחד מחרטה</td></tr>
+      </table>
+    </div>
+  </div>
+
+  <button class="collapse-btn" onclick="toggle(this)">
+    <span>קבלת החלטות בתנאי סיכון ועצי החלטה <span class="tag tag-method">שיטה</span></span>
+    <span class="arrow">▼</span>
+  </button>
+  <div class="collapse-content">
+    <p>כשידועות ההסתברויות של כל מצב טבע:</p>
+    <div class="formula">EMV = Σ (הסתברות × תוצאה)</div>
+    <p>בחר את האלטרנטיבה עם ה-EMV הגבוה ביותר.</p>
+
+    <div class="sub-h">עצי החלטה</div>
+    <p>כלי גרפי להחלטות רב-שלביות:</p>
+    <p>◻ = צומת החלטה (אנחנו בוחרים)<br>
+    ○ = צומת סיכוי (הטבע בוחר)<br>
+    פתרון: מימין לשמאל (backward induction) – חשב EMV בכל צומת סיכוי, בחר מקסימום בכל צומת החלטה.</p>
+  </div>
+</div>
+
+<!-- ============ FORECAST ============ -->
+<div class="section" id="sec-forecast">
+  <div class="topic-header">
+    <h2>📈 חיזוי</h2>
+    <p>סדרות עתיות, מדדי שגיאה, מודל ליניארי, רגרסיה וחיזוי עונתי</p>
+  </div>
+
+  <button class="collapse-btn" onclick="toggle(this)">
+    <span>מודל ליניארי – נוסחאות הרגרסיה <span class="tag tag-exam">חובה למבחן</span></span>
+    <span class="arrow">▼</span>
+  </button>
+  <div class="collapse-content">
+    <div class="formula">D̂ₜ = a + b·t</div>
+    <div class="formula">b = [n·Σ(t·D) − Σt·ΣD] / [n·Σt² − (Σt)²]</div>
+    <div class="formula">a = D̄ − b·t̄</div>
+    <p>כאשר: t̄ = ממוצע הזמנים, D̄ = ממוצע הביקושים, n = מספר התקופות</p>
+
+    <div class="example">
+      <div class="example-title">✅ דוגמה: הפגנות קפלן (תשפ"ג)</div>
+      <p>D = {48000, 38000, 30000, 24000}, t = {1,2,3,4}<br>
+      מודל ליניארי יורד → שיפוע שלילי, חוזים מתי ייפסקו (D̂ₜ = 0).</p>
+    </div>
+  </div>
+
+  <button class="collapse-btn" onclick="toggle(this)">
+    <span>רגרסיה עם התמרה (מודלים לא ליניאריים) <span class="tag tag-exam">חובה למבחן</span></span>
+    <span class="arrow">▼</span>
+  </button>
+  <div class="collapse-content">
+    <p>כשהמודל אינו ליניארי, מבצעים <strong>התמרה</strong> כדי להפוך אותו לליניארי:</p>
+
+    <div class="sub-h">מודל אקספוננציאלי</div>
+    <div class="formula">Dₜ = a · k^(t-1)<br>
+    ⟹ ln(Dₜ) = ln(a) + (t-1)·ln(k)</div>
+    <p>מגדירים: Y = ln(Dₜ), X = (t-1). מבצעים רגרסיה ליניארית Y = A + B·X ואז:<br>
+    a = e^A, k = e^B</p>
+
+    <div class="sub-h">מודל פולינומיאלי</div>
+    <div class="formula">Dₜ = a·t² − b·t + c + εₜ</div>
+    <p>כשחלק מהמקדמים ידועים, מגדירים את הנעלם כמשתנה ומבצעים רגרסיה ליניארית רגילה.</p>
+
+    <div class="example">
+      <div class="example-title">✅ דוגמה: אבעבועות התפעול (תשפ"ב)</div>
+      <p>Dₜ = a·k^(t-1). הנתונים: D={32,48,72,108}.<br>
+      שיטת עינב: k = ממוצע (D₂/D₁, D₃/D₂, D₄/D₃) = ממוצע (1.5, 1.5, 1.5) = 1.5<br>
+      שיטת דורון: התמרה לוגריתמית + רגרסיה.</p>
+    </div>
+  </div>
+
+  <button class="collapse-btn" onclick="toggle(this)">
+    <span>שיטות חיזוי לביקוש קבוע <span class="tag tag-core">ליבה</span></span>
+    <span class="arrow">▼</span>
+  </button>
+  <div class="collapse-content">
+    <div class="tbl-wrap">
+      <table>
+        <tr><th>שיטה</th><th>נוסחה</th><th>מתי</th></tr>
+        <tr><td>ממוצע נע פשוט</td><td>ממוצע N תקופות אחרונות</td><td>ביקוש יציב, רעש</td></tr>
+        <tr><td>ממוצע נע משוקלל</td><td>ממוצע משוקלל עם משקלות יורדים</td><td>דגש על נתונים אחרונים</td></tr>
+        <tr><td>החלקה אקספוננציאלית</td><td>F̂ₜ₊₁ = α·Dₜ + (1-α)·F̂ₜ</td><td>ביקוש יציב, α קטן = החלקה חזקה</td></tr>
+      </table>
+    </div>
+
+    <div class="sub-h">מדדי שגיאה</div>
+    <div class="formula">MAD = Σ|eₜ|/n     MSE = Σeₜ²/n     MAPE = Σ(|eₜ|/Dₜ)/n × 100%</div>
+    <p>כאשר eₜ = Dₜ − F̂ₜ (שגיאת החיזוי)</p>
+  </div>
+</div>
+
+<!-- ============ MRP ============ -->
+<div class="section" id="sec-mrp">
+  <div class="topic-header">
+    <h2>🏭 MRP – תכנון דרישות חומרים</h2>
+    <p>עצי מוצר, שיטת S&M, שיטת Wagner-Whitin, גודל מנת ייצור</p>
+  </div>
+
+  <button class="collapse-btn" onclick="toggle(this)">
+    <span>שיטת Silver & Meal (S&M) – יוריסטית <span class="tag tag-exam">חובה למבחן</span></span>
+    <span class="arrow">▼</span>
+  </button>
+  <div class="collapse-content">
+    <p>שיטה <strong>יוריסטית</strong> (לא מבטיחה אופטימום) למציאת תכנית הזמנות שממזערת עלות ממוצעת לתקופה.</p>
+
+    <div class="sub-h">עקרון הפעולה</div>
+    <p>התחל הזמנה בתקופה i. הוסף תקופות בזו אחר זו וחשב עלות ממוצעת לתקופה. כל עוד העלות הממוצעת יורדת – המשך. ברגע שעולה – עצור ובצע הזמנה חדשה.</p>
+
+    <div class="sub-h">חישוב העלות</div>
+    <div class="formula">הזמנה לתקופות i עד j:<br>
+עלות = K + h·V(i+1)·1 + h·V(i+2)·2 + ... + h·V(j)·(j-i)<br>
+עלות ממוצעת = עלות / (j-i+1)</div>
+    <p>K = עלות הזמנה, h = עלות אחזקה לתקופה, V(t) = ביקוש בתקופה t</p>
+
+    <div class="example">
+      <div class="example-title">✅ דוגמה: תשע"ו שאלה 4</div>
+      <p>K=100, h=1, V={50,80,5,30,10}, אורך חיים = 2 תקופות</p>
+      <div class="tbl-wrap">
+        <table>
+          <tr><th>הזמנה</th><th>עלות</th><th>תקופות</th><th>ממוצע</th></tr>
+          <tr><td>1-1</td><td>K = 100</td><td>1</td><td>100</td></tr>
+          <tr><td>1-2</td><td>K + 80h = 180</td><td>2</td><td>90 ↓</td></tr>
+          <tr><td>1-3</td><td>K + 80h + 2·5h = 190</td><td>3</td><td>63.3 ↓ (אבל: מגבלת פג תוקף!)</td></tr>
+          <tr><td>4-4</td><td>K = 100</td><td>1</td><td>100</td></tr>
+          <tr><td>4-5</td><td>K + 10h = 110</td><td>2</td><td>55 ↓</td></tr>
+        </table>
+      </div>
+      <p><strong>תוצאה:</strong> הזמנה בתקופה 1 (135 יח') + הזמנה בתקופה 4 (40 יח'). עלות = 300$.</p>
+    </div>
+
+    <div class="warn">
+      <div class="warn-title">⚠️ מגבלת פג תוקף (Shelf Life)</div>
+      <p style="color:var(--text2);font-size:0.88rem">אם למוצר אורך חיים של T תקופות – לא ניתן להזמין בתקופה i ולספק בתקופה i+T+1 ומעלה. גם אם העלות הממוצעת עדיין יורדת!</p>
+    </div>
+  </div>
+
+  <button class="collapse-btn" onclick="toggle(this)">
+    <span>שיטת Wagner-Whitin (WW) – אופטימלית <span class="tag tag-exam">חובה למבחן</span></span>
+    <span class="arrow">▼</span>
+  </button>
+  <div class="collapse-content">
+    <p>שיטת <strong>תכנות דינמי</strong> שמבטיחה פתרון אופטימלי.</p>
+
+    <div class="sub-h">הגדרות</div>
+    <div class="formula">F₀ = 0<br>
+Fₜ = Min{Fⱼ + M(j,t)} עבור j = 0,1,...,t-1<br>
+M(j,t) = עלות הזמנה בתקופה j+1 לכיסוי תקופות j+1 עד t</div>
+
+    <div class="sub-h">חישוב M(j,t)</div>
+    <div class="formula">M(j,t) = K + h·V(j+2)·1 + h·V(j+3)·2 + ... + h·V(t)·(t-j-1)</div>
+
+    <div class="sub-h">שחזור הפתרון</div>
+    <p>עבוד לאחור: מ-F₅ (למשל), ראה איזה j נתן את המינימום. אותו j הוא תקופת ההזמנה הקודמת. המשך חזרה ל-F₀.</p>
+
+    <div class="example">
+      <div class="example-title">✅ דוגמה: WW עם משתנה Y (תשע"ו)</div>
+      <p>הפתרון מתקבל כפונקציה של Y:<br>
+      F₅ = Min{330, 290+2Y, 310+Y}<br>
+      כשY=5: F₅ = Min{330, 300, 315} = 300. הזמנות בתקופות 1 ו-4.</p>
+    </div>
+
+    <div class="tip">
+      <div class="tip-title">💡 S&M מול WW – מתי S&M = אופטימלי?</div>
+      <p>במבחנים של ד"ר צופי שואלים לעיתים קרובות: "עבור אילו ערכים של Y הפתרון ב-S&M יהיה זהה לאופטימלי?"<br>
+      <strong>שיטה:</strong> פתור WW כפונקציה של Y. זהה את הטווחים. השווה לתוצאת S&M בכל טווח.</p>
+    </div>
+  </div>
+
+  <button class="collapse-btn" onclick="toggle(this)">
+    <span>שיטת LFL (Lot For Lot) <span class="tag tag-core">ליבה</span></span>
+    <span class="arrow">▼</span>
+  </button>
+  <div class="collapse-content">
+    <p>הזמנה בכל תקופה בדיוק את הביקוש שלה. אין מלאי, אין עלויות אחזקה.</p>
+    <div class="formula">עלות LFL = n × K</div>
+    <p>כאשר n = מספר התקופות עם ביקוש חיובי.</p>
+    <p>LFL אופטימלי כאשר עלות האחזקה גבוהה מאוד ביחס לעלות ההזמנה (כלומר כשלא משתלם להחזיק מלאי כלל).</p>
+  </div>
+
+  <div class="quiz-box">
+    <div class="quiz-q">📝 תרגול: בשיטת S&M, מתי עוצרים את הרחבת ההזמנה לתקופות נוספות?</div>
+    <div class="quiz-opts" id="q-mrp1">
+      <label onclick="checkQuiz('q-mrp1',this,false)"><input type="radio" name="q-mrp1">כשהעלות הכוללת עולה</label>
+      <label onclick="checkQuiz('q-mrp1',this,true)"><input type="radio" name="q-mrp1">כשהעלות הממוצעת לתקופה עולה</label>
+      <label onclick="checkQuiz('q-mrp1',this,false)"><input type="radio" name="q-mrp1">כשהביקוש בתקופה הבאה הוא 0</label>
+    </div>
+    <div class="quiz-result" id="q-mrp1-res"></div>
+  </div>
+</div>
+
+<!-- ============ LEAN ============ -->
+<div class="section" id="sec-lean">
+  <div class="topic-header">
+    <h2>🔄 Lean Production & שרשרת קריטית</h2>
+    <p>JIT, תורת האילוצים (TOC), ניהול באפרים</p>
+  </div>
+
+  <button class="collapse-btn" onclick="toggle(this)">
+    <span>שרשרת קריטית (Critical Chain) – TOC <span class="tag tag-exam">חובה למבחן</span></span>
+    <span class="arrow">▼</span>
+  </button>
+  <div class="collapse-content">
+    <div class="sub-h">שלבי הפתרון</div>
+    <div class="step"><div class="step-num">1</div><div class="step-text"><strong>חתוך זמנים:</strong> קצר את כל משכי הפעולות ב-50%</div></div>
+    <div class="step"><div class="step-num">2</div><div class="step-text"><strong>החלקת משאבים:</strong> אם יש קונפליקט משאבים (שתי פעולות צריכות אותם עובדים), הוסף תלות כך שיתבצעו בזו אחר זו</div></div>
+    <div class="step"><div class="step-num">3</div><div class="step-text"><strong>זהה שרשרת קריטית:</strong> הנתיב הארוך ביותר ברשת לאחר ההחלקה</div></div>
+    <div class="step"><div class="step-num">4</div><div class="step-text"><strong>באפר פרויקט:</strong> הוסף בסוף הפרויקט באפר = 40% (או כנדרש) מאורך השרשרת</div></div>
+    <div class="step"><div class="step-num">5</div><div class="step-text"><strong>באפרים מזינים:</strong> בכל נקודת חיבור של נתיב מזין לשרשרת, הוסף באפר = 50% (או כנדרש) מאורך הנתיב המזין</div></div>
+
+    <div class="sub-h">זמן התחייבות</div>
+    <div class="formula">זמן סיום = אורך שרשרת + באפר פרויקט</div>
+
+    <div class="sub-h">מעקב באפרים</div>
+    <p>בכל נקודת זמן, בדוק:</p>
+    <p><span class="hl-green">ירוק:</span> קצב ניצול באפר < קצב התקדמות → בסדר<br>
+    <span class="hl-orange">צהוב:</span> קצב ניצול באפר ≈ קצב התקדמות → מעקב<br>
+    <span class="hl">אדום:</span> קצב ניצול באפר > קצב התקדמות → צפויה חריגה!</p>
+
+    <div class="example">
+      <div class="example-title">✅ דוגמה: עצרת סטודנטים (תשע"ו)</div>
+      <p>אחרי חיתוך 50%: שרשרת A→D→E→G (20 ימים). באפר פרויקט = 8 (40%). התחייבות = 28 ימים.<br>
+      סעיף ג': D מפגרת 4 ימים. השלמנו 40% מהשרשרת אבל ניצלנו 50% מהבאפר → צפויה חריגה.<br>
+      סעיף ד': גיוס עובד ליומיים (10-12) מאפשר D ו-E במקביל → עמידה ב-28 ימים.</p>
+    </div>
+  </div>
+
+  <button class="collapse-btn" onclick="toggle(this)">
+    <span>CPM – נתיב קריטי קלאסי <span class="tag tag-core">ליבה</span></span>
+    <span class="arrow">▼</span>
+  </button>
+  <div class="collapse-content">
+    <p>חישוב 4 זמנים לכל פעולה ברשת AON:</p>
+    <div class="tbl-wrap">
+      <table>
+        <tr><th>זמן</th><th>חישוב</th><th>כיוון</th></tr>
+        <tr><td>ES (Early Start)</td><td>Max(EF של קודמות)</td><td>קדימה</td></tr>
+        <tr><td>EF (Early Finish)</td><td>ES + משך</td><td>קדימה</td></tr>
+        <tr><td>LF (Late Finish)</td><td>Min(LS של עוקבות)</td><td>אחורה</td></tr>
+        <tr><td>LS (Late Start)</td><td>LF − משך</td><td>אחורה</td></tr>
+      </table>
+    </div>
+    <div class="formula">Slack = LS − ES = LF − EF</div>
+    <p><strong>נתיב קריטי:</strong> הפעולות שבהן Slack = 0. זהו הנתיב הארוך ביותר = משך הפרויקט.</p>
+  </div>
+</div>
+
+<!-- ============ EXAMS ============ -->
+<div class="section" id="sec-exams">
+  <div class="topic-header">
+    <h2>📝 ניתוח מבחנים</h2>
+    <p>מבנה טיפוסי, תבניות חוזרות וטיפים</p>
+  </div>
+
+  <div class="card">
+    <h3><span class="icon">🔍</span>מבנה מבחן טיפוסי</h3>
+    <p>4 שאלות, 3 שעות, חומר עזר מותר, אפשר לצבור עד 105 נקודות:</p>
+    
+    <div class="exam-q">
+      <div class="q-type">שאלה 1 – תכנות ליניארי (25-30%)</div>
+      <div class="q-detail">ניסוח LP, פירוש פלט LINDO, ניתוח רגישות (שינוי RHS/מקדם, הוספת אילוץ), פתרון גרפי (כשמצמצמים ל-2 משתנים)</div>
+    </div>
+    <div class="exam-q">
+      <div class="q-type">שאלה 2 – גרפים / השמה / כיסוי / TSP (25-30%)</div>
+      <div class="q-detail">דייקסטרא להשלמת טבלת מרחקים + בעיית כיסוי + אלגוריתם חסכונות. או: בעיית השמה עם מקרים מיוחדים</div>
+    </div>
+    <div class="exam-q">
+      <div class="q-type">שאלה 3 – MRP / Lot Sizing (25-30%)</div>
+      <div class="q-detail">S&M ו/או WW. לעיתים קרובות עם פרמטר Y לא ידוע – "עבור אילו ערכים של Y...?"</div>
+    </div>
+    <div class="exam-q">
+      <div class="q-type">שאלה 4 – חיזוי / שרשרת קריטית (20-25%)</div>
+      <div class="q-detail">מודל ליניארי + רגרסיה עם התמרה. או: CPM → שרשרת קריטית → מעקב באפרים</div>
+    </div>
+  </div>
+
+  <div class="card">
+    <h3><span class="icon">🎯</span>תבניות חוזרות של ד"ר צופי</h3>
+    <ul>
+      <li><strong>"האם בסיס הפתרון ישתנה?"</strong> – בדוק אם השינוי בתוך ה-RANGES</li>
+      <li><strong>"מבלי לפתור"</strong> – השתמש בניתוח רגישות, אל תפתור מחדש</li>
+      <li><strong>"עבור אילו ערכים של Y..."</strong> – פתור WW כפונקציה של Y, השווה ל-S&M</li>
+      <li><strong>הוספת אילוץ חדש</strong> – הצב את הפתרון הקיים ובדוק אם עומד בו</li>
+      <li><strong>שינוי RHS בתחום</strong> – Z חדש = Z ישן + Δ × DUAL PRICE</li>
+      <li><strong>פתרון גרפי</strong> – כשמצמצמים ל-2 משתנים (ויתור על חלק מהמוצרים)</li>
+      <li><strong>מגבלת פג תוקף (Shelf Life)</strong> – מגבילה את S&M ו-WW</li>
+      <li><strong>כפיית שיבוץ בהשמה</strong> – M בתא הפיקטיבי</li>
+    </ul>
+  </div>
+
+  <div class="card">
+    <h3><span class="icon">📚</span>מבחנים זמינים לתרגול</h3>
+    <div class="tbl-wrap">
+      <table>
+        <tr><th>מועד</th><th>נושאים עיקריים</th><th>הערות</th></tr>
+        <tr><td>תשע"ו סמ' ב' מועד ב'</td><td>LP+LINDO, השמה, שרשרת קריטית, MRP(S&M+WW+Y)</td><td>פתרון מלא זמין ✅</td></tr>
+        <tr><td>תשפ"ב סמ' ב' מועד א'</td><td>LP+LINDO, דייקסטרא+כיסוי+TSP, MRP(S&M+WW+Y), חיזוי אקספוננציאלי</td><td>שאלות בלבד</td></tr>
+        <tr><td>תשפ"ג סמ' ב' מועד א'</td><td>LP+LINDO, חיזוי ליניארי+רגרסיה, MRP(WW+Y), דייקסטרא+כיסוי+TSP</td><td>שאלות בלבד</td></tr>
+      </table>
+    </div>
+  </div>
+
+  <div class="tip">
+    <div class="tip-title">💡 אסטרטגיית הכנה</div>
+    <p>
+    1. <strong>הכן דף נוסחאות מסודר</strong> – חומר עזר מותר! כלול: נוסחאות S&M, WW, רגרסיה, דייקסטרא, חסכונות<br>
+    2. <strong>תרגל קריאת LINDO</strong> – זו שאלה כמעט בטוחה, ושווה הרבה נקודות קלות<br>
+    3. <strong>שים דגש על MRP</strong> – שאלה עם Y כפונקציה חוזרת במבחנים רבים, שווה 25-30%<br>
+    4. <strong>אל תבזבז זמן על ניסוח</strong> – אם הניסוח כבר נתון, עבור ישר לסעיפים<br>
+    5. <strong>5 נקודות בונוס</strong> – ניתן לצבור 105, אז גם אם שאלה אחת קשה – אפשר לפצות</p>
+  </div>
+</div>
+
+</div><!-- /main -->
+
+<div class="footer">
+  <span class="brand">🐢🚀 marom.cloud</span> · אתר למידה לניהול התפעול · ד"ר משה צופי · תשפ"ו
+</div>
+
+<script>
+function showSection(id) {
+  document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+  document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
+  document.getElementById('sec-' + id).classList.add('active');
+  event.target.classList.add('active');
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+function toggle(btn) {
+  btn.classList.toggle('open');
+  const content = btn.nextElementSibling;
+  content.classList.toggle('open');
+}
+
+function checkQuiz(qId, label, correct) {
+  const container = document.getElementById(qId);
+  const resEl = document.getElementById(qId + '-res');
+  if (container.dataset.answered) return;
+  container.dataset.answered = 'true';
+  
+  if (correct) {
+    label.classList.add('correct');
+    resEl.className = 'quiz-result show success';
+    resEl.textContent = '✅ נכון!';
+  } else {
+    label.classList.add('wrong');
+    resEl.className = 'quiz-result show fail';
+    resEl.textContent = '❌ לא נכון. נסה שוב בפעם הבאה.';
+    // highlight correct
+    container.querySelectorAll('label').forEach(l => {
+      if (l.onclick.toString().includes('true')) l.classList.add('correct');
+    });
+  }
+}
+</script>
+</body>
+</html>
