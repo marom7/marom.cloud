@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>מבנה ארגוני</title>
+<link href="https://fonts.googleapis.com/css2?family=Heebo:wght@300;400;500;600;700;800&family=Rubik:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="orgchart.css">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+</head>
+<body>
+
+<div class="topbar">
+  <h1>🏛️ מבנה ארגוני</h1>
+  <div class="sep"></div>
+  <div class="stats"><span id="sEmp">-</span> עובדים | <span id="sDept">-</span> מחלקות | <span id="sUnit">-</span> יחידות</div>
+  <div class="sep"></div>
+  <input type="text" id="searchInput" placeholder="🔍 חיפוש תפקיד / שם..." oninput="handleSearch(this.value)">
+  <span class="search-count" id="searchCount"></span>
+  <div class="sep"></div>
+  <div class="zoom-controls">
+    <button class="btn" onclick="zoomOut()">−</button>
+    <span class="zoom-label" id="zoomLabel">100%</span>
+    <button class="btn" onclick="zoomIn()">+</button>
+    <button class="btn" onclick="zoomFit()" title="התאם למסך">⊡</button>
+  </div>
+  <div class="sep"></div>
+  <button class="btn" onclick="openFieldsModal()">⚙️ שדות</button>
+  <button class="btn" onclick="openPrintPreview()" title="דוחס את כל התיבות לדף A4 לרוחב">🖨️ הדפסה A4</button>
+  <button class="btn" onclick="autoLayout()" title="סידור אוטומטי מחדש">🔄 סדר מחדש</button>
+  <button class="btn" onclick="exportJSON()">⬇️ ייצוא</button>
+  <button class="btn" onclick="document.getElementById('jsonInput').click()">⬆️ ייבוא</button>
+  <button class="btn" onclick="document.getElementById('fileInput').click()">📂 אקסל</button>
+  <span class="save-status" id="saveStatus">✓ נשמר</span>
+  <input type="file" id="fileInput" accept=".xlsx,.xls" style="display:none" onchange="handleFile(this.files[0])">
+  <input type="file" id="jsonInput" accept=".json" style="display:none" onchange="importJSON(this.files[0])">
+</div>
+
+<div class="upload-overlay" id="uploadOverlay">
+  <div class="upload-box" id="uploadBox" onclick="document.getElementById('fileInput').click()">
+    <div class="icon">📊</div>
+    <h2>טען קובץ אקסל</h2>
+    <p>גרור לכאן או לחץ לבחירה · xlsx / xls</p>
+  </div>
+</div>
+
+<div class="loading-screen hidden" id="loadingScreen"><div class="spinner"></div><p>טוען...</p></div>
+
+<div class="balloon-overlay" id="balloonOverlay" onclick="closeBalloon(event)">
+  <div class="balloon" onclick="event.stopPropagation()">
+    <div class="balloon-head" id="bHead">
+      <button class="balloon-close" onclick="closeBalloon()">✕</button>
+      <div class="balloon-avatar" id="bAvatar">👤</div>
+      <div class="balloon-bname" id="bName"></div>
+      <div class="balloon-btag" id="bTag"></div>
+    </div>
+    <div class="balloon-body" id="balloonBody"></div>
+  </div>
+</div>
+
+<div class="modal-overlay" id="fieldsModal" onclick="closeFieldsModal(event)">
+  <div class="modal" onclick="event.stopPropagation()">
+    <div class="modal-head"><h3>⚙️ בחירת שדות לכרטיס</h3><button class="modal-close" onclick="closeFieldsModal()">✕</button></div>
+    <div class="modal-body">
+      <p class="modal-hint">בחר אילו שדות יוצגו בכרטיס העובד:</p>
+      <div id="fieldToggles"></div>
+    </div>
+  </div>
+</div>
+
+<div class="canvas-wrap" id="canvasWrap">
+  <div class="canvas-sizer" id="canvasSizer">
+    <div class="canvas" id="canvas">
+      <svg id="linksSvg"></svg>
+    </div>
+  </div>
+</div>
+
+<div class="print-preview" id="printPreview">
+  <div class="print-preview-bar">
+    <h2>📄 תצוגה מקדימה · A4 לרוחב · דף אחד</h2>
+    <span class="hint" id="printHint">כל התיבות נארזות ומוקטנות אוטומטית כדי להיכנס לדף</span>
+    <button class="btn" onclick="closePrintPreview()">✕ סגור</button>
+    <button class="btn primary" onclick="doPrint()">🖨️ הדפס / שמור PDF</button>
+  </div>
+  <div class="print-sheet-wrap">
+    <div class="print-sheet" id="printSheet">
+      <div class="print-sheet-header">
+        <div class="ph-title">🏛️ מבנה ארגוני</div>
+        <div class="ph-meta"><span id="printStats"></span> · <span id="printDate"></span></div>
+      </div>
+      <div class="print-sheet-stage" id="printStage">
+        <div class="print-scaler" id="printScaler"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script src="orgchart.js" defer></script>
+</body>
+</html>
