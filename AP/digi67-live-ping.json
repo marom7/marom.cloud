@@ -1,0 +1,25 @@
+{
+  "mode": "Live",
+  "agentName": "Digi67-v2-LivePing",
+  "intervalSeconds": 60,
+  "pingTimeoutMs": 3000,
+  "batchSize": 20,
+  "localPort": 8267,
+  "bindAddress": "127.0.0.1",
+  "machinesFile": "config/machines.json",
+  "dataDirectory": "data/ping-only",
+  "staleAfterSeconds": 180,
+  "sharedFolder": "",
+  "sharedFileName": "digi67-v2-results.json",
+  "enableRadminLinks": false,
+  "stripDomainSuffixes": [".ashdodport.co.il"],
+  "digiAliases": {},
+  "digiApi": {
+    "enabled": false
+  },
+  "history": {
+    "retentionDays": 30,
+    "segmentMegabytes": 16,
+    "maxTotalMegabytes": 256
+  }
+}
